@@ -142,6 +142,11 @@ class ItemTemplate < ApplicationRecord
     enhancement_rules.to_h["description"].presence
   end
 
+  # Prefer authored Russian/source label; keep `name` as unique storage key fallback.
+  def display_name
+    enhancement_rules.to_h["source_name"].presence || name
+  end
+
   # Definition eligibility only; the selected ShopStock is the authority for
   # local availability and quantities, checked separately by each trade.
   def available_in_shop?

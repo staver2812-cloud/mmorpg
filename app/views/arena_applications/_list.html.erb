@@ -9,7 +9,7 @@
 <div class="arena-applications-list">
   <% if applications.empty? %>
     <div class="arena-empty">
-      <p class="text-muted">No open applications.</p>
+      <p class="text-muted"><%= t("arena.table.empty") %></p>
     </div>
   <% else %>
     <% applications.each do |app| %>

@@ -17,7 +17,7 @@ class ArenaController < ApplicationController
 
     if active_participation
       redirect_to arena_match_path(active_participation.arena_match),
-        notice: "You already have an active fight."
+        notice: I18n.t("game.flashes.active_fight")
       return
     end
 

@@ -4,11 +4,6 @@
     <%= render "city_buildings/airship", routes: @airship_routes %>
   </div>
 <% else %>
-<%#
-  City building interior. Navigation away from the building is owned
-  by the shell header, as in the source, so this page adds no second context
-  strip of its own.
-%>
 <div class="nl-city-building-page" data-building-key="<%= @building_key %>">
     <section class="nl-city-building-frame">
       <header class="nl-city-building-header">
@@ -16,15 +11,16 @@
           <h1><%= @building["title"] %></h1>
           <p><%= @building["summary"] %></p>
         </div>
-        <%= link_to "City", world_path, class: "lbut", data: {turbo: false} %>
+        <%= link_to t("arena.nav.city"), world_path, class: "lbut", data: {turbo: false} %>
       </header>
 
       <p class="nl-city-building-notice">
         <% if @building["kind"] == "market" %>
-          Stall rentals and player listings are read-only.
+          Аренда прилавков и лоты игроков пока только для просмотра.
+        <% elsif @building["kind"] == "landmark" %>
+          Интерьер открыт. Игровые действия здания появятся в следующих срезах.
         <% else %>
-        This source-captured surface is read-only for MVP. No purchase, sale,
-        processing, healing, or rental action is exposed.
+          Поверхность пока read-only: без покупки, продажи, лечения и аренды.
         <% end %>
       </p>
 
@@ -37,6 +33,8 @@
         <%= render "city_buildings/numismatics", building: @building %>
       <% when "hospital" %>
         <%= render "city_buildings/hospital", building: @building %>
+      <% when "landmark" %>
+        <%= render "city_buildings/landmark", building: @building %>
       <% end %>
     </section>
 </div>

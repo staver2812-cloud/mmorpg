@@ -2,7 +2,7 @@
      data-controller="perk-allocation"
      data-perk-allocation-free-value="<%= @perk_points %>">
   <div class="nl-allocation-points">
-    <span class="nl-allocation-points-label">Possible new perks:</span>
+    <span class="nl-allocation-points-label"><%= t("game.profile.possible_perks") %>:</span>
     <span class="nl-allocation-points-value" data-perk-allocation-target="freePoints"><%= @perk_points %></span>
   </div>
 
@@ -70,7 +70,7 @@
         </button>
       </div>
     <% else %>
-      <p class="nl-perk-empty-points">No new perk points are available.</p>
+      <p class="nl-perk-empty-points"><%= t("game.profile.no_perk_points") %></p>
     <% end %>
   <% end %>
 </div>

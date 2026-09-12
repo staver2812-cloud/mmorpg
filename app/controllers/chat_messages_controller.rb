@@ -30,7 +30,7 @@ class ChatMessagesController < ApplicationController
           head :ok
         end
       end
-      format.html { redirect_to chat_channel_path(@chat_channel), notice: "Message sent." }
+      format.html { redirect_to chat_channel_path(@chat_channel), notice: I18n.t("game.flashes.message_sent") }
       format.json { head :created }
     end
   rescue Chat::Errors::MutedError,

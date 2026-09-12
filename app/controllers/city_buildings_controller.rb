@@ -23,7 +23,7 @@ class CityBuildingsController < ApplicationController
   def load_building
     @building_key = params[:building_key].to_s
     @building = Game::World::CityBuildingCatalog.fetch(@building_key)
-    redirect_to(world_path, alert: "City building not found.") unless @building
+    redirect_to(world_path, alert: "Здание не найдено.") unless @building
   end
 
   # Entry changes saved room state. Revalidate and render under the same lock
@@ -45,6 +45,6 @@ class CityBuildingsController < ApplicationController
       building_key: @building_key
     )
 
-    redirect_to world_path, alert: "Enter this building from its current city node."
+    redirect_to world_path, alert: "Войдите в здание из текущего района города."
   end
 end

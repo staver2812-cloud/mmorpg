@@ -40,32 +40,27 @@ module InventoriesHelper
     ["runes", "Runes"]
   ].freeze
 
-  FAMILY_EMPTY_STATES = {
-    "elixirs" => "You carry no elixirs.",
-    "quests" => "No active quests.",
-    "all" => "No items in this category.",
-    "things" => "No things in this category."
-  }.freeze
+  FAMILY_EMPTY_KEYS = %w[elixirs quests all things].freeze
 
-  FAMILY_SECTIONS = {
+  FAMILY_SECTION_KEYS = {
     "alchemy" => [
-      ["Alchemy Inventory", "No alchemy inventory items available.", true],
-      ["Alchemy Resources", "No alchemy resources available.", true]
+      %w[alchemy_inventory alchemy_inventory_empty],
+      %w[alchemy_resources alchemy_resources_empty]
     ],
     "fishing" => [
-      ["Fishing Inventory", "No fishing inventory items available.", true],
-      ["Alchemy Resources", "No alchemy resources available.", true]
+      %w[fishing_inventory fishing_inventory_empty],
+      %w[alchemy_resources alchemy_resources_empty]
     ],
     "hunting" => [
-      ["Cooking Inventory", "No cooking inventory items available.", true],
-      ["Resources", "No resources available.", true]
+      %w[cooking_inventory cooking_inventory_empty],
+      %w[resources resources_empty]
     ],
     "resources" => [
-      ["Resources", "No resources available.", true]
+      %w[resources resources_empty]
     ],
     "wood" => [
-      ["Carpentry Inventory", "No carpentry inventory items available.", true],
-      ["Resources", "No resources available.", true]
+      %w[carpentry_inventory carpentry_inventory_empty],
+      %w[resources resources_empty]
     ]
   }.freeze
 
@@ -190,79 +185,67 @@ module InventoriesHelper
     "doctor_license_iii" => "items/doctor_license_iii.png"
   }.freeze
 
-  INVENTORY_CATEGORY_MARKS = {
-    "all" => "All",
-    "things" => "Gear",
-    "elixirs" => "Elx",
-    "fishing" => "Fish",
-    "alchemy" => "Alch",
-    "hunting" => "Hunt",
-    "resources" => "Res",
-    "wood" => "Wood",
-    "quests" => "Quest"
-  }.freeze
-
   # Family strip order observed in the live inventory capture. The source has no
   # "all" icon: its first family is the equipment family, so the local default
   # `all` category highlights the same cell.
   INVENTORY_FAMILY_STRIP = %w[things elixirs alchemy fishing hunting resources wood quests].freeze
 
-  ITEM_DETAIL_LABELS = {
-    "ap" => "Action Points",
-    "action_points" => "Action Points",
-    "armor_class" => "Armor class",
-    "armor_pierce" => "Armor pierce",
-    "armor_piercing" => "Armor pierce",
-    "crushing" => "Crushing",
-    "dexterity" => "Dexterity",
-    "dodge" => "Dodge",
-    "earth_resistance" => "Earth resistance",
-    "evasion" => "Evasion",
-    "fire_resistance" => "Fire resistance",
-    "fortitude" => "Fortitude",
-    "health" => "Health",
-    "hp" => "HP",
-    "intelligence" => "Knowledge",
-    "knowledge" => "Knowledge",
-    "luck" => "Luck",
-    "mana" => "Mana",
-    "mass" => "Mass",
-    "max_hp" => "HP",
-    "max_mp" => "Mana",
-    "mp" => "Mana",
-    "strength" => "Strength",
-    "vitality" => "Health",
-    "water_resistance" => "Water resistance",
-    "air_resistance" => "Air resistance",
-    "all_resistances" => "All elemental resistances",
-    "two_handed" => "Two-handed",
-    "two_handed_skill" => "Two-Handed Skill"
+  ITEM_DETAIL_I18N_KEYS = {
+    "ap" => "action_points",
+    "action_points" => "action_points",
+    "armor_class" => "armor_class",
+    "armor_pierce" => "armor_pierce",
+    "armor_piercing" => "armor_pierce",
+    "crushing" => "crushing",
+    "dexterity" => "dexterity",
+    "dodge" => "dodge",
+    "earth_resistance" => "earth_resistance",
+    "evasion" => "evasion",
+    "fire_resistance" => "fire_resistance",
+    "fortitude" => "fortitude",
+    "health" => "health",
+    "hp" => "hp",
+    "intelligence" => "knowledge",
+    "knowledge" => "knowledge",
+    "luck" => "luck",
+    "mana" => "mana",
+    "mass" => "mass",
+    "max_hp" => "hp",
+    "max_mp" => "mana",
+    "mp" => "mana",
+    "strength" => "strength",
+    "vitality" => "health",
+    "water_resistance" => "water_resistance",
+    "air_resistance" => "air_resistance",
+    "all_resistances" => "all_resistances",
+    "two_handed" => "two_handed",
+    "two_handed_skill" => "two_handed_skill"
   }.freeze
 
-  ITEM_SKILL_LABELS = {
-    "unarmed_skill" => "Unarmed Combat",
-    "unarmed_combat" => "Unarmed Combat",
-    "sword_skill" => "Sword Skill",
-    "sword_mastery" => "Sword Skill",
-    "axe_skill" => "Axe Skill",
-    "axe_mastery" => "Axe Skill",
-    "blunt_skill" => "Bludgeoning Skill",
-    "bludgeoning_skill" => "Bludgeoning Skill",
-    "bludgeoning_mastery" => "Bludgeoning Skill",
-    "knife_skill" => "Knife Skill",
-    "knife_mastery" => "Knife Skill",
-    "throwing_skill" => "Throwing Skill",
-    "throwing_mastery" => "Throwing Skill",
-    "polearm_skill" => "Polearm Skill",
-    "polearm_mastery" => "Polearm Skill",
-    "staff_skill" => "Staff Skill",
-    "staff_mastery" => "Staff Skill",
-    "two_handed_skill" => "Two-Handed Skill",
-    "two_handed_mastery" => "Two-Handed Skill",
-    "dual_wield_skill" => "Dual Wielding",
-    "dual_wielding" => "Dual Wielding",
-    "stealth" => "Stealth",
-    "linguistics" => "Linguistics"
+  ITEM_SKILL_I18N_KEYS = {
+    "unarmed_skill" => "unarmed_combat",
+    "unarmed_combat" => "unarmed_combat",
+    "sword_skill" => "sword_skill",
+    "sword_mastery" => "sword_skill",
+    "axe_skill" => "axe_skill",
+    "axe_mastery" => "axe_skill",
+    "blunt_skill" => "bludgeoning_skill",
+    "bludgeoning_skill" => "bludgeoning_skill",
+    "bludgeoning_mastery" => "bludgeoning_skill",
+    "knife_skill" => "knife_skill",
+    "knife_mastery" => "knife_skill",
+    "throwing_skill" => "throwing_skill",
+    "throwing_mastery" => "throwing_skill",
+    "polearm_skill" => "polearm_skill",
+    "polearm_mastery" => "polearm_skill",
+    "staff_skill" => "staff_skill",
+    "staff_mastery" => "staff_skill",
+    "two_handed_skill" => "two_handed_skill",
+    "two_handed_mastery" => "two_handed_skill",
+    "dual_wield_skill" => "dual_wielding",
+    "dual_wielding" => "dual_wielding",
+    "stealth" => "stealth",
+    "linguistics" => "linguistics"
   }.freeze
 
   ITEM_EFFECT_SKIP_KEYS = %w[
@@ -281,23 +264,26 @@ module InventoriesHelper
   end
 
   def item_artwork_path(item_template)
+    explicit = item_template.enhancement_rules.to_h["icon"].presence
+    return explicit.delete_prefix("/") if explicit
+
     ITEM_ARTWORK_PATHS[item_template.key.to_s]
   end
 
   def inventory_category_options
-    INVENTORY_CATEGORIES
+    INVENTORY_CATEGORIES.map { |key, _| [key, inventory_category_label(key)] }
   end
 
   def inventory_category_mark(category)
-    INVENTORY_CATEGORY_MARKS.fetch(category.to_s, INVENTORY_CATEGORY_MARKS.fetch("all"))
+    I18n.t("game.inventory.marks.#{category}", default: I18n.t("game.inventory.marks.all"))
   end
 
   def inventory_category_label(category)
-    INVENTORY_CATEGORIES.to_h.fetch(category.to_s, category.to_s.humanize)
+    I18n.t("game.inventory.categories.#{category}", default: category.to_s.humanize)
   end
 
   def inventory_things_subcategory_options
-    THINGS_SUBCATEGORIES
+    THINGS_SUBCATEGORIES.map { |key, _| [key, I18n.t("game.inventory.subcategories.#{key}", default: key.to_s.humanize)] }
   end
 
   def inventory_equipment_family?(category)
@@ -305,11 +291,18 @@ module InventoriesHelper
   end
 
   def inventory_family_sections(category)
-    FAMILY_SECTIONS.fetch(category.to_s, [])
+    FAMILY_SECTION_KEYS.fetch(category.to_s, []).map do |title_key, empty_key|
+      [I18n.t("game.inventory.sections.#{title_key}"), I18n.t("game.inventory.sections.#{empty_key}"), true]
+    end
   end
 
   def inventory_empty_message(category)
-    FAMILY_EMPTY_STATES.fetch(category.to_s, "No items in this category.")
+    key = category.to_s
+    if FAMILY_EMPTY_KEYS.include?(key)
+      I18n.t("game.inventory.empty.#{key}")
+    else
+      I18n.t("game.common.no_items")
+    end
   end
 
   def inventory_requirement_rows(item)
@@ -321,7 +314,7 @@ module InventoriesHelper
       missing_entry = missing[normalized]
       {
         label:,
-        value: missing_entry ? "#{value} (current #{missing_entry[:current]})" : value,
+        value: missing_entry ? I18n.t("game.inventory.current_value", value:, current: missing_entry[:current]) : value,
         met: missing_entry.blank?
       }
     end
@@ -467,9 +460,10 @@ module InventoriesHelper
 
   def inventory_detail_label(label, parent: nil)
     key = normalize_item_detail_key(label)
-    return inventory_skill_label(key) if ITEM_SKILL_LABELS.key?(key)
+    return inventory_skill_label(key) if ITEM_SKILL_I18N_KEYS.key?(key)
 
-    base = ITEM_DETAIL_LABELS.fetch(key, key.titleize)
+    i18n_key = ITEM_DETAIL_I18N_KEYS[key]
+    base = i18n_key ? I18n.t("game.details.#{i18n_key}") : key.titleize
     parent_key = normalize_item_detail_key(parent)
     return base if parent.blank? || %w[stats skills requirements properties effects].include?(parent_key)
 
@@ -478,15 +472,16 @@ module InventoriesHelper
 
   def inventory_skill_label(skill)
     key = normalize_item_detail_key(skill)
-    ITEM_SKILL_LABELS.fetch(key) do
-      definition = Game::Skills::PassiveSkillRegistry.find(key)
-      definition&.fetch(:name) || key.titleize
-    end
+    i18n_key = ITEM_SKILL_I18N_KEYS[key]
+    return I18n.t("game.skills.#{i18n_key}") if i18n_key
+
+    definition = Game::Skills::PassiveSkillRegistry.find(key)
+    definition&.fetch(:name) || key.titleize
   end
 
   def formatted_item_value(value, signed: true)
-    return "yes" if value == true
-    return "no" if value == false
+    return I18n.t("game.common.yes") if value == true
+    return I18n.t("game.common.no") if value == false
     return value.to_json if value.is_a?(Array) || value.is_a?(Hash)
     return value unless signed
 

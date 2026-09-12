@@ -25,7 +25,7 @@ class ChatChannelsController < ApplicationController
     current_user.ensure_social_features!
     prepare_local_chat_context
     @chat_channel = ChatChannel.local.find_by("metadata ->> 'location_key' = ?", @chat_context.key) ||
-      ChatChannel.new(channel_type: :local, name: "Local", metadata: {"location_key" => @chat_context.key})
+      ChatChannel.new(channel_type: :local, name: I18n.t("game.chat.local"), metadata: {"location_key" => @chat_context.key})
     @chat_entries = Chat::Timeline.new(
       channel: @chat_channel, viewer: current_user, session: @chat_session,
       include_game_events: params[:poll] != "1"

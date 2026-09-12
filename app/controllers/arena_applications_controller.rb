@@ -33,7 +33,7 @@ class ArenaApplicationsController < ApplicationController
 
     respond_to do |format|
       if result.success?
-        format.html { redirect_to arena_room_path(@room), notice: "Application submitted." }
+        format.html { redirect_to arena_room_path(@room), notice: I18n.t("game.flashes.application_submitted") }
         format.json { render json: {success: true, application: result.application}, status: :created }
       else
         format.html { redirect_to arena_room_path(@room), alert: result.errors.join(", ") }
@@ -53,7 +53,7 @@ class ArenaApplicationsController < ApplicationController
 
     respond_to do |format|
       if result.success?
-        format.html { redirect_to arena_match_path(result.match), notice: "Application accepted." }
+        format.html { redirect_to arena_match_path(result.match), notice: I18n.t("game.flashes.application_accepted") }
         format.json do
           render json: {
             success: true,
@@ -84,7 +84,7 @@ class ArenaApplicationsController < ApplicationController
 
     respond_to do |format|
       if result.success?
-        format.html { redirect_to arena_room_path(@application.arena_room), notice: "Application canceled." }
+        format.html { redirect_to arena_room_path(@application.arena_room), notice: I18n.t("game.flashes.application_canceled") }
         format.json { render json: {success: true} }
       else
         format.html { redirect_back fallback_location: arena_index_path, alert: result.errors.join(", ") }
@@ -103,9 +103,9 @@ class ArenaApplicationsController < ApplicationController
     return if @room.accessible_by?(current_character)
 
     respond_to do |format|
-      format.html { redirect_to arena_index_path, alert: "This arena room is unavailable." }
+      format.html { redirect_to arena_index_path, alert: I18n.t("game.flashes.arena_room_unavailable") }
       format.json do
-        render json: {success: false, errors: ["This arena room is unavailable."]}, status: :forbidden
+        render json: {success: false, errors: [I18n.t("game.flashes.arena_room_unavailable")]}, status: :forbidden
       end
     end
   end

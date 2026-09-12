@@ -22,7 +22,7 @@
         equipment: @equipment,
         interactive: false,
         show_money: @own_profile %>
-      <p class="nl-profile-location" aria-label="Current location"><%= profile_location(@character) %></p>
+      <p class="nl-profile-location" aria-label="<%= t("game.world.location") %>"><%= profile_location(@character) %></p>
     </aside>
 
     <main class="nl-character-page-main">
@@ -36,7 +36,7 @@
         <% end %>
       <% elsif @character.owned_perk_keys.any? %>
         <div class="nl-panel">
-          <h2>Perks</h2>
+          <h2><%= t("game.profile.perks") %></h2>
           <ul class="nl-profile-perk-list">
             <% @character.owned_perk_keys.each do |perk_key| %>
               <li><%= Game::Skills::PerkRegistry.find(perk_key)[:name] %></li>

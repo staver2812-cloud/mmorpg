@@ -10,17 +10,17 @@
     <button type="button" class="nl-nav-link nl-world-action-button" disabled><%= action["label"].presence || MapTileTemplate.default_local_action_label(action["type"]) %></button>
   <% end %>
   <% unless locked_actions.any? { |action| MapTileTemplate.world_action_type_for(action["type"]) == @active_world_action.action_type } %>
-    <button type="button" class="nl-nav-link nl-world-action-button" disabled><%= @active_world_action.metadata["label"].presence || "Action in progress" %></button>
+    <button type="button" class="nl-nav-link nl-world-action-button" disabled><%= @active_world_action.metadata["label"].presence || t("game.world.action_in_progress") %></button>
   <% end %>
 <% end %>
 
 <% if @movement_state&.locked_reason == :fatigued %>
-  <span class="nl-world-action-unavailable" title="Fatigue is 86% or higher. Move, Look, and Enter are unavailable until it recovers.">Actions unavailable</span>
-  <span class="nl-visually-hidden">Move, Look, and Enter are unavailable until fatigue recovers.</span>
+  <span class="nl-world-action-unavailable" title="<%= t("game.world.actions_unavailable_title") %>"><%= t("game.world.actions_unavailable") %></span>
+  <span class="nl-visually-hidden"><%= t("game.world.actions_unavailable_title") %></span>
 <% end %>
 
 <% if local_actions_present %>
-  <div class="actions-panel nl-world-action-strip" aria-label="Current cell actions">
+  <div class="actions-panel nl-world-action-strip" aria-label="<%= t("game.world.cell_actions") %>">
     <% if tile_building_action && tile_building_action[:building] %>
       <% building = tile_building_action[:building] %>
       <% offer = tile_building_action[:offer] %>
@@ -32,14 +32,14 @@
                       data: {turbo: true, turbo_frame: "_top"} do |f| %>
           <%= f.hidden_field :building_id, value: building[:id] %>
           <%= f.hidden_field :action_key, value: offer.action_key %>
-          <%= f.submit "Enter", class: "nl-nav-link nl-world-action-button", title: building[:name] %>
+          <%= f.submit t("game.world.enter"), class: "nl-nav-link nl-world-action-button", title: building[:name] %>
           <span class="nl-visually-hidden"><%= building[:name] %> <%= building[:destination] %> <%= building[:description] %></span>
         <% end %>
       <% else %>
         <button type="button"
                 class="nl-nav-link nl-world-action-button"
                 title="<%= building[:blocked_reason] %>"
-                disabled>Enter</button>
+                disabled><%= t("game.world.enter") %></button>
         <span class="building-blocked nl-visually-hidden"><%= building[:name] %> <%= building[:blocked_reason] %></span>
       <% end %>
     <% end %>

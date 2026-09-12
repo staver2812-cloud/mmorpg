@@ -8,11 +8,14 @@
 require_relative "seeds/world_content_support"
 
 %w[
+  ashen_veil_world_labels
   accounts
   world_zones
   world_cells
   starter_characters
   shop_inventory
+  ashen_veil_item_labels
+  ashen_veil_thematic_sets
   starter_wallets
   arena_rooms
   world_locations

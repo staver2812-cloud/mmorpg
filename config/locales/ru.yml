@@ -1,0 +1,90 @@
+ru:
+  app:
+    title: "Пепельная Завеса"
+    title_short: "Завеса"
+  locales:
+    ru: "RU"
+    en: "EN"
+    switch: "Язык"
+  errors:
+    forbidden: "У вас нет доступа к этому действию."
+  nav:
+    your_character: "Персонаж"
+    inventory: "Инвентарь"
+    return: "Назад"
+    city: "Город"
+    exit_confirm: "Выйти из игры?"
+    exit: "Выход"
+    abilities: "Способности"
+  social:
+    chat_players: "Чат и игроки рядом"
+    sort: "Сорт:"
+    refresh: "обновл."
+    loading: "Загрузка..."
+    unknown: "Неизвестно"
+    total: "Всего"
+    action: "Действие"
+    say: "Сказать"
+    send: "Отправить"
+    clear_input: "Очистить"
+    emoticons: "Смайлы"
+    more_emoticons: "Ещё смайлы"
+    refresh_chat: "Обновить чат"
+    clear_chat: "Очистить чат"
+    all_messages: "Все"
+    refresh_10s: "Обновлять каждые 10 с"
+    text_mode: "Текст"
+  auth:
+    sign_in: "Вход"
+    sign_up: "Создать персонажа"
+    create_account: "Создать аккаунт"
+    enter: "Войти"
+    nickname: "Игровой ник"
+    nickname_placeholder: "Например: ПепельныйКлинок"
+    nickname_hint: "2–20 символов. Буквы (в т.ч. кириллица), цифры, пробел, _ и -"
+    email: "Почта"
+    password: "Пароль"
+    password_confirmation: "Пароль ещё раз"
+    remember_me: "Запомнить устройство"
+    forgot_password: "Забыли пароль?"
+    already_have_account: "Уже есть аккаунт? Войти"
+    password_min: "%{count} символов минимум"
+    create_character: "Создать персонажа"
+    resend_confirmation: "Не получили письмо подтверждения?"
+    resend_unlock: "Не получили письмо разблокировки?"
+    sign_in_with: "Войти через %{provider}"
+    change_password: "Сменить пароль"
+    send_reset: "Отправить инструкции"
+    back_to_login: "Назад ко входу"
+    update: "Обновить"
+    back: "Назад"
+    characters_minimum: "минимум %{count} символов"
+    forgot_title: "Забыли пароль?"
+    forgot_hint: "Введите почту — пришлём инструкции по сбросу."
+    change_password_title: "Смена пароля"
+    resend_confirmation_title: "Повторная отправка подтверждения"
+    resend_unlock_title: "Повторная отправка разблокировки"
+    waiting_confirmation: "Ожидается подтверждение для:"
+
+  activerecord:
+    attributes:
+      user:
+        profile_name: "Игровой ник"
+        email: "Почта"
+        password: "Пароль"
+        password_confirmation: "Пароль ещё раз"
+        remember_me: "Запомнить устройство"
+    errors:
+      messages:
+        record_invalid: "Возникли ошибки: %{errors}"
+        taken: "уже занято"
+        blank: "не может быть пустым"
+        too_short: "слишком короткое (минимум %{count})"
+        too_long: "слишком длинное (максимум %{count})"
+        invalid: "имеет неверный формат"
+      models:
+        user:
+          attributes:
+            profile_name:
+              invalid_nickname: "допускает буквы, цифры, пробел, _ и - (2–20)"
+              taken: "уже занят"

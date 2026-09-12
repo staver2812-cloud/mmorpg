@@ -28,69 +28,69 @@
         <div class="nl-inventory-item-actions">
           <% if item.item_template.equippable? && !item.equipped? %>
             <% if requirements_allowed %>
-              <%= button_to "Wear", equip_inventory_path(item_id: item.id, category: category, subcategory: subcategory, info: info_mode), method: :post, class: "invbut", data: {turbo: true} %>
+              <%= button_to t("game.common.wear"), equip_inventory_path(item_id: item.id, category: category, subcategory: subcategory, info: info_mode), method: :post, class: "invbut", data: {turbo: true} %>
             <% end %>
           <% end %>
           <% if item.item_template.consumable? %>
             <% if requirements_allowed %>
-              <%= button_to "Use", use_inventory_path(item_id: item.id, category: category, subcategory: subcategory, info: info_mode), method: :post, class: "invbut", data: {turbo: true} %>
+              <%= button_to t("game.common.use"), use_inventory_path(item_id: item.id, category: category, subcategory: subcategory, info: info_mode), method: :post, class: "invbut", data: {turbo: true} %>
             <% end %>
           <% end %>
           <% unless item.equipped? || item.protected_from_discard? %>
             <details class="nl-inline-action">
-              <summary class="invbut">Transfer</summary>
+              <summary class="invbut"><%= t("game.common.transfer") %></summary>
               <%= form_with url: transfer_item_inventory_path, method: :post, class: "nl-inline-action-form" do |f| %>
                 <%= f.hidden_field :item_id, value: item.id %>
                 <%= f.hidden_field :category, value: category %>
                 <%= f.hidden_field :subcategory, value: subcategory %>
                 <%= f.hidden_field :info, value: info_mode %>
-                <%= f.text_field :recipient_name, placeholder: "Recipient", maxlength: 25, class: "LogintextBox" %>
+                <%= f.text_field :recipient_name, placeholder: t("game.common.recipient"), maxlength: 25, class: "LogintextBox" %>
                 <%= f.number_field :quantity, value: 1, min: 1, max: item.quantity, class: "LogintextBox2" %>
-                <%= f.submit "Transfer", class: "lbut" %>
+                <%= f.submit t("game.common.transfer"), class: "lbut" %>
               <% end %>
             </details>
             <details class="nl-inline-action">
-              <summary class="invbut">Gift</summary>
+              <summary class="invbut"><%= t("game.common.gift") %></summary>
               <%= form_with url: gift_item_inventory_path, method: :post, class: "nl-inline-action-form" do |f| %>
                 <%= f.hidden_field :item_id, value: item.id %>
                 <%= f.hidden_field :category, value: category %>
                 <%= f.hidden_field :subcategory, value: subcategory %>
                 <%= f.hidden_field :info, value: info_mode %>
-                <%= f.text_field :recipient_name, placeholder: "Recipient", maxlength: 25, class: "LogintextBox" %>
+                <%= f.text_field :recipient_name, placeholder: t("game.common.recipient"), maxlength: 25, class: "LogintextBox" %>
                 <%= f.number_field :quantity, value: 1, min: 1, max: item.quantity, class: "LogintextBox2" %>
-                <%= f.submit "Gift", class: "lbut" %>
+                <%= f.submit t("game.common.gift"), class: "lbut" %>
               <% end %>
             </details>
             <details class="nl-inline-action">
-              <summary class="invbut">Sell</summary>
+              <summary class="invbut"><%= t("game.common.sell") %></summary>
               <%= form_with url: sell_to_player_inventory_path, method: :post, class: "nl-inline-action-form" do |f| %>
                 <%= f.hidden_field :item_id, value: item.id %>
                 <%= f.hidden_field :category, value: category %>
                 <%= f.hidden_field :subcategory, value: subcategory %>
                 <%= f.hidden_field :info, value: info_mode %>
-                <%= f.text_field :recipient_name, placeholder: "Recipient", maxlength: 25, class: "LogintextBox" %>
+                <%= f.text_field :recipient_name, placeholder: t("game.common.recipient"), maxlength: 25, class: "LogintextBox" %>
                 <%= f.number_field :price, placeholder: "NV", min: 0.01, step: 0.01, class: "LogintextBox2" %>
                 <%= f.number_field :quantity, value: 1, min: 1, max: item.quantity, class: "LogintextBox2" %>
-                <%= f.submit "Sell", class: "lbut" %>
+                <%= f.submit t("game.common.sell"), class: "lbut" %>
               <% end %>
             </details>
           <% end %>
           <% unless item.protected_from_discard? %>
-            <%= button_to "Delete",
+            <%= button_to t("game.common.delete"),
               inventory_item_path(item, category: category, subcategory: subcategory, info: info_mode),
               method: :delete,
               class: "invbut invbut--danger",
-              form: {class: "nl-inventory-discard", data: {turbo_confirm: "Delete #{item.item_template.name}?"}} %>
+              form: {class: "nl-inventory-discard", data: {turbo_confirm: t("game.inventory.delete_confirm", name: item.item_template.display_name)}} %>
           <% end %>
         </div>
 
         <div class="nl-inventory-item-details">
           <section>
-            <h3>Properties</h3>
+            <h3><%= t("game.common.properties") %></h3>
             <table class="nl-detail-table">
               <tr>
-                <th>Name</th>
-                <td><%= item.item_template.name %></td>
+                <th><%= t("game.common.name") %></th>
+                <td><%= item.item_template.display_name %></td>
               </tr>
               <% if info_mode == "full" %>
                 <% inventory_item_properties(item).each do |label, value| %>
@@ -104,7 +104,7 @@
           </section>
 
           <section class="<%= 'nl-inventory-details--compact' if info_mode == 'short' %>">
-            <h3>Requirements</h3>
+            <h3><%= t("game.common.requirements") %></h3>
             <table class="nl-detail-table">
               <% inventory_requirement_rows(item).each do |row| %>
                 <tr class="<%= 'nl-requirement-missing' unless row[:met] %>">
@@ -114,8 +114,8 @@
               <% end %>
               <% unless requirements_allowed %>
                 <tr class="nl-requirement-missing">
-                  <th>Action</th>
-                  <td><%= action_availability[:error].presence || "Unavailable until requirements are met" %></td>
+                  <th><%= t("game.common.action") %></th>
+                  <td><%= action_availability[:error].presence || t("game.inventory.req_blocked") %></td>
                 </tr>
               <% end %>
             </table>

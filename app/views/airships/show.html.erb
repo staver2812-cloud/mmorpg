@@ -19,14 +19,14 @@
       <div class="nl-airship-marker">
         <%= image_tag "airship.svg", alt: "Airship", width: 100, height: 100 %>
         <% if @airship_state.deadline %>
-          <output class="nl-airship-timer" data-nl-airship-target="timer" aria-label="Time remaining"><%= airship_timer(@airship_state.remaining_seconds) %></output>
+          <output class="nl-airship-timer" data-nl-airship-target="timer" aria-label="<%= t("game.airship.time_remaining") %>"><%= airship_timer(@airship_state.remaining_seconds) %></output>
         <% end %>
       </div>
     </div>
   </div>
   <% if @airship_state.can_disembark %>
     <div class="nl-airship-actions">
-      <%= button_to "Disembark from the airship", disembark_airship_path,
+      <%= button_to t("game.airship.disembark"), disembark_airship_path,
           method: :post,
           params: {journey_id: @active_airship_journey.id},
           class: "lbut",

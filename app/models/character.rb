@@ -165,7 +165,7 @@ class Character < ApplicationRecord
   end
 
   def self.stat_label(key)
-    STAT_LABELS.fetch(key.to_sym)
+    I18n.t("game.stats.#{key}", default: STAT_LABELS.fetch(key.to_sym))
   end
 
   def self.xp_required_for_level(level)

@@ -18,7 +18,7 @@ class ArenaMatchesController < ApplicationController
 
     # Auto-end stale or finished matches
     if @arena_match.auto_end_if_needed!
-      flash.now[:notice] = "Fight finished."
+      flash.now[:notice] = I18n.t("game.flashes.fight_finished")
     end
 
     @participations = @arena_match.arena_participations.includes(
@@ -69,7 +69,7 @@ class ArenaMatchesController < ApplicationController
 
     respond_to do |format|
       if result.success?
-        message = result[:surrendered] ? "Surrender recorded." : "Turn submitted."
+        message = result[:surrendered] ? I18n.t("game.flashes.surrender_recorded") : I18n.t("game.flashes.turn_submitted")
         format.html { redirect_to @arena_match, notice: message, status: :see_other }
         format.json { render json: {success: true, data: result.data} }
         format.turbo_stream { redirect_to @arena_match, notice: message, status: :see_other }
@@ -94,7 +94,7 @@ class ArenaMatchesController < ApplicationController
 
     respond_to do |format|
       if result.success?
-        message = result[:mode] == "draw" ? "Timeout draw recorded." : "Timeout victory recorded."
+        message = result[:mode] == "draw" ? I18n.t("game.flashes.timeout_draw") : I18n.t("game.flashes.timeout_victory")
         format.html { redirect_to @arena_match, notice: message, status: :see_other }
         format.json { render json: {success: true, data: result.data} }
       else
@@ -110,9 +110,9 @@ class ArenaMatchesController < ApplicationController
 
     unless @arena_match.completed?
       respond_to do |format|
-        format.html { redirect_to @arena_match, alert: "The fight is still active." }
+        format.html { redirect_to @arena_match, alert: I18n.t("game.flashes.fight_still_active") }
         format.json do
-          render json: {error: "The fight is still active."}, status: :unprocessable_content
+          render json: {error: I18n.t("game.flashes.fight_still_active")}, status: :unprocessable_content
         end
         format.turbo_stream { head :unprocessable_content }
       end
@@ -127,7 +127,7 @@ class ArenaMatchesController < ApplicationController
     end
     current_character.exit_combat! if current_character.in_combat?
 
-    redirect_to finish_destination_path, notice: "Fight finished.", status: :see_other
+    redirect_to finish_destination_path, notice: I18n.t("game.flashes.fight_finished"), status: :see_other
   end
 
   private

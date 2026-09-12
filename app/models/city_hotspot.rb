@@ -18,7 +18,26 @@ class CityHotspot < ApplicationRecord
     "junk_dealer" => "/city/buildings/junk_dealer",
     "numismatics" => "/city/buildings/numismatics",
     "airship_station" => "/city/buildings/airship_station",
-    "hospital" => "/city/buildings/hospital"
+    "hospital" => "/city/buildings/hospital",
+    "tavern" => "/city/buildings/tavern",
+    "workshop" => "/city/buildings/workshop",
+    "guard_tower" => "/city/buildings/guard_tower",
+    "city_hall" => "/city/buildings/city_hall",
+    "clan_hall" => "/city/buildings/clan_hall",
+    "post" => "/city/buildings/post",
+    "magic_school" => "/city/buildings/magic_school",
+    "library" => "/city/buildings/library",
+    "general_school" => "/city/buildings/general_school",
+    "military_school" => "/city/buildings/military_school",
+    "dealer_house" => "/city/buildings/dealer_house",
+    "souvenir_shop" => "/city/buildings/souvenir_shop",
+    "auction" => "/city/buildings/auction",
+    "obelisk" => "/city/buildings/obelisk",
+    "bank" => "/city/buildings/bank",
+    "temple" => "/city/buildings/temple",
+    "law_abode" => "/city/buildings/law_abode",
+    "prison" => "/city/buildings/prison",
+    "gallows" => "/city/buildings/gallows"
   }.freeze
 
   belongs_to :zone

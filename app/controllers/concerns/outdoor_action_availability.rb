@@ -18,7 +18,7 @@ module OutdoorActionAvailability
         @position = current_character.position
 
         message = if MovementCommand.moving.where(character: current_character).exists?
-          "Movement already in progress."
+          I18n.t("game.flashes.movement_in_progress")
         elsif active_action
           "A local action is already in progress."
         end

@@ -39,10 +39,10 @@
                     style: "left: #{image_x}px; top: #{image_y}px;" %>
       <% else %>
         <h1 class="nl-city-pending-title city-name"><%= current_zone.display_name %></h1>
-        <p class="nl-city-pending-notice">This quarter is not ready yet.</p>
+        <p class="nl-city-pending-notice"><%= t("game.world.quarter_pending") %></p>
       <% end %>
 
-      <nav class="nl-city-hotspots" aria-label="City buildings">
+      <nav class="nl-city-hotspots" aria-label="<%= t("game.world.city_buildings") %>">
         <% hotspots.each_with_index do |hotspot, index| %>
           <% next if hotspot.hotspot_type == "district" %>
           <%= render "world/city_action", hotspot:, index:, node_key:, image_asset:, tooltip_actions:, offers_by_hotspot_id: %>
@@ -50,7 +50,7 @@
       </nav>
 
       <% if image_asset %>
-      <div class="nl-city-landmarks" aria-label="City landmarks">
+      <div class="nl-city-landmarks" aria-label="<%= t("game.world.city_landmarks") %>">
         <% presentation.fetch("landmarks", {}).each do |landmark_key, landmark| %>
           <% left, top, width, height = landmark.fetch("box") %>
           <span class="nl-city-hotspot nl-city-hotspot--landmark"
@@ -70,7 +70,7 @@
     </div>
     </div>
     <% if hotspots.any? { |hotspot| hotspot.hotspot_type == "district" } %>
-    <nav class="nl-city-routes" aria-label="City quarter routes">
+    <nav class="nl-city-routes" aria-label="<%= t("game.world.city_routes") %>">
       <% hotspots.each_with_index do |hotspot, index| %>
         <% next unless hotspot.hotspot_type == "district" %>
         <%= render "world/city_action", hotspot:, index:, node_key:, image_asset:, tooltip_actions:, offers_by_hotspot_id: %>

@@ -37,7 +37,7 @@
 
       <% if @chat_entries.empty? %>
         <div class="chat-empty">
-          <p>No messages yet.</p>
+          <p><%= t("game.chat.empty") %></p>
         </div>
       <% else %>
         <%= render "chat_channels/timeline_entries", entries: @chat_entries %>

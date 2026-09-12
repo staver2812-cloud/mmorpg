@@ -1,9 +1,9 @@
 <%= render "shop/merchant_qualification", location: :market %>
 
-<h2>Stall tiers</h2>
+<h2><%= t("game.buildings.stall_tiers") %></h2>
 <table class="nl-detail-table nl-city-building-table">
   <thead>
-    <tr><th>Stall</th><th>Merchant skill</th><th>Mass</th><th>30-day rent</th><th>Sale tax</th></tr>
+    <tr><th><%= t("game.common.stall") %></th><th><%= t("game.common.merchant_skill") %></th><th><%= t("game.common.mass") %></th><th>30-day rent</th><th><%= t("game.common.sale_tax") %></th></tr>
   </thead>
   <tbody>
     <% building["stall_tiers"].each do |name, skill, mass, rent, tax| %>

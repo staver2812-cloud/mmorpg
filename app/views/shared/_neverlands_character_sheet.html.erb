@@ -29,7 +29,7 @@
       <table class="nl-sheet-table nl-sheet-table--money">
         <tbody>
           <tr>
-            <th><span class="nl-money-mark" aria-hidden="true">NV</span> Money:</th>
+            <th><span class="nl-money-mark" aria-hidden="true">NV</span> <%= t("game.sheet.money") %>:</th>
             <td><%= number_with_delimiter(character.user&.currency_wallet&.nv_balance || 0) %> NV</td>
           </tr>
         </tbody>
@@ -37,7 +37,7 @@
     <% end %>
 
     <table class="nl-sheet-table nl-sheet-table--stats">
-      <caption class="nl-visually-hidden">Primary stats</caption>
+      <caption class="nl-visually-hidden"><%= t("game.sheet.primary_stats") %></caption>
       <tbody>
         <% profile_primary_stats(character).each do |stat| %>
           <tr>
@@ -51,46 +51,46 @@
           </tr>
         <% end %>
         <tr>
-          <th>Wisdom:</th>
+          <th><%= t("game.sheet.wisdom") %>:</th>
           <td class="nl-sheet-stat-total"><%= metadata.fetch("wisdom", 0) %></td>
           <td class="nl-sheet-stat-breakdown"></td>
         </tr>
       </tbody>
     </table>
 
-    <div class="nl-sheet-link-row"><%= link_to "Save", player_path(name: character.name) %></div>
+    <div class="nl-sheet-link-row"><%= link_to t("game.common.save"), player_path(name: character.name) %></div>
 
     <hr class="nl-sheet-divider">
 
     <table class="nl-sheet-table nl-sheet-table--experience">
-      <caption>Experience</caption>
+      <caption><%= t("game.sheet.experience") %></caption>
       <tbody>
-        <tr><th>Combat:</th><td class="nl-sheet-xp-combat"><%= number_with_delimiter(character.experience) %></td></tr>
-        <tr><th>Glory:</th><td class="nl-sheet-xp-glory"><%= number_with_delimiter(metadata.fetch("glory", 0)) %></td></tr>
-        <tr><th>Valor:</th><td class="nl-sheet-xp-valor"><%= number_with_delimiter(metadata.fetch("valor", 0)) %></td></tr>
-        <tr><th>To level:</th><td><%= number_with_delimiter(character.experience_to_next_level) %></td></tr>
+        <tr><th><%= t("game.sheet.combat_xp") %>:</th><td class="nl-sheet-xp-combat"><%= number_with_delimiter(character.experience) %></td></tr>
+        <tr><th><%= t("game.sheet.glory") %>:</th><td class="nl-sheet-xp-glory"><%= number_with_delimiter(metadata.fetch("glory", 0)) %></td></tr>
+        <tr><th><%= t("game.sheet.valor") %>:</th><td class="nl-sheet-xp-valor"><%= number_with_delimiter(metadata.fetch("valor", 0)) %></td></tr>
+        <tr><th><%= t("game.sheet.to_level") %>:</th><td><%= number_with_delimiter(character.experience_to_next_level) %></td></tr>
       </tbody>
     </table>
 
     <hr class="nl-sheet-divider">
 
     <table class="nl-sheet-table nl-sheet-table--record">
-      <caption class="nl-visually-hidden">Fight record</caption>
+      <caption class="nl-visually-hidden"><%= t("game.sheet.fight_record") %></caption>
       <tbody>
-        <tr><th>Wins:</th><td><%= metadata.fetch("player_wins", 0) %></td></tr>
-        <tr><th>Losses:</th><td><%= metadata.fetch("player_losses", 0) %></td></tr>
-        <tr><th>Wins over NPC:</th><td><%= metadata.fetch("npc_wins", 0) %></td></tr>
-        <tr><th>Losses to NPC:</th><td><%= metadata.fetch("npc_losses", 0) %></td></tr>
+        <tr><th><%= t("game.sheet.wins") %>:</th><td><%= metadata.fetch("player_wins", 0) %></td></tr>
+        <tr><th><%= t("game.sheet.losses") %>:</th><td><%= metadata.fetch("player_losses", 0) %></td></tr>
+        <tr><th><%= t("game.sheet.wins_npc") %>:</th><td><%= metadata.fetch("npc_wins", 0) %></td></tr>
+        <tr><th><%= t("game.sheet.losses_npc") %>:</th><td><%= metadata.fetch("npc_losses", 0) %></td></tr>
       </tbody>
     </table>
 
-    <div class="nl-sheet-increases">Increases: <%= character.stat_points_available.to_i %></div>
+    <div class="nl-sheet-increases"><%= t("game.sheet.increases") %>: <%= character.stat_points_available.to_i %></div>
 
     <table class="nl-sheet-table nl-sheet-table--chips">
-      <caption class="nl-visually-hidden">Combat parameters</caption>
+      <caption class="nl-visually-hidden"><%= t("game.sheet.combat_params") %></caption>
       <tbody>
         <tr>
-          <th>Fatigue:</th>
+          <th><%= t("game.sheet.fatigue") %>:</th>
           <td class="nl-sheet-chip nl-sheet-chip--fatigue"><%= fatigue %>%</td>
         </tr>
         <% profile_combat_stats(character).each do |label, value| %>
@@ -102,6 +102,6 @@
       </tbody>
     </table>
 
-    <p class="nl-sheet-effects">Total effects: <%= metadata.fetch("active_effects", []).size %> / 99</p>
+    <p class="nl-sheet-effects"><%= t("game.sheet.total_effects") %>: <%= metadata.fetch("active_effects", []).size %> / 99</p>
   </div>
 </section>

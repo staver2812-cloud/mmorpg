@@ -33,13 +33,13 @@ class CharactersController < ApplicationController
     Characters::StatAllocationService.new(character: @character).call(allocations: allocated)
 
     respond_to do |format|
-      format.html { redirect_to stats_character_path(@character), notice: "Stats saved" }
+      format.html { redirect_to stats_character_path(@character), notice: I18n.t("game.flashes.stats_saved") }
       format.turbo_stream do
         @stats_data = build_stats_data
         @allocatable_stats = allocatable_stat_keys
         render turbo_stream: [
           turbo_stream.replace("stat-allocation", partial: "characters/stat_allocation"),
-          turbo_stream.update("flash", partial: "shared/flash", locals: {type: "notice", message: "Stats saved"})
+          turbo_stream.update("flash", partial: "shared/flash", locals: {type: "notice", message: I18n.t("game.flashes.stats_saved")})
         ]
       end
     end
@@ -69,7 +69,7 @@ class CharactersController < ApplicationController
     Characters::SkillAllocationService.new(character: @character).call(allocations: allocated)
 
     respond_to do |format|
-      format.html { redirect_to skills_character_path(@character), notice: "Skills saved" }
+      format.html { redirect_to skills_character_path(@character), notice: I18n.t("game.flashes.skills_saved") }
       format.turbo_stream do
         @skills_data = build_skills_data
         @skill_definitions = Game::Skills::PassiveSkillRegistry.all
@@ -78,7 +78,7 @@ class CharactersController < ApplicationController
         @peace_skill_points = @character.available_peace_skill_points
         render turbo_stream: [
           turbo_stream.replace("skill-allocation", partial: "characters/skill_allocation"),
-          turbo_stream.update("flash", partial: "shared/flash", locals: {type: "notice", message: "Skills saved"})
+          turbo_stream.update("flash", partial: "shared/flash", locals: {type: "notice", message: I18n.t("game.flashes.skills_saved")})
         ]
       end
     end
@@ -97,12 +97,12 @@ class CharactersController < ApplicationController
     Game::Skills::PerkAllocation.new(@character).call(selected_keys:)
 
     respond_to do |format|
-      format.html { redirect_to perks_character_path(@character), notice: "Perks saved" }
+      format.html { redirect_to perks_character_path(@character), notice: I18n.t("game.flashes.perks_saved") }
       format.turbo_stream do
         build_perks_data
         render turbo_stream: [
           turbo_stream.replace("perk-allocation", partial: "characters/perk_allocation"),
-          turbo_stream.update("flash", partial: "shared/flash", locals: {type: "notice", message: "Perks saved"})
+          turbo_stream.update("flash", partial: "shared/flash", locals: {type: "notice", message: I18n.t("game.flashes.perks_saved")})
         ]
       end
     end
@@ -126,7 +126,7 @@ class CharactersController < ApplicationController
   def authorize_character!
     authorize @character, :manage_progression?
   rescue Pundit::NotAuthorizedError
-    redirect_to root_path, alert: "You can only manage your own character."
+    redirect_to root_path, alert: I18n.t("game.flashes.own_character_only")
   end
 
   def build_stats_data

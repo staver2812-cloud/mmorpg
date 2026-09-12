@@ -9,6 +9,7 @@ class ApplicationController < ActionController::Base
   before_action :authenticate_user!
   before_action :ensure_device_identifier
   before_action :reject_closed_game_session
+  around_action :switch_locale
   around_action :with_airship_context
   before_action :prepare_game_shell_context, if: :game_shell_context_request?
 
@@ -22,6 +23,13 @@ class ApplicationController < ActionController::Base
   helper_method :current_device_id
 
   protected
+
+  def switch_locale(&action)
+    locale = params[:locale].presence || session[:locale].presence || cookies[:locale].presence || I18n.default_locale
+    locale = I18n.default_locale unless I18n.available_locales.map(&:to_s).include?(locale.to_s)
+    session[:locale] = locale.to_s
+    I18n.with_locale(locale, &action)
+  end
 
   def after_sign_in_path_for(resource)
     character = resource.ensure_playable_character! if resource.respond_to?(:ensure_playable_character!)
@@ -125,7 +133,7 @@ class ApplicationController < ActionController::Base
 
         redirect_target = nil if redirect_target == request.url
 
-        redirect_to(redirect_target || root_path, alert: "You do not have access to this action.")
+        redirect_to(redirect_target || root_path, alert: I18n.t("errors.forbidden"))
       end
       format.turbo_stream { head :forbidden }
       format.json { render json: {error: "forbidden"}, status: :forbidden }

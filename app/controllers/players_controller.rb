@@ -82,7 +82,7 @@ class PlayersController < ApplicationController
 
   def location_payload
     position = @character.position
-    return {label: "Unknown"} unless position
+    return {label: I18n.t("game.profile.unknown_location")} unless position
     label = Game::World::Presence.new(character: @character, position:).label
 
     if (match = active_arena_match_for(@character))

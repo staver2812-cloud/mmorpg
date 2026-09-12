@@ -85,7 +85,7 @@ class WorldController < ApplicationController
     @position = result.position.reload
     respond_to do |format|
       format.turbo_stream { render_map_update }
-      format.html { redirect_to world_path, notice: "Move started." }
+      format.html { redirect_to world_path, notice: I18n.t("game.flashes.move_started") }
     end
   rescue Game::Movement::MovementViolationError,
     Game::World::StartNpcFight::FightViolationError => e
@@ -99,7 +99,7 @@ class WorldController < ApplicationController
   # Accept a captured city transition, building, or gate offer.
   def interact_hotspot
     hotspot = CityHotspot.find_by(id: params[:hotspot_id], zone: @position.zone)
-    return respond_with_city_action_error("Location not found.") unless hotspot
+    return respond_with_city_action_error(I18n.t("game.flashes.location_not_found")) unless hotspot
 
     service = Game::World::CityHotspotService.new(
       character: current_character,
@@ -152,8 +152,8 @@ class WorldController < ApplicationController
 
     unless building
       return respond_to do |format|
-        format.html { redirect_to world_path, alert: "Building not found." }
-        format.turbo_stream { render_error("Building not found.") }
+        format.html { redirect_to world_path, alert: I18n.t("game.flashes.building_not_found") }
+        format.turbo_stream { render_error(I18n.t("game.flashes.building_not_found")) }
       end
     end
 

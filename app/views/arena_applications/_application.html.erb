@@ -27,7 +27,7 @@
           <span class="npc-avatar"><%= npc_avatar_tag(application.npc_template, size: :small) %></span>
           <strong class="npc-name"><%= application.applicant_name %></strong>
           <span class="npc-level">[<%= application.applicant_level %>]</span>
-          <span class="npc-badge badge badge--npc">NPC</span>
+          <span class="npc-badge badge badge--npc"><%= t("game.fight.npc") %></span>
         </span>
       <% else %>
         <%= character_nameplate(application.applicant, show_level: true) %>
@@ -57,9 +57,9 @@
   <div class="arena-application-actions">
     <% if defined?(current_character) %>
       <% if application.applicant == current_character %>
-        <span class="text-muted">Your application</span>
+        <span class="text-muted"><%= t("arena.your_application") %></span>
       <% elsif application.acceptable_by?(current_character) %>
-        <%= button_to "Accept",
+        <%= button_to t("game.common.accept"),
             accept_arena_application_path(application),
             method: :post,
             class: "btn-primary btn-sm",
@@ -69,7 +69,7 @@
               application_id: application.id
             } %>
       <% else %>
-        <span class="text-muted text-sm" title="Level or alignment requirements are not met">
+        <span class="text-muted text-sm" title="<%= t("arena.level_mismatch") %>">
           Unavailable
         </span>
       <% end %>

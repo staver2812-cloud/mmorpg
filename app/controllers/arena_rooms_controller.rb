@@ -17,13 +17,13 @@ class ArenaRoomsController < ApplicationController
 
     if active_participation
       redirect_to arena_match_path(active_participation.arena_match),
-        notice: "You already have an active fight."
+        notice: I18n.t("game.flashes.active_fight")
       return
     end
 
     context = Game::World::ResumeContext.new(character: current_character)
     unless context.arena_room_available?(room: @room)
-      redirect_to arena_index_path, alert: "This arena room is unavailable."
+      redirect_to arena_index_path, alert: I18n.t("game.flashes.arena_room_unavailable")
       return
     end
 
@@ -39,7 +39,7 @@ class ArenaRoomsController < ApplicationController
     respond_to do |format|
       format.html do
         unless context.remember_arena_room!(room: @room)
-          redirect_to arena_index_path, alert: "This arena room is unavailable."
+          redirect_to arena_index_path, alert: I18n.t("game.flashes.arena_room_unavailable")
           next
         end
         prepare_presence_context

@@ -1,0 +1,10 @@
+<%# shared/_locale_switcher.html.erb %>
+<div class="nl-locale-switch" aria-label="<%= t("locales.switch") %>">
+  <%= link_to t("locales.ru"), switch_locale_path(locale: :ru),
+      class: "nl-locale-link#{' is-active' if I18n.locale.to_s == 'ru'}",
+      data: {turbo: false} %>
+  <span class="nl-locale-sep">|</span>
+  <%= link_to t("locales.en"), switch_locale_path(locale: :en),
+      class: "nl-locale-link#{' is-active' if I18n.locale.to_s == 'en'}",
+      data: {turbo: false} %>
+</div>

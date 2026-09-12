@@ -39,7 +39,7 @@ class InventoriesController < ApplicationController
 
           render turbo_stream: [inventory_grid_stream, character_sheet_stream]
         end
-        format.html { redirect_to inventory_redirect_path, notice: "Item worn!" }
+        format.html { redirect_to inventory_redirect_path, notice: I18n.t("game.flashes.item_worn") }
       else
         format.turbo_stream do
           render turbo_stream: turbo_stream.update(
@@ -69,7 +69,7 @@ class InventoriesController < ApplicationController
 
           render turbo_stream: [inventory_grid_stream, character_sheet_stream]
         end
-        format.html { redirect_to inventory_redirect_path, notice: "Item removed!" }
+        format.html { redirect_to inventory_redirect_path, notice: I18n.t("game.flashes.item_removed") }
       else
         format.turbo_stream do
           render turbo_stream: turbo_stream.update(
@@ -87,7 +87,7 @@ class InventoriesController < ApplicationController
   def unequip_all
     result = Game::Inventory::EquipmentService.new(character: current_character).unequip_all!
 
-    redirect_to inventory_redirect_path, notice: "Removed #{result[:count]} equipped item(s)."
+    redirect_to inventory_redirect_path, notice: I18n.t("game.flashes.unequip_all", count: result[:count])
   end
 
   # POST /inventory/use
@@ -140,7 +140,7 @@ class InventoriesController < ApplicationController
 
     Game::Inventory::Manager.sort_inventory!(current_character.inventory, by: sort_type.to_sym)
 
-    redirect_to inventory_redirect_path, notice: "Inventory sorted."
+    redirect_to inventory_redirect_path, notice: I18n.t("game.flashes.inventory_sorted")
   end
 
   def save_equipment_set

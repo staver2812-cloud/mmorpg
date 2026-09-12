@@ -74,7 +74,7 @@ class ShopController < ApplicationController
 
   def ensure_shop_access!
     unless Game::World::ResumeContext.new(character: current_character).shop_available?
-      redirect_to world_path, alert: "Shop is only available from an accessible trading location."
+      redirect_to world_path, alert: I18n.t("game.flashes.shop_location_required")
     end
   end
 

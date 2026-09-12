@@ -1,5 +1,5 @@
 <div class="login-container">
-  <h1>Change your password</h1>
+  <h1><%= t("auth.change_password_title") %></h1>
 
   <%= form_for(resource, as: resource_name, url: password_path(resource_name), html: { method: :put }) do |f| %>
     <%= render "devise/shared/error_messages", resource: resource %>
@@ -19,13 +19,13 @@
     </div>
 
     <div class="field">
-      <%= f.submit "Change my password", class: "btn-primary w-full" %>
+      <%= f.submit t("auth.change_password"), class: "btn-primary w-full" %>
     </div>
   <% end %>
 
   <hr>
 
   <div class="text-center">
-    <%= link_to "Back to login", new_session_path(resource_name) %>
+    <%= link_to t("auth.back_to_login"), new_session_path(resource_name) %>
   </div>
 </div>

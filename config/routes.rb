@@ -116,5 +116,6 @@ Rails.application.routes.draw do
   devise_for :users, controllers: {registrations: "user_registrations", sessions: "user_sessions"}
   mount ActionCable.server => "/cable"
   resource :session_ping, only: :create
+  get "locale/:locale", to: "locales#update", as: :switch_locale
   get "up" => "rails/health#show", :as => :rails_health_check
 end

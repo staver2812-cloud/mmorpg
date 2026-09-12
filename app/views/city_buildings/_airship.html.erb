@@ -1,6 +1,6 @@
 <div class="nl-airship-station">
   <table class="nl-airship-routes">
-    <thead><tr><th>Route</th><th>Price</th><th>Next departure</th><th></th></tr></thead>
+    <thead><tr><th><%= t("game.common.route") %></th><th><%= t("game.common.price") %></th><th><%= t("game.common.next_departure") %></th><th></th></tr></thead>
     <tbody>
       <% routes.each do |route| %>
         <tr data-airship-route="<%= route.key %>">
@@ -9,11 +9,11 @@
           <td><%= route.departs_at ? l(route.departs_at, format: "%Y-%m-%d %H:%M:%S") : "Schedule unavailable" %></td>
           <td>
             <% if route.available %>
-              <%= button_to "Buy a ticket and board the flight", airship_path,
+              <%= button_to t("game.airship.board"), airship_path,
                   method: :post, params: {action_key: route.action_key}, class: "lbut",
                   form: {data: {turbo_frame: "_top"}} %>
             <% else %>
-              <button type="button" class="lbut" disabled>Unavailable</button>
+              <button type="button" class="lbut" disabled><%= t("game.common.unavailable") %></button>
             <% end %>
           </td>
         </tr>

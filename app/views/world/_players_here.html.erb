@@ -1,5 +1,5 @@
 <div class="players-panel">
-  <h3>Players on this tile</h3>
+  <h3><%= t("game.world.players_here") %></h3>
   <% if players.any? %>
     <ul class="players-list">
       <% players.each do |pos| %>
@@ -10,12 +10,12 @@
             <span class="player-level">[<%= pos.character.level %>]</span>
           </div>
           <div class="player-actions">
-            <%= link_to "Info", player_path(name: pos.character.name), title: "Character" %>
+            <%= link_to t("game.common.info"), player_path(name: pos.character.name), title: "Character" %>
           </div>
         </li>
       <% end %>
     </ul>
   <% else %>
-    <p class="text-muted text-sm">No players nearby.</p>
+    <p class="text-muted text-sm"><%= t("game.world.no_players") %></p>
   <% end %>
 </div>
