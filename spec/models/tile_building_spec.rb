@@ -3,7 +3,7 @@
 require "rails_helper"
 
 RSpec.describe TileBuilding, type: :model do
-  let(:source_zone) { create(:zone, name: "Outpost Surroundings", location_type: "outdoor") }
+  let(:source_zone) { create(:zone, name: "Пепельный Берег", location_type: "outdoor") }
   let(:destination_zone) { create(:zone, name: "Outpost", location_type: "city") }
   let(:location_metadata) { build(:tile_building, :world_location).metadata }
 

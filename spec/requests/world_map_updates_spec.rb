@@ -59,7 +59,7 @@ RSpec.describe "Incremental World map updates", type: :request do
   end
 
   it "renders the western survey margin in a wider viewport without importing or extending gameplay cells" do
-    zone.update!(name: "Outpost Surroundings", metadata: {"source_map" => "m_1001_999"})
+    zone.update!(name: "Пепельный Берег", metadata: {"source_map" => "m_1001_999"})
     position.update!(x: 6, y: 8)
     existing_tiles = MapTileTemplate.order(:id).map(&:attributes)
     existing_zone = zone.attributes
@@ -83,7 +83,7 @@ RSpec.describe "Incremental World map updates", type: :request do
   end
 
   it "withholds movement into painted western cells and rejects a stale offer targeting outside the region" do
-    zone.update!(name: "Outpost Surroundings", metadata: {"source_map" => "m_1001_999"})
+    zone.update!(name: "Пепельный Берег", metadata: {"source_map" => "m_1001_999"})
     position.update!(x: 0, y: 8)
 
     get world_path, params: viewport

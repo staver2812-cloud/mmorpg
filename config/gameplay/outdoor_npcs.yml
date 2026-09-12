@@ -1,24 +1,20 @@
-# Source-backed outdoor NPC configuration.
-# Captured Neverlands outdoor bot attacks near Outpost Surroundings used
-# Plague Rat NPCs and the normal shared fight pipeline.
+# Ashen Veil outdoor NPC configuration (Пепельный Берег).
+# Coordinates and encounter samples preserve the prior Neverlands capture;
+# names/loot are reskinned for the sandbox fork.
 
 outpost_surroundings:
-  zone_name: "Outpost Surroundings"
+  zone_name: "Пепельный Берег"
   source_map: "m_1001_999"
-  # A bootstrap of complete captured groups onto matching atlas cells, not an
-  # inferred global distance/difficulty formula. Existing cell edits survive.
   starter_encounters:
     atlas_names:
-      plague_rat: "Крысы"
-      wilderness_bandit: "Разбойники"
-      wilderness_robber: "Грабители"
+      plague_rat: "Пепельные клещи"
+      wilderness_bandit: "Патруль Завесы"
+      wilderness_robber: "Солевые контрабандисты"
     profiles:
       - key: forpost_captured_rat_pair
         source_npc_key: plague_rat
       - key: forpost_captured_bandit_groups
         source_npc_key: wilderness_bandit
-    # User-reported September 9 cadence; uniform sampling within this interval
-    # is a local calibration, not a measured Neverlands distribution.
     passive_delay_source: "user_reported_2026-09-09"
     passive_delay_windows:
       - key: user_reported_five_to_six_minutes
@@ -26,19 +22,28 @@ outpost_surroundings:
         max_seconds: 360
   npc_templates:
     - key: wilderness_robber
-      name: Robber
+      name: Солевой контрабандист
       role: hostile
       level: 8
       hp: 270
       xp: 0
       metadata:
-        source_name: "Грабитель"
+        source_name: "Солевой контрабандист"
         source_observation: "2026-09-01_wilderness_bandit_group_variation_and_magic"
         source_map: "m_1008_1007"
         max_attacks_per_turn: 2
+      loot:
+        - kind: item
+          item: set-judge-bracers-t5
+          source_name: "Наручи «Судия» · T5"
+          chance: 0.05
+        - kind: currency
+          currency: NV
+          amount: 12
+          chance: 0.45
   npcs:
     - key: plague_rat
-      name: Plague Rat
+      name: Пепельный клещ
       role: hostile
       level: 4
       x: 7
@@ -47,8 +52,8 @@ outpost_surroundings:
       damage: 7
       xp: 35
       metadata:
-        source_name: "Plague Rat"
-        source_location: "Outpost Surroundings"
+        source_name: "Пепельный клещ"
+        source_location: "Пепельный Берег"
         source_observation: "neverlands_live_outdoor_npc_resource"
         source_map: "m_1001_999"
         source_coordinates: [1001, 999]
@@ -66,18 +71,19 @@ outpost_surroundings:
       loot:
         - kind: item
           item: rat_tail
-          source_name: "Rat Tail"
-          # Exact Neverlands probability is not captured. Preserve the prior
-          # no-drop behavior until source evidence supplies a value.
-          chance: 0.0
+          source_name: "Хвост Крысы Завесы"
+          chance: 0.35
+        - kind: item
+          item: set-blood-helm-t5
+          source_name: "Шлем «Кровь Завесы» · T5"
+          chance: 0.06
+        - kind: currency
+          currency: NV
+          amount: 4
+          chance: 0.5
 
-    # Source [1008,1007] maps to local [14,15] with the zone's [994,992]
-    # coordinate offset. This independent capture is not beside the west gate.
-    # Each roster entry is one exact observed output. Replaying these samples
-    # is an MVP calibration and does not claim the source's hidden pool or
-    # weights.
     - key: wilderness_bandit
-      name: Bandit
+      name: Пепельный патрульный
       role: hostile
       level: 7
       x: 14
@@ -85,8 +91,8 @@ outpost_surroundings:
       hp: 155
       xp: 0
       metadata:
-        source_name: "Разбойник"
-        source_location: "Captured wilderness cell"
+        source_name: "Пепельный патрульный"
+        source_location: "Пепельный Берег"
         source_observation: "2026-09-01_wilderness_bandit_group_variation_and_magic"
         source_map: "m_1008_1007"
         source_coordinates: [1008, 1007]
@@ -139,3 +145,20 @@ outpost_surroundings:
               - npc_key: wilderness_robber
                 level: 9
                 hp: 310
+      loot:
+        - kind: item
+          item: set-blood-weapon-sword-t5
+          source_name: "Клинок «Кровь Завесы» · T5"
+          chance: 0.07
+        - kind: item
+          item: set-swamp-gloves-t5
+          source_name: "Перчатки «Топь» · T5"
+          chance: 0.05
+        - kind: item
+          item: set-judge-boots-t5
+          source_name: "Сапоги «Судия» · T5"
+          chance: 0.04
+        - kind: currency
+          currency: NV
+          amount: 18
+          chance: 0.55

@@ -4,7 +4,7 @@
     <div class="nl-manage-field"><%= form.label :npc_key %><%= form.text_field :npc_key %></div>
     <div class="nl-manage-field"><%= form.label :name %><%= form.text_field :name, required: true %></div>
     <div class="nl-manage-field">
-      <%= label_tag "#{form.object_name}_npc_role", "Role" %>
+      <%= label_tag "#{form.object_name}_npc_role", t("manage.views.role") %>
       <%= select_tag "#{form.object_name}[npc_role]", options_for_select(NpcTemplate::ROLES, npc_template.role), id: "#{form.object_name}_npc_role" %>
     </div>
     <div class="nl-manage-field"><%= form.label :level %><%= form.number_field :level, min: 0, required: true %></div>

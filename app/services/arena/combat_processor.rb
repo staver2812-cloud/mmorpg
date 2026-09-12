@@ -247,7 +247,7 @@ module Arena
           starts_at: started_at,
           updated_at: started_at
         )
-        log_entry("system", nil, "The fight begins!")
+        log_entry("system", nil, Arena::CombatLogMessages.fight_begins)
         true
       end
 
@@ -293,18 +293,18 @@ module Arena
         # End match messages
         case reason
         when :timeout
-          log_entry("timeout", nil, "Fight ended by timeout")
+          log_entry("timeout", nil, Arena::CombatLogMessages.fight_timeout)
         when :forfeit
-          log_entry("system", nil, "Fight ended by surrender")
+          log_entry("system", nil, Arena::CombatLogMessages.fight_surrender)
         else
           if resolved_winning_team
             if npc_fight?
               winner_name = match.arena_participations.find_by(team: resolved_winning_team)&.participant_name
-              log_entry("victory", nil, "Victory: #{winner_name}.") if winner_name.present?
+              log_entry("victory", nil, Arena::CombatLogMessages.victory_named(winner_name)) if winner_name.present?
             end
-            log_entry("victory", nil, "Fight finished. Winner: side #{resolved_winning_team.upcase}")
+            log_entry("victory", nil, Arena::CombatLogMessages.victory_side(resolved_winning_team))
           else
-            log_entry("draw", nil, "Fight ended in a draw")
+            log_entry("draw", nil, Arena::CombatLogMessages.draw)
           end
         end
         true
@@ -340,9 +340,9 @@ module Arena
       winning_team = (normalized_mode == "draw") ? nil : participation.team
 
       description = if normalized_mode == "draw"
-        "#{character.name} accepts a timeout draw."
+        Arena::CombatLogMessages.timeout_draw(character.name)
       else
-        "#{character.name} claims victory by timeout."
+        Arena::CombatLogMessages.timeout_victory(character.name)
       end
       log_entry("timeout", character, description)
       end_match(winning_team, reason: :timeout)
@@ -515,9 +515,9 @@ module Arena
         participation.metadata["current_ap"] = [ap_limit - total_ap, 0].max
         participation.save!
 
-        log_entry("action", character, "#{character.name} submitted a turn and waits for the opponent.")
+        log_entry("action", character, Arena::CombatLogMessages.turn_submitted(character.name))
         broadcaster.broadcast_ap_update(character, participation.metadata["current_ap"], ap_limit)
-        broadcaster.broadcast_system_message("#{character.name} submitted a turn. Waiting for opponent.")
+        broadcaster.broadcast_system_message(Arena::CombatLogMessages.turn_submitted(character.name))
 
         resolved = resolve_pending_player_turns! if all_player_turns_ready?
       end
@@ -611,7 +611,7 @@ module Arena
       pending_turns = participants.index_with { |participation| pending_turn_data(participation) }
       round_number = match.current_turn_number || 1
 
-      broadcaster.broadcast_system_message("Both sides committed. Resolving round #{round_number}.")
+      broadcaster.broadcast_system_message(Arena::CombatLogMessages.resolving_round(round_number))
 
       pending_turns.each do |participation, turn|
         Array(turn["skills"]).each do |skill|
@@ -698,16 +698,16 @@ module Arena
 
       case resolution[:outcome]
       when :miss
-        log_entry("miss", attacker, "#{attacker.name} missed #{target.name} (#{body_part})")
+        log_entry("miss", attacker, Arena::CombatLogMessages.missed(attacker.name, target.name, body_part))
         broadcaster.broadcast_combat_action(attacker, "miss", target, 0, body_part:, miss: true)
         return success(**attack_result_payload(resolution, attack_type:, body_part:))
       when :dodge
-        log_entry("dodge", target, "#{target.name} dodged #{attacker.name}'s attack (#{body_part})")
+        log_entry("dodge", target, Arena::CombatLogMessages.dodged(target.name, attacker.name, body_part))
         broadcaster.broadcast_combat_action(attacker, "dodge", target, 0, body_part:, dodge: true)
         return success(**attack_result_payload(resolution, attack_type:, body_part:))
       when :blocked
         clear_blocking_state(target)
-        log_entry("block", target, "#{target.name} blocked attack (#{body_part}) from #{attacker.name}")
+        log_entry("block", target, Arena::CombatLogMessages.blocked(target.name, attacker.name, body_part))
         broadcaster.broadcast_combat_action(attacker, "blocked", target, 0, body_part:)
         return success(**attack_result_payload(resolution, attack_type:, body_part:))
       end
@@ -716,7 +716,7 @@ module Arena
       critical = resolution[:critical]
       if resolution[:block_attempted]
         clear_blocking_state(target)
-        log_entry("block_failed", target, "#{target.name} tried to block attack (#{body_part}) from #{attacker.name}, but it broke through")
+        log_entry("block_failed", target, Arena::CombatLogMessages.block_failed(target.name, attacker.name, body_part))
       end
 
       # Neverlands logs the rolled hit even when it exceeds the remaining HP,
@@ -764,16 +764,16 @@ module Arena
 
       case resolution[:outcome]
       when :miss
-        log_entry("miss", attacker, "#{attacker.name} missed #{npc.name} (#{body_part})")
+        log_entry("miss", attacker, Arena::CombatLogMessages.missed(attacker.name, npc.name, body_part))
         broadcast_npc_action(npc, "miss", nil, 0, body_part:)
         return success(**attack_result_payload(resolution, attack_type:, body_part:))
       when :dodge
-        log_entry("dodge", npc_participation, "#{npc.name} dodged #{attacker.name}'s attack (#{body_part})")
+        log_entry("dodge", npc_participation, Arena::CombatLogMessages.dodged(npc.name, attacker.name, body_part))
         broadcast_npc_action(npc, "dodge", nil, 0, body_part:)
         return success(**attack_result_payload(resolution, attack_type:, body_part:))
       when :blocked
         clear_npc_blocking_state(npc_participation)
-        log_entry("block", npc_participation, "#{npc.name} blocked attack (#{body_part}) from #{attacker.name}")
+        log_entry("block", npc_participation, Arena::CombatLogMessages.blocked(npc.name, attacker.name, body_part))
         broadcast_npc_action(npc, "blocked", nil, 0, body_part:)
         return success(**attack_result_payload(resolution, attack_type:, body_part:))
       end
@@ -782,7 +782,7 @@ module Arena
       critical = resolution[:critical]
       if resolution[:block_attempted]
         clear_npc_blocking_state(npc_participation)
-        log_entry("block_failed", npc_participation, "#{npc.name} tried to block attack (#{body_part}) from #{attacker.name}, but it broke through")
+        log_entry("block_failed", npc_participation, Arena::CombatLogMessages.block_failed(npc.name, attacker.name, body_part))
       end
 
       # Preserve raw overkill in the log, but count only removed HP in the
@@ -849,7 +849,7 @@ module Arena
     def handle_npc_defeat(npc_participation, defeated_by: nil)
       npc = npc_participation.npc_template
       npc_participation.update!(result: "defeat", ended_at: Time.current)
-      log_entry("defeat", npc_participation, "#{npc.name} has been defeated!")
+      log_entry("defeat", npc_participation, Arena::CombatLogMessages.defeated(npc.name))
       award_npc_loot!(npc_participation, defeated_by) if defeated_by
       mark_world_tile_npc_defeated!(defeated_by) if defeated_by && all_npcs_defeated?
 
@@ -886,14 +886,14 @@ module Arena
       return [] if result.already_processed?
 
       result.failures.each do |failure|
-        log_entry("loot", defeated_by, "#{defeated_by.name} searched #{npc.name}. #{failure.message}.")
+        log_entry("loot", defeated_by, Arena::CombatLogMessages.loot_failed(defeated_by.name, npc.name, failure.message))
       end
 
       if result.awards.empty? && result.failures.empty?
-        log_entry("loot", defeated_by, "#{defeated_by.name} searched #{npc.name}. Result: nothing found.")
+        log_entry("loot", defeated_by, Arena::CombatLogMessages.loot_nothing(defeated_by.name, npc.name))
       elsif result.awards.any?
         found = result.awards.map(&:description).join(", ")
-        log_entry("loot", defeated_by, "#{defeated_by.name} searched #{npc.name}. Found #{found}.")
+        log_entry("loot", defeated_by, Arena::CombatLogMessages.loot_found(defeated_by.name, npc.name, found))
       end
 
       result.awards
@@ -916,7 +916,7 @@ module Arena
       character.save!
 
       parts_str = block_parts.join(", ")
-      log_entry("action", character, "#{character.name} takes defensive stance (blocking: #{parts_str})")
+      log_entry("action", character, Arena::CombatLogMessages.defensive_stance(character.name, parts_str))
       broadcaster.broadcast_combat_action(character, "defend", nil, 0, block_parts:)
 
       success(defending: true, block_parts:)
@@ -961,7 +961,7 @@ module Arena
             metadata: participation.metadata.to_h.merge("surrendered_at" => Time.current.iso8601)
           )
 
-          log_entry("defeat", character, "#{character.name} surrendered.")
+          log_entry("defeat", character, Arena::CombatLogMessages.surrendered(character.name))
           broadcaster.broadcast_vitals_update(character)
 
           side_defeated = should_end?
@@ -1045,15 +1045,9 @@ module Arena
     end
 
     def physical_hit_log(attacker_name, target_name, attack_type, body_part, damage, current_hp, max_hp, critical: false)
-      action_name = Game::Combat::ActionCatalog.attack_config(attack_type)["name"].presence
-      if action_name.present? && !%w[simple aimed].include?(attack_type.to_s)
-        verb = critical ? "critical #{action_name}" : "uses #{action_name}"
-        "#{attacker_name} #{verb} (#{body_part}) #{target_name} for -#{damage} [#{current_hp}/#{max_hp}]"
-      elsif critical
-        "#{attacker_name} critical hit (#{body_part}) #{target_name} for -#{damage} [#{current_hp}/#{max_hp}]"
-      else
-        "#{attacker_name} hit #{target_name} (#{body_part}) for -#{damage} [#{current_hp}/#{max_hp}]"
-      end
+      Arena::CombatLogMessages.physical_hit(
+        attacker_name, target_name, attack_type, body_part, damage, current_hp, max_hp, critical:
+      )
     end
 
     def find_default_target(attacker)
@@ -1081,7 +1075,7 @@ module Arena
     def handle_defeat(character)
       participation = match.arena_participations.find_by(character:)
       participation.update!(result: "defeat", ended_at: Time.current)
-      log_entry("defeat", character, "has been defeated!")
+      log_entry("defeat", character, Arena::CombatLogMessages.defeated_short)
       broadcaster.broadcast_defeat(character)
     end
 
@@ -1114,14 +1108,14 @@ module Arena
 
       if xp_result&.experience_awarded.to_i.positive?
         winner = Character.find(xp_result.character_id)
-        log_entry("system", winner, "#{winner.name} gains #{xp_result.experience_awarded} experience.")
+        log_entry("system", winner, Arena::CombatLogMessages.xp_gain(winner.name, xp_result.experience_awarded))
       end
 
       wear_results.each do |result|
         next if result.item_ids.empty?
 
         character = Character.find(result.character_id)
-        log_entry("system", character, "#{character.name}'s equipment loses durability.")
+        log_entry("system", character, Arena::CombatLogMessages.durability_loss(character.name))
       end
 
       publish_fight_finished_events!(xp_result, winning_team)
@@ -1654,16 +1648,16 @@ module Arena
 
       case resolution[:outcome]
       when :miss
-        log_entry("miss", npc_participation, "#{npc.name} missed #{target.name} (#{body_part})")
+        log_entry("miss", npc_participation, Arena::CombatLogMessages.missed(npc.name, target.name, body_part))
         broadcast_npc_action(npc, "miss", target, 0, body_part:)
         return success(**attack_result_payload(resolution, attack_type:, body_part:))
       when :dodge
-        log_entry("dodge", target, "#{target.name} dodged #{npc.name}'s attack (#{body_part})")
+        log_entry("dodge", target, Arena::CombatLogMessages.dodged(target.name, npc.name, body_part))
         broadcast_npc_action(npc, "dodge", target, 0, body_part:)
         return success(**attack_result_payload(resolution, attack_type:, body_part:))
       when :blocked
         clear_blocking_state(target)
-        log_entry("block", target, "#{target.name} blocked attack (#{body_part}) from #{npc.name}")
+        log_entry("block", target, Arena::CombatLogMessages.blocked(target.name, npc.name, body_part))
         broadcast_npc_action(npc, "blocked", target, 0, body_part:)
         return success(**attack_result_payload(resolution, attack_type:, body_part:))
       end
@@ -1672,7 +1666,7 @@ module Arena
       critical = resolution[:critical]
       if resolution[:block_attempted]
         clear_blocking_state(target)
-        log_entry("block_failed", target, "#{target.name} tried to block attack (#{body_part}) from #{npc.name}, but it broke through")
+        log_entry("block_failed", target, Arena::CombatLogMessages.block_failed(target.name, npc.name, body_part))
       end
 
       # Apply damage to player while keeping result statistics bounded by the
@@ -1685,7 +1679,7 @@ module Arena
 
       # Log and broadcast
       log_type = critical ? "critical" : "damage"
-      log_entry(log_type, npc_participation, "#{npc.name} attacks #{target.name}'s #{body_part} for #{damage} damage#{" (CRITICAL!)" if critical}")
+      log_entry(log_type, npc_participation, Arena::CombatLogMessages.npc_attack(npc.name, target.name, body_part, damage, critical: critical))
 
       broadcaster.broadcast_vitals_update(target)
       broadcast_npc_action(npc, "attack", target, damage, critical: critical, body_part: body_part)
@@ -1713,7 +1707,7 @@ module Arena
       npc_participation.metadata["block_until"] = block_expires_at.iso8601
       npc_participation.save!
 
-      log_entry("action", npc_participation, "#{npc.name} takes a defensive stance")
+      log_entry("action", npc_participation, Arena::CombatLogMessages.defensive_stance_simple(npc.name))
       broadcast_npc_action(npc, "defend", nil, 0)
 
       success(defending: true)

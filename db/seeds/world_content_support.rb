@@ -28,7 +28,7 @@ module Seeds
       end
 
       case name
-      when "Outpost Surroundings"
+      when "Пепельный Берег"
         {
           "source_map" => "m_1001_999"
         }
@@ -155,7 +155,7 @@ module Seeds
           "source_map" => "m_1007_1002",
           "source_coordinates" => [1007, 1002],
           "source_observation" => "2026-09-08_cell_content_and_world_rules",
-          "presence_label" => "Outpost Surroundings, Pond",
+          "presence_label" => "Пепельный Берег, Pond",
           "cell_art" => {"key" => "forpost_pond", "column" => 2, "row" => 2},
           "local_actions" => [
             {"type" => "resource_search", "source_id" => "look", "label" => "Look Around", "active" => true,

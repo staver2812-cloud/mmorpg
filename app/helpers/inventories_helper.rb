@@ -355,9 +355,9 @@ module InventoriesHelper
       append_inventory_property_rows(lines, label, value, signed: false)
     end
 
-    lines << ["Description", template.description] if template.description.present?
+    lines << [I18n.t("game.details.description"), template.description] if template.description.present?
 
-    lines.presence || [["Description", template.item_type.to_s.titleize]]
+    lines.presence || [[I18n.t("game.details.description"), template.item_type.to_s.titleize]]
   end
 
   def inventory_item_requirements(item)

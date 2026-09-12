@@ -3,7 +3,7 @@
 require "rails_helper"
 
 RSpec.describe "world/_actions.html.erb", type: :view do
-  let(:zone) { create(:zone, name: "Outpost Surroundings", location_type: "outdoor") }
+  let(:zone) { create(:zone, name: "Пепельный Берег", location_type: "outdoor") }
   let(:position) { create(:character_position, zone:, x: 5, y: 5) }
   let(:offer) { OpenStruct.new(action_key: "attack-action-key") }
 

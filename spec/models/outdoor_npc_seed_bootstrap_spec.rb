@@ -4,7 +4,7 @@ require "rails_helper"
 require Rails.root.join("db/seeds/starter_encounter_bootstrap")
 
 RSpec.describe Seeds::StarterEncounterBootstrap, type: :model do
-  let(:zone_name) { "Outpost Surroundings" }
+  let(:zone_name) { "Пепельный Берег" }
   let(:zone_config) { Game::World::OutdoorNpcConfig.config.fetch(:outpost_surroundings) }
   let(:definition) { zone_config.fetch(:starter_npcs).find { |npc| npc.values_at(:x, :y) == [15, 7] }.deep_dup }
   let(:templates) do

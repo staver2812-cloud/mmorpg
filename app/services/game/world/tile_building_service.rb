@@ -20,7 +20,7 @@ module Game
     # Usage:
     #   service = Game::World::TileBuildingService.new(
     #     character: current_character,
-    #     zone: "Outpost Surroundings",
+    #     zone: "Пепельный Берег",
     #     x: 5,
     #     y: 5
     #   )

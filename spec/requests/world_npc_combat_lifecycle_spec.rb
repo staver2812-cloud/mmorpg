@@ -18,7 +18,7 @@ RSpec.describe "Physical wilderness NPC combat lifecycle", type: :request do
   let(:zone) do
     create(
       :zone,
-      name: "Outpost Surroundings",
+      name: "Пепельный Берег",
       location_type: "outdoor",
       width: 1_000,
       height: 1_000

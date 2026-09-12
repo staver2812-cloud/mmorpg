@@ -4,7 +4,7 @@ require "rails_helper"
 
 RSpec.describe "World Interactions", type: :system, js: true do
   let(:user) { create(:user) }
-  let(:zone) { create(:zone, name: "Outpost Surroundings", location_type: "outdoor", width: 10, height: 10) }
+  let(:zone) { create(:zone, name: "Пепельный Берег", location_type: "outdoor", width: 10, height: 10) }
   let(:character) { create(:character, user: user) }
   let!(:position) { create(:character_position, character: character, zone: zone, x: 5, y: 5) }
 
@@ -366,12 +366,12 @@ RSpec.describe "World Interactions", type: :system, js: true do
       neighbor_position = create(:character_position, character: neighbor, zone:, x: 5, y: 5)
       create(:user_session, user: neighbor.user)
       visit world_path
-      expect(page).to have_css(".nl-location-text", text: "Outpost Surroundings [ 2 ]")
+      expect(page).to have_css(".nl-location-text", text: "Пепельный Берег [ 2 ]")
 
       neighbor_position.update!(x: 6)
       find(".nl-sort-links [data-sort='za']").click
 
-      expect(page).to have_css(".nl-location-text", text: "Outpost Surroundings [ 1 ]")
+      expect(page).to have_css(".nl-location-text", text: "Пепельный Берег [ 1 ]")
       expect(page).to have_css(".nl-player-entry", text: character.name)
       expect(page).not_to have_css(".nl-player-entry", text: "NearbyTraveler")
 

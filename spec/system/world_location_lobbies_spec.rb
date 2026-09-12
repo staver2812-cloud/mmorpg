@@ -12,7 +12,7 @@ RSpec.describe "Seeded mine and exchange lobbies", type: :system, js: true do
       Rails.application.load_seed
       user = create(:user)
       character = create(:character, user:, level: 0)
-      zone = Zone.find_by!(name: "Outpost Surroundings")
+      zone = Zone.find_by!(name: "Пепельный Берег")
       position = create(:character_position, character:, zone:, x: lobby[:x], y: lobby[:y])
 
       page.current_window.resize_to(1500, 1000)

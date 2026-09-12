@@ -3,7 +3,7 @@
 require "rails_helper"
 
 RSpec.describe Game::World::StartNpcFight do
-  let(:zone) { create(:zone, name: "Outpost Surroundings", location_type: "outdoor") }
+  let(:zone) { create(:zone, name: "Пепельный Берег", location_type: "outdoor") }
   let(:character) { create(:character, level: 4, current_hp: 100, max_hp: 100) }
   let!(:position) { create(:character_position, character:, zone:, x: 5, y: 5) }
   let(:npc_template) do

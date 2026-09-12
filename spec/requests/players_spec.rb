@@ -5,7 +5,7 @@ RSpec.describe "Players", type: :request do
 
   describe "GET /player/:name" do
     it "renders a Neverlands-style public character page by character name" do
-      zone = create(:zone, name: "Outpost Surroundings")
+      zone = create(:zone, name: "Пепельный Берег")
       character = create(:character,
         user: user,
         name: "max_kerby",
@@ -26,7 +26,7 @@ RSpec.describe "Players", type: :request do
       expect(response.body).not_to include('<body class="nl-game-layout"')
       expect(response.body).to include("max_kerby [#{character.level}]")
       location = Nokogiri::HTML(response.body).at_css(".nl-character-page-aside .nl-profile-location")
-      expect(location.text).to eq("Outpost Surroundings")
+      expect(location.text).to eq("Пепельный Берег")
       expect(location.text).not_to include("[7, 9]")
       expect(response.body).to include("nl-doll-figure")
       expect(response.body).not_to include("assets/neverlands")
@@ -120,26 +120,26 @@ RSpec.describe "Players", type: :request do
     end
 
     it "shows the same current pond label to its owner, visitors, and the public JSON reader" do
-      zone = create(:zone, :mvp_outdoor_region, name: "Outpost Surroundings")
+      zone = create(:zone, :mvp_outdoor_region, name: "Пепельный Берег")
       character = create(:character, user:, name: "pond_visitor")
       create(:character_position, character:, zone:, x: 13, y: 10)
       create(:map_tile_template, zone: zone.name, x: 13, y: 10,
-        metadata: {"presence_label" => "Outpost Surroundings, Pond"})
+        metadata: {"presence_label" => "Пепельный Берег, Pond"})
 
       get player_path(name: character.name)
       public_location = Nokogiri::HTML(response.body).at_css(".nl-profile-location")
-      expect(public_location.inner_html).to eq("Outpost Surroundings<br>Outpost Surroundings, Pond")
+      expect(public_location.inner_html).to eq("Пепельный Берег<br>Пепельный Берег, Pond")
       expect(public_location.text).not_to include("[13, 10]")
 
       sign_in user, scope: :user
       get player_path(name: character.name)
       own_location = Nokogiri::HTML(response.body).at_css(".nl-profile-location")
       expect(own_location.inner_html).to eq(public_location.inner_html)
-      expect(Nokogiri::HTML(response.body).at_css(".nl-location-text").text).to include("Outpost Surroundings, Pond")
+      expect(Nokogiri::HTML(response.body).at_css(".nl-location-text").text).to include("Пепельный Берег, Pond")
 
       get player_path(name: character.name, format: :json)
       expect(response.parsed_body.dig("character", "location")).to eq(
-        "label" => "Outpost Surroundings, Pond", "zone" => "Outpost Surroundings", "x" => 13, "y" => 10
+        "label" => "Пепельный Берег, Pond", "zone" => "Пепельный Берег", "x" => 13, "y" => 10
       )
     end
 

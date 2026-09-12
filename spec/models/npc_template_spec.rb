@@ -60,7 +60,7 @@ RSpec.describe NpcTemplate, type: :model do
           ActiveRecord::Base.connection_pool.with_connection do |connection|
             ApplicationRecord.transaction do
               connection.execute("SET LOCAL lock_timeout = '100ms'")
-              TileNpc.create!(zone: "Outpost Surroundings", x: 1, y: 1, npc_key: "roster_anchor",
+              TileNpc.create!(zone: "Пепельный Берег", x: 1, y: 1, npc_key: "roster_anchor",
                 npc_template_id: anchor_id, npc_role: "hostile", level: 1, metadata:)
             end
           rescue => error

@@ -26,7 +26,7 @@ module Manage
       attributes = parsed_tile_npc_params
 
       if attributes && mutate(@tile_npc, operation: :create, attributes:)
-        redirect_to manage_tile_npc_path(@tile_npc), notice: "Cell NPC created.", status: :see_other
+        redirect_to manage_tile_npc_path(@tile_npc), notice: I18n.t("manage.flashes.tile_npc_created"), status: :see_other
       else
         render :new, status: :unprocessable_content
       end
@@ -36,7 +36,7 @@ module Manage
       attributes = parsed_tile_npc_params
 
       if attributes && mutate(@tile_npc, operation: :update, attributes:)
-        redirect_to manage_tile_npc_path(@tile_npc), notice: "Cell NPC updated.", status: :see_other
+        redirect_to manage_tile_npc_path(@tile_npc), notice: I18n.t("manage.flashes.tile_npc_updated"), status: :see_other
       else
         render :edit, status: :unprocessable_content
       end
@@ -44,7 +44,7 @@ module Manage
 
     def destroy
       if mutate(@tile_npc, operation: :destroy)
-        redirect_to manage_tile_npcs_path, notice: "Cell NPC deleted.", status: :see_other
+        redirect_to manage_tile_npcs_path, notice: I18n.t("manage.flashes.tile_npc_deleted"), status: :see_other
       else
         redirect_to manage_tile_npc_path(@tile_npc), alert: @tile_npc.errors.full_messages.to_sentence,
           status: :see_other

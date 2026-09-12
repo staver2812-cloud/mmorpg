@@ -61,7 +61,7 @@ RSpec.describe "World", type: :request do
 
   describe "GET /world" do
     let(:user) { create(:user) }
-    let(:zone) { create(:zone, name: "Outpost Surroundings", location_type: "outdoor", width: 20, height: 20) }
+    let(:zone) { create(:zone, name: "Пепельный Берег", location_type: "outdoor", width: 20, height: 20) }
     let(:character) { create(:character, user: user) }
     let!(:position) { create(:character_position, character: character, zone: zone, x: 5, y: 5) }
 
@@ -87,7 +87,7 @@ RSpec.describe "World", type: :request do
 
       it "displays the zone name" do
         get world_path
-        expect(response.body).to include("Outpost Surroundings")
+        expect(response.body).to include("Пепельный Берег")
       end
 
       it "displays the player coordinates" do
@@ -258,7 +258,7 @@ RSpec.describe "World", type: :request do
 
   describe "POST /world/move" do
     let(:user) { create(:user) }
-    let(:zone) { create(:zone, name: "Outpost Surroundings", location_type: "outdoor", width: 20, height: 20) }
+    let(:zone) { create(:zone, name: "Пепельный Берег", location_type: "outdoor", width: 20, height: 20) }
     let(:character) { create(:character, user: user) }
     let!(:position) { create(:character_position, character: character, zone: zone, x: 5, y: 5) }
 
@@ -951,7 +951,7 @@ RSpec.describe "World", type: :request do
   # ===========================================================================
   describe "POST /world/enter_building" do
     let(:user) { create(:user) }
-    let(:source_zone) { create(:zone, name: "Outpost Surroundings", location_type: "outdoor", width: 20, height: 20) }
+    let(:source_zone) { create(:zone, name: "Пепельный Берег", location_type: "outdoor", width: 20, height: 20) }
     let(:destination_zone) { create(:zone, name: "Outpost", location_type: "city", width: 10, height: 10) }
     let(:character) { create(:character, user: user, level: 10) }
     let!(:position) { create(:character_position, character: character, zone: source_zone, x: 5, y: 5) }
@@ -1317,7 +1317,7 @@ RSpec.describe "World", type: :request do
 
   describe "TileBuilding display on map" do
     let(:user) { create(:user) }
-    let(:zone) { create(:zone, name: "Outpost Surroundings", location_type: "outdoor", width: 20, height: 20) }
+    let(:zone) { create(:zone, name: "Пепельный Берег", location_type: "outdoor", width: 20, height: 20) }
     let(:destination_zone) { create(:zone, name: "Outpost", location_type: "city") }
     let(:character) { create(:character, user: user) }
     let!(:position) { create(:character_position, character: character, zone: zone, x: 10, y: 10) }
@@ -1404,7 +1404,7 @@ RSpec.describe "World", type: :request do
 
   describe "TileBuilding actions panel display" do
     let(:user) { create(:user) }
-    let(:zone) { create(:zone, name: "Outpost Surroundings", location_type: "outdoor", width: 20, height: 20) }
+    let(:zone) { create(:zone, name: "Пепельный Берег", location_type: "outdoor", width: 20, height: 20) }
     let(:destination_zone) { create(:zone, name: "Outpost", location_type: "city") }
     let(:character) { create(:character, user: user, level: 5) }
     let!(:position) { create(:character_position, character: character, zone: zone, x: 5, y: 5) }
@@ -1492,7 +1492,7 @@ RSpec.describe "World", type: :request do
   describe "POST /world/interact_hotspot" do
     let(:user) { create(:user) }
     let(:city_zone) { create(:zone, name: "Hotspot Test City", location_type: "city", width: 20, height: 20) }
-    let(:destination_zone) { create(:zone, name: "Outpost Surroundings", location_type: "outdoor", width: 20, height: 20) }
+    let(:destination_zone) { create(:zone, name: "Пепельный Берег", location_type: "outdoor", width: 20, height: 20) }
     let(:character) { create(:character, user: user, level: 10) }
     let!(:position) { create(:character_position, character: character, zone: city_zone, x: 5, y: 5) }
     before { sign_in user, scope: :user }

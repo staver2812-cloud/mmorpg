@@ -9,10 +9,10 @@ RSpec.describe Game::World::OutdoorNpcConfig do
 
   describe ".source_npc_for_tile" do
     it "returns the captured plague rat at its mapped local coordinate" do
-      npc = described_class.source_npc_for_tile("Outpost Surroundings", 7, 7)
+      npc = described_class.source_npc_for_tile("Пепельный Берег", 7, 7)
 
       expect(npc[:key]).to eq("plague_rat")
-      expect(npc[:name]).to eq("Plague Rat")
+      expect(npc[:name]).to eq("Пепельный клещ")
       expect(npc[:hp]).to eq(100)
       expect(npc[:damage]).to eq(7)
       expect(npc.dig(:metadata, :source_map)).to eq("m_1001_999")
@@ -27,20 +27,20 @@ RSpec.describe Game::World::OutdoorNpcConfig do
       )
     end
 
-    it "keeps the uncaptured Plague Rat probability explicitly disabled" do
-      npc = described_class.source_npc_for_tile("Outpost Surroundings", 7, 7)
+    it "keeps author-controlled starter loot chance for Пепельный клещ" do
+      npc = described_class.source_npc_for_tile("Пепельный Берег", 7, 7)
       loot_entry = npc.fetch(:loot).first
 
-      expect(loot_entry[:chance]).to eq(0.0)
-      expect(Game::LootEntry.new(loot_entry).chance_percent).to eq(0.0)
+      expect(loot_entry[:chance]).to eq(0.35)
+      expect(Game::LootEntry.new(loot_entry).chance_percent).to eq(35.0)
     end
 
     it "does not invent NPCs for other coordinates in the same zone" do
-      expect(described_class.source_npc_for_tile("Outpost Surroundings", 9, 7)).to be_nil
+      expect(described_class.source_npc_for_tile("Пепельный Берег", 9, 7)).to be_nil
     end
 
     it "preserves the four captured m_1008_1007 roster samples and timing windows" do
-      npc = described_class.source_npc_for_tile("Outpost Surroundings", 14, 15)
+      npc = described_class.source_npc_for_tile("Пепельный Берег", 14, 15)
       rosters = npc.dig(:metadata, :encounter_rosters)
 
       expect(npc[:key]).to eq("wilderness_bandit")
@@ -48,7 +48,7 @@ RSpec.describe Game::World::OutdoorNpcConfig do
       expect(npc.dig(:metadata, :source_capture_scope)).to eq("independent_encounter_sample")
       expect(npc.dig(:metadata, :source_coordinates)).to eq([1008, 1007])
       expect(npc.dig(:metadata, :source_coordinate_offset)).to eq([994, 992])
-      expect(described_class.source_npc_for_tile("Outpost Surroundings", 8, 7)).to be_nil
+      expect(described_class.source_npc_for_tile("Пепельный Берег", 8, 7)).to be_nil
       expect(npc.dig(:metadata, :passive_delay_windows)).to eq(
         [
           {key: "2026-09-01-interval-1", min_seconds: 230, max_seconds: 278},
@@ -62,7 +62,7 @@ RSpec.describe Game::World::OutdoorNpcConfig do
       expect(rosters.last[:members].pluck(:npc_key, :level, :hp)).to eq(
         [["wilderness_bandit", 8, 185], ["wilderness_robber", 9, 310]]
       )
-      expect(described_class.find_npc("wilderness_robber")[:name]).to eq("Robber")
+      expect(described_class.find_npc("wilderness_robber")[:name]).to eq("Солевой контрабандист")
     end
   end
 

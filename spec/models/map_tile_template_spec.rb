@@ -5,7 +5,7 @@ require "rails_helper"
 RSpec.describe MapTileTemplate, type: :model do
   describe "presence label" do
     it "accepts a bounded authored label and rejects malformed labels" do
-      expect(build(:map_tile_template, metadata: {"presence_label" => "Outpost Surroundings, Pond"})).to be_valid
+      expect(build(:map_tile_template, metadata: {"presence_label" => "Пепельный Берег, Pond"})).to be_valid
       [nil, "", "  ", 123, {}, "a" * 121].each do |label|
         cell = build(:map_tile_template, metadata: {"presence_label" => label})
         expect(cell).not_to be_valid

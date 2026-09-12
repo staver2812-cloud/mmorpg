@@ -11,7 +11,7 @@ ZONE_RENAMES = {
   "Outpost Knowledge Quarter" => "Чёрный Маяк",
   "Outpost Business Quarter" => "Верфь Без Колоколов",
   "Outpost Law Quarter" => "Утонувшая Цистерна",
-  "Outpost Surroundings" => "Пепельный Берег"
+  "Пепельный Берег" => "Пепельный Берег"
 }.freeze
 
 ZONE_RENAMES.each do |from, to|

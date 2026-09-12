@@ -4,7 +4,7 @@
   <div class="nl-manage-field-grid">
     <div class="nl-manage-field">
       <%= form.label :zone %>
-      <%= form.collection_select :zone, @outdoor_zones, :name, :name, prompt: "Select an outdoor zone" %>
+      <%= form.collection_select :zone, @outdoor_zones, :name, :name, prompt: t("manage.views.select_outdoor_zone") %>
     </div>
     <div class="nl-manage-field">
       <%= form.label :terrain_type %>
@@ -23,7 +23,7 @@
       <%= form.check_box :passable %>
     </div>
     <div class="nl-manage-field nl-manage-field--wide">
-      <%= form.label :metadata, "Metadata and resources (JSON)" %>
+      <%= form.label :metadata, t("manage.views.metadata_json") %>
       <%= form.text_area :metadata, value: pretty_json(world_cell.metadata.to_h.except("local_actions", "resource_groups")), spellcheck: false %>
       <small class="nl-manage-help">Advanced cell properties and source references. Edit actions and resource groups below. Cell art also requires <code>source_map</code>.</small>
     </div>

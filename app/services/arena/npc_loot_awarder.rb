@@ -30,10 +30,9 @@ module Arena
 
       def description
         if item?
-          suffix = quantity > 1 ? " x#{quantity}" : ""
-          "Item «#{item_template.name}»#{suffix}"
+          Arena::CombatLogMessages.item_award(item_template.display_name, quantity)
         else
-          "Funds «#{amount} #{currency}»"
+          Arena::CombatLogMessages.funds_award(amount, currency)
         end
       end
 
