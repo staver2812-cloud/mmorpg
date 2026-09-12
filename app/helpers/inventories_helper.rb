@@ -265,9 +265,13 @@ module InventoriesHelper
 
   def item_artwork_path(item_template)
     explicit = item_template.enhancement_rules.to_h["icon"].presence
-    return explicit.delete_prefix("/") if explicit
+    path = explicit.presence || ITEM_ARTWORK_PATHS[item_template.key.to_s]
+    return if path.blank?
 
-    ITEM_ARTWORK_PATHS[item_template.key.to_s]
+    # Public /ashen/... URLs must stay absolute so image_tag does not treat them
+    # as Propshaft digest assets.
+    path = path.to_s
+    path.start_with?("/") ? path : "/#{path}"
   end
 
   def inventory_category_options
@@ -335,10 +339,10 @@ module InventoriesHelper
   def inventory_item_properties(item)
     template = item.item_template
     lines = []
-    lines << ["Quantity", item.quantity] if item.quantity.to_i > 1
-    lines << ["Price", "#{template.base_price} NV"] if template.base_price.to_i.positive?
-    lines << ["Durability", inventory_item_durability(item)] if inventory_item_durability(item)
-    lines << ["Damage", "#{template.stat_modifiers["damage_min"]}-#{template.stat_modifiers["damage_max"]}"] if template.stat_modifiers["damage_min"] && template.stat_modifiers["damage_max"]
+    lines << [I18n.t("game.details.quantity"), item.quantity] if item.quantity.to_i > 1
+    lines << [I18n.t("game.details.price"), "#{template.base_price} NV"] if template.base_price.to_i.positive?
+    lines << [I18n.t("game.details.durability"), inventory_item_durability(item)] if inventory_item_durability(item)
+    lines << [I18n.t("game.details.damage"), "#{template.stat_modifiers["damage_min"]}-#{template.stat_modifiers["damage_max"]}"] if template.stat_modifiers["damage_min"] && template.stat_modifiers["damage_max"]
 
     template.stat_modifiers.to_h.each do |stat, value|
       next if value.blank?
@@ -364,7 +368,7 @@ module InventoriesHelper
     template = item.item_template
     requirements = template.requirements.to_h.merge(item.properties.to_h.fetch("requirements", {}))
     weight = item.weight.to_i.positive? ? item.weight : template.weight
-    lines = [["Mass", weight, "mass"]]
+    lines = [[I18n.t("game.details.mass"), weight, "mass"]]
 
     requirements.each do |label, value|
       append_inventory_requirement_rows(lines, label, value)
@@ -394,16 +398,20 @@ module InventoriesHelper
 
     damage_min = modifiers["damage_min"].to_i
     damage_max = modifiers["damage_max"].to_i
-    lines << "Damage: #{damage_min}-#{damage_max}" if damage_min.positive? || damage_max.positive?
+    lines << "#{I18n.t("game.details.damage")}: #{damage_min}-#{damage_max}" if damage_min.positive? || damage_max.positive?
 
-    {"Armor class" => "armor_class", "Armor pierce" => "armor_pierce", "HP" => "max_hp", "Mana" => "max_mp"}
-      .each do |title, key|
-        amount = modifiers[key].to_i
-        lines << "#{title}: #{signed_value(amount)}" unless amount.zero?
-      end
+    {
+      I18n.t("game.details.armor_class") => %w[armor_class],
+      I18n.t("game.details.armor_pierce") => %w[armor_pierce],
+      I18n.t("game.details.hp") => %w[hp max_hp],
+      I18n.t("game.details.mana") => %w[mana max_mp]
+    }.each do |title, keys|
+      amount = keys.sum { |key| modifiers[key].to_i }
+      lines << "#{title}: #{signed_value(amount)}" unless amount.zero?
+    end
 
     durability = inventory_item_durability(item)
-    lines << "Durability: #{durability}" if durability
+    lines << "#{I18n.t("game.details.durability")}: #{durability}" if durability
 
     lines.join("\n")
   end

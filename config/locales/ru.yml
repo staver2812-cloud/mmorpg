@@ -88,3 +88,13 @@ ru:
             profile_name:
               invalid_nickname: "допускает буквы, цифры, пробел, _ и - (2–20)"
               taken: "уже занят"
+  time:
+    formats:
+      default: "%d.%m.%Y %H:%M"
+      short: "%d.%m %H:%M"
+      long: "%d %B %Y, %H:%M:%S"
+  date:
+    formats:
+      default: "%d.%m.%Y"
+      short: "%d.%m.%Y"
+      long: "%d %B %Y"

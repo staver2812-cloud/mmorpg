@@ -276,6 +276,7 @@ en:
       location: "Location"
     details:
       price: "Price"
+      quantity: "Qty"
       damage: "Damage"
       durability: "Durability"
       description: "Description"

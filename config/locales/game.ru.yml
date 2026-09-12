@@ -276,6 +276,7 @@ ru:
       location: "Локация"
     details:
       price: "Цена"
+      quantity: "Кол-во"
       damage: "Урон"
       durability: "Прочность"
       description: "Описание"
