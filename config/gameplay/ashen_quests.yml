@@ -18,7 +18,22 @@ quests:
       item_key: set-blood-ring-t5
     sort: 10
 
-  salt_smuggler_trace:
+  ash_scout_watch:
+    title_ru: "Разведка берега"
+    title_en: "Shore Recon"
+    summary_ru: "Сбейте пепельного разведчика у Пепельного Берега и доложите в Ратушу."
+    summary_en: "Defeat the ash shore scout and report to City Hall."
+    giver: "Ратуша Угля"
+    objective:
+      type: kill_npc
+      npc_keys: [ash_shore_scout]
+      count: 1
+    reward:
+      experience: 35
+      currency_nv: 20
+      item_key: set-distortion-gloves-t5
+    sort: 15
+
     title_ru: "След соли"
     title_en: "Salt Trail"
     summary_ru: "Сбейте солевых контрабандистов и патруль Завесы, затем вернитесь с докладом."

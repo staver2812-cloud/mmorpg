@@ -82,6 +82,34 @@ outpost_surroundings:
           amount: 4
           chance: 0.5
 
+    - key: ash_shore_scout
+      name: Пепельный разведчик
+      role: hostile
+      level: 5
+      x: 9
+      y: 8
+      hp: 120
+      damage: 9
+      xp: 28
+      metadata:
+        source_name: "Пепельный разведчик"
+        source_location: "Пепельный Берег"
+        source_observation: "ashen_sandbox_starter_scout_2026-09-12"
+        source_map: "m_1001_999"
+        encounter_count: 1
+        encounter_experience_reward: 28
+        avatar_image: "zombie.png"
+        max_attacks_per_turn: 1
+      loot:
+        - kind: item
+          item: set-swamp-boots-t5
+          source_name: "Сапоги «Топь» · T5"
+          chance: 0.08
+        - kind: currency
+          currency: NV
+          amount: 8
+          chance: 0.5
+
     - key: wilderness_bandit
       name: Пепельный патрульный
       role: hostile

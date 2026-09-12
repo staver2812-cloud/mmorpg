@@ -237,6 +237,13 @@ def main() -> int:
     gated = "/world" in r.url or 'data-building-key="temple"' not in r.text
     report.add("temple gated from main square", gated, f"url={r.url}")
 
+    ok_gate, gate_detail = click_hotspot(s, "west_gate")
+    report.add("travel west_gate", ok_gate, gate_detail)
+    if ok_gate:
+        r = s.get(f"{BASE}/world", timeout=TIMEOUT)
+        outdoorish = ("Пепельный Берег" in r.text) or ("nl-world-map" in r.text) or ("available-actions" in r.text)
+        report.add("outdoor after west_gate", r.status_code == 200 and outdoorish, f"{r.status_code}")
+
     failed = report.failed
     print("\n=== SUMMARY ===")
     print(f"passed={len(report.checks) - len(failed)} failed={len(failed)} total={len(report.checks)}")

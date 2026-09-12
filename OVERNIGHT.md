@@ -13,3 +13,7 @@
 - Full Neverlands-faithful quest engine remains NOT_IMPLEMENTED; this is sandbox Ashen loop
 - Outdoor fight e2e in smoke (move to cell + fight) still heavy — optional next
 - More quests / friendly talk NPCs / AFK bait — later slices
+
+## Follow-up same night
+- Added `ash_shore_scout` outdoor NPC + quest `ash_scout_watch`
+- Smoke now checks `west_gate` → outdoor
