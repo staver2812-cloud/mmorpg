@@ -166,6 +166,29 @@ def main() -> int:
         r.status_code == 200 and 'data-building-key="city_hall"' in r.text,
         f"url={r.url}",
     )
+    if r.status_code == 200:
+        report.add("city_hall quest board", "Задания" in r.text or "/quests" in r.text)
+
+    r = s.get(f"{BASE}/quests", timeout=TIMEOUT)
+    report.add(
+        "GET /quests",
+        r.status_code == 200 and ("Пепельный дозор" in r.text or "Ashen Veil Quests" in r.text or "nl-quests" in r.text),
+        f"{r.status_code}",
+    )
+    if r.status_code == 200:
+        token = csrf_from(r.text) or token
+        # accept first available quest (veil_tail_delivery is sort 5)
+        r_acc = s.post(
+            f"{BASE}/quests/veil_tail_delivery/accept",
+            data={"authenticity_token": token},
+            timeout=TIMEOUT,
+            allow_redirects=True,
+        )
+        report.add(
+            "POST accept veil_tail_delivery",
+            r_acc.status_code in (200, 302) and ("принято" in r_acc.text.lower() or "accepted" in r_acc.text.lower() or "В работе" in r_acc.text or "In progress" in r_acc.text),
+            f"{r_acc.status_code}",
+        )
 
     ok_main, d1 = click_hotspot(s, "go_main")
     report.add("travel go_main", ok_main, d1)

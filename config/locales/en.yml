@@ -29,3 +29,12 @@
 
 en:
   hello: "Hello world"
+  nav:
+    your_character: "Character"
+    inventory: "Inventory"
+    return: "Back"
+    city: "City"
+    exit_confirm: "Leave the game?"
+    exit: "Exit"
+    abilities: "Abilities"
+    quests: "Quests"

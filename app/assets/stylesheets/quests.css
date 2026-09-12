@@ -1,0 +1,59 @@
+/* Sandbox Ashen quest journal */
+.nl-quests {
+  max-width: 720px;
+  margin: 0 auto;
+  padding: 12px 16px 24px;
+  color: #2a2218;
+}
+
+.nl-quests__header h1 {
+  margin: 0 0 6px;
+  font: 700 18px Verdana, Tahoma, sans-serif;
+}
+
+.nl-quests__header p,
+.nl-quests__giver,
+.nl-quests__progress {
+  margin: 0 0 8px;
+  color: #5a4a38;
+}
+
+.nl-quests__list {
+  display: grid;
+  gap: 12px;
+}
+
+.nl-quests__card {
+  padding: 12px;
+  border: 1px solid #b9a588;
+  background: linear-gradient(180deg, #f7f0e2 0%, #ebe1cd 100%);
+}
+
+.nl-quests__card h2 {
+  margin: 0 0 6px;
+  font: 700 14px Verdana, Tahoma, sans-serif;
+}
+
+.nl-quests__card--completed {
+  opacity: 0.78;
+}
+
+.nl-quests__actions {
+  margin-top: 8px;
+}
+
+.nl-quests__done {
+  font-weight: 700;
+  color: #3d5a2f;
+}
+
+.nl-quests-board {
+  margin-top: 16px;
+  padding: 12px;
+  border: 1px solid #b9a588;
+  background: #f4ecdc;
+}
+
+.nl-chat-tool--quests {
+  font-weight: 700;
+}

@@ -16,6 +16,7 @@ ru:
     exit_confirm: "Выйти из игры?"
     exit: "Выход"
     abilities: "Способности"
+    quests: "Задания"
   social:
     chat_players: "Чат и игроки рядом"
     sort: "Сорт:"

@@ -20,7 +20,7 @@ RSpec.describe Arena::NpcApplicationService do
       it "uses the captured mannequin application contract in the training room" do
         result = service.create_for_room(room: arena_room)
 
-        expect(result.application.applicant_name).to eq("Training Dummy")
+        expect(result.application.applicant_name).to eq("Пепельный манекен")
         expect(result.application.applicant_level).to eq(1)
         expect(result.application.fight_kind).to eq("free")
         expect(result.application.timeout_seconds).to eq(300)
@@ -49,7 +49,7 @@ RSpec.describe Arena::NpcApplicationService do
         result = service.create_for_room(room: arena_room)
 
         expect(result.success?).to be true
-        expect(result.application.applicant_name).to eq("Training Dummy")
+        expect(result.application.applicant_name).to eq("Пепельный манекен")
         expect(result.application.metadata).not_to have_key("difficulty")
       end
 
@@ -132,7 +132,7 @@ RSpec.describe Arena::NpcApplicationService do
       results = service.spawn_batch(room: arena_room, count: 3)
       names = results.map { |r| r.application&.applicant_name }.compact
 
-      expect(names).to eq(["Training Dummy"])
+      expect(names).to eq(["Пепельный манекен"])
     end
   end
 end

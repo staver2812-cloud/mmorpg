@@ -1,0 +1,50 @@
+# Sandbox Ashen Veil starter quests (Пепельная Завеса).
+# Lightweight journal progress stored on character.metadata["ashen_quests"].
+
+quests:
+  ash_mite_patrol:
+    title_ru: "Пепельный дозор"
+    title_en: "Ash Mite Patrol"
+    summary_ru: "Уничтожьте пепельных клещей у Пепельного Берега и доложите в Ратушу."
+    summary_en: "Defeat ash mites on the Ashen Shore and report to City Hall."
+    giver: "Ратуша Угля"
+    objective:
+      type: kill_npc
+      npc_keys: [plague_rat]
+      count: 3
+    reward:
+      experience: 40
+      currency_nv: 25
+      item_key: set-blood-ring-t5
+    sort: 10
+
+  salt_smuggler_trace:
+    title_ru: "След соли"
+    title_en: "Salt Trail"
+    summary_ru: "Сбейте солевых контрабандистов и патруль Завесы, затем вернитесь с докладом."
+    summary_en: "Defeat salt smugglers and Veil patrols, then report back."
+    giver: "Ратуша Угля"
+    objective:
+      type: kill_npc
+      npc_keys: [wilderness_robber, wilderness_bandit]
+      count: 2
+    reward:
+      experience: 80
+      currency_nv: 45
+      item_key: set-judge-amulet-t5
+    sort: 20
+
+  veil_tail_delivery:
+    title_ru: "Хвост Завесы"
+    title_en: "Veil Tail Delivery"
+    summary_ru: "Добыйте «Хвост Крысы Завесы» с клещей и сдайте в Ратушу."
+    summary_en: "Collect a Veil Rat Tail from ash mites and turn it in at City Hall."
+    giver: "Ратуша Угля"
+    objective:
+      type: deliver_item
+      item_key: rat_tail
+      count: 1
+    reward:
+      experience: 30
+      currency_nv: 15
+    sort: 5

@@ -85,7 +85,7 @@ RSpec.describe Game::World::ArenaNpcConfig do
       npc = described_class.find_npc(:arena_training_dummy)
 
       expect(npc).to be_present
-      expect(npc[:name]).to eq("Training Dummy")
+      expect(npc[:name]).to eq("Пепельный манекен")
     end
 
     it "returns nil for unknown key" do

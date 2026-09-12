@@ -36,6 +36,14 @@
       <% when "landmark" %>
         <%= render "city_buildings/landmark", building: @building %>
       <% end %>
+
+      <% if @building_key == "city_hall" %>
+        <section class="nl-quests-board">
+          <h2><%= t("game.quests.board_title") %></h2>
+          <p><%= t("game.quests.hint") %></p>
+          <%= link_to t("game.quests.board_open"), quests_path, class: "lbut" %>
+        </section>
+      <% end %>
     </section>
 </div>
 <% end %>

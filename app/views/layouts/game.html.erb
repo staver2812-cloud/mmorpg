@@ -188,6 +188,7 @@
     <div class="nl-status-icons">
       <span class="nl-time-display"><%= Time.current.strftime("%H:%M:%S") %></span>
       <% if current_character %>
+        <%= link_to "Q", quests_path, class: "nl-chat-tool nl-chat-tool--quests", aria: {label: t("nav.quests")}, title: t("nav.quests"), data: {turbo_frame: "_top"} %>
         <%= link_to "A", character_licenses_path, class: "nl-chat-tool nl-chat-tool--abilities", aria: {label: t("nav.abilities")}, title: t("nav.abilities"), data: {turbo_frame: "_top"} %>
       <% end %>
     </div>

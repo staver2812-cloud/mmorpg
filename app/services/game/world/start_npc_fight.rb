@@ -22,7 +22,7 @@ module Game
       end
 
       def call
-        raise FightViolationError, "NPC is unavailable." unless tile_npc
+        raise FightViolationError, I18n.t("game.quests.npc_unavailable") unless tile_npc
 
         match = nil
         ActiveRecord::Base.transaction do
@@ -54,16 +54,14 @@ module Game
       attr_reader :character, :tile_npc, :return_context, :rng, :roster_selector_class
 
       def validate!
-        if character.active_airship_journey
-          raise FightViolationError, "Disembark before interacting with ground NPCs."
-        end
+        raise FightViolationError, I18n.t("game.flashes.disembark_first") if character.active_airship_journey
 
         if MovementCommand.moving.where(character:).exists?
-          raise FightViolationError, "Movement already in progress."
+          raise FightViolationError, I18n.t("game.flashes.movement_in_progress")
         end
-        raise FightViolationError, "NPC is unavailable." unless tile_npc&.alive?
-        raise FightViolationError, "This NPC is not hostile." unless tile_npc.hostile?
-        raise FightViolationError, "NPC is not on the current cell." unless npc_matches_position?
+        raise FightViolationError, I18n.t("game.quests.npc_unavailable") unless tile_npc&.alive?
+        raise FightViolationError, I18n.t("game.quests.npc_not_hostile") unless tile_npc.hostile?
+        raise FightViolationError, I18n.t("game.quests.npc_wrong_cell") unless npc_matches_position?
         encounter_selection
       rescue EncounterRosterSelector::InvalidRosterError => error
         raise FightViolationError, error.message

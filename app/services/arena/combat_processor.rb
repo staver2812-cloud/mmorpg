@@ -1182,6 +1182,15 @@ module Arena
           "npc_wins" => winner.metadata.to_h["npc_wins"].to_i + 1
         ))
       end
+
+      defeated_keys = match.arena_participations.npcs
+        .where.not(team: winning_team)
+        .includes(:npc_template)
+        .select(&:defeat?)
+        .filter_map { |participation| participation.npc_template&.npc_key.presence }
+      defeated_keys.each do |npc_key|
+        Game::Quests::Journal.new(character: winner).record_npc_kill!(npc_key:)
+      end
     end
 
     def log_entry(entry_type, actor, description)
