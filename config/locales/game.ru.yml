@@ -36,6 +36,7 @@ ru:
       mass: "Масса"
       remember: "Запомнить"
       set_name: "Имя комплекта"
+      nv_short: "NV"
       recipient: "Получатель"
       no_items: "Нет предметов в этой категории."
       remove_aria: "Снять «%{item}» со слота «%{slot}»"

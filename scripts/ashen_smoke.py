@@ -631,6 +631,11 @@ def main() -> int:
         f"url={r.url}",
     )
     report.add(
+        "inventory transfer price field",
+        "data-inventory-transfer-price=" in r.text,
+        f"url={r.url}",
+    )
+    report.add(
         "inventory junk hint or link",
         ("Скупщику:" in r.text) or ("Junk buyer:" in r.text),
         f"url={r.url}",

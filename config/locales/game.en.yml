@@ -36,6 +36,7 @@ en:
       mass: "Mass"
       remember: "Remember"
       set_name: "Set name"
+      nv_short: "NV"
       recipient: "Recipient"
       no_items: "No items in this category."
       remove_aria: "Remove %{item} from %{slot}"

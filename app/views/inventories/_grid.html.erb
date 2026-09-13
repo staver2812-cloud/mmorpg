@@ -75,7 +75,7 @@
                 <%= f.hidden_field :subcategory, value: subcategory %>
                 <%= f.hidden_field :info, value: info_mode %>
                 <%= f.text_field :recipient_name, placeholder: t("game.common.recipient"), maxlength: 25, class: "LogintextBox" %>
-                <%= f.number_field :price, placeholder: "NV", min: 0.01, step: 0.01, class: "LogintextBox2" %>
+                <%= f.number_field :price, placeholder: t("game.common.nv_short"), min: 0.01, step: 0.01, class: "LogintextBox2", data: {inventory_transfer_price: "1"} %>
                 <%= f.number_field :quantity, value: 1, min: 1, max: item.quantity, class: "LogintextBox2" %>
                 <%= f.submit t("game.common.sell"), class: "lbut" %>
               <% end %>
