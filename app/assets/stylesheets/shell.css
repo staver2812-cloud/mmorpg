@@ -123,6 +123,30 @@
   background: #1a1212;
 }
 
+.nl-obelisk-chip-form {
+  display: inline;
+  margin: 0;
+}
+
+.nl-obelisk-chip {
+  margin-left: 6px;
+  padding: 1px 6px;
+  border: 1px solid #4a5a78;
+  background: #12161c;
+  color: #b8c8e0;
+  font-size: 11px;
+  font-weight: 700;
+  white-space: nowrap;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+a.nl-obelisk-chip:hover,
+button.nl-obelisk-chip:hover {
+  color: #e8f0ff;
+  border-color: #7a90b8;
+}
+
 .nl-vitals-inline {
   gap: 3px;
   margin-left: 3px;

@@ -21,12 +21,28 @@ RSpec.describe Game::World::TavernRest do
   it "rejects when already full" do
     character.update!(
       current_hp: character.effective_max_hp,
-      current_mp: character.effective_max_mp
+      current_mp: character.effective_max_mp,
+      fatigue_percent: 0,
+      fatigue_updated_at: Time.current
     )
 
     result = described_class.new(character:).call
 
     expect(result.success).to be(false)
+  end
+
+  it "clears fatigue when vitals are already full" do
+    character.update!(
+      current_hp: character.effective_max_hp,
+      current_mp: character.effective_max_mp,
+      fatigue_percent: 40,
+      fatigue_updated_at: Time.current
+    )
+
+    result = described_class.new(character:).call
+
+    expect(result.success).to be(true)
+    expect(character.reload.fatigue_percent).to eq(0)
   end
 
   it "rejects during combat" do

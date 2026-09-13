@@ -288,6 +288,14 @@ def main() -> int:
         and ("Привязать" in r.text or "Bind" in r.text),
         f"url={r.url}",
     )
+    r = s.get(f"{BASE}/city/buildings/tavern", timeout=TIMEOUT, allow_redirects=True)
+    report.add(
+        "GET /city/buildings/tavern fatigue copy",
+        r.status_code == 200
+        and 'data-building-key="tavern"' in r.text
+        and ("устал" in r.text.lower() or "fatigue" in r.text.lower()),
+        f"url={r.url}",
+    )
 
     for path in [
         "/ashen/items/set-blood/helm.png",
