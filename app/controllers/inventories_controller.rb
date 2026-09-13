@@ -22,7 +22,9 @@ class InventoriesController < ApplicationController
     @equipment = current_character_equipment
     @equipment_sets = Game::Inventory::EquipmentSetService.new(character: current_character).all
     Game::Professions::Templates.ensure_craft_items!
-    @junk_offer_count = Game::Shop::JunkBuyback.offer_rows_for(current_character).size
+    junk_rows = Game::Shop::JunkBuyback.offer_rows_for(current_character)
+    @junk_offer_count = junk_rows.size
+    @junk_offer_total = junk_rows.sum { |row| row[:quantity].to_i * row[:price].to_i }
   end
 
   # POST /inventory/equip

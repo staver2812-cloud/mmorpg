@@ -115,6 +115,7 @@ ru:
       repair_deferred_cta: "Ремонт отложен — Смоляная Кузница"
       repair_deferred_hint: "Ремонт пока недоступен. Смотрите Смоляную Кузницу, когда рядом."
       junk_cta: "Скупщику: %{count}"
+      junk_cta_nv: "Скупщику: %{count} · до %{total} NV"
       junk_hint: "Скупщик Пепла на Рынке Угля — сдайте лишнее за NV"
       restored_hp: "Восстановлено %{amount} HP."
       restored_mp: "Восстановлено %{amount} MP."

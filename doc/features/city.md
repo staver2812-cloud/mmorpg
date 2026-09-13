@@ -1150,7 +1150,7 @@ Final rerun results are in the
 - 2026-09-13: Watchtower directory posts live district offers from the current node.
 - 2026-09-13: Watchtower shows current district (“you are here”); west-gate outdoor Enter round-trip covered in smoke.
 - 2026-09-13: Relic stall shows owned bag counts per offer; inventory mass row shows equipped wear.
-- 2026-09-13: Temple shows live injury status (Hospital link for heavy/combat); Dealer House shows junk buyback estimate.
+- 2026-09-13: Temple shows live injury status (Hospital link for heavy/combat); Dealer House shows junk buyback estimate; Inventory junk CTA mirrors count + estimated NV (`data-inventory-junk-total`).
 - 2026-09-13: Salt Auction shows wallet/vault/VM treasury snapshot with Shop/Buyer/Bank links (lots still deferred). Library repair card corrected to deferred `[EVIDENCE]`.
 - 2026-09-13: Clan Hall embeds the colocated Presence/Assault list for meetup PvP.
 - 2026-09-13: Knowledge Quarter schools show a live skill/profession snapshot board (no invented training formulas).

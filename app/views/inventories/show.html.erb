@@ -103,13 +103,17 @@
         <% end %>
         <% if @junk_offer_count.to_i.positive? %>
           ·
+          <% junk_label = t("game.inventory.junk_cta_nv", count: @junk_offer_count, total: @junk_offer_total.to_i) %>
           <% if Game::World::CityBuildingCatalog.accessible?(character: current_character, building_key: "junk_dealer") %>
-            <%= link_to t("game.inventory.junk_cta", count: @junk_offer_count),
+            <%= link_to junk_label,
                   city_building_path("junk_dealer"),
-                  class: "nl-inventory-junk-link" %>
+                  class: "nl-inventory-junk-link",
+                  data: {inventory_junk_total: @junk_offer_total.to_i} %>
           <% else %>
-            <span class="nl-inventory-junk-hint" title="<%= t("game.inventory.junk_hint") %>">
-              <%= t("game.inventory.junk_cta", count: @junk_offer_count) %>
+            <span class="nl-inventory-junk-hint"
+                  title="<%= t("game.inventory.junk_hint") %>"
+                  data-inventory-junk-total="<%= @junk_offer_total.to_i %>">
+              <%= junk_label %>
             </span>
           <% end %>
         <% end %>

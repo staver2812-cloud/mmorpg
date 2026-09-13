@@ -559,6 +559,11 @@ def main() -> int:
         f"url={r.url}",
     )
     report.add(
+        "inventory junk NV estimate",
+        ("data-inventory-junk-total=" in r.text) or ("до " in r.text and "NV" in r.text) or ("up to" in r.text),
+        f"url={r.url}",
+    )
+    report.add(
         "inventory durability markers",
         ("data-inventory-broken=" in r.text) or ("nl-durability-bar" in r.text),
         f"url={r.url}",
