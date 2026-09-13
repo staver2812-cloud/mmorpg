@@ -1155,7 +1155,7 @@ Final rerun results are in the
 - 2026-09-13: Temple shows live injury status (Hospital link for heavy/combat); Dealer House shows junk buyback estimate; Inventory junk CTA mirrors count + estimated NV (`data-inventory-junk-total`); Ash Buyer desk shows live wallet NV (`data-junk-wallet`) and sell readiness (`data-junk-can-sell`).
 - 2026-09-13: Salt Auction shows wallet/vault/VM treasury snapshot with Shop/Buyer/Bank links (lots still deferred; `data-auction-wallet`/`vault`/`vm` / `data-auction-lots="deferred"`). Library repair card corrected to deferred `[EVIDENCE]`.
 - 2026-09-13: Dealer House mirrors Ash Buyer wallet NV beside buyback estimate (`data-dealer-wallet`); sell readiness via `data-dealer-can-sell`.
-- 2026-09-13: Clan Hall embeds the colocated Presence/Assault list for meetup PvP; shows live Assault/Heal scroll bag totals (`data-clan-hall-assault`/`heal`).
+- 2026-09-13: Clan Hall embeds the colocated Presence/Assault list for meetup PvP; shows live Assault/Heal scroll bag totals (`data-clan-hall-assault`/`heal`); presence count via `data-clan-hall-presence-count`.
 - 2026-09-13: Knowledge Quarter schools show a live skill/profession snapshot board (no invented training formulas); unspent points link to allocate stats/skills (`data-school-unspent`); allocate readiness exposed as `data-school-can-allocate` / `data-school-can-allocate-stats` / `data-school-can-allocate-skills`.
 - 2026-09-13: Law Abode notes Cistern east-gate outdoor handoff; smoke covers east exit and Enter back.
 - 2026-09-13: Law Abode shows wallet NV and greys out paid alignment changes when short on NV; explicit first-free vs paid mode markers (`data-law-first-pledge`).
