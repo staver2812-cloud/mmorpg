@@ -13,13 +13,22 @@
 <%= render "city_buildings/junk_buyback", offers: local_assigns.fetch(:offers, []) %>
 
 <h2><%= t("game.buildings.stall_tiers") %></h2>
-<table class="nl-detail-table nl-city-building-table">
+<% stall_tiers = building["stall_tiers"] || [] %>
+<% any_stall_affordable = stall_tiers.any? { |_name, _skill, _mass, rent, _tax| market_wallet.nv_balance.to_i >= rent.to_i } %>
+<table class="nl-detail-table nl-city-building-table"
+       data-market-stalls="<%= stall_tiers.size %>"
+       data-market-any-stall-affordable="<%= any_stall_affordable ? "1" : "0" %>">
   <thead>
     <tr><th><%= t("game.common.stall") %></th><th><%= t("game.common.merchant_skill") %></th><th><%= t("game.common.mass") %></th><th><%= t("game.buildings.stall_rent_30d") %></th><th><%= t("game.common.sale_tax") %></th></tr>
   </thead>
   <tbody>
-    <% building["stall_tiers"].each do |name, skill, mass, rent, tax| %>
-      <tr><td><%= name %></td><td><%= skill %></td><td><%= mass %></td><td><%= number_with_delimiter(rent) %> NV</td><td><%= tax %></td></tr>
+    <% stall_tiers.each do |name, skill, mass, rent, tax| %>
+      <% affordable = market_wallet.nv_balance.to_i >= rent.to_i %>
+      <tr data-market-stall="<%= name %>"
+          data-market-stall-rent="<%= rent.to_i %>"
+          data-market-stall-affordable="<%= affordable ? "1" : "0" %>">
+        <td><%= name %></td><td><%= skill %></td><td><%= mass %></td><td><%= number_with_delimiter(rent) %> NV</td><td><%= tax %></td>
+      </tr>
     <% end %>
   </tbody>
 </table>
