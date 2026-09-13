@@ -177,6 +177,15 @@ def main() -> int:
 
     ok, detail = click_hotspot(s, "go_forpost1")
     report.add("travel go_forpost1", ok, detail)
+    r = s.get(f"{BASE}/city/buildings/market", timeout=TIMEOUT, allow_redirects=True)
+    report.add(
+        "GET /city/buildings/market junk",
+        r.status_code == 200
+        and 'data-building-key="market"' in r.text
+        and ("Скупщик" in r.text or "junk" in r.text.lower())
+        and ("Сдать" in r.text or "Sell" in r.text or "пусто" in r.text.lower() or "empty" in r.text.lower() or "NV" in r.text),
+        f"url={r.url}",
+    )
     r = s.get(f"{BASE}/city/buildings/city_hall", timeout=TIMEOUT, allow_redirects=True)
     report.add(
         "GET /city/buildings/city_hall",
