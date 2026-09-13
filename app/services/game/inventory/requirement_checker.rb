@@ -51,8 +51,8 @@ module Game
       end
 
       def call
-        return failure(I18n.t("game.inventory.item_broken")) if item.broken?
-        return failure(I18n.t("game.inventory.item_expired")) if item.expired?
+        return failure(I18n.t("game.inventory.wear_item_broken")) if item.broken?
+        return failure(I18n.t("game.inventory.wear_item_expired")) if item.expired?
 
         missing = missing_requirements
         return {allowed: true, missing: []} if missing.empty?
