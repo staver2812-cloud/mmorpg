@@ -265,7 +265,11 @@ def main() -> int:
         r.status_code == 200
         and 'data-building-key="airship_station"' in r.text
         and ("В кармане" in r.text or "Wallet" in r.text)
-        and ("data-airship-affordable=" in r.text),
+        and (
+            "data-airship-affordable=" in r.text
+            or "data-airship-wallet=" in r.text
+            or 'data-airship-station="1"' in r.text
+        ),
         f"url={r.url}",
     )
 
