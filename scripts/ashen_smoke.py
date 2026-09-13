@@ -459,7 +459,9 @@ def main() -> int:
         r.status_code == 200
         and 'data-building-key="auction"' in r.text
         and ("сейф" in r.text.lower() or "vault" in r.text.lower() or "NV" in r.text)
-        and ("Лавка" in r.text or "Shop" in r.text or "/shop" in r.text),
+        and ("Лавка" in r.text or "Shop" in r.text or "/shop" in r.text)
+        and ("data-auction-wallet=" in r.text)
+        and ("data-auction-vault=" in r.text),
         f"url={r.url}",
     )
     r = s.get(f"{BASE}/city/buildings/dealer_house", timeout=TIMEOUT, allow_redirects=True)
@@ -468,6 +470,7 @@ def main() -> int:
         r.status_code == 200
         and 'data-building-key="dealer_house"' in r.text
         and ("data-dealer-buyback-total=" in r.text)
+        and ("data-dealer-wallet=" in r.text)
         and ("Скупщик" in r.text or "Ash Buyer" in r.text or "junk_dealer" in r.text),
         f"url={r.url}",
     )
