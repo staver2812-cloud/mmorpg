@@ -295,7 +295,9 @@ def main() -> int:
         and 'data-building-key="post"' in r.text
         and ("записк" in r.text.lower() or "note" in r.text.lower())
         and "data-post-remaining=" in r.text
-        and "data-post-empty=" in r.text,
+        and "data-post-empty=" in r.text
+        and "data-post-max=" in r.text
+        and "data-post-can-clear=" in r.text,
         f"url={r.url}",
     )
     r = s.get(f"{BASE}/city/buildings/clan_hall", timeout=TIMEOUT, allow_redirects=True)
