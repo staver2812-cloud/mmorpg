@@ -49,6 +49,14 @@
 <section class="nl-handbook" aria-label="<%= t("game.buildings.premium_desk") %>">
   <h2><%= t("game.buildings.premium_desk") %></h2>
   <p><%= t("game.buildings.premium_lead", marks: local_assigns.fetch(:veil_marks, 0)) %></p>
+  <p>
+    <%= button_to t("game.buildings.premium_topup_cta", amount: Game::Shop::VeilMarksTopUp::AMOUNT),
+          city_building_topup_vm_path("hospital"),
+          method: :post,
+          class: "lbut",
+          form: {data: {turbo: false}},
+          title: t("game.buildings.premium_topup_hint") %>
+  </p>
   <div class="nl-handbook__grid">
     <% local_assigns.fetch(:premium_offers, {}).each do |item_key, price| %>
       <article class="nl-handbook__card">

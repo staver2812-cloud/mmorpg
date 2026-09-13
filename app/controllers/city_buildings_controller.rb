@@ -86,6 +86,19 @@ class CityBuildingsController < ApplicationController
     end
   end
 
+  def topup_vm
+    unless @building_key == "hospital"
+      redirect_to world_path, alert: I18n.t("game.buildings.hospital_only") and return
+    end
+
+    result = Game::Shop::VeilMarksTopUp.new(character: current_character).call
+    if result.success
+      redirect_to city_building_path("hospital"), notice: result.message
+    else
+      redirect_to city_building_path("hospital"), alert: result.message
+    end
+  end
+
   def sell
     unless @building_key == "junk_dealer"
       redirect_to world_path, alert: I18n.t("game.buildings.junk_only") and return
