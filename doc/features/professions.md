@@ -53,7 +53,12 @@ metadata skill together.
 
 ## 5. UI surfaces
 
-- `/city/buildings/workshop` lists recipes and craft buttons
+- `/city/buildings/workshop` lists recipes and craft buttons; desk exposes
+  `data-workshop-any-ready` plus per-card `data-workshop-recipe` /
+  `data-workshop-ready`
+- `/city/buildings/hospital` Ash Healer craft exposes
+  `data-hospital-craft-any-ready` plus per-card `data-hospital-recipe` /
+  `data-hospital-craft-ready`
 - Consumables `ashen_bandage` / `veil_field_kit` heal via existing inventory use
 
 ## 6. Tests
