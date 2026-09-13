@@ -44,6 +44,19 @@
                 class: "nl-injury-chip#{' nl-injury-chip--heavy' if injury_state.blocks_movement?}",
                 title: t("game.injuries.hospital_hint") %>
         <% end %>
+        <% trauma_scrolls = Game::World::StartPlayerAssault.trauma_scroll_quantity(current_character) %>
+        <% if trauma_scrolls.positive? || Game::World::CityBuildingCatalog.accessible?(character: current_character, building_key: "hospital") %>
+          <% if Game::World::CityBuildingCatalog.accessible?(character: current_character, building_key: "hospital") %>
+            <%= link_to t("game.world.trauma_scroll_chip", count: trauma_scrolls),
+                  city_building_path("hospital"),
+                  class: "nl-trauma-chip#{' nl-trauma-chip--empty' if trauma_scrolls <= 0}",
+                  title: t("game.world.trauma_scroll_chip_hint") %>
+          <% elsif trauma_scrolls.positive? %>
+            <span class="nl-trauma-chip" title="<%= t("game.world.trauma_scroll_chip_hint") %>">
+              <%= t("game.world.trauma_scroll_chip", count: trauma_scrolls) %>
+            </span>
+          <% end %>
+        <% end %>
         <% if current_character.alignment.to_s == "none" && Game::World::CityBuildingCatalog.accessible?(character: current_character, building_key: "law_abode") %>
           <%= link_to t("game.world.alignment_chip"),
                 city_building_path("law_abode"),

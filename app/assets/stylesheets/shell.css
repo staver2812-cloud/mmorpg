@@ -192,6 +192,29 @@ a.nl-alignment-chip:hover {
   border-color: #6a98b0;
 }
 
+.nl-trauma-chip {
+  margin-left: 6px;
+  padding: 1px 6px;
+  border: 1px solid #6a3a3a;
+  background: #1a1010;
+  color: #e0a8a8;
+  font-size: 11px;
+  font-weight: 700;
+  white-space: nowrap;
+  text-decoration: none;
+}
+
+a.nl-trauma-chip:hover {
+  color: #ffd0d0;
+  border-color: #a06060;
+}
+
+.nl-trauma-chip--empty {
+  border-color: #5a4040;
+  color: #c09090;
+  opacity: 0.9;
+}
+
 .nl-vitals-inline {
   gap: 3px;
   margin-left: 3px;
