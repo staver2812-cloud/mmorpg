@@ -591,6 +591,7 @@ ru:
       bank_only: "Операции доступны только в Банке."
       bank_title: "Сейф персонажа"
       bank_lead: "В кармане %{wallet} NV · в сейфе %{vault} NV. Одна ячейка для предмета ниже."
+      bank_vm: "Марки Завесы: %{amount} VM (свитки в Лазарете)"
       bank_deposit: "Вклад"
       bank_withdraw: "Снятие"
       bank_deposit_cta: "Положить"

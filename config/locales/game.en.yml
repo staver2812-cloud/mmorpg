@@ -591,6 +591,7 @@ en:
       bank_only: "Bank operations are only available at the Bank."
       bank_title: "Character vault"
       bank_lead: "Wallet %{wallet} NV · vault %{vault} NV. One item locker slot below."
+      bank_vm: "Veil Marks: %{amount} VM (scrolls at Infirmary)"
       bank_deposit: "Deposit"
       bank_withdraw: "Withdraw"
       bank_deposit_cta: "Deposit"
