@@ -454,7 +454,7 @@ The directionality is explicit. Code must not infer a reverse link, shortest pat
 |---|---|---|
 | Central | Tavern, Workshop, Guard Tower | Hover/focus only |
 | Residential | Clan Hall, Post Office, City Hall | Hover/focus only |
-| Knowledge | Magic School, Library, General School, Military School | Hover/focus only |
+| Knowledge | Library handbook; Magic/General/Military schools show live skill snapshots (allocation still on the character sheet) | Entered interiors |
 | Business | Auction, Souvenir Shop, Dealer House, Temple of Ilana | Hover/focus only |
 | Law | Law Abode, Prison, Gallows | Hover/focus only |
 
