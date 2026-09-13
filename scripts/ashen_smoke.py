@@ -247,7 +247,10 @@ def main() -> int:
     r = s.get(f"{BASE}/city/buildings/post", timeout=TIMEOUT, allow_redirects=True)
     report.add(
         "GET /city/buildings/post",
-        r.status_code == 200 and 'data-building-key="post"' in r.text and ("записк" in r.text.lower() or "note" in r.text.lower()),
+        r.status_code == 200
+        and 'data-building-key="post"' in r.text
+        and ("записк" in r.text.lower() or "note" in r.text.lower())
+        and "data-post-remaining=" in r.text,
         f"url={r.url}",
     )
     r = s.get(f"{BASE}/city/buildings/clan_hall", timeout=TIMEOUT, allow_redirects=True)

@@ -639,6 +639,7 @@ en:
       post_placeholder: "e.g. return to the gate after bandaging"
       post_current: "Current: %{text}"
       post_empty: "No note yet."
+      post_remaining: "%{used}/%{max} characters"
       post_save_cta: "Save note"
       post_clear_cta: "Clear"
       post_saved: "Note saved."

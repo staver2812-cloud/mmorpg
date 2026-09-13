@@ -2,13 +2,18 @@
   <h2><%= t("game.buildings.post_title") %></h2>
   <p class="nl-handbook__lead"><%= t("game.buildings.post_lead") %></p>
   <% note = local_assigns.fetch(:note, "") %>
+  <% max_len = Game::World::PostOfficeNote::MAX_LEN %>
+  <% used = note.to_s.length %>
   <% if note.present? %>
     <p class="nl-quests-board__meta"><%= t("game.buildings.post_current", text: note) %></p>
   <% else %>
     <p class="nl-quests-board__meta"><%= t("game.buildings.post_empty") %></p>
   <% end %>
+  <p class="nl-quests-board__meta" data-post-remaining="<%= max_len - used %>">
+    <%= t("game.buildings.post_remaining", used: used, max: max_len) %>
+  </p>
   <%= form_with url: city_building_post_path("post"), method: :post, data: {turbo: false} do |f| %>
-    <%= f.text_area :body, rows: 3, maxlength: Game::World::PostOfficeNote::MAX_LEN, class: "nl-post-body", placeholder: t("game.buildings.post_placeholder") %>
+    <%= f.text_area :body, rows: 3, maxlength: max_len, class: "nl-post-body", placeholder: t("game.buildings.post_placeholder"), value: note %>
     <p>
       <%= f.submit t("game.buildings.post_save_cta"), class: "lbut" %>
     </p>

@@ -639,6 +639,7 @@ ru:
       post_placeholder: "Например: вернуться к воротам после бинта"
       post_current: "Сейчас: %{text}"
       post_empty: "Записка пуста."
+      post_remaining: "%{used}/%{max} знаков"
       post_save_cta: "Сохранить записку"
       post_clear_cta: "Стереть"
       post_saved: "Записка сохранена."
