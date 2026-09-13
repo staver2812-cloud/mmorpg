@@ -428,6 +428,15 @@ def main() -> int:
         and ("Лавка" in r.text or "Shop" in r.text or "/shop" in r.text),
         f"url={r.url}",
     )
+    r = s.get(f"{BASE}/city/buildings/dealer_house", timeout=TIMEOUT, allow_redirects=True)
+    report.add(
+        "GET /city/buildings/dealer_house buyback",
+        r.status_code == 200
+        and 'data-building-key="dealer_house"' in r.text
+        and ("data-dealer-buyback-total=" in r.text)
+        and ("Скупщик" in r.text or "Ash Buyer" in r.text or "junk_dealer" in r.text),
+        f"url={r.url}",
+    )
     r = s.get(f"{BASE}/city/buildings/obelisk", timeout=TIMEOUT, allow_redirects=True)
     report.add(
         "GET /city/buildings/obelisk",

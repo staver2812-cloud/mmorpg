@@ -1148,6 +1148,7 @@ Final rerun results are in the
 - 2026-09-13: Law Abode alignment pledge/change (first free, later 25 NV).
 - 2026-09-13: Fatigue HUD chip; Prison/Gallows handbooks link to Law Abode.
 - 2026-09-13: Watchtower directory posts live district offers from the current node.
+- 2026-09-13: Temple shows live injury status (Hospital link for heavy/combat); Dealer House shows junk buyback estimate.
 - 2026-09-13: Salt Auction shows wallet/vault/VM treasury snapshot with Shop/Buyer/Bank links (lots still deferred). Library repair card corrected to deferred `[EVIDENCE]`.
 - 2026-09-13: Clan Hall embeds the colocated Presence/Assault list for meetup PvP.
 - 2026-09-13: Knowledge Quarter schools show a live skill/profession snapshot board (no invented training formulas).
