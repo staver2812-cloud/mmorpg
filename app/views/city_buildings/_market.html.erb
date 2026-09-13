@@ -5,6 +5,8 @@
   <%= link_to t("game.buildings.junk_dealer_link"), city_building_path("junk_dealer"), class: "lbut" %>
 </p>
 
+<%= render "city_buildings/junk_buyback", offers: local_assigns.fetch(:offers, []) %>
+
 <h2><%= t("game.buildings.stall_tiers") %></h2>
 <table class="nl-detail-table nl-city-building-table">
   <thead>

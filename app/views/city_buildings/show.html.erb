@@ -61,7 +61,7 @@
 
       <% case @building["kind"] %>
       <% when "market" %>
-        <%= render "city_buildings/market", building: @building %>
+        <%= render "city_buildings/market", building: @building, offers: @junk_offers %>
       <% when "shop_shell" %>
         <%= render "city_buildings/shop_shell", building: @building %>
       <% when "junk_buyback" %>

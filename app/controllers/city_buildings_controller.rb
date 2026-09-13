@@ -20,7 +20,7 @@ class CityBuildingsController < ApplicationController
       @profession_recipes = Game::Professions::Catalog.recipes_for_building("workshop")
       @tar_smith_skill = current_character.metadata.to_h.dig("profession_skills", "tar_smith").to_i
     end
-    if @building_key == "junk_dealer"
+    if @building_key == "junk_dealer" || @building_key == "market"
       Game::Professions::Templates.ensure_craft_items!
       @junk_offers = Game::Shop::JunkBuyback.offer_rows_for(current_character)
     end
