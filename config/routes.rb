@@ -69,6 +69,7 @@ Rails.application.routes.draw do
 
   get "city/buildings/:building_key", to: "city_buildings#show", as: :city_building
   post "city/buildings/:building_key/rest", to: "city_buildings#rest", as: :city_building_rest
+  post "city/buildings/:building_key/craft", to: "city_buildings#craft", as: :city_building_craft
   resources :quests, only: [:index] do
     member do
       post :accept

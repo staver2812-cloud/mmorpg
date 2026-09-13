@@ -23,8 +23,12 @@
       <p class="nl-city-building-notice">
         <% if @building["kind"] == "market" %>
           Аренда прилавков и лоты игроков пока только для просмотра.
+        <% elsif @building["kind"] == "workshop" %>
+          <%= t("game.professions.workshop_notice") %>
         <% elsif @building["kind"] == "landmark" %>
           Интерьер открыт. Игровые действия здания появятся в следующих срезах.
+        <% elsif @building["kind"] == "hospital" %>
+          <%= t("game.buildings.hospital_rest_lead") %>
         <% else %>
           Поверхность пока read-only: без покупки, продажи, лечения и аренды.
         <% end %>
@@ -39,6 +43,8 @@
         <%= render "city_buildings/numismatics", building: @building %>
       <% when "hospital" %>
         <%= render "city_buildings/hospital", building: @building %>
+      <% when "workshop" %>
+        <%= render "city_buildings/workshop", recipes: @profession_recipes, skill: @tar_smith_skill %>
       <% when "landmark" %>
         <%= render "city_buildings/landmark", building: @building, building_key: @building_key %>
       <% end %>

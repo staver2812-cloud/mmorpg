@@ -1,0 +1,57 @@
+# Ashen sandbox professions / workshop recipes.
+# Intentionally authored for playable loop; balance is tunable after playtests.
+
+professions:
+  tar_smith:
+    title_ru: "Смолокур"
+    title_en: "Tar Smith"
+    summary_ru: "Плавка смолы и полевые наборы в Смоляной Кузнице."
+    summary_en: "Tar work and field kits at the Pitch Forge."
+    skill_key: tar_smith
+    building_key: workshop
+
+recipes:
+  ashen_bandage:
+    profession: tar_smith
+    title_ru: "Пепельный бинт"
+    title_en: "Ashen Bandage"
+    summary_ru: "Щепа смолы + хвост клеща → бинт (+40 HP)."
+    summary_en: "Resin chips + mite tail → bandage (+40 HP)."
+    inputs:
+      wood_chips: 2
+      rat_tail: 1
+    output:
+      item_key: ashen_bandage
+      quantity: 1
+    skill_gain: 1
+    min_skill: 0
+
+  veil_field_kit:
+    profession: tar_smith
+    title_ru: "Полевой набор Завесы"
+    title_en: "Veil Field Kit"
+    summary_ru: "2 бинта + приманка → набор (+80 HP, 1 приманка внутри как эффект не нужен — просто крафт расходки)."
+    summary_en: "2 bandages + bait → field kit (+80 HP)."
+    inputs:
+      ashen_bandage: 2
+      ashen_bait: 1
+    output:
+      item_key: veil_field_kit
+      quantity: 1
+    skill_gain: 2
+    min_skill: 3
+
+  tar_lure_pack:
+    profession: tar_smith
+    title_ru: "Пачка смоляных приманок"
+    title_en: "Tar Lure Pack"
+    summary_ru: "3 приманки + щепа → 5 приманок."
+    summary_en: "3 bait + chips → 5 bait."
+    inputs:
+      ashen_bait: 3
+      wood_chips: 1
+    output:
+      item_key: ashen_bait
+      quantity: 5
+    skill_gain: 1
+    min_skill: 1

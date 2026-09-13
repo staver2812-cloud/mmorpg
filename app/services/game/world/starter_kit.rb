@@ -20,6 +20,7 @@ module Game
         character.with_lock do
           character.reload
           grant_bait!
+          grant_craft_mats!
           grant_starter_nv!
           grant_weapon!
           mark_granted!
@@ -58,6 +59,7 @@ module Game
       attr_reader :character
 
       def grant_bait!
+        Game::Professions::Templates.ensure_craft_items!
         template = Bait.item_template
         return unless template
 
@@ -67,6 +69,23 @@ module Game
         return if need <= 0
 
         Game::Inventory::Manager.new(inventory:).add_item!(item_template: template, quantity: need)
+      end
+
+      def grant_craft_mats!
+        Game::Professions::Templates.ensure_craft_items!
+        inventory = character.inventory || character.create_inventory!
+        manager = Game::Inventory::Manager.new(inventory:)
+        {
+          "wood_chips" => 10,
+          "rat_tail" => 3
+        }.each do |key, want|
+          template = ItemTemplate.find_by(key:)
+          next unless template
+
+          have = inventory.inventory_items.where(item_template: template, equipped: false).sum(:quantity)
+          need = want - have
+          manager.add_item!(item_template: template, quantity: need) if need.positive?
+        end
       end
 
       def grant_starter_nv!

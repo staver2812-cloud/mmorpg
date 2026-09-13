@@ -505,6 +505,16 @@ en:
       no_listings: "No MVP listings"
       captured_modes: "Captured modes"
       stock_note: "Stock was not captured and is intentionally not copied from the General Shop."
+    professions:
+      workshop_aria: "Pitch Forge recipes"
+      tar_smith: "Tar Smith"
+      tar_smith_lead: "Tar Smith skill: %{skill}. Starter mats and shop stock cover early crafts; shore drops feed the rest."
+      workshop_notice: "Crafting is live. Recipes below consume materials and raise Tar Smith skill."
+      workshop_only: "Crafting is only available at the Pitch Forge."
+      craft_cta: "Craft"
+      crafted: "Crafted: %{name}. Tar Smith skill: %{skill}."
+      min_skill: "min skill %{amount}"
+      inputs: "needs"
     locations:
       you_have: "You have"
       available_levels: "Available levels"

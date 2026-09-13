@@ -505,6 +505,16 @@ ru:
       no_listings: "Нет предложений"
       captured_modes: "Режимы"
       stock_note: "Склад этого здания пока не заполнен."
+    professions:
+      workshop_aria: "Рецепты Смоляной Кузницы"
+      tar_smith: "Смолокур"
+      tar_smith_lead: "Навык Смолокура: %{skill}. Материалы есть в стартовом наборе и в лавке; трофеи — с берега."
+      workshop_notice: "Крафт доступен. Рецепты ниже списывают материалы и поднимают навык Смолокура."
+      workshop_only: "Крафт доступен только в Смоляной Кузнице."
+      craft_cta: "Скрафтить"
+      crafted: "Скрафчено: %{name}. Навык Смолокура: %{skill}."
+      min_skill: "мин. навык %{amount}"
+      inputs: "нужно"
     locations:
       you_have: "У вас"
       available_levels: "Доступные уровни"

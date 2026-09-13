@@ -1,0 +1,29 @@
+<section class="nl-handbook" aria-label="<%= t("game.professions.workshop_aria") %>">
+  <h2><%= t("game.professions.tar_smith") %></h2>
+  <p class="nl-handbook__lead">
+    <%= t("game.professions.tar_smith_lead", skill: local_assigns.fetch(:skill, 0)) %>
+  </p>
+
+  <div class="nl-handbook__grid">
+    <% local_assigns.fetch(:recipes, {}).each do |key, recipe| %>
+      <% title = I18n.locale.to_s.start_with?("ru") ? recipe["title_ru"] : recipe["title_en"] %>
+      <% summary = I18n.locale.to_s.start_with?("ru") ? recipe["summary_ru"] : recipe["summary_en"] %>
+      <article class="nl-handbook__card">
+        <h3><%= title %></h3>
+        <p><%= summary %></p>
+        <p class="nl-quests-board__meta">
+          <%= t("game.professions.min_skill", amount: recipe.fetch("min_skill", 0)) %>
+          ·
+          <%= t("game.professions.inputs") %>:
+          <%= recipe.fetch("inputs").map { |item_key, qty| "#{item_key}×#{qty}" }.join(", ") %>
+        </p>
+        <%= button_to t("game.professions.craft_cta"),
+              city_building_craft_path("workshop"),
+              method: :post,
+              params: {recipe_key: key},
+              class: "lbut",
+              form: {data: {turbo: false}} %>
+      </article>
+    <% end %>
+  </div>
+</section>

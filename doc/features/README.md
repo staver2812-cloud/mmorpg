@@ -23,7 +23,7 @@ Neverlands remains the sole game-design authority.
 | `shop_economy.md` | Partially Implemented | Wallet/ledger, per-building stock and funds, atomic buy/sell, typed licenses and Merchant qualification; broader parity remains open |
 | `world.md` | Partially Implemented | Bounded region/cell reads, eight-neighbor movement, gate/village entry, empty Look, and NPC handoff; full region content and successful gathering remain gaps |
 | `quests.md` | NOT_IMPLEMENTED | Explicit Quest runtime gap |
-| `professions.md` | NOT_IMPLEMENTED | Explicit profession runtime gap |
+| `professions.md` | Partially Implemented | Ashen Tar Smith workshop craft; Neverlands gathering/fishing/mining still deferred |
 | `dungeons.md` | NOT_IMPLEMENTED | Explicit dungeon runtime gap |
 
 A non-green status is intentionally visible. Do not upgrade it because nearby

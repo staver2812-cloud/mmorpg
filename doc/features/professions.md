@@ -1,90 +1,64 @@
-# frozen_string_literal: true
 ---
 title: Professions Feature
-description: NOT_IMPLEMENTED placeholder for source-backed gathering and production profession behavior.
-status: NOT_IMPLEMENTED
-updated: 2026-09-09
-owners: Professions domain
-template: feature-gap-v2
+description: Ashen sandbox workshop craft (Tar Smith) plus remaining Neverlands profession gaps.
+status: Partially Implemented
+updated: 2026-09-13
+owners: [Professions]
+template: feature-v3
 ---
 
 # Professions
 
-## 1. Evidence and design
+## 1. Authority and scope
 
-Neverlands is the sole game-design authority.
+Ashen sandbox ships a playable Tar Smith craft loop at the Pitch Forge
+(`workshop`). Broader Neverlands gathering/fishing/mining counters and tool
+timers remain deferred; those flows are not invented here.
 
-- Domain: `doc/domains/professions.md`
-- Source summary: `doc/design/reference/professions/README.md`
-- Evidence gap: `doc/design/reference/professions/observations/evidence_needed_complete_profession_flow.md`
-- Normalized design: `doc/design/features/professions.md`
-- MVP boundary: `doc/design/launch_mvp_plan.md`
+- Design gap / Neverlands boundary: `doc/design/features/professions.md`
+- Related runtime: `doc/features/city.md`, `doc/features/player_inventory.md`, `doc/features/world.md`
 
-## 2. Missing runtime contract
+Shipped now: workshop recipes, material consumption, output grant, profession
+skill bump in `character.metadata["profession_skills"]["tar_smith"]`.
 
-`NOT_IMPLEMENTED`: no complete profession eligibility, tool, timer, yield,
-counter, failure, interruption, or production loop is shipped.
+## 2. Player-facing behavior
 
-No profession route, authoritative profession state, mutation, persistence,
-feature-specific Turbo/Stimulus/CSS, or runtime spec is claimed.
+On the Pitch Forge building page the player sees Tar Smith skill and recipe
+cards. Crafting posts to the workshop craft route, consumes exact unequipped
+material stacks, grants the output item, and increases skill. Recipes with a
+`min_skill` gate reject early without consuming inputs.
 
-The remaining categories belong to this domain, even though World links them
-from its map/cell gap matrix:
+## 3. Server ownership
 
-| Missing category | Confirmed contract and unresolved scope |
-|---|---|
-| Successful fishing and counter growth | No initial skill/perk gate; growth on successful fishing is user-confirmed. Casting, catches, exact gain, probabilities, timing/modifiers and failure/interruption remain unimplemented. |
-| Plant gathering / herbalism | Successful discovery/harvest, exact requirements, yields and counter changes are missing. Naturalist/Herbalist and Observation inputs are separate from Alchemy. |
-| Alchemy production | Recipe/ingredient/tool requirements, consumption, timing, outputs and progression need a complete separate flow. |
-| Digging / extraction | Skill dependence is confirmed; exact skill/license/tool, timer, outcomes, interruption and repeatability remain unresolved. Mine lobby and read-only shop sections do not implement extraction. |
-| Equipment, bait and inventory settlement | Rod/bait requirements are confirmed direction; complete item identities, equip checks, bait use/expiry, durability, material grants, capacity failures and retry-safe settlement are missing. |
+- `Game::Professions::Catalog` — YAML recipes
+- `Game::Professions::Craft` — locked craft mutation
+- `Game::Professions::Templates` — craft item templates
+- `CityBuildingsController#craft` — HTTP boundary
+- Config: `config/gameplay/ashen_professions.yml`
 
-## 3. Existing related handoffs
+## 4. Persistence and failure
 
-World owns immediate empty Look with a persisted 28-second lock, immediate
-normal Drink recovery of two fatigue points with a 60-second lock, and the
-no-bait Fish result with a 30-second lock. No fish/herb award or profession
-growth is performed by those actions. Digging's identifier can be authored but
-does not produce an implemented action offer. Fishing and drinking have no
-initial skill/perk gate; a nonzero displayed proficiency is not an entry rule.
+Craft runs under the character lock. Missing materials, capacity overflow, or
+skill gate leave inventory unchanged. Successful craft persists inventory and
+metadata skill together.
 
-Inventory owns carried/equipped items and capacity. Character Progression is
-the adjacent owner for future profession-counter persistence. World owns
-cell eligibility, offers, action locking and hostile interruption. The mine's
-outdoor entrance/read-only lobby belongs to World; descent/underground travel
-belongs to Dungeons. Professions owns mining-license use/effects; Economy owns
-purchase/payment of mine items/licenses and exchange queries, listings,
-transactions and storage. Those surfaces do not constitute successful
-extraction or production.
+## 5. UI surfaces
 
-Successful profession work remains deferred from the starter-map task. The
-earlier user shorthand grouped gathering with alchemy; the source-backed
-design now distinguishes plant discovery/harvest from potion production.
-The owning categories above and their capture checklist are canonical here;
-the World matrix is a cross-domain summary.
+- `/city/buildings/workshop` lists recipes and craft buttons
+- Consumables `ashen_bandage` / `veil_field_kit` heal via existing inventory use
 
-## 4. Prerequisites for implementation
+## 6. Tests
 
-1. Follow the linked activity-specific capture checklist for one complete
-   Neverlands profession flow, including failure/interruption and inventory.
-2. Normalize exact eligibility, tools/bait, timers, yields and counter changes
-   without reopening the settled no-gate fishing/drinking decision.
-3. Define server-owned timing and current-cell/equipment validation, plus the
-   atomic locking boundary for proven consumption, durability, rewards and
-   counter growth. Cover capacity failure, duplicate completion and restoration.
-4. Extend World and Inventory pipelines rather than creating duplicates; add
-   applicable content, service, request/policy, timing, and system coverage.
-5. Promote this handbook only after the runtime is verified.
+- `spec/services/game/professions/craft_spec.rb`
 
-## 5. Responsible documentation and history
+## 7. Explicit gaps
 
-- `doc/features/professions.md`
-- `doc/domains/professions.md`
-- `doc/design/features/professions.md`
-- `doc/design/reference/professions/README.md`
-- `doc/design/reference/professions/observations/evidence_needed_complete_profession_flow.md`
+Neverlands successful fishing/gathering/digging timers, tools, Observation
+modifiers, and profession quests remain unimplemented.
+
+## 8. Change log
 
 | Date | Change |
 |---|---|
-| 2026-07-29 | Recorded the audited `NOT_IMPLEMENTED` boundary. |
-| 2026-08-26 | Migrated the gap record to the lean feature-gap-v2 contract. |
+| 2026-09-13 | Promoted from NOT_IMPLEMENTED: Ashen Tar Smith workshop craft loop. |
+| 2026-07-29 | Recorded the audited NOT_IMPLEMENTED boundary. |

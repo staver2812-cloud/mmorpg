@@ -15,6 +15,11 @@ class CityBuildingsController < ApplicationController
     if @building_key == "airship_station"
       @airship_routes = Game::World::AirshipTravel.new(character: current_character).station_routes!
     end
+    if @building_key == "workshop"
+      Game::Professions::Templates.ensure_craft_items!
+      @profession_recipes = Game::Professions::Catalog.recipes_for_building("workshop")
+      @tar_smith_skill = current_character.metadata.to_h.dig("profession_skills", "tar_smith").to_i
+    end
     prepare_presence_context
   end
 
@@ -28,6 +33,22 @@ class CityBuildingsController < ApplicationController
       redirect_to city_building_path("hospital"), notice: result.message
     else
       redirect_to city_building_path("hospital"), alert: result.message
+    end
+  end
+
+  def craft
+    unless @building_key == "workshop"
+      redirect_to world_path, alert: I18n.t("game.professions.workshop_only") and return
+    end
+
+    result = Game::Professions::Craft.new(
+      character: current_character,
+      recipe_key: params[:recipe_key]
+    ).call
+    if result.success
+      redirect_to city_building_path("workshop"), notice: result.message
+    else
+      redirect_to city_building_path("workshop"), alert: result.message
     end
   end
 
