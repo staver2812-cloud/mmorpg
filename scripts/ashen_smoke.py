@@ -200,7 +200,8 @@ def main() -> int:
         "shop sell junk hint",
         r.status_code == 200
         and 'nl-shop' in r.text
-        and (("Скупщик" in r.text) or ("Ash Buyer" in r.text) or ("junk_dealer" in r.text)),
+        and (("Скупщик" in r.text) or ("Ash Buyer" in r.text) or ("junk_dealer" in r.text))
+        and ("data-shop-any-sellable=" in r.text),
         f"url={r.url}",
     )
 

@@ -4,7 +4,8 @@
       <% items.each do |item| %>
         <% block_reason = shop_sell_block_reason(item) %>
         <% offer = @shop_sell_offers[item.id] %>
-        <tr>
+        <% sellable = block_reason.nil? && offer.present? %>
+        <tr data-shop-sell-item="<%= item.id %>" data-shop-sellable="<%= sellable ? "1" : "0" %>">
           <td class="nl-shop-icon-cell">
             <% if artwork = item_artwork_path(item.item_template) %>
               <%= image_tag artwork, width: 62, height: 91, alt: "", class: "nl-shop-item-icon" %>
