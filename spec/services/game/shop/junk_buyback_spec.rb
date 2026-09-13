@@ -39,4 +39,20 @@ RSpec.describe Game::Shop::JunkBuyback do
     expect(result.paid).to eq(2)
     expect(wallet.reload.nv_balance).to eq(before + 2)
   end
+
+  it "buys thematic T5 set drops for NV" do
+    template = create(:item_template, :material, key: "set-blood-ring-t5", name: "Blood Ring T5 Junk")
+    Game::Inventory::Manager.new(inventory: character.inventory).add_item!(
+      item_template: template,
+      quantity: 1
+    )
+    wallet = character.user.currency_wallet || character.user.create_currency_wallet!(nv_balance: 0)
+    before = wallet.nv_balance
+
+    result = described_class.new(character:, item_key: "set-blood-ring-t5", quantity: 1).call
+
+    expect(result.success).to be(true)
+    expect(result.paid).to eq(8)
+    expect(wallet.reload.nv_balance).to eq(before + 8)
+  end
 end

@@ -83,6 +83,15 @@
   color: #555;
 }
 
+.nl-quests__badge--locked {
+  background: #ece8e0;
+  color: #7a6a55;
+}
+
+.nl-quests__card--locked {
+  opacity: 0.72;
+}
+
 .nl-quests__card--completed {
   opacity: 0.82;
 }

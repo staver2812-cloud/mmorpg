@@ -27,7 +27,8 @@ Veil Marks (VM) at the Infirmary premium desk. The trauma scroll also powers
 same-cell world Assault (`POST /world/assault`), not only the Arena checkbox.
 Sandbox players can claim +50 VM once per hour at the same desk
 (`POST /city/buildings/hospital/topup_vm`) so scroll testing does not stall.
-Starter kits grant capacity-safe `ash_herb` stacks; the junk dealer also buys herbs.
+Starter kits grant capacity-safe `ash_herb` stacks; the junk dealer buys herbs and
+surplus thematic `set-*-t5` drops (8 NV each).
 
 ## 2. Player-facing behavior
 
@@ -69,6 +70,7 @@ modifiers, and profession quests remain unimplemented.
 | Date | Change |
 |---|---|
 | 2026-09-13 | Sandbox Veil Marks hourly top-up at Infirmary desk for trauma/heal scroll testing. |
+| 2026-09-13 | Junk buyback accepts surplus `set-*-t5` drops at 8 NV. |
 | 2026-09-13 | Junk buyback accepts ash herbs; starter kit grants capacity-safe herbs for healer craft. |
 | 2026-09-13 | Clarified instant healer treatment vs injury expiry timers; trauma scroll also powers same-cell world Assault. |
 | 2026-09-13 | Promoted from NOT_IMPLEMENTED: Ashen Tar Smith workshop craft loop. |

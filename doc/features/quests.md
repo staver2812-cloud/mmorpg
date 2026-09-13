@@ -1,6 +1,6 @@
 ---
 title: Quests Feature
-description: Ashen sandbox starter quest journal with kill and delivery objectives.
+description: Ashen sandbox starter quest journal with gated craft/shore chains.
 status: Partially Implemented
 updated: 2026-09-13
 owners: [NPCs and Quests]
@@ -21,29 +21,33 @@ describes only the verified Ashen runtime.
 ## 2. Player-facing behavior
 
 Players open quests from Coal Hall or `/quests`. New playable characters
-auto-accept `veil_lure_drill` once. They can accept other contracts, track
-kill/delivery progress, and turn in completed ones for NV and item rewards.
+auto-accept `veil_lure_drill` once. Contracts use `requires` / `unlocks` so
+later shore and craft jobs stay locked until earlier ones are turned in;
+successful turn-in can auto-accept the next key in `unlocks`. Journal cards show
+where-hints, named item rewards, and locked/available/active/completed status.
+Kill and delivery objectives grant NV, XP, and item rewards.
 
 ## 3. Server ownership
 
 - `Game::Quests::Catalog` — YAML quest definitions
 - `Game::Quests::Journal` — accept / progress / turn-in mutations on
-  `character.metadata["ashen_quests"]`
+  `character.metadata["ashen_quests"]` (requirement gate + auto-unlock)
 - `QuestsController` — HTTP boundary
 - `Arena::CombatProcessor` — records NPC kill progress after victory
 
 ## 4. Persistence and failure
 
 All accept/turn-in mutations run under character lock. Failed turn-in leaves
-quest state and inventory unchanged. Unknown keys and already-completed quests
-reject safely.
+quest state and inventory unchanged. Unknown keys, unmet `requires`, and
+already-completed quests reject safely.
 
 ## 5. Coverage
 
-Focused service/request coverage exists for accept, incomplete turn-in, and
-reward grant paths where present. Live smoke exercises accept on
-`veil_tail_delivery`. Starter craft contracts include Tar Smith bandage and
-Ash Healer novice bag (`ash_healer_first_bag`).
+Focused service/request coverage exists for accept, locked gate, auto-unlock,
+incomplete turn-in, and reward grant paths where present. Live smoke verifies
+the starter lure is active and chain accepts of `veil_tail_delivery` stay locked.
+Craft spine includes Tar Smith bandage, field kit / lure pack, and Ash Healer
+novice → adept → master bags.
 
 ## 6. Non-goals
 
@@ -55,6 +59,7 @@ Ash Healer novice bag (`ash_healer_first_bag`).
 
 | Date | Change |
 |---|---|
+| 2026-09-13 | Quest spine: `requires`/`unlocks`/`where_*`, Tar Smith + Healer mastery contracts, locked UI. |
 | 2026-09-13 | Added Ash Healer first-bag delivery contract (`ash_healer_first_bag`). |
 | 2026-09-13 | Promoted from NOT_IMPLEMENTED: Ashen starter journal + kill/delivery loop. |
 | 2026-08-26 | Gap record under feature-gap-v2. |

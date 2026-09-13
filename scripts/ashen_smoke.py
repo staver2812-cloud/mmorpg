@@ -171,8 +171,12 @@ def main() -> int:
 
     r = s.get(f"{BASE}/quests", timeout=TIMEOUT)
     quest_needles = [
-        "Пепельный дозор",
+        "Приманка Завесы",
         "Хвост Завесы",
+        "Первый бинт Смолокура",
+        "Первая сумка Лекаря",
+        "Полевой набор Смолокура",
+        "Пепельный дозор",
         "Разведка берега",
         "След соли",
         "Крошки колокольного двора",
@@ -183,30 +187,52 @@ def main() -> int:
         "Заглушить пыль",
         "nl-quests",
         "nl-quests__summary",
+        "Закрыто",
     ]
     quest_hits = [n for n in quest_needles if n in r.text]
     report.add(
         "GET /quests",
-        r.status_code == 200 and len(quest_hits) >= 6,
+        r.status_code == 200 and len(quest_hits) >= 8,
         f"{r.status_code} hits={quest_hits}",
     )
     if r.status_code == 200:
         token = csrf_from(r.text) or token
-        # accept first available quest (veil_tail_delivery is sort 5)
+        report.add(
+            "starter lure active on journal",
+            ("Приманка Завесы" in r.text) and ("В работе" in r.text),
+        )
+        report.add(
+            "chain shows locked contracts",
+            ("Закрыто" in r.text) and ("Хвост Завесы" in r.text),
+        )
+        # Chain gate: veil_tail requires lure completion — expect safe reject.
         r_acc = s.post(
             f"{BASE}/quests/veil_tail_delivery/accept",
             data={"authenticity_token": token},
             timeout=TIMEOUT,
             allow_redirects=True,
         )
+        locked_ok = (
+            r_acc.status_code in (200, 302)
+            and (
+                "предыдущие" in r_acc.text.lower()
+                or "locked" in r_acc.text.lower()
+                or "цепи" in r_acc.text.lower()
+                or "Закрыто" in r_acc.text
+            )
+        )
         report.add(
-            "POST accept veil_tail_delivery",
-            r_acc.status_code in (200, 302) and ("принято" in r_acc.text.lower() or "accepted" in r_acc.text.lower() or "В работе" in r_acc.text or "In progress" in r_acc.text),
+            "POST accept veil_tail_delivery locked",
+            locked_ok,
             f"{r_acc.status_code}",
         )
         report.add(
             "quests show rewards",
             ("Опыт:" in r.text) or ("NV:" in r.text) or ("Предмет:" in r.text) or ("XP:" in r.text),
+        )
+        report.add(
+            "quests show where hints",
+            ("Где:" in r.text) or ("Where:" in r.text),
         )
 
     ok_main, d1 = click_hotspot(s, "go_main")

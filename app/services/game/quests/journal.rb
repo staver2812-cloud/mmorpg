@@ -5,6 +5,7 @@ module Game
     # Character-scoped Ashen quest journal stored in metadata["ashen_quests"].
     class Journal
       META_KEY = "ashen_quests"
+      STARTER_QUEST_KEY = "veil_lure_drill"
 
       Result = Data.define(:success, :message, :quest_key)
 
@@ -17,14 +18,26 @@ module Game
       end
 
       def present(quest)
-        state = state_for(quest.fetch("key"))
+        key = quest.fetch("key")
+        state = state_for(key)
+        status = if state["status"] == "completed"
+          "completed"
+        elsif state["status"] == "active"
+          "active"
+        elsif requirements_met?(quest)
+          "available"
+        else
+          "locked"
+        end
+
         {
           quest:,
-          status: state["status"] || "available",
+          status:,
           progress: state["progress"].to_i,
           target: objective_count(quest),
           completed_at: state["completed_at"],
-          accepted_at: state["accepted_at"]
+          accepted_at: state["accepted_at"],
+          where: where_for(quest)
         }
       end
 
@@ -37,6 +50,7 @@ module Game
           state = state_for(quest_key)
           return failure(quest_key, I18n.t("game.quests.already_done")) if state["status"] == "completed"
           return failure(quest_key, I18n.t("game.quests.already_active")) if state["status"] == "active"
+          return failure(quest_key, I18n.t("game.quests.locked")) unless requirements_met?(quest)
 
           write_state!(quest_key, {
             "status" => "active",
@@ -49,8 +63,6 @@ module Game
       end
 
       # Quietly arms the first Ashen shore contract once. Safe to call every login.
-      STARTER_QUEST_KEY = "veil_lure_drill"
-
       def ensure_starter!
         state = state_for(STARTER_QUEST_KEY)
         return if state["status"].in?(%w[active completed])
@@ -65,13 +77,16 @@ module Game
 
         quest = entry[:quest]
         title = title_for(quest)
-        I18n.t("game.quests.chip", title:, progress: entry[:progress], target: entry[:target])
+        where = entry[:where]
+        base = I18n.t("game.quests.chip", title:, progress: entry[:progress], target: entry[:target])
+        where.present? ? "#{base} · #{where}" : base
       end
 
       def turn_in!(quest_key)
         quest = Catalog.find(quest_key)
         return failure(quest_key, I18n.t("game.quests.unknown")) unless quest
 
+        unlocked_titles = []
         character.with_lock do
           character.reload
           state = state_for(quest_key)
@@ -88,9 +103,14 @@ module Game
             "progress" => objective_count(quest),
             "completed_at" => Time.current.iso8601
           ))
+          unlocked_titles = auto_unlock!(quest)
         end
 
-        success(quest_key, I18n.t("game.quests.completed", title: title_for(quest)))
+        message = I18n.t("game.quests.completed", title: title_for(quest))
+        if unlocked_titles.any?
+          message = "#{message} #{I18n.t("game.quests.unlocked", list: unlocked_titles.join(", "))}"
+        end
+        success(quest_key, message)
       end
 
       # Called after a solo NPC victory. Quiet no-op when nothing matches.
@@ -129,6 +149,32 @@ module Game
       def write_state!(quest_key, state)
         next_bag = bag.merge(quest_key.to_s => state)
         character.update!(metadata: character.metadata.to_h.merge(META_KEY => next_bag))
+      end
+
+      def requirements_met?(quest)
+        Array(quest["requires"]).map(&:to_s).all? do |required_key|
+          state_for(required_key)["status"] == "completed"
+        end
+      end
+
+      def auto_unlock!(quest)
+        titles = []
+        Array(quest["unlocks"]).map(&:to_s).each do |next_key|
+          next_quest = Catalog.find(next_key)
+          next unless next_quest
+
+          state = state_for(next_key)
+          next if state["status"].in?(%w[active completed])
+          next unless requirements_met?(next_quest)
+
+          write_state!(next_key, {
+            "status" => "active",
+            "progress" => 0,
+            "accepted_at" => Time.current.iso8601
+          })
+          titles << title_for(next_quest)
+        end
+        titles
       end
 
       def objective_count(quest)
@@ -192,10 +238,12 @@ module Game
         item_key = reward["item_key"].presence
         return unless item_key
 
+        Game::Professions::Templates.ensure_craft_items!
         template = ItemTemplate.find_by(key: item_key)
         return unless template
 
-        Game::Inventory::Manager.new(inventory: character.inventory).add_item!(
+        inventory = character.inventory || character.create_inventory!(slot_capacity: 30, weight_capacity: 100)
+        Game::Inventory::Manager.new(inventory:).add_item!(
           item_template: template,
           quantity: 1
         )
@@ -204,6 +252,11 @@ module Game
       def title_for(quest)
         locale_key = I18n.locale.to_s.start_with?("ru") ? "title_ru" : "title_en"
         quest[locale_key].presence || quest["title_ru"] || quest.fetch("key")
+      end
+
+      def where_for(quest)
+        locale_key = I18n.locale.to_s.start_with?("ru") ? "where_ru" : "where_en"
+        quest[locale_key].presence || quest["where_ru"]
       end
 
       def success(quest_key, message)
