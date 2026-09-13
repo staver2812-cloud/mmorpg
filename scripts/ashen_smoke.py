@@ -190,6 +190,14 @@ def main() -> int:
         r.status_code == 200 and 'data-building-key="clan_hall"' in r.text and ("Напасть" in r.text or "Attack" in r.text or "свитк" in r.text.lower()),
         f"url={r.url}",
     )
+    r = s.get(f"{BASE}/city/buildings/airship_station", timeout=TIMEOUT, allow_redirects=True)
+    report.add(
+        "GET /city/buildings/airship_station wallet",
+        r.status_code == 200
+        and 'data-building-key="airship_station"' in r.text
+        and ("В кармане" in r.text or "Wallet" in r.text),
+        f"url={r.url}",
+    )
 
     r = s.get(f"{BASE}/quests", timeout=TIMEOUT)
     quest_needles = [
