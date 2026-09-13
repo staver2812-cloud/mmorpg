@@ -45,6 +45,7 @@ Rails.application.routes.draw do
   get "world/locations/:key", to: "world_locations#show", as: :world_location
   post "world/locations/:key/features", to: "world_locations#open_feature", as: :world_location_feature
   post "world/encounter_check", to: "world_encounter_checks#create", as: :world_encounter_check
+  post "world/assault", to: "world_assaults#create", as: :world_assault
 
   resource :inventory, only: [:show] do
     post :equip

@@ -51,7 +51,7 @@ en:
       trauma_high: "high (50%)"
       trauma_very_high: "very high (80%)"
       combat_trauma: "Combat trauma (VM scroll)"
-      combat_trauma_hint: "Consumes a Combat Trauma Scroll from inventory. The loser receives combat trauma."
+      combat_trauma_hint: "Consumes a Combat Trauma Scroll from inventory. The loser receives combat trauma. The same scroll powers Attack on a nearby player in the world."
       own_team: "own team"
       levels_short: "levels"
       vs: "vs"

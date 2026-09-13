@@ -100,6 +100,13 @@ RSpec.describe "shared/_nl_players_list.html.erb", type: :view do
 
       expect(rendered).to have_link("max_kerby_list", href: player_path(name: "max_kerby_list"))
     end
+    it "shows an assault control for other players when a viewer is present" do
+      viewer = double("Character", id: 99)
+      render partial: "shared/nl_players_list", locals: {viewer:}
+
+      expect(rendered).to have_css(".nl-assault-btn", count: 3)
+      expect(rendered).to include(world_assault_path)
+    end
   end
 
   describe "with no players" do

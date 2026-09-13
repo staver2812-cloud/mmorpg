@@ -21,8 +21,10 @@ timers remain deferred; those flows are not invented here.
 Shipped now: workshop recipes, material consumption, output grant, profession
 skill bump in `character.metadata["profession_skills"]["tar_smith"]`, plus Ash
 Healer bags crafted at Coal Infirmary (`ash_healer`) that clear light/heavy/combat
-injuries by tier. Combat trauma scrolls and heal scrolls are bought for Veil Marks
-(VM) at the Infirmary premium desk.
+injuries by tier instantly. Injury timers (light ~20–45m, heavy ~2h, combat ~12h)
+are untreated expiry only. Combat trauma scrolls and heal scrolls are bought for
+Veil Marks (VM) at the Infirmary premium desk. The trauma scroll also powers
+same-cell world Assault (`POST /world/assault`), not only the Arena checkbox.
 
 ## 2. Player-facing behavior
 
@@ -63,5 +65,6 @@ modifiers, and profession quests remain unimplemented.
 
 | Date | Change |
 |---|---|
+| 2026-09-13 | Clarified instant healer treatment vs injury expiry timers; trauma scroll also powers same-cell world Assault. |
 | 2026-09-13 | Promoted from NOT_IMPLEMENTED: Ashen Tar Smith workshop craft loop. |
 | 2026-07-29 | Recorded the audited NOT_IMPLEMENTED boundary. |

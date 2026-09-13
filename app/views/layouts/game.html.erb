@@ -154,7 +154,7 @@
         <span class="nl-total-online" data-game-layout-target="playersTotal"><%= t("social.total") %> [ <%= @total_online.to_i %> ]</span>
       </div>
       <div class="nl-players-list-float" data-game-layout-target="playersList">
-        <%= render "shared/nl_players_list" %>
+        <%= render "shared/nl_players_list", viewer: current_character %>
       </div>
     </aside>
   </section>

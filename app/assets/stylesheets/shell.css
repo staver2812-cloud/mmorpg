@@ -317,6 +317,27 @@ button.nl-nav-link:disabled {
 
 .nl-player-entry:hover { background: var(--nl-surface-accent); }
 
+.nl-assault-form {
+  display: inline-flex;
+  margin: 0 0 0 4px;
+  flex: 0 0 auto;
+}
+
+.nl-assault-btn {
+  padding: 0 4px;
+  border: 1px solid #8a4a4a;
+  background: #f3dede;
+  color: #6a2020;
+  font-size: 9px;
+  font-weight: 700;
+  line-height: 1.2;
+  cursor: pointer;
+}
+
+.nl-assault-btn:hover {
+  background: #e8c0c0;
+}
+
 .nl-player-arrow,
 .nl-player-icon,
 .nl-player-lvl,

@@ -1639,6 +1639,18 @@ otherwise the Ashen fallback `300..300` seconds (five minutes). The same
 character/anchor locks make concurrent due checks or retry delivery reuse the
 active match rather than creating another fight.
 
+### 8.6.1 Same-cell player assault (combat trauma scroll)
+
+`POST /world/assault` starts a player-versus-player duel against another
+playable character who shares the attacker's exact Presence cell/room. The
+attacker must hold and lose one `combat_trauma_scroll`. The created match is a
+live Arena duel with `metadata.source = world_pvp` and
+`metadata.combat_trauma = true`, so defeat applies combat trauma. Assault is
+blocked in hospital, temple, shop, and arena-room contexts, and when either
+side is offline, moving, aboard, or already in an active match. The presence
+list exposes an Attack control for other nearby players; World owns the
+mutation, Arena Combat owns the fight after start.
+
 ## 9. HTTP and Turbo contract
 
 | Method and path | Purpose | Success | Failure |
@@ -1652,6 +1664,7 @@ active match rather than creating another fight.
 | `POST /world/perform_local_action` | Execute an offered implemented cell action | Observation result or hostile fight transition | Offer fails; no reward/state invention. |
 | `POST /world/context` | Open Character or Inventory from the wilderness shell | Allowlisted destination or hostile fight transition with saved return context | Unsupported context returns to World; no arbitrary URL is followed. |
 | `POST /world/encounter_check` | Check the persisted outdoor cell for its hidden hostile without a manual action | JSON redirect to the existing/new shared fight, or `{interrupted: false}` | Authentication failure; bounded `422` on startup error with no partial match. |
+| `POST /world/assault` | Same-cell PvP assault consuming a combat trauma scroll | Redirect into the live Arena duel with `combat_trauma` metadata | Missing scroll, not co-located, safe zone, offline/busy target; no match created. |
 | `POST /world/interact_hotspot` | Shared city hotspot action | See `doc/features/city.md` | See city contract. |
 | `POST /arena_matches/:id/finish` | Finish a completed wilderness result | Marks the participant result viewed, exits combat, and returns to saved World/Character/Inventory context | Reject active fight or non-participant; malformed context falls back to World. |
 | `GET/POST/PATCH/DELETE /manage/world_cells`, `/manage/tile_buildings`, `/manage/npc_templates`, `/manage/tile_npcs` | Admin-only persisted content CRUD | Atomically changes the existing resolver owners and records an audit event | Anonymous redirects to sign-in; non-admin is denied; invalid/dependent changes preserve state. |
@@ -1659,8 +1672,9 @@ active match rather than creating another fight.
 
 There is no separately versioned public World API. HTML/Turbo is the
 player-facing contract. Hidden hostile encounters transition through the same
-server redirect flow as the interrupted action; there is no manual outdoor-NPC
-attack endpoint. Swagger/rswag and blueprint documentation are intentionally
+server redirect flow as the interrupted action. Same-cell player Assault is a
+separate scroll-gated PvP endpoint; there is still no free outdoor NPC Attack
+button. Swagger/rswag and blueprint documentation are intentionally
 outside this feature.
 
 ## 10. Client-side and CSS ownership
@@ -2951,6 +2965,7 @@ Before extending the World feature:
 | 2026-08-25 | Required explicit validated loot probabilities, preserved the pre-existing Plague Rat no-drop behavior as a documented `0.0` evidence hold, and corrected the World acceptance contract so a per-NPC resolution is not misreported as a guaranteed Inventory award. |
 | 2026-08-26 | Added targetless passive delivery for the persisted source-backed same-cell hostile through the existing start pipeline: an immediate browser check follows a server-persisted coordinate/NPC-fingerprinted random due time, reload/early checks cannot accelerate it, cell/NPC changes invalidate it, overlapping due checks reuse one fight, and focused request/service/system coverage protects the boundary. The local `10..30` range does not claim Neverlands timing/probability. |
 | 2026-09-02 | Added validated exact-cell roster samples and captured delay windows through one server-owned selector/start pipeline, including mixed/repeated templates, per-member level/HP, encounter XP/risk persistence, malformed-reference failure, and seeded config convergence. Sampled anchors now remain eligible after full victory and Finish, matching the completed four-fight `m_1008_1007` chain; request coverage proves a second schedule/start on the same anchor. Seeded Chrome verified normal City exit, a mixed `[8,7]` round, five-minute timeout/Finish/return, and automatic re-entry after a server-persisted `137s` captured-window delay. Complete source pools, weights, probability, cooldown, and delay distribution remain evidence gaps. |
+| 2026-09-13 | Same-cell player Assault via combat trauma scroll (`POST /world/assault`): Presence Attack control, safe-zone denials, combat-trauma match metadata, and focused service/request coverage. |
 
 
 ## 19. Open-world parity audit (updated 2026-09-09)

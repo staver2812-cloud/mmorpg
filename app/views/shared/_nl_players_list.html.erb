@@ -1,5 +1,6 @@
 <%# Players list for the floating panel %>
 <% players = @players_here || [] %>
+<% viewer = local_assigns[:viewer] || (defined?(current_character) ? current_character : nil) %>
 <div data-player-list-count="<%= @presence_player_count || players.size %>" data-player-list-location="<%= @presence_location_label || @position&.zone&.name || 'Unknown' %>" data-player-list-total="<%= @total_online.to_i %>">
   <% players.each do |player| %>
     <div class="nl-player-entry">
@@ -10,6 +11,15 @@
         <span class="nl-player-icon">&gt;</span>
       <% end %>
       <a href="<%= player_path(name: player.name) %>" class="nl-player-name-link"><%= player.name %></a><span class="nl-player-lvl">[<%= player.level %>]</span><span class="nl-player-status">g</span>
+      <% if viewer.present? && viewer.id != player.id %>
+        <%= button_to t("game.world.assault_cta"),
+              world_assault_path,
+              method: :post,
+              params: {defender_id: player.id},
+              class: "nl-assault-btn",
+              form: {class: "nl-assault-form", data: {turbo: false}},
+              title: t("game.world.assault_hint") %>
+      <% end %>
     </div>
   <% end %>
   <% if players.empty? %>

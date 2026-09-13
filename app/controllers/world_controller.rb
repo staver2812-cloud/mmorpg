@@ -69,7 +69,7 @@ class WorldController < ApplicationController
   def players
     prepare_presence_context(sort: params[:sort])
 
-    render partial: "shared/nl_players_list", layout: false
+    render partial: "shared/nl_players_list", locals: {viewer: current_character}, layout: false
   end
 
   def move
