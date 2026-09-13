@@ -9,7 +9,12 @@
          data-tavern-fatigue="<%= fatigue %>">
   <h2><%= t("game.buildings.tavern_rest_title") %></h2>
   <p class="nl-handbook__lead"><%= t("game.buildings.tavern_rest_lead") %></p>
-  <p class="nl-quests-board__meta" data-tavern-vitals="1">
+  <p class="nl-quests-board__meta"
+     data-tavern-vitals="1"
+     data-tavern-hp="<%= hp %>"
+     data-tavern-max-hp="<%= max_hp %>"
+     data-tavern-mp="<%= mp %>"
+     data-tavern-max-mp="<%= max_mp %>">
     <%= t("game.buildings.tavern_vitals", hp: hp, max_hp: max_hp, mp: mp, max_mp: max_mp, fatigue: fatigue) %>
   </p>
   <p>

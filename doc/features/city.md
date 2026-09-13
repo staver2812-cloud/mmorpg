@@ -1159,7 +1159,7 @@ Final rerun results are in the
 - 2026-09-13: Law Abode notes Cistern east-gate outdoor handoff; smoke covers east exit and Enter back.
 - 2026-09-13: Law Abode shows wallet NV and greys out paid alignment changes when short on NV; explicit first-free vs paid mode markers (`data-law-first-pledge`).
 - 2026-09-13: Temple rite greys out without light injuries or NV; shows wallet + injury markers.
-- 2026-09-13: Coal Tide Tavern shows live HP/MP/fatigue and disables rest when already full.
+- 2026-09-13: Coal Tide Tavern shows live HP/MP/fatigue and disables rest when already full; vitals expose `data-tavern-hp`/`mp` markers.
 - 2026-09-13: Veil Obelisk shows wallet NV and greys out recall when unbound or short on fare.
 - 2026-09-13: Relic stall shows wallet NV and greys out unaffordable buys (`data-souvenir-affordable`).
 - 2026-09-13: Infirmary premium desk shows live Assault/Heal scroll bag totals matching HUD chips; greys out VM buys when short (`data-hospital-premium-affordable`); rest desk lists live injury summary (`data-hospital-injuries`); healer craft shows bag mass/slots (`data-hospital-mass`).
