@@ -538,7 +538,8 @@ def main() -> int:
     r = s.get(f"{BASE}/world", timeout=TIMEOUT)
     report.add(
         "alignment chip on Law Quarter",
-        ("Склонность?" in r.text) or ("nl-alignment-chip" in r.text) or ("Alignment?" in r.text),
+        (("Склонность?" in r.text) or ("nl-alignment-chip" in r.text) or ("Alignment?" in r.text))
+        and ("data-alignment-chip=" in r.text),
         f"url={r.url}",
     )
     r = s.get(f"{BASE}/city/buildings/prison", timeout=TIMEOUT, allow_redirects=True)
