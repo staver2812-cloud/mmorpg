@@ -60,7 +60,7 @@
              data-shop-weight="<%= number_with_precision(@inventory.current_weight, precision: 2) %>"
              data-shop-any-affordable="<%= shop_any_affordable ? "1" : "0" %>"
              data-shop-any-sellable="<%= shop_any_sellable ? "1" : "0" %>"
-             <% if @shop_account %>data-shop-funds="<%= @shop_account.nv_balance.to_i %>"<% end %>>
+             data-shop-funds="<%= @shop_account ? @shop_account.nv_balance.to_i : 0 %>">
           <div><%= t("game.shop.carry_html",
             nv: number_with_precision(@wallet.nv_balance, precision: 2),
             weight: number_with_precision(@inventory.current_weight, precision: 2),
