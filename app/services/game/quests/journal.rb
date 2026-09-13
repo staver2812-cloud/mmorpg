@@ -58,6 +58,16 @@ module Game
         accept!(STARTER_QUEST_KEY)
       end
 
+      # Compact HUD label for the first active Ashen quest, if any.
+      def active_chip
+        entry = entries.find { |row| row[:status] == "active" }
+        return nil unless entry
+
+        quest = entry[:quest]
+        title = title_for(quest)
+        I18n.t("game.quests.chip", title:, progress: entry[:progress], target: entry[:target])
+      end
+
       def turn_in!(quest_key)
         quest = Catalog.find(quest_key)
         return failure(quest_key, I18n.t("game.quests.unknown")) unless quest
