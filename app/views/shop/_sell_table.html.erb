@@ -13,13 +13,13 @@
               <span class="nl-shop-category__icon nl-shop-item-icon" style="<%= shop_category_icon_style(Game::Shop::Catalog.category_for(item.item_template)) %>" aria-hidden="true"></span>
             <% end %>
             <% if item.durable? %>
-              <meter class="nl-shop-durability" value="<%= item.current_durability %>" max="<%= item.max_durability %>" aria-label="Durability <%= item.item_template.display_name %>"></meter>
+              <meter class="nl-shop-durability" value="<%= item.current_durability %>" max="<%= item.max_durability %>" aria-label="<%= t("game.common.durability") %> <%= item.item_template.display_name %>"></meter>
             <% end %>
           </td>
           <td class="nl-shop-row-content">
             <div class="nl-shop-item-heading">
               <strong><%= item.item_template.display_name %></strong>
-              <span>(quantity: <%= shop_stock_label(item.item_template) %>)</span>
+              <span>(<%= t("game.shop.quantity", count: shop_stock_label(item.item_template)) %>)</span>
               <span><%= t("game.common.quantity") %>: <%= item.quantity %></span>
             </div>
             <div class="nl-shop-item-trade">

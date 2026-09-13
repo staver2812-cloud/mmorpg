@@ -624,9 +624,12 @@ def main() -> int:
     )
 
     r = s.get(f"{BASE}/shop", timeout=TIMEOUT)
-    banned_shop = ["You carry", "Shop funds", "Refresh to buy", "There are no items"]
+    banned_shop = ["You carry", "Shop funds", "Refresh to buy", "There are no items", "Valid for", "(quantity:"]
     found_shop = [w for w in banned_shop if w in r.text]
     report.add("shop no English chrome", not found_shop, f"found={found_shop}")
+    r = s.get(f"{BASE}/shop?mode=sell", timeout=TIMEOUT)
+    found_sell = [w for w in ["(quantity:", "Durability "] if w in r.text]
+    report.add("shop sell no English chrome", not found_sell, f"found={found_sell}")
 
     r = s.get(f"{BASE}/world", timeout=TIMEOUT)
     report.add("locale switcher", ("RU" in r.text and "EN" in r.text) or "/locales" in r.text)
