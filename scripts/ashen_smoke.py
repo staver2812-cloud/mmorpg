@@ -483,7 +483,8 @@ def main() -> int:
         and ('data-temple-injury="' in r.text)
         and ("data-temple-wallet=" in r.text)
         and ("data-temple-light=" in r.text)
-        and ("data-temple-rite-ready=" in r.text),
+        and ("data-temple-rite-ready=" in r.text)
+        and ("data-temple-can-afford=" in r.text),
         f"url={r.url}",
     )
 
