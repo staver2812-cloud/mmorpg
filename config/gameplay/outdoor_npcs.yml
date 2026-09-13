@@ -11,6 +11,8 @@ outpost_surroundings:
       wilderness_bandit: "Патруль Завесы"
       wilderness_robber: "Солевые контрабандисты"
       ash_shore_scout: "Пепельные разведчики"
+      ash_gate_mite: "Клещи у ворот"
+      ash_gate_patrol: "Дозоры у ворот"
       ash_bell_mite: "Колокольные клещи"
       salt_dock_wraith: "Солевые призраки пирса"
       soot_market_knifer: "Ножевики Сажевого рынка"
@@ -89,6 +91,71 @@ outpost_surroundings:
         - kind: currency
           currency: NV
           amount: 4
+          chance: 0.5
+
+    - key: ash_gate_mite
+      name: Клещ у ворот
+      role: hostile
+      level: 3
+      x: 6
+      y: 7
+      hp: 80
+      damage: 5
+      xp: 22
+      metadata:
+        source_name: "Клещ у ворот"
+        source_location: "Пепельный Берег"
+        source_observation: "ashen_sandbox_gate_mite_2026-09-13"
+        source_map: "m_1001_999"
+        source_coordinates: [1000, 999]
+        encounter_count: 1
+        encounter_experience_reward: 22
+        avatar_image: "zombie.png"
+        max_attacks_per_turn: 1
+      loot:
+        - kind: item
+          item: rat_tail
+          source_name: "Хвост Крысы Завесы"
+          chance: 0.5
+        - kind: item
+          item: wood_chips
+          source_name: "Щепа Смолы"
+          chance: 0.55
+        - kind: currency
+          currency: NV
+          amount: 3
+          chance: 0.55
+
+    - key: ash_gate_patrol
+      name: Дозор у ворот
+      role: hostile
+      level: 4
+      x: 7
+      y: 8
+      hp: 95
+      damage: 6
+      xp: 26
+      metadata:
+        source_name: "Дозор у ворот"
+        source_location: "Пепельный Берег"
+        source_observation: "ashen_sandbox_gate_patrol_2026-09-13"
+        source_map: "m_1001_999"
+        encounter_count: 1
+        encounter_experience_reward: 26
+        avatar_image: "zombie.png"
+        max_attacks_per_turn: 1
+      loot:
+        - kind: item
+          item: ashen_bait
+          source_name: "Приманка Завесы"
+          chance: 0.25
+        - kind: item
+          item: wood_chips
+          source_name: "Щепа Смолы"
+          chance: 0.4
+        - kind: currency
+          currency: NV
+          amount: 5
           chance: 0.5
 
     - key: ash_shore_scout
