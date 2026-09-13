@@ -2971,6 +2971,7 @@ Before extending the World feature:
 | 2026-09-13 | Look/Enter without bait appends a hostile-cell hint while passive ambush timer remains authoritative. |
 | 2026-09-13 | City Obelisk bind/recall for 15 NV via `Game::World::ObeliskRecall` and `POST /city/buildings/:building_key/obelisk`. |
 | 2026-09-13 | Outdoor Obelisk recall chip (`POST /world/obelisk`); Tavern table also clears fatigue. |
+| 2026-09-13 | Law Abode alignment pledge/change via `Game::World::LawAlignmentPledge`. |
 
 
 ## 19. Open-world parity audit (updated 2026-09-09)
