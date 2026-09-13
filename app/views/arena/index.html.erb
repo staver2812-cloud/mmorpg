@@ -5,11 +5,18 @@
 
 <div class="nl-arena-frame"
      data-controller="arena"
-     data-arena-character-level-value="<%= current_character.level %>">
+     data-arena-character-level-value="<%= current_character.level %>"
+     data-arena-apps="<%= total_applications %>"
+     data-arena-has-application="<%= @current_application.present? ? "1" : "0" %>">
   <div class="nl-arena-topline">
     <div class="nl-arena-character">
       <%= current_character.name %>[<%= current_character.level %>]
-      <span class="nl-arena-vitals"><%= current_character.current_hp %>/<%= current_character.max_hp %> | <%= current_character.current_mp %>/<%= current_character.max_mp %></span>
+      <span class="nl-arena-vitals"
+            data-arena-vitals="1"
+            data-arena-hp="<%= current_character.current_hp %>"
+            data-arena-max-hp="<%= current_character.max_hp %>"
+            data-arena-mp="<%= current_character.current_mp %>"
+            data-arena-max-mp="<%= current_character.max_mp %>"><%= current_character.current_hp %>/<%= current_character.max_hp %> | <%= current_character.current_mp %>/<%= current_character.max_mp %></span>
     </div>
     <div class="nl-arena-controls">
       <%= link_to t("arena.nav.character"), player_path(name: current_character.name), class: "nl-arena-link" %>
