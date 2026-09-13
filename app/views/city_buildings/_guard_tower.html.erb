@@ -8,6 +8,9 @@
     </p>
   <% end %>
   <% routes = local_assigns.fetch(:routes, []) %>
+  <p class="nl-quests-board__meta" data-guard-routes="<%= routes.size %>">
+    <%= t("game.buildings.guard_routes_count", count: routes.size) %>
+  </p>
   <% if routes.empty? %>
     <p class="nl-quests-board__meta"><%= t("game.buildings.guard_empty") %></p>
   <% else %>
