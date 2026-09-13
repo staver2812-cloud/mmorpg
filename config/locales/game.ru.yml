@@ -558,6 +558,7 @@ ru:
       tavern_rest_title: "Стол угля"
       tavern_rest_lead: "Присесть за стол — HP, MP и усталость восстанавливаются сразу. Травмы здесь не снимают: для них Лазарет Угля."
       tavern_rest_cta: "Отдохнуть за столом"
+      tavern_vitals: "Сейчас: %{hp}/%{max_hp} HP · %{mp}/%{max_mp} MP · усталость %{fatigue}%"
       tavern_rested: "Вы отдохнули за столом. HP, MP и усталость полные. Травмы не тронуты."
       tavern_already_full: "Вы уже сыты, свежи и без усталости."
       tavern_in_combat: "Сначала закончите бой."

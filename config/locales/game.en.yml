@@ -558,6 +558,7 @@ en:
       tavern_rest_title: "Coal table"
       tavern_rest_lead: "Sit down to restore HP, MP, and fatigue instantly. Injuries are not cleared here — use Coal Infirmary."
       tavern_rest_cta: "Rest at the table"
+      tavern_vitals: "Now: %{hp}/%{max_hp} HP · %{mp}/%{max_mp} MP · fatigue %{fatigue}%"
       tavern_rested: "You rested at the table. HP, MP, and fatigue are full. Injuries unchanged."
       tavern_already_full: "You are already rested and fresh."
       tavern_in_combat: "Finish the fight first."
