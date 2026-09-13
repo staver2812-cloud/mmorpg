@@ -38,7 +38,7 @@ RSpec.describe "Players", type: :request do
     end
 
     it "keeps an owner's profile inside the persistent game shell" do
-      character = create(:character, user: user, name: "shell_hero")
+      character = create(:character, user: user, name: "shell_hero", metadata: {"ashen_bank_nv" => 42})
       zone = create(:zone, name: "Outpost")
       create(:character_position, character: character, zone: zone, x: 1, y: 2)
       sign_in user, scope: :user
@@ -50,6 +50,21 @@ RSpec.describe "Players", type: :request do
       expect(response.body).to include('class="nl-profile-tabs"')
       expect(response.body).to include("Character sections")
       expect(Nokogiri::HTML(response.body).css(".nl-profile-location").size).to eq(1)
+      vault = Nokogiri::HTML(response.body).at_css(".nl-sheet-vault")
+      expect(vault).to be_present
+      expect(vault.text).to include("42")
+    end
+
+    it "hides vault balance on another player's public sheet" do
+      owner = create(:user, profile_name: "vault-owner")
+      character = create(:character, user: owner, name: "other_vault", metadata: {"ashen_bank_nv" => 99})
+      zone = create(:zone, name: "Outpost")
+      create(:character_position, character: character, zone: zone, x: 1, y: 2)
+
+      get player_path(name: character.name)
+
+      expect(response).to have_http_status(:ok)
+      expect(response.body).not_to include("nl-sheet-vault")
     end
 
     it "returns location, equipment, and public player path in JSON" do

@@ -248,6 +248,8 @@ ru:
       knowledge: "Знания"
     sheet:
       money: "Деньги"
+      vault: "Сейф"
+      vault_open_cta: "Банк"
       primary_stats: "Основные характеристики"
       wisdom: "Мудрость"
       experience: "Опыт"

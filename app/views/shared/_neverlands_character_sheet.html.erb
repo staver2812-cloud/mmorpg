@@ -32,6 +32,17 @@
             <th><span class="nl-money-mark" aria-hidden="true">NV</span> <%= t("game.sheet.money") %>:</th>
             <td><%= number_with_delimiter(character.user&.currency_wallet&.nv_balance || 0) %> NV</td>
           </tr>
+          <% if character == current_character %>
+            <tr>
+              <th><%= t("game.sheet.vault") %>:</th>
+              <td class="nl-sheet-vault">
+                <%= number_with_delimiter(Game::World::BankVault.balance_for(character)) %> NV
+                <% if Game::World::CityBuildingCatalog.accessible?(character:, building_key: "bank") %>
+                  · <%= link_to t("game.sheet.vault_open_cta"), city_building_path("bank"), class: "nl-sheet-link" %>
+                <% end %>
+              </td>
+            </tr>
+          <% end %>
         </tbody>
       </table>
     <% end %>

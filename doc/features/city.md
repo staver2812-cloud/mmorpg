@@ -108,7 +108,7 @@ The current slice contains:
 - A generic town grid, city movement timer, pathfinding avatar, or inferred reverse routes.
 - Copying Neverlands city/Shop images, tooltips as bitmaps, logos, or identity prose.
 - Treating presentation geometry, arrow visibility, or labels as authorization.
-- Inventing services for Auction, Bank, Clan Hall, schools, prison, temple, or other landmarks.
+- Inventing services for Auction, schools, or other landmarks still marked presentation-only.
 - Assigning an unobserved outdoor destination to another city exit.
 - Preserving the superseded nine-node `city2_*` topology as current Forpost behavior.
 
@@ -455,7 +455,7 @@ The directionality is explicit. Code must not infer a reverse link, shortest pat
 | Central | Tavern, Workshop, Guard Tower | Hover/focus only |
 | Residential | Clan Hall, Post Office, City Hall | Hover/focus only |
 | Knowledge | Magic School, Library, General School, Military School | Hover/focus only |
-| Business | Auction, Souvenir Shop, Dealer House, Obelisk, Temple of Ilana, Bank | Hover/focus only |
+| Business | Auction, Souvenir Shop, Dealer House, Temple of Ilana | Hover/focus only |
 | Law | Law Abode, Prison, Gallows | Hover/focus only |
 
 These labels preserve RPG-domain meaning but do not copy source-platform identity text. No mutation or interior is implied.
@@ -1148,6 +1148,7 @@ Final rerun results are in the
 - 2026-09-13: Law Abode alignment pledge/change (first free, later 25 NV).
 - 2026-09-13: Fatigue HUD chip; Prison/Gallows handbooks link to Law Abode.
 - 2026-09-13: Watchtower directory posts live district offers from the current node.
+- 2026-09-13: Owner character sheet shows Pitch Bank vault NV (private; Bank link when colocated).
 - 2026-09-13: Bank item locker (one unequipped stack) plus alignment on the character sheet.
 - 2026-07-29: fixed existing-database City Exit interaction by making the one seed pipeline reconcile the complete historical `city2_*` graph, retire stale hotspots/offers/gates, preserve retained-node positions, recover removed-node positions to Central Square, and prove convergence plus idempotency.
 - 2026-07-29: added admin-only responsive City node/action CRUD, dependency-safe atomic audit records, stale-offer cancellation, runtime precedence for managed `Zone` scene metadata plus `CityHotspot` geometry/direction, and the task-oriented cross-feature management-guide link. `CityCatalog` remains the source-backed seed declaration, not a parallel runtime graph.

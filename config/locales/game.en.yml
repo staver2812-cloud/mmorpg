@@ -248,6 +248,8 @@ en:
       knowledge: "Knowledge"
     sheet:
       money: "Money"
+      vault: "Vault"
+      vault_open_cta: "Bank"
       primary_stats: "Primary stats"
       wisdom: "Wisdom"
       experience: "Experience"
