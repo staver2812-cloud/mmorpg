@@ -452,11 +452,11 @@ The directionality is explicit. Code must not infer a reverse link, shortest pat
 
 | District | Observed landmark identities | Current local presentation |
 |---|---|---|
-| Central | Tavern, Workshop, Guard Tower | Hover/focus only |
+| Central | Tavern (rest/fatigue), Workshop (craft), Guard Tower (live routes), Hospital/Shop/Arena hotspots | Entered service interiors |
 | Residential | Clan Hall (presence/Assault meetup), Post, City Hall treasury/quest links | Entered interiors |
 | Knowledge | Library handbook; Magic/General/Military schools show live skill snapshots (allocation still on the character sheet) | Entered interiors |
-| Business | Auction, Souvenir Shop, Dealer House, Temple of Ilana | Hover/focus only |
-| Law | Law Abode, Prison, Gallows | Hover/focus only |
+| Business | Auction treasury snapshot + Shop/Buyer links; Souvenir Shop; Dealer House → Buyer; Obelisk; Bank; Temple | Mixed: services + orientation |
+| Law | Law Abode (alignment), Prison/Gallows handbooks, east gate outdoor handoff | Entered interiors |
 
 These labels preserve RPG-domain meaning but do not copy source-platform identity text. No mutation or interior is implied.
 
@@ -1148,6 +1148,7 @@ Final rerun results are in the
 - 2026-09-13: Law Abode alignment pledge/change (first free, later 25 NV).
 - 2026-09-13: Fatigue HUD chip; Prison/Gallows handbooks link to Law Abode.
 - 2026-09-13: Watchtower directory posts live district offers from the current node.
+- 2026-09-13: Salt Auction shows wallet/vault/VM treasury snapshot with Shop/Buyer/Bank links (lots still deferred). Library repair card corrected to deferred `[EVIDENCE]`.
 - 2026-09-13: Clan Hall embeds the colocated Presence/Assault list for meetup PvP.
 - 2026-09-13: Knowledge Quarter schools show a live skill/profession snapshot board (no invented training formulas).
 - 2026-09-13: Law Abode notes Cistern east-gate outdoor handoff; smoke covers east exit and Enter back.

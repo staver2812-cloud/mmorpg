@@ -108,7 +108,7 @@
       <p class="nl-handbook__lead">Станки подключим после сетов. Пока — витрина того, что уже есть в мире.</p>
       <div class="nl-handbook__grid">
         <article class="nl-handbook__card"><h3>Сеты</h3><p>Кровь, Судия, Топь, Искажение, Демиург — тиры 5…50.</p></article>
-        <article class="nl-handbook__card"><h3>Починка</h3><p>В Смоляной Кузнице: износ экипировки чинится за NV. Выйти — кнопка «Город» сверху.</p></article>
+        <article class="nl-handbook__card"><h3>Починка</h3><p>Ремонт экипировки в кузнице пока отложен (нужен подтверждённый Neverlands-поток). Износ уже считается в бою.</p></article>
       </div>
     </section>
   <% when "magic_school", "general_school", "military_school" %>
@@ -198,12 +198,23 @@
       <p class="nl-handbook__lead">Письма между городами подключим после соцслоя. Выход всегда на карту квартала.</p>
     </section>
   <% when "auction" %>
-    <section class="nl-handbook">
-      <h2>Аукцион Соли</h2>
-      <p class="nl-handbook__lead">Игровые лоты позже. Сейчас живой оборот — Лавка и Скупщик Пепла.</p>
+    <section class="nl-handbook" aria-label="<%= t("game.buildings.auction_aria") %>">
+      <h2><%= t("game.buildings.auction_title") %></h2>
+      <p class="nl-handbook__lead"><%= t("game.buildings.auction_lead") %></p>
+      <% wallet = current_user.currency_wallet || current_user.create_currency_wallet!(nv_balance: 0) %>
+      <% vault = Game::World::BankVault.balance_for(current_character) %>
+      <p class="nl-quests-board__meta">
+        <%= t("game.buildings.auction_treasury",
+              wallet: wallet.nv_balance.to_i,
+              vault: vault,
+              marks: wallet.veil_marks.to_i) %>
+      </p>
       <p>
         <%= link_to t("game.shop.title"), shop_path, class: "lbut" %>
         <%= link_to t("game.buildings.junk_dealer_link"), city_building_path("junk_dealer"), class: "lbut" %>
+        <% if Game::World::CityBuildingCatalog.accessible?(character: current_character, building_key: "bank") %>
+          <%= link_to t("game.sheet.vault_open_cta"), city_building_path("bank"), class: "lbut" %>
+        <% end %>
       </p>
     </section>
   <% when "prison", "gallows" %>

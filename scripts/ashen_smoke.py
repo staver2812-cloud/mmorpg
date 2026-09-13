@@ -416,6 +416,15 @@ def main() -> int:
         r.status_code == 200 and 'data-building-key="souvenir_shop"' in r.text and ("Приманка" in r.text or "bait" in r.text.lower()),
         f"url={r.url}",
     )
+    r = s.get(f"{BASE}/city/buildings/auction", timeout=TIMEOUT, allow_redirects=True)
+    report.add(
+        "GET /city/buildings/auction treasury",
+        r.status_code == 200
+        and 'data-building-key="auction"' in r.text
+        and ("сейф" in r.text.lower() or "vault" in r.text.lower() or "NV" in r.text)
+        and ("Лавка" in r.text or "Shop" in r.text or "/shop" in r.text),
+        f"url={r.url}",
+    )
     r = s.get(f"{BASE}/city/buildings/obelisk", timeout=TIMEOUT, allow_redirects=True)
     report.add(
         "GET /city/buildings/obelisk",
