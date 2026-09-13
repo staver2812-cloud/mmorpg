@@ -186,13 +186,22 @@ def main() -> int:
         (f"/player/{nick}", ["nl-character-sheet", "Сейф", "nl-sheet-vault", "data-sheet-vault=", "Ячейка", "nl-sheet-locker", "data-sheet-locker=", "nl-sheet-vm", "data-sheet-vm=", "data-sheet-nv="]),
         ("/arena", ["nl-arena", "Арена", "Дуэли", "data-arena-vitals=", "data-arena-hp=", "data-arena-mp=", "data-arena-apps=", "data-arena-room-accessible="]),
         ("/city/buildings/tavern", ["data-building-key=\"tavern\"", "Отдохнуть за столом", "data-tavern-rumors=", "data-tavern-vitals=", "data-tavern-hp=", "data-tavern-mp=", "data-tavern-ready="]),
-        ("/city/buildings/guard_tower", ["data-building-key=\"guard_tower\"", "interact_hotspot", "data-guard-square=", "data-guard-here=", "Вы здесь:", "data-guard-routes="]),
+        ("/city/buildings/guard_tower", ["data-building-key=\"guard_tower\"", "interact_hotspot", "data-guard-square=", "data-guard-here=", "data-guard-routes="]),
         ("/city/buildings/workshop", ["data-building-key=\"workshop\"", "Смолокур", "Скрафтить", "data-workshop-repair=\"deferred\"", "data-workshop-mass=", "data-workshop-any-ready=", "data-workshop-recipe=", "data-workshop-ready=", "data-workshop-landmark="]),
         ("/city/buildings/hospital", ["data-building-key=\"hospital\"", "Лазарет", "Лекарь", "в сумке:", "data-hospital-assault=", "data-hospital-heal=", "data-hospital-vitals=", "data-hospital-vm=", "data-hospital-premium-affordable=", "data-hospital-premium-any-affordable=", "data-hospital-topup-ready=", "data-hospital-injuries=", "data-hospital-mass=", "data-hospital-combat=", "data-hospital-rest-ready=", "data-hospital-craft-any-ready=", "data-hospital-recipe=", "data-hospital-craft-ready="]),
     ]:
         r = s.get(urljoin(BASE + "/", path.lstrip("/")), timeout=TIMEOUT)
-        hit = any(n in r.text for n in needles)
-        report.add(f"GET {path}", r.status_code == 200 and hit, f"{r.status_code} needles={hit}")
+        data_needles = [n for n in needles if "data-" in n]
+        text_needles = [n for n in needles if "data-" not in n]
+        data_ok = all(n in r.text for n in data_needles)
+        text_ok = (not text_needles) or any(n in r.text for n in text_needles)
+        hit = data_ok and text_ok
+        missing = [n for n in data_needles if n not in r.text]
+        report.add(
+            f"GET {path}",
+            r.status_code == 200 and hit,
+            f"{r.status_code} data_ok={data_ok} text_ok={text_ok} missing={missing[:4]}",
+        )
         time.sleep(0.1)
 
     r = s.get(f"{BASE}/shop?mode=sell", timeout=TIMEOUT)
