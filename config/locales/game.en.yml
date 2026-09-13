@@ -560,8 +560,10 @@ en:
       workshop_only: "Crafting is only available at the Pitch Forge or Infirmary."
       wrong_building: "That recipe belongs to another building."
       craft_cta: "Craft"
-      crafted: "Crafted: %{name}. Tar Smith skill: %{skill}."
+      crafted: "Crafted: %{name}. %{profession} skill: %{skill}."
       min_skill: "min skill %{amount}"
+      need_skill: "Need skill %{amount}+ (now %{current})"
+      need_mats: "Missing: %{list}"
       inputs: "needs"
     locations:
       you_have: "You have"

@@ -560,8 +560,10 @@ ru:
       wrong_building: "Этот рецепт крафтится в другом здании."
       workshop_only: "Крафт доступен только в кузнице или лазарете."
       craft_cta: "Скрафтить"
-      crafted: "Скрафчено: %{name}. Навык Смолокура: %{skill}."
+      crafted: "Скрафчено: %{name}. Навык «%{profession}»: %{skill}."
       min_skill: "мин. навык %{amount}"
+      need_skill: "Нужен навык %{amount}+ (сейчас %{current})"
+      need_mats: "Не хватает: %{list}"
       inputs: "нужно"
     locations:
       you_have: "У вас"

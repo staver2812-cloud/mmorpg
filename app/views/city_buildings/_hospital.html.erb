@@ -26,6 +26,7 @@
     <% local_assigns.fetch(:recipes, {}).each do |key, recipe| %>
       <% title = I18n.locale.to_s.start_with?("ru") ? recipe["title_ru"] : recipe["title_en"] %>
       <% summary = I18n.locale.to_s.start_with?("ru") ? recipe["summary_ru"] : recipe["summary_en"] %>
+      <% gate = craft_readiness(recipe, character: current_character, skill: local_assigns.fetch(:skill, 0)) %>
       <article class="nl-handbook__card">
         <h3><%= title %></h3>
         <p><%= summary %></p>
@@ -35,12 +36,17 @@
           <%= t("game.professions.inputs") %>:
           <%= craft_input_labels(recipe, character: current_character) %>
         </p>
-        <%= button_to t("game.professions.craft_cta"),
-              city_building_craft_path("hospital"),
-              method: :post,
-              params: {recipe_key: key},
-              class: "lbut",
-              form: {data: {turbo: false}} %>
+        <% if gate[:ready] %>
+          <%= button_to t("game.professions.craft_cta"),
+                city_building_craft_path("hospital"),
+                method: :post,
+                params: {recipe_key: key},
+                class: "lbut",
+                form: {data: {turbo: false}} %>
+        <% else %>
+          <button type="button" class="lbut" disabled title="<%= gate[:reason] %>"><%= t("game.professions.craft_cta") %></button>
+          <p class="nl-quests-board__meta"><%= gate[:reason] %></p>
+        <% end %>
       </article>
     <% end %>
   </div>

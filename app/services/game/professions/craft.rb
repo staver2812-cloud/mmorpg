@@ -52,6 +52,7 @@ module Game
             message: I18n.t(
               "game.professions.crafted",
               name: recipe_title(recipe),
+              profession: profession_title(profession),
               skill: new_skill
             )
           )

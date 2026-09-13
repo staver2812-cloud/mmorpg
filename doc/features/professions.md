@@ -70,6 +70,7 @@ modifiers, and profession quests remain unimplemented.
 | Date | Change |
 |---|---|
 | 2026-09-13 | Sandbox Veil Marks hourly top-up at Infirmary desk for trauma/heal scroll testing. |
+| 2026-09-13 | Craft buttons gate on skill/materials; craft flash names the correct profession. |
 | 2026-09-13 | Workshop/Infirmary craft cards show owned/needed material counts with display names. |
 | 2026-09-13 | Junk buyback accepts surplus `set-*-t5` drops at 8 NV. |
 | 2026-09-13 | Junk buyback accepts ash herbs; starter kit grants capacity-safe herbs for healer craft. |
