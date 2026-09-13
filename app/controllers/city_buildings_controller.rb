@@ -203,6 +203,22 @@ class CityBuildingsController < ApplicationController
     end
   end
 
+  def law
+    unless @building_key == "law_abode"
+      redirect_to world_path, alert: I18n.t("game.buildings.law_only") and return
+    end
+
+    result = Game::World::LawAlignmentPledge.new(
+      character: current_character,
+      alignment: params[:alignment]
+    ).call
+    if result.success
+      redirect_to city_building_path("law_abode"), notice: result.message
+    else
+      redirect_to city_building_path("law_abode"), alert: result.message
+    end
+  end
+
   def sell
     unless @building_key == "junk_dealer"
       redirect_to world_path, alert: I18n.t("game.buildings.junk_only") and return

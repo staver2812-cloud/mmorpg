@@ -288,12 +288,27 @@ def main() -> int:
         and ("Привязать" in r.text or "Bind" in r.text),
         f"url={r.url}",
     )
+
+    ok_main_tav, detail_main_tav = click_hotspot(s, "go_main")
+    report.add("return main before tavern fatigue", ok_main_tav, detail_main_tav)
     r = s.get(f"{BASE}/city/buildings/tavern", timeout=TIMEOUT, allow_redirects=True)
     report.add(
         "GET /city/buildings/tavern fatigue copy",
         r.status_code == 200
         and 'data-building-key="tavern"' in r.text
         and ("устал" in r.text.lower() or "fatigue" in r.text.lower()),
+        f"url={r.url}",
+    )
+    ok_f1_law, d_f1_law = click_hotspot(s, "go_forpost1")
+    report.add("travel go_forpost1 for law", ok_f1_law, d_f1_law)
+    ok_f4, d_f4 = click_hotspot(s, "go_forpost4")
+    report.add("travel go_forpost4", ok_f4, d_f4)
+    r = s.get(f"{BASE}/city/buildings/law_abode", timeout=TIMEOUT, allow_redirects=True)
+    report.add(
+        "GET /city/buildings/law_abode",
+        r.status_code == 200
+        and 'data-building-key="law_abode"' in r.text
+        and ("склонност" in r.text.lower() or "alignment" in r.text.lower()),
         f"url={r.url}",
     )
 

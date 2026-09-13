@@ -80,6 +80,7 @@ Rails.application.routes.draw do
   post "city/buildings/:building_key/post", to: "city_buildings#post", as: :city_building_post
   post "city/buildings/:building_key/souvenir", to: "city_buildings#souvenir", as: :city_building_souvenir
   post "city/buildings/:building_key/obelisk", to: "city_buildings#obelisk", as: :city_building_obelisk
+  post "city/buildings/:building_key/law", to: "city_buildings#law", as: :city_building_law
   resources :quests, only: [:index] do
     member do
       post :accept

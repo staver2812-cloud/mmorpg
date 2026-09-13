@@ -1,0 +1,35 @@
+<section class="nl-handbook" aria-label="<%= t("game.buildings.law_aria") %>">
+  <h2><%= t("game.buildings.law_title") %></h2>
+  <p class="nl-handbook__lead">
+    <%= t(
+          "game.buildings.law_lead",
+          current: t("game.buildings.law_alignment.#{current_character.alignment}"),
+          amount: Game::World::LawAlignmentPledge::CHANGE_COST
+        ) %>
+  </p>
+  <div class="nl-handbook__grid">
+    <% Game::World::LawAlignmentPledge::CHOICES.each do |key| %>
+      <article class="nl-handbook__card">
+        <h3><%= t("game.buildings.law_alignment.#{key}") %></h3>
+        <p><%= t("game.buildings.law_alignment_hint.#{key}") %></p>
+        <% if current_character.alignment == key %>
+          <button type="button" class="lbut" disabled><%= t("game.buildings.law_current_cta") %></button>
+        <% elsif current_character.alignment.to_s == "none" %>
+          <%= button_to t("game.buildings.law_pledge_cta"),
+                city_building_law_path("law_abode"),
+                method: :post,
+                params: {alignment: key},
+                class: "lbut",
+                form: {data: {turbo: false}} %>
+        <% else %>
+          <%= button_to t("game.buildings.law_change_cta", amount: Game::World::LawAlignmentPledge::CHANGE_COST),
+                city_building_law_path("law_abode"),
+                method: :post,
+                params: {alignment: key},
+                class: "lbut",
+                form: {data: {turbo: false}} %>
+        <% end %>
+      </article>
+    <% end %>
+  </div>
+</section>
