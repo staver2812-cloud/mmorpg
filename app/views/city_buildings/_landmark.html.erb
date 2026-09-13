@@ -94,22 +94,28 @@
       </div>
     </section>
   <% when "guard_tower" %>
-    <section class="nl-handbook">
-      <h2>Дозор площади</h2>
-      <p class="nl-handbook__lead">Карта районов города. Из каждого квартала есть обратный переход.</p>
+    <section class="nl-handbook" data-guard-square="1">
+      <h2><%= t("game.buildings.guard_square_title") %></h2>
+      <p class="nl-handbook__lead"><%= t("game.buildings.guard_square_lead") %></p>
       <ul class="nl-city-landmark__notes">
-        <li>Площадь ↔ Верфь, Площадь ↔ Рынок</li>
-        <li>Рынок ↔ Маяк, Рынок ↔ Цистерна</li>
-        <li>Ворота: запад с площади, восток из Цистерны</li>
+        <li><%= t("game.buildings.guard_square_note_central") %></li>
+        <li><%= t("game.buildings.guard_square_note_market") %></li>
+        <li><%= t("game.buildings.guard_square_note_gates") %></li>
       </ul>
     </section>
   <% when "workshop" %>
-    <section class="nl-handbook">
-      <h2>Смоляная Кузница</h2>
-      <p class="nl-handbook__lead">Станки подключим после сетов. Пока — витрина того, что уже есть в мире.</p>
+    <section class="nl-handbook" data-workshop-landmark="1">
+      <h2><%= t("game.buildings.workshop_landmark_title") %></h2>
+      <p class="nl-handbook__lead"><%= t("game.buildings.workshop_landmark_lead") %></p>
       <div class="nl-handbook__grid">
-        <article class="nl-handbook__card"><h3>Сеты</h3><p>Кровь, Судия, Топь, Искажение, Демиург — тиры 5…50.</p></article>
-        <article class="nl-handbook__card"><h3>Починка</h3><p>Ремонт экипировки в кузнице пока отложен (нужен подтверждённый Neverlands-поток). Износ уже считается в бою.</p></article>
+        <article class="nl-handbook__card">
+          <h3><%= t("game.buildings.workshop_landmark_sets_title") %></h3>
+          <p><%= t("game.buildings.workshop_landmark_sets_body") %></p>
+        </article>
+        <article class="nl-handbook__card">
+          <h3><%= t("game.buildings.workshop_landmark_repair_title") %></h3>
+          <p><%= t("game.buildings.workshop_landmark_repair_body") %></p>
+        </article>
       </div>
     </section>
   <% when "magic_school", "general_school", "military_school" %>
