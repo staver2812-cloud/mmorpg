@@ -632,6 +632,7 @@ en:
       airship_wallet: "Wallet %{amount} NV — fare is charged when you board."
       airship_need_nv: "Need %{amount} NV to board"
       airship_need_nv_short: "Need NV"
+      airship_earn_hint: "Earn NV via Shop sell or Ash Buyer on Coal Market."
       post_aria: "Ashen Post"
       post_only: "Notes are only available at the Post."
       post_title: "Personal note"
