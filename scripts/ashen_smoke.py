@@ -149,7 +149,7 @@ def main() -> int:
         ("/shop", ["Лавка", "nl-shop", "NV", "Купить"]),
         ("/inventory", ["nl-inventory", "Вес инвентаря", "Надеть", "Свойства"]),
         ("/arena", ["nl-arena", "Арена", "Дуэли"]),
-        ("/city/buildings/tavern", ["data-building-key=\"tavern\"", "nl-city-landmark"]),
+        ("/city/buildings/tavern", ["data-building-key=\"tavern\"", "Отдохнуть за столом", "Слухи угля"]),
         ("/city/buildings/workshop", ["data-building-key=\"workshop\"", "nl-city-landmark"]),
         ("/city/buildings/hospital", ["data-building-key=\"hospital\"", "Лазарет", "hospital"]),
     ]:

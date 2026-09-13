@@ -27,6 +27,8 @@
           <%= t("game.professions.workshop_notice") %>
         <% elsif @building["kind"] == "junk_buyback" %>
           <%= t("game.buildings.junk_lead") %>
+        <% elsif @building["kind"] == "tavern" %>
+          <%= t("game.buildings.tavern_rest_lead") %>
         <% elsif @building["kind"] == "landmark" %>
           Интерьер открыт. Игровые действия здания появятся в следующих срезах.
         <% elsif @building["kind"] == "hospital" %>
@@ -57,6 +59,8 @@
               premium_offers: @premium_offers %>
       <% when "workshop" %>
         <%= render "city_buildings/workshop", recipes: @profession_recipes, skill: @tar_smith_skill %>
+      <% when "tavern" %>
+        <%= render "city_buildings/tavern", building: @building %>
       <% when "landmark" %>
         <%= render "city_buildings/landmark", building: @building, building_key: @building_key %>
       <% end %>

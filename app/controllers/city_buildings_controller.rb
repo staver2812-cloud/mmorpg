@@ -36,15 +36,21 @@ class CityBuildingsController < ApplicationController
   end
 
   def rest
-    unless @building_key == "hospital"
-      redirect_to world_path, alert: I18n.t("game.buildings.hospital_only") and return
+    case @building_key
+    when "hospital"
+      result = Game::World::HospitalRest.new(character: current_character).call
+      target = city_building_path("hospital")
+    when "tavern"
+      result = Game::World::TavernRest.new(character: current_character).call
+      target = city_building_path("tavern")
+    else
+      redirect_to world_path, alert: I18n.t("game.buildings.rest_unavailable") and return
     end
 
-    result = Game::World::HospitalRest.new(character: current_character).call
     if result.success
-      redirect_to city_building_path("hospital"), notice: result.message
+      redirect_to target, notice: result.message
     else
-      redirect_to city_building_path("hospital"), alert: result.message
+      redirect_to target, alert: result.message
     end
   end
 
