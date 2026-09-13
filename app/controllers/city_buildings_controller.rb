@@ -105,6 +105,19 @@ class CityBuildingsController < ApplicationController
     end
   end
 
+  def bless
+    unless @building_key == "temple"
+      redirect_to world_path, alert: I18n.t("game.buildings.temple_only") and return
+    end
+
+    result = Game::World::TempleBlessing.new(character: current_character).call
+    if result.success
+      redirect_to city_building_path("temple"), notice: result.message
+    else
+      redirect_to city_building_path("temple"), alert: result.message
+    end
+  end
+
   def sell
     unless @building_key == "junk_dealer"
       redirect_to world_path, alert: I18n.t("game.buildings.junk_only") and return

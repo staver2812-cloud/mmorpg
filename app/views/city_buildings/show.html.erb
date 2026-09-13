@@ -27,6 +27,8 @@
           <%= t("game.professions.workshop_notice") %>
         <% elsif @building["kind"] == "junk_buyback" %>
           <%= t("game.buildings.junk_lead") %>
+        <% elsif @building["kind"] == "temple" %>
+          <%= t("game.buildings.temple_rite_lead", amount: Game::World::TempleBlessing::COST_NV) %>
         <% elsif @building["kind"] == "tavern" %>
           <%= t("game.buildings.tavern_rest_lead") %>
         <% elsif @building["kind"] == "landmark" %>
@@ -61,6 +63,8 @@
         <%= render "city_buildings/workshop", recipes: @profession_recipes, skill: @tar_smith_skill %>
       <% when "tavern" %>
         <%= render "city_buildings/tavern", building: @building %>
+      <% when "temple" %>
+        <%= render "city_buildings/temple", building: @building %>
       <% when "landmark" %>
         <%= render "city_buildings/landmark", building: @building, building_key: @building_key %>
       <% end %>
