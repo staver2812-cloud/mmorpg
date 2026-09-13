@@ -15,6 +15,15 @@ RSpec.describe Game::World::HospitalRest do
     )
   end
 
+  it "clears ashen injuries while resting" do
+    Game::Combat::InjuryState.new(character:).apply!(severity: "heavy", duration: 1.hour)
+
+    result = described_class.new(character:).call
+
+    expect(result.success).to be(true)
+    expect(Game::Combat::InjuryState.new(character: character.reload).any?).to be(false)
+  end
+
   it "rejects rest during combat" do
     character.update!(in_combat: true, last_combat_at: Time.current)
 

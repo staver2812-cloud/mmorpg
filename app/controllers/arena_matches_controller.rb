@@ -128,10 +128,13 @@ class ArenaMatchesController < ApplicationController
     current_character.exit_combat! if current_character.in_combat?
 
     recovery = Game::World::DefeatRecovery.new(character: current_character).call
+    injury_note = Game::Combat::InjuryState.new(character: current_character).summary_ru
     if recovery.recovered
-      redirect_to recovery.path, notice: recovery.message, status: :see_other
+      notice = [recovery.message, injury_note].compact.join(" ")
+      redirect_to recovery.path, notice:, status: :see_other
     else
-      redirect_to finish_destination_path, notice: I18n.t("game.flashes.fight_finished"), status: :see_other
+      notice = [I18n.t("game.flashes.fight_finished"), injury_note].compact.join(" ")
+      redirect_to finish_destination_path, notice:, status: :see_other
     end
   end
 

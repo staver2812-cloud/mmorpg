@@ -1,0 +1,45 @@
+<section class="nl-handbook" aria-label="<%= t("game.buildings.junk_aria") %>">
+  <h2><%= t("game.buildings.junk_title") %></h2>
+  <p class="nl-handbook__lead"><%= t("game.buildings.junk_lead") %></p>
+
+  <% rows = local_assigns.fetch(:offers, []) %>
+  <% if rows.empty? %>
+    <p class="nl-empty-note"><%= t("game.buildings.junk_empty") %></p>
+  <% else %>
+    <table class="nl-detail-table nl-city-building-table">
+      <thead>
+        <tr>
+          <th><%= t("game.common.item") %></th>
+          <th><%= t("game.common.quantity") %></th>
+          <th><%= t("game.common.price") %></th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody>
+        <% rows.each do |row| %>
+          <tr>
+            <td><%= row[:name] %></td>
+            <td><%= row[:quantity] %></td>
+            <td><%= row[:price] %> NV</td>
+            <td>
+              <%= button_to t("game.buildings.junk_sell_one"),
+                    city_building_sell_path("junk_dealer"),
+                    method: :post,
+                    params: {item_key: row[:key], quantity: 1},
+                    class: "lbut",
+                    form: {data: {turbo: false}} %>
+              <% if row[:quantity].to_i > 1 %>
+                <%= button_to t("game.buildings.junk_sell_all"),
+                      city_building_sell_path("junk_dealer"),
+                      method: :post,
+                      params: {item_key: row[:key], quantity: row[:quantity]},
+                      class: "lbut",
+                      form: {data: {turbo: false}} %>
+              <% end %>
+            </td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  <% end %>
+</section>

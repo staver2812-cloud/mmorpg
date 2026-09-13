@@ -20,6 +20,13 @@ class CityBuildingsController < ApplicationController
       @profession_recipes = Game::Professions::Catalog.recipes_for_building("workshop")
       @tar_smith_skill = current_character.metadata.to_h.dig("profession_skills", "tar_smith").to_i
     end
+    if @building_key == "junk_dealer"
+      Game::Professions::Templates.ensure_craft_items!
+      @junk_offers = Game::Shop::JunkBuyback.offer_rows_for(current_character)
+    end
+    if @building_key == "hospital"
+      @injury_summary = Game::Combat::InjuryState.new(character: current_character).summary_ru
+    end
     prepare_presence_context
   end
 
@@ -49,6 +56,23 @@ class CityBuildingsController < ApplicationController
       redirect_to city_building_path("workshop"), notice: result.message
     else
       redirect_to city_building_path("workshop"), alert: result.message
+    end
+  end
+
+  def sell
+    unless @building_key == "junk_dealer"
+      redirect_to world_path, alert: I18n.t("game.buildings.junk_only") and return
+    end
+
+    result = Game::Shop::JunkBuyback.new(
+      character: current_character,
+      item_key: params[:item_key],
+      quantity: params[:quantity]
+    ).call
+    if result.success
+      redirect_to city_building_path("junk_dealer"), notice: result.message
+    else
+      redirect_to city_building_path("junk_dealer"), alert: result.message
     end
   end
 

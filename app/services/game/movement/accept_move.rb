@@ -32,6 +32,9 @@ module Game
             raise violation("A local action is already in progress")
           end
           ensure_not_fatigued!
+          if Game::Combat::InjuryState.new(character:).blocks_movement?
+            raise violation(I18n.t("game.injuries.blocks_movement"))
+          end
 
           command = find_offer!(position)
 

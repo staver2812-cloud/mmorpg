@@ -2,8 +2,8 @@
 
 module Game
   module World
-    # Free Ashen hospital rest: restores HP/MP when the character is out of combat
-    # and currently inside the hospital building context.
+    # Free Ashen hospital rest: restores HP/MP and clears sandbox injuries when
+    # the character is out of combat inside the hospital.
     class HospitalRest
       Result = Struct.new(:success, :message, keyword_init: true)
 
@@ -18,14 +18,17 @@ module Game
             return Result.new(success: false, message: I18n.t("game.buildings.hospital_in_combat"))
           end
 
+          injuries = Game::Combat::InjuryState.new(character:)
           max_hp = character.effective_max_hp.to_i
           max_mp = character.effective_max_mp.to_i
-          if character.current_hp.to_i >= max_hp && character.current_mp.to_i >= max_mp
+          full = character.current_hp.to_i >= max_hp && character.current_mp.to_i >= max_mp
+          if full && !injuries.any?
             return Result.new(success: false, message: I18n.t("game.buildings.hospital_already_full"))
           end
 
           character.update!(current_hp: max_hp, current_mp: max_mp, in_combat: false)
-          Result.new(success: true, message: I18n.t("game.buildings.hospital_rested"))
+          injuries.clear_all!
+          Result.new(success: true, message: I18n.t("game.buildings.hospital_rested_injuries"))
         end
       end
 

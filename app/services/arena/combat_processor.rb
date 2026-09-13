@@ -1104,6 +1104,7 @@ module Arena
         Arena::NpcExperienceAwarder.new(match:, winning_team:).call
       end
       wear_results = Arena::EquipmentWearResolver.new(match:, rng:).call
+      injury_results = Game::Combat::InjuryResolver.new(match:, rng:).call
       record_solo_npc_victory!(winning_team) if npc_fight?
 
       if xp_result&.experience_awarded.to_i.positive?
@@ -1133,7 +1134,8 @@ module Arena
             "chance_percent" => result.chance_percent,
             "item_ids" => result.item_ids
           }
-        end
+        end,
+        "ashen_injuries" => injury_results.map { |result| {"severity" => result.severity} }
       }.compact
 
       match.update!(metadata: match.metadata.to_h.merge(

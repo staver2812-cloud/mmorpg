@@ -25,10 +25,15 @@
           Аренда прилавков и лоты игроков пока только для просмотра.
         <% elsif @building["kind"] == "workshop" %>
           <%= t("game.professions.workshop_notice") %>
+        <% elsif @building["kind"] == "junk_buyback" %>
+          <%= t("game.buildings.junk_lead") %>
         <% elsif @building["kind"] == "landmark" %>
           Интерьер открыт. Игровые действия здания появятся в следующих срезах.
         <% elsif @building["kind"] == "hospital" %>
           <%= t("game.buildings.hospital_rest_lead") %>
+          <% if @injury_summary.present? %>
+            <br><strong><%= @injury_summary %></strong>
+          <% end %>
         <% else %>
           Поверхность пока read-only: без покупки, продажи, лечения и аренды.
         <% end %>
@@ -39,6 +44,8 @@
         <%= render "city_buildings/market", building: @building %>
       <% when "shop_shell" %>
         <%= render "city_buildings/shop_shell", building: @building %>
+      <% when "junk_buyback" %>
+        <%= render "city_buildings/junk_buyback", offers: @junk_offers %>
       <% when "numismatics" %>
         <%= render "city_buildings/numismatics", building: @building %>
       <% when "hospital" %>
