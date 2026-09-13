@@ -20,9 +20,9 @@
         <%= link_to t("arena.nav.city"), world_path, class: "lbut", data: {turbo: false} %>
       </header>
 
-      <p class="nl-city-building-notice">
+      <p class="nl-city-building-notice"<%= ' data-market-notice="1"'.html_safe if @building["kind"] == "market" %>>
         <% if @building["kind"] == "market" %>
-          Аренда прилавков и лоты игроков пока только для просмотра.
+          <%= t("game.buildings.market_notice") %>
         <% elsif @building["kind"] == "workshop" %>
           <%= t("game.professions.workshop_notice") %>
         <% elsif @building["kind"] == "junk_buyback" %>

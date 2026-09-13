@@ -590,6 +590,7 @@ en:
       dealer_house_lead: "Live trophy buyback already runs at Ash Buyer on the Salt Market."
       dealer_house_buyback: "In bags for buyback: %{lines} lines · up to %{total} NV"
       market_short: "Salt Market"
+      market_notice: "Stall rent and player lots are view-only for now."
       bank_aria: "Pitch Bank"
       bank_only: "Bank operations are only available at the Bank."
       bank_title: "Character vault"
