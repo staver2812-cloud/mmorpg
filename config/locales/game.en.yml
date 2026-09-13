@@ -620,6 +620,8 @@ en:
         light: "light"
         heavy: "heavy"
         combat: "combat"
+      remain_h_m: "%{hours}h %{minutes}m"
+      remain_m: "%{minutes}m"
     quests:
       title: "Ashen Veil Quests"
       chip: "%{title} %{progress}/%{target}"
