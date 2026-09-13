@@ -290,7 +290,7 @@ en:
       bait_ambush: "%{name} lunges at the bait!"
       local_action_in_progress: "A local action is already in progress."
       passive_rule: "Without bait, bots ambush on their own about once every 5 minutes."
-      starter_tip: "Ashen Shore loop: Shop / bait → West Gate → Look (or wait 5 min) → fight → Coal Hall quests → Ash Buyer on Burned Market → Infirmary if injured."
+      starter_tip: "Loop: Shop/bait → West Gate → fight → Coal Hall → Ash Buyer → bandage for light injury / Infirmary for heavy."
     details:
       price: "Price"
       quantity: "Qty"
