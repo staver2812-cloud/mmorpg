@@ -150,8 +150,8 @@ def main() -> int:
         ("/inventory", ["nl-inventory", "Вес инвентаря", "Надеть", "Свойства"]),
         ("/arena", ["nl-arena", "Арена", "Дуэли"]),
         ("/city/buildings/tavern", ["data-building-key=\"tavern\"", "Отдохнуть за столом", "Слухи угля"]),
-        ("/city/buildings/workshop", ["data-building-key=\"workshop\"", "nl-city-landmark"]),
-        ("/city/buildings/hospital", ["data-building-key=\"hospital\"", "Лазарет", "hospital"]),
+        ("/city/buildings/workshop", ["data-building-key=\"workshop\"", "Смолокур", "Скрафтить"]),
+        ("/city/buildings/hospital", ["data-building-key=\"hospital\"", "Лазарет", "Лекарь"]),
     ]:
         r = s.get(urljoin(BASE + "/", path.lstrip("/")), timeout=TIMEOUT)
         hit = any(n in r.text for n in needles)
@@ -272,6 +272,12 @@ def main() -> int:
     report.add(
         "GET /city/buildings/bank",
         r.status_code == 200 and 'data-building-key="bank"' in r.text and ("Сейф" in r.text or "vault" in r.text.lower()),
+        f"url={r.url}",
+    )
+    r = s.get(f"{BASE}/city/buildings/souvenir_shop", timeout=TIMEOUT, allow_redirects=True)
+    report.add(
+        "GET /city/buildings/souvenir_shop",
+        r.status_code == 200 and 'data-building-key="souvenir_shop"' in r.text and ("Приманка" in r.text or "bait" in r.text.lower()),
         f"url={r.url}",
     )
 
