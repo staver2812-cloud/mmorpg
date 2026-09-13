@@ -15,8 +15,8 @@ recipes:
     profession: tar_smith
     title_ru: "Пепельный бинт"
     title_en: "Ashen Bandage"
-    summary_ru: "Щепа смолы + хвост клеща → бинт (+40 HP)."
-    summary_en: "Resin chips + mite tail → bandage (+40 HP)."
+    summary_ru: "Щепа смолы + хвост клеща → бинт (+40 HP, снимает лёгкие травмы)."
+    summary_en: "Resin chips + mite tail → bandage (+40 HP, clears light injuries)."
     inputs:
       wood_chips: 2
       rat_tail: 1
@@ -30,8 +30,8 @@ recipes:
     profession: tar_smith
     title_ru: "Полевой набор Завесы"
     title_en: "Veil Field Kit"
-    summary_ru: "2 бинта + приманка → набор (+80 HP, 1 приманка внутри как эффект не нужен — просто крафт расходки)."
-    summary_en: "2 bandages + bait → field kit (+80 HP)."
+    summary_ru: "2 бинта + приманка → набор (+80 HP, снимает лёгкие травмы)."
+    summary_en: "2 bandages + bait → field kit (+80 HP, clears light injuries)."
     inputs:
       ashen_bandage: 2
       ashen_bait: 1

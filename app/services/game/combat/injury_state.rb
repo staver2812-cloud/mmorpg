@@ -53,6 +53,22 @@ module Game
         end
       end
 
+      # Field bandages clear light injuries only. Heavy trauma stays hospital-only.
+      # @return [Integer] number of light injuries removed
+      def clear_light!
+        character.with_lock do
+          character.reload
+          metadata = character.metadata.to_h
+          rows = Array(metadata[METADATA_KEY]).map(&:deep_stringify_keys)
+          keep = rows.select { |row| active_row?(row) && row["severity"].to_s != "light" }
+          removed = rows.count { |row| active_row?(row) && row["severity"].to_s == "light" }
+          return 0 if removed.zero?
+
+          character.update!(metadata: metadata.merge(METADATA_KEY => keep))
+          removed
+        end
+      end
+
       def summary_ru
         summary
       end

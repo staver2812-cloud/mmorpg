@@ -6,16 +6,18 @@ module Game
     # Grants bait, starter NV, and a free equipped blade so the shore loop is
     # reachable without an empty wallet or bare fists.
     class StarterKit
-      METADATA_KEY = "ashen_starter_kit_v3"
-      LEGACY_METADATA_KEYS = %w[ashen_starter_kit_v1 ashen_starter_kit_v2].freeze
+      METADATA_KEY = "ashen_starter_kit_v4"
+      LEGACY_METADATA_KEYS = %w[ashen_starter_kit_v1 ashen_starter_kit_v2 ashen_starter_kit_v3].freeze
       STARTER_NV = 100
       NV_REASON = "ashen.starter_kit_nv"
       WEAPON_KEY = "ashen_starter_blade"
-      # Keep craft mats inside a level-0 carrying capacity (~15) after bait+blade.
+      # Keep craft mats inside a level-0 carrying capacity (~15) after bait+blade+bandage.
       CRAFT_MATS = {
-        "wood_chips" => 4,
+        "wood_chips" => 3,
         "rat_tail" => 2
       }.freeze
+      STARTER_BANDAGE = 1
+      BANDAGE_KEY = "ashen_bandage"
 
       def initialize(character:)
         @character = character
@@ -27,6 +29,7 @@ module Game
           grant_weapon!
           grant_bait!
           grant_craft_mats!
+          grant_bandage!
           grant_starter_nv!
           mark_granted!
         end
@@ -89,6 +92,19 @@ module Game
 
           add_fitting!(inventory:, template:, quantity: need)
         end
+      end
+
+      def grant_bandage!
+        Game::Professions::Templates.ensure_craft_items!
+        template = ItemTemplate.find_by(key: BANDAGE_KEY)
+        return unless template
+
+        inventory = ensure_inventory!
+        have = inventory.inventory_items.where(item_template: template, equipped: false).sum(:quantity)
+        need = STARTER_BANDAGE - have
+        return unless need.positive?
+
+        add_fitting!(inventory:, template:, quantity: need)
       end
 
       def ensure_inventory!
@@ -157,7 +173,8 @@ module Game
               "bait" => Bait::STARTER_GRANT,
               "nv" => STARTER_NV,
               "weapon" => WEAPON_KEY,
-              "craft_mats" => CRAFT_MATS
+              "craft_mats" => CRAFT_MATS,
+              "bandage" => STARTER_BANDAGE
             }
           )
         )

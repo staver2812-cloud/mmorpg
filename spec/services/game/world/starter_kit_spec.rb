@@ -21,6 +21,8 @@ RSpec.describe Game::World::StarterKit do
     weapon = character.inventory.inventory_items.joins(:item_template).find_by(item_templates: {key: Game::World::StarterKit::WEAPON_KEY})
     expect(weapon).to be_present
     expect(weapon).to be_equipped
+    bandage_qty = character.inventory.inventory_items.joins(:item_template).where(item_templates: {key: Game::World::StarterKit::BANDAGE_KEY}).sum(:quantity)
+    expect(bandage_qty).to be >= 1
     Game::World::StarterKit::CRAFT_MATS.each do |key, want|
       qty = character.inventory.inventory_items.joins(:item_template).where(item_templates: {key:}).sum(:quantity)
       expect(qty).to be >= 1

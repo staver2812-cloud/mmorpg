@@ -97,17 +97,23 @@ module Game
       def self.apply_item_effect(character, inventory_item)
         template = inventory_item.item_template
         stats = inventory_item.effect_modifiers
+        notes = []
+
+        if truthy_effect?(stats["clear_light_injury"])
+          removed = Game::Combat::InjuryState.new(character:).clear_light!
+          notes << I18n.t("game.injuries.cleared_light", count: removed) if removed.positive?
+        end
 
         if stats["heal_hp"]
           amount = stats["heal_hp"].to_i
           actual_healed = Characters::VitalsService.new(character).apply_healing(amount, source: template.name)
-          return {success: true, message: "Restored #{actual_healed} HP"}
+          notes << I18n.t("game.inventory.restored_hp", amount: actual_healed)
         end
 
         if stats["restore_mp"]
           amount = stats["restore_mp"].to_i
           actual_restored = Characters::VitalsService.new(character).restore_mana(amount, source: template.name)
-          return {success: true, message: "Restored #{actual_restored} MP"}
+          notes << I18n.t("game.inventory.restored_mp", amount: actual_restored)
         end
 
         if truthy_effect?(stats["reset_allocation"])
@@ -119,11 +125,13 @@ module Game
             peace_skill_points: character.peace_skill_points.to_i + allocated_skill_points(character, :peace)
           )
           character.clear_passive_skill_cache!
-          return {success: true, message: "Parameters, skills, and perks reset."}
+          notes << I18n.t("game.inventory.reset_allocation")
         end
 
+        return {success: true, message: notes.join(" ")} if notes.any?
+
         # Default case - item has no known effect
-        {success: false, error: "No usable effect"}
+        {success: false, error: I18n.t("game.inventory.no_usable_effect")}
       end
 
       def self.decrement_inventory_weight!(inventory, delta)

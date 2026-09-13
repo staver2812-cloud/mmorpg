@@ -111,6 +111,10 @@ en:
       short_info: "Short information"
       reset_filter: "Reset filter"
       mass_label: "Inventory mass"
+      restored_hp: "Restored %{amount} HP."
+      restored_mp: "Restored %{amount} MP."
+      reset_allocation: "Parameters, skills, and perks reset."
+      no_usable_effect: "No usable effect."
       marks:
         all: "All"
         things: "Gear"
@@ -573,6 +577,7 @@ en:
       blocks_movement: "Heavy injury: wilderness travel locked. Visit Coal Infirmary first."
       summary: "Injuries: %{list}"
       hospital_hint: "Open Coal Infirmary"
+      cleared_light: "Cleared light injuries (%{count})."
       severity:
         light: "light"
         heavy: "heavy"

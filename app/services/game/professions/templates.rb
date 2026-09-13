@@ -47,12 +47,12 @@ module Game
           weight: 1,
           stack_limit: 20,
           base_price: 12,
-          stat_modifiers: {"heal_hp" => 40},
+          stat_modifiers: {"heal_hp" => 40, "clear_light_injury" => true},
           enhancement_rules: {
             "inventory_family" => "things",
             "subcategory" => "consumables",
             "source_name" => "Пепельный бинт",
-            "description" => "Полевой бинт Смолокура. Восстанавливает 40 HP."
+            "description" => "Полевой бинт Смолокура. +40 HP и снимает лёгкие травмы."
           }
         )
         ensure_item!(
@@ -63,12 +63,12 @@ module Game
           weight: 2,
           stack_limit: 10,
           base_price: 35,
-          stat_modifiers: {"heal_hp" => 80},
+          stat_modifiers: {"heal_hp" => 80, "clear_light_injury" => true},
           enhancement_rules: {
             "inventory_family" => "things",
             "subcategory" => "consumables",
             "source_name" => "Полевой набор Завесы",
-            "description" => "Усиленный набор Смолокура. Восстанавливает 80 HP."
+            "description" => "Усиленный набор Смолокура. +80 HP и снимает лёгкие травмы."
           }
         )
       end

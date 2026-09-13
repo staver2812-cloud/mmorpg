@@ -1,64 +1,60 @@
-# frozen_string_literal: true
 ---
 title: Quests Feature
-description: NOT_IMPLEMENTED placeholder for source-backed Quest dialogue, journal, task, and resolution behavior.
-status: NOT_IMPLEMENTED
-updated: 2026-08-26
-owners: NPCs and Quests domain
-template: feature-gap-v2
+description: Ashen sandbox starter quest journal with kill and delivery objectives.
+status: Partially Implemented
+updated: 2026-09-13
+owners: [NPCs and Quests]
+template: feature-v3
 ---
 
 # Quests
 
-## 1. Evidence and design
+## 1. Authority and scope
 
-Neverlands is the sole game-design authority.
+Ashen sandbox ships a playable starter quest journal. Full Neverlands NPC
+dialogue trees and multi-step quest engines remain deferred; this handbook
+describes only the verified Ashen runtime.
 
-- Domain: `doc/domains/npcs_quests.md`
-- Source summary: `doc/design/reference/npcs_quests/README.md`
-- Evidence gap: `doc/design/reference/npcs_quests/observations/evidence_needed_complete_quest_flow.md`
-- Normalized design: `doc/design/features/npcs_quests.md`
-- MVP boundary: `doc/design/launch_mvp_plan.md`
+- Config: `config/gameplay/ashen_quests.yml`
+- Related runtime: `doc/features/city.md`, `doc/features/world.md`, `doc/features/arena_combat.md`
 
-## 2. Missing runtime contract
+## 2. Player-facing behavior
 
-`NOT_IMPLEMENTED`: the general NPC Quest dialogue, journal/task, reward and
-cancellation lifecycle is absent. The Shop-owned Merchant qualification below
-is a bounded prerequisite and does not complete this broader contract.
+Players open quests from Coal Hall or `/quests`. They can accept available
+contracts, track kill/delivery progress, and turn in completed ones for NV and
+item rewards. Outdoor NPC victories feed kill objectives through the Arena
+finish path. Delivery objectives consume unequipped inventory stacks at turn-in.
 
-No general Quest engine, NPC dialogue route or journal runtime is claimed here.
+## 3. Server ownership
 
-## 3. Existing related handoffs
+- `Game::Quests::Catalog` — YAML quest definitions
+- `Game::Quests::Journal` — accept / progress / turn-in mutations on
+  `character.metadata["ashen_quests"]`
+- `QuestsController` — HTTP boundary
+- `Arena::CombatProcessor` — records NPC kill progress after victory
 
-World owns NPC placement and Arena Combat owns NPC fights. Their existing NPC
-behavior does not create Quest eligibility, progress, dialogue, or rewards.
+## 4. Persistence and failure
 
-[Shop and Economy](shop_economy.md) owns the published Merchant license prerequisite:
-Market acceptance, a 1,000-NV Shop receipt and Market completion. That bounded
-persisted flow unlocks trading-license purchases; its temporary garment reward
-and original quest presentation remain incomplete. The September 9 economy
-observation owns its official-wiki evidence. This handoff does not supply a
-general NPC quest system or other profession quests.
+All accept/turn-in mutations run under character lock. Failed turn-in leaves
+quest state and inventory unchanged. Unknown keys and already-completed quests
+reject safely.
 
-## 4. Prerequisites for implementation
+## 5. Coverage
 
-1. Capture a complete Neverlands Quest flow, including failures and completion.
-2. Normalize entry, task gates, progress, cancellation, turn-in, and rewards.
-3. Define stable Quest/step identities, ownership, persistence, and retry-safe
-   reward transitions.
-4. Extend existing NPC/World/Inventory owners where evidence establishes a
-   handoff; add applicable request, policy, service/model, and system coverage.
-5. Promote this handbook only after the runtime is verified.
+Focused service/request coverage exists for accept, incomplete turn-in, and
+reward grant paths where present. Live smoke exercises accept on
+`veil_tail_delivery`.
 
-## 5. Responsible documentation and history
+## 6. Non-goals
 
-- `doc/features/quests.md`
-- `doc/domains/npcs_quests.md`
-- `doc/design/features/npcs_quests.md`
-- `doc/design/reference/npcs_quests/README.md`
-- `doc/design/reference/npcs_quests/observations/evidence_needed_complete_quest_flow.md`
+- Neverlands dialogue trees, cancellation UI, and shared party quests
+- Merchant qualification “quest” owned by Shop Economy
+- Invented evidence for missing Neverlands quest formulas
+
+## 7. History
 
 | Date | Change |
 |---|---|
-| 2026-07-29 | Recorded the audited `NOT_IMPLEMENTED` boundary. |
-| 2026-08-26 | Migrated the gap record to the lean feature-gap-v2 contract. |
+| 2026-09-13 | Promoted from NOT_IMPLEMENTED: Ashen starter journal + kill/delivery loop. |
+| 2026-08-26 | Gap record under feature-gap-v2. |
+| 2026-07-29 | Recorded audited NOT_IMPLEMENTED boundary. |

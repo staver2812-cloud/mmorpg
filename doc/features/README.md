@@ -22,7 +22,7 @@ Neverlands remains the sole game-design authority.
 | `player_inventory.md` | Fully Implemented | Inventory, equipment, capacity, grants, and item ownership |
 | `shop_economy.md` | Partially Implemented | Wallet/ledger, per-building stock and funds, atomic buy/sell, typed licenses and Merchant qualification; broader parity remains open |
 | `world.md` | Partially Implemented | Bounded region/cell reads, eight-neighbor movement, gate/village entry, empty Look, and NPC handoff; full region content and successful gathering remain gaps |
-| `quests.md` | NOT_IMPLEMENTED | Explicit Quest runtime gap |
+| `quests.md` | Partially Implemented | Ashen starter journal with kill/delivery objectives; Neverlands dialogue trees deferred |
 | `professions.md` | Partially Implemented | Ashen Tar Smith workshop craft; Neverlands gathering/fishing/mining still deferred |
 | `dungeons.md` | NOT_IMPLEMENTED | Explicit dungeon runtime gap |
 
