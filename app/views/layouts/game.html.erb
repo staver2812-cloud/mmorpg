@@ -112,7 +112,10 @@
           <%= link_to quest_chip, quests_path,
                 class: "nl-quest-chip#{' nl-quest-chip--ready' if journal.active_chip_ready?}",
                 title: t("game.quests.title"),
-                data: {quest_chip_ready: (journal.active_chip_ready? ? "1" : "0")} %>
+                data: {
+                  quest_chip: "1",
+                  quest_chip_ready: (journal.active_chip_ready? ? "1" : "0")
+                } %>
         <% end %>
         <% obelisk_bound = Game::World::ObeliskRecall.bound_for(current_character) %>
         <% if obelisk_bound.present? %>
