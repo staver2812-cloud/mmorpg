@@ -728,6 +728,7 @@ en:
       guard_lead: "Live routes into neighboring districts. Each button consumes the current server offer."
       guard_here: "You are here: %{place}"
       guard_empty: "No watchtower routes from this cell."
+      guard_routes_count: "Routes now: %{count}"
       guard_meta: "Outdoor gates stay on Central and Law Quarter, not inside the tower."
       law_alignment:
         none: "None"
