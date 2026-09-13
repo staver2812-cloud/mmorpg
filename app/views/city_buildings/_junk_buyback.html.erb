@@ -1,5 +1,6 @@
 <section class="nl-handbook" aria-label="<%= t("game.buildings.junk_aria") %>"
-         data-junk-lines="<%= local_assigns.fetch(:offers, []).size %>">
+         data-junk-lines="<%= local_assigns.fetch(:offers, []).size %>"
+         data-junk-can-sell="<%= local_assigns.fetch(:offers, []).any? ? "1" : "0" %>">
   <h2><%= t("game.buildings.junk_title") %></h2>
   <p class="nl-handbook__lead"><%= t("game.buildings.junk_lead") %></p>
   <% wallet = current_user.currency_wallet || current_user.create_currency_wallet!(nv_balance: 0) %>
