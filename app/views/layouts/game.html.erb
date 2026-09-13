@@ -140,8 +140,13 @@
         <% end %>
         <% if @zone&.outdoor? %>
           <% bait_qty = Game::World::Bait.new(character: current_character).quantity %>
-          <span class="nl-bait-chip<%= ' nl-bait-chip--empty' if bait_qty <= 0 %>" title="<%= t("game.world.bait_chip_hint") %>">
+          <span class="nl-bait-chip<%= ' nl-bait-chip--empty' if bait_qty <= 0 %>"
+                data-bait-qty="<%= bait_qty %>"
+                title="<%= bait_qty.positive? ? t("game.world.bait_chip_hint") : t("game.world.bait_chip_outdoor_empty_hint") %>">
             <%= t("game.world.bait_chip", count: bait_qty) %>
+            <% if bait_qty <= 0 %>
+              · <%= t("game.world.bait_chip_outdoor_empty_short") %>
+            <% end %>
           </span>
         <% elsif bait_link = (
              Game::World::CityBuildingCatalog.accessible?(character: current_character, building_key: "souvenir_shop") ? "souvenir_shop" :
@@ -152,7 +157,12 @@
             <%= link_to t("game.world.bait_chip", count: bait_qty),
                   (bait_link == "shop" ? shop_path : city_building_path(bait_link)),
                   class: "nl-bait-chip nl-bait-chip--empty",
+                  data: {bait_qty: bait_qty},
                   title: t("game.world.bait_chip_city_hint") %>
+          <% else %>
+            <span class="nl-bait-chip" data-bait-qty="<%= bait_qty %>" title="<%= t("game.world.bait_chip_hint") %>">
+              <%= t("game.world.bait_chip", count: bait_qty) %>
+            </span>
           <% end %>
         <% end %>
       <% end %>

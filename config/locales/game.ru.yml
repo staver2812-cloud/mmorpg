@@ -320,6 +320,8 @@ ru:
       bait_chip: "Приманка: %{count}"
       bait_chip_hint: "Пассивный набег ~5 мин. Осмотр/Вход с приманкой вызывает бой сразу."
       bait_chip_city_hint: "Купите Приманку Завесы в Лавке Реликвий или Соляной Лавке"
+      bait_chip_outdoor_empty_hint: "Без приманки боты бьют сами раз в ~5 мин. Купите в городе (Реликвии / Лавка)."
+      bait_chip_outdoor_empty_short: "купить в городе"
       trauma_scroll_chip: "Напасть: %{count}"
       trauma_scroll_chip_hint: "Свитки боевой травмы для «Напасть». Покупка — в Лазарете за VM."
       heal_scroll_chip: "Лечение: %{count}"

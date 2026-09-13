@@ -607,7 +607,8 @@ def main() -> int:
         report.add("outdoor after west_gate", r.status_code == 200 and outdoorish, f"{r.status_code}")
         report.add(
             "outdoor bait chip",
-            ("Приманка:" in r.text) or ("nl-bait-chip" in r.text),
+            (("Приманка:" in r.text) or ("nl-bait-chip" in r.text))
+            and ("data-bait-qty=" in r.text),
         )
         if "nl-obelisk-chip" in r.text or "data-obelisk-chip-affordable=" in r.text:
             report.add(

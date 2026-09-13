@@ -320,6 +320,8 @@ en:
       bait_chip: "Bait: %{count}"
       bait_chip_hint: "Passive ambush ~5 min. Look/Enter with bait forces a fight now."
       bait_chip_city_hint: "Buy Veil Bait at the Relic stall or Shop"
+      bait_chip_outdoor_empty_hint: "Without bait, bots attack about every 5 min. Buy bait in town (Relics / Shop)."
+      bait_chip_outdoor_empty_short: "buy in town"
       trauma_scroll_chip: "Attack: %{count}"
       trauma_scroll_chip_hint: "Combat trauma scrolls for Assault. Buy at the Infirmary for VM."
       heal_scroll_chip: "Heal: %{count}"
