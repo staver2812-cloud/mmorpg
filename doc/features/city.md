@@ -1165,6 +1165,10 @@ Final rerun results are in the
 - 2026-09-13: Ashen Post shows used/max character count (`data-post-remaining`) and prefills the editor with the saved note.
 - 2026-09-13: Library equipment card documents Inventory wear/broken badges and deferred forge repair.
 - 2026-09-13: Airship Station greys out board when wallet cannot cover fare (`data-airship-affordable`).
+<<<<<<< Updated upstream
+=======
+- 2026-09-13: Owner character sheet shows Pitch Bank vault NV and item-locker occupancy (private; Bank link when colocated); also private Veil Marks with Infirmary link (`data-sheet-vm`).
+>>>>>>> Stashed changes
 - 2026-09-13: City Hall treasury exposes wallet/vault/VM data markers; quest board shows ready-to-turn-in count matching the HUD chip.
 - 2026-09-13: Bank item locker (one unequipped stack) plus alignment on the character sheet.
 - 2026-07-29: fixed existing-database City Exit interaction by making the one seed pipeline reconcile the complete historical `city2_*` graph, retire stale hotspots/offers/gates, preserve retained-node positions, recover removed-node positions to Central Square, and prove convergence plus idempotency.
