@@ -92,6 +92,18 @@
 
       <div class="nl-inventory-mass">
         <%= t("game.inventory.mass_label") %>: <b><%= @inventory.current_weight %>/<%= @inventory.max_weight %></b>
+        <% if @junk_offer_count.to_i.positive? %>
+          ·
+          <% if Game::World::CityBuildingCatalog.accessible?(character: current_character, building_key: "junk_dealer") %>
+            <%= link_to t("game.inventory.junk_cta", count: @junk_offer_count),
+                  city_building_path("junk_dealer"),
+                  class: "nl-inventory-junk-link" %>
+          <% else %>
+            <span class="nl-inventory-junk-hint" title="<%= t("game.inventory.junk_hint") %>">
+              <%= t("game.inventory.junk_cta", count: @junk_offer_count) %>
+            </span>
+          <% end %>
+        <% end %>
       </div>
 
       <div id="inventory_grid">

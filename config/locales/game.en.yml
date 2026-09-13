@@ -111,6 +111,8 @@ en:
       short_info: "Short information"
       reset_filter: "Reset filter"
       mass_label: "Inventory mass"
+      junk_cta: "Junk buyer: %{count}"
+      junk_hint: "Ash Buyer on Coal Market — sell surplus for NV"
       restored_hp: "Restored %{amount} HP."
       restored_mp: "Restored %{amount} MP."
       reset_allocation: "Parameters, skills, and perks reset."

@@ -111,6 +111,8 @@ ru:
       short_info: "Краткая информация"
       reset_filter: "Сбросить фильтр"
       mass_label: "Вес инвентаря"
+      junk_cta: "Скупщику: %{count}"
+      junk_hint: "Скупщик Пепла на Рынке Угля — сдайте лишнее за NV"
       restored_hp: "Восстановлено %{amount} HP."
       restored_mp: "Восстановлено %{amount} MP."
       reset_allocation: "Параметры, умения и перки сброшены."

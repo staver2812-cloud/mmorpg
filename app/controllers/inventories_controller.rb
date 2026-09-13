@@ -21,6 +21,8 @@ class InventoriesController < ApplicationController
     @items = filtered_inventory_items(@inventory, @category, @subcategory)
     @equipment = current_character_equipment
     @equipment_sets = Game::Inventory::EquipmentSetService.new(character: current_character).all
+    Game::Professions::Templates.ensure_craft_items!
+    @junk_offer_count = Game::Shop::JunkBuyback.offer_rows_for(current_character).size
   end
 
   # POST /inventory/equip

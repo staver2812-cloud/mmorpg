@@ -383,6 +383,11 @@ def main() -> int:
     banned = ["Wear", "Properties", "Requirements", "Inventory mass", "Equipment Sets", "Transfer"]
     found_en = [w for w in banned if w in r.text]
     report.add("inventory no English chrome", not found_en, f"found={found_en}")
+    report.add(
+        "inventory junk hint or link",
+        ("Скупщику:" in r.text) or ("Junk buyer:" in r.text),
+        f"url={r.url}",
+    )
 
     r = s.get(f"{BASE}/shop", timeout=TIMEOUT)
     banned_shop = ["You carry", "Shop funds", "Refresh to buy", "There are no items"]
