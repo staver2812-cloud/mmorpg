@@ -766,6 +766,7 @@ ru:
       junk_sold: "Скупщик взял %{name} ×%{qty} за %{amount} NV."
       junk_only: "Скупка доступна только у Скупщика Пепла."
       stall_tiers: "Уровни лотков"
+      stall_rent_30d: "Аренда 30 дн."
       commodity_book: "Книга товаров"
       no_listings: "Нет предложений"
       captured_modes: "Режимы"

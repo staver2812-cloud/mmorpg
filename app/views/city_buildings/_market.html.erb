@@ -1,5 +1,10 @@
 <%= render "shop/merchant_qualification", location: :market %>
 
+<% market_wallet = current_user.currency_wallet || current_user.create_currency_wallet!(nv_balance: 0) %>
+<p class="nl-quests-board__meta" data-market-wallet="<%= market_wallet.nv_balance.to_i %>">
+  <%= t("game.buildings.junk_wallet", amount: market_wallet.nv_balance.to_i) %>
+</p>
+
 <p class="nl-city-building-notice">
   <%= link_to t("game.shop.title"), shop_path, class: "lbut" %>
   <%= link_to t("game.buildings.junk_dealer_link"), city_building_path("junk_dealer"), class: "lbut" %>
@@ -10,7 +15,7 @@
 <h2><%= t("game.buildings.stall_tiers") %></h2>
 <table class="nl-detail-table nl-city-building-table">
   <thead>
-    <tr><th><%= t("game.common.stall") %></th><th><%= t("game.common.merchant_skill") %></th><th><%= t("game.common.mass") %></th><th>30-day rent</th><th><%= t("game.common.sale_tax") %></th></tr>
+    <tr><th><%= t("game.common.stall") %></th><th><%= t("game.common.merchant_skill") %></th><th><%= t("game.common.mass") %></th><th><%= t("game.buildings.stall_rent_30d") %></th><th><%= t("game.common.sale_tax") %></th></tr>
   </thead>
   <tbody>
     <% building["stall_tiers"].each do |name, skill, mass, rent, tax| %>
