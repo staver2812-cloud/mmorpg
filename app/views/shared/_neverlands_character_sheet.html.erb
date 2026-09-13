@@ -30,7 +30,9 @@
         <tbody>
           <tr>
             <th><span class="nl-money-mark" aria-hidden="true">NV</span> <%= t("game.sheet.money") %>:</th>
-            <td><%= number_with_delimiter(character.user&.currency_wallet&.nv_balance || 0) %> NV</td>
+            <td class="nl-sheet-nv" data-sheet-nv="<%= character.user&.currency_wallet&.nv_balance.to_i %>">
+              <%= number_with_delimiter(character.user&.currency_wallet&.nv_balance || 0) %> NV
+            </td>
           </tr>
           <% if character == current_character %>
             <tr>
