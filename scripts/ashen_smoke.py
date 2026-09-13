@@ -180,7 +180,7 @@ def main() -> int:
         report.add("POST register + land in game", False, "no csrf")
 
     for path, needles in [
-        ("/world", ["city-view", "nl-city", "Пепельный", "Город", "Площадь"]),
+        ("/world", ["city-view", "nl-city", "Пепельный", "Город", "Площадь", "data-presence-count=", "data-online-total="]),
         ("/shop", ["Лавка", "nl-shop", "NV", "Купить", "data-shop-wallet=", "data-shop-any-affordable="]),
         ("/inventory", ["nl-inventory", "Вес инвентаря", "Надеть", "Свойства"]),
         (f"/player/{nick}", ["nl-character-sheet", "Сейф", "nl-sheet-vault", "data-sheet-vault=", "Ячейка", "nl-sheet-locker", "data-sheet-locker=", "nl-sheet-vm", "data-sheet-vm=", "data-sheet-nv="]),

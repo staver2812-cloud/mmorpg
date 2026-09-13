@@ -277,8 +277,8 @@
         </label>
       </div>
       <div class="nl-players-location">
-        <span class="nl-location-text" data-game-layout-target="playersLocation"><%= @presence_location_label || @position&.zone&.name || t("social.unknown") %> [ <%= @presence_player_count || @players_here&.size || 0 %> ]</span>
-        <span class="nl-total-online" data-game-layout-target="playersTotal"><%= t("social.total") %> [ <%= @total_online.to_i %> ]</span>
+        <span class="nl-location-text" data-game-layout-target="playersLocation" data-presence-count="<%= @presence_player_count || @players_here&.size || 0 %>"><%= @presence_location_label || @position&.zone&.name || t("social.unknown") %> [ <%= @presence_player_count || @players_here&.size || 0 %> ]</span>
+        <span class="nl-total-online" data-game-layout-target="playersTotal" data-online-total="<%= @total_online.to_i %>"><%= t("social.total") %> [ <%= @total_online.to_i %> ]</span>
       </div>
       <div class="nl-players-list-float" data-game-layout-target="playersList">
         <%= render "shared/nl_players_list", viewer: current_character %>
