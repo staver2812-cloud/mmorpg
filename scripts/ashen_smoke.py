@@ -460,7 +460,8 @@ def main() -> int:
         and ("Приманка" in r.text or "bait" in r.text.lower())
         and ("в сумке:" in r.text or "in bag:" in r.text)
         and ("data-souvenir-wallet=" in r.text)
-        and ("data-souvenir-affordable=" in r.text),
+        and ("data-souvenir-affordable=" in r.text)
+        and ("data-souvenir-any-affordable=" in r.text),
         f"url={r.url}",
     )
     r = s.get(f"{BASE}/city/buildings/auction", timeout=TIMEOUT, allow_redirects=True)
