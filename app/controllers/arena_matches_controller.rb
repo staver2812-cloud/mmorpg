@@ -127,7 +127,12 @@ class ArenaMatchesController < ApplicationController
     end
     current_character.exit_combat! if current_character.in_combat?
 
-    redirect_to finish_destination_path, notice: I18n.t("game.flashes.fight_finished"), status: :see_other
+    recovery = Game::World::DefeatRecovery.new(character: current_character).call
+    if recovery.recovered
+      redirect_to recovery.path, notice: recovery.message, status: :see_other
+    else
+      redirect_to finish_destination_path, notice: I18n.t("game.flashes.fight_finished"), status: :see_other
+    end
   end
 
   private

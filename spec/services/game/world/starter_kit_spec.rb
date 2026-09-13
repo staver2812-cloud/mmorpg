@@ -18,6 +18,9 @@ RSpec.describe Game::World::StarterKit do
 
     expect(Game::World::Bait.new(character:).quantity).to eq(Game::World::Bait::STARTER_GRANT)
     expect(character.user.currency_wallet.nv_balance).to eq(Game::World::StarterKit::STARTER_NV)
+    weapon = character.inventory.inventory_items.joins(:item_template).find_by(item_templates: {key: Game::World::StarterKit::WEAPON_KEY})
+    expect(weapon).to be_present
+    expect(weapon).to be_equipped
 
     expect {
       described_class.new(character:).call

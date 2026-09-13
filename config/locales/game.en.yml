@@ -537,6 +537,7 @@ en:
       application_accepted: "Application accepted."
       application_canceled: "Application canceled."
       fight_finished: "Fight finished."
+      defeat_hospital_recovery: "You fell in combat. Recovered at Coal Infirmary."
       turn_submitted: "Turn submitted."
       surrender_recorded: "Surrender recorded."
       timeout_draw: "Timeout draw recorded."

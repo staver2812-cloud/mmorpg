@@ -537,6 +537,7 @@ ru:
       application_accepted: "Заявка принята."
       application_canceled: "Заявка отменена."
       fight_finished: "Бой завершён."
+      defeat_hospital_recovery: "Вы пали в бою. Восстановлены в Лазарете Угля."
       turn_submitted: "Ход отправлен."
       surrender_recorded: "Сдача записана."
       timeout_draw: "Ничья по таймауту."
