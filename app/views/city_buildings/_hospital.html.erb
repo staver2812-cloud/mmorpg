@@ -50,19 +50,25 @@
   <% bag_max = inv&.max_weight.to_i || current_character.carrying_capacity.to_i %>
   <% bag_slots = inv&.inventory_items&.where(equipped: false)&.count.to_i || 0 %>
   <% bag_slot_cap = inv&.slot_capacity.to_i || 0 %>
+  <% recipes = local_assigns.fetch(:recipes, {}) %>
+  <% skill = local_assigns.fetch(:skill, 0) %>
+  <% any_ready = recipes.any? { |_key, recipe| craft_readiness(recipe, character: current_character, skill: skill)[:ready] } %>
   <p class="nl-quests-board__meta"
      data-hospital-mass="<%= bag_weight %>"
      data-hospital-mass-max="<%= bag_max %>"
      data-hospital-slots="<%= bag_slots %>"
-     data-hospital-slots-max="<%= bag_slot_cap %>">
+     data-hospital-slots-max="<%= bag_slot_cap %>"
+     data-hospital-craft-any-ready="<%= any_ready ? "1" : "0" %>">
     <%= t("game.professions.bag_capacity", weight: bag_weight, max: bag_max, slots: bag_slots, slot_max: bag_slot_cap) %>
   </p>
   <div class="nl-handbook__grid">
-    <% local_assigns.fetch(:recipes, {}).each do |key, recipe| %>
+    <% recipes.each do |key, recipe| %>
       <% title = I18n.locale.to_s.start_with?("ru") ? recipe["title_ru"] : recipe["title_en"] %>
       <% summary = I18n.locale.to_s.start_with?("ru") ? recipe["summary_ru"] : recipe["summary_en"] %>
-      <% gate = craft_readiness(recipe, character: current_character, skill: local_assigns.fetch(:skill, 0)) %>
-      <article class="nl-handbook__card">
+      <% gate = craft_readiness(recipe, character: current_character, skill: skill) %>
+      <article class="nl-handbook__card"
+               data-hospital-recipe="<%= key %>"
+               data-hospital-craft-ready="<%= gate[:ready] ? "1" : "0" %>">
         <h3><%= title %></h3>
         <p><%= summary %></p>
         <p class="nl-quests-board__meta">

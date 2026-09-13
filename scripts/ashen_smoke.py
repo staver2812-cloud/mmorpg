@@ -187,8 +187,8 @@ def main() -> int:
         ("/arena", ["nl-arena", "Арена", "Дуэли", "data-arena-vitals=", "data-arena-hp=", "data-arena-mp=", "data-arena-apps=", "data-arena-room-accessible="]),
         ("/city/buildings/tavern", ["data-building-key=\"tavern\"", "Отдохнуть за столом", "Слухи угля", "data-tavern-vitals=", "data-tavern-hp=", "data-tavern-mp=", "data-tavern-ready="]),
         ("/city/buildings/guard_tower", ["data-building-key=\"guard_tower\"", "interact_hotspot", "Карта кварталов", "data-guard-here=", "Вы здесь:", "data-guard-routes="]),
-        ("/city/buildings/workshop", ["data-building-key=\"workshop\"", "Смолокур", "Скрафтить", "data-workshop-repair=\"deferred\"", "data-workshop-mass="]),
-        ("/city/buildings/hospital", ["data-building-key=\"hospital\"", "Лазарет", "Лекарь", "в сумке:", "data-hospital-assault=", "data-hospital-heal=", "data-hospital-vitals=", "data-hospital-vm=", "data-hospital-premium-affordable=", "data-hospital-injuries=", "data-hospital-mass=", "data-hospital-combat=", "data-hospital-rest-ready="]),
+        ("/city/buildings/workshop", ["data-building-key=\"workshop\"", "Смолокур", "Скрафтить", "data-workshop-repair=\"deferred\"", "data-workshop-mass=", "data-workshop-any-ready=", "data-workshop-recipe=", "data-workshop-ready="]),
+        ("/city/buildings/hospital", ["data-building-key=\"hospital\"", "Лазарет", "Лекарь", "в сумке:", "data-hospital-assault=", "data-hospital-heal=", "data-hospital-vitals=", "data-hospital-vm=", "data-hospital-premium-affordable=", "data-hospital-injuries=", "data-hospital-mass=", "data-hospital-combat=", "data-hospital-rest-ready=", "data-hospital-craft-any-ready=", "data-hospital-recipe=", "data-hospital-craft-ready="]),
     ]:
         r = s.get(urljoin(BASE + "/", path.lstrip("/")), timeout=TIMEOUT)
         hit = any(n in r.text for n in needles)
