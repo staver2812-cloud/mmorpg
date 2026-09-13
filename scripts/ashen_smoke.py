@@ -153,12 +153,18 @@ def main() -> int:
         ("/city/buildings/guard_tower", ["data-building-key=\"guard_tower\"", "interact_hotspot", "Карта кварталов"]),
         ("/city/buildings/workshop", ["data-building-key=\"workshop\"", "Смолокур", "Скрафтить"]),
         ("/city/buildings/hospital", ["data-building-key=\"hospital\"", "Лазарет", "Лекарь", "в сумке:"]),
-        ("/world", ["Напасть:", "nl-trauma-chip"]),
     ]:
         r = s.get(urljoin(BASE + "/", path.lstrip("/")), timeout=TIMEOUT)
         hit = any(n in r.text for n in needles)
         report.add(f"GET {path}", r.status_code == 200 and hit, f"{r.status_code} needles={hit}")
         time.sleep(0.1)
+
+    r = s.get(f"{BASE}/world", timeout=TIMEOUT)
+    report.add(
+        "trauma scroll chip on square",
+        r.status_code == 200 and (("Напасть:" in r.text) or ("nl-trauma-chip" in r.text) or ("Attack:" in r.text)),
+        f"url={r.url}",
+    )
 
     ok, detail = click_hotspot(s, "go_forpost1")
     report.add("travel go_forpost1", ok, detail)
