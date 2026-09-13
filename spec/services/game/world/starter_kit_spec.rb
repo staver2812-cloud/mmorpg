@@ -21,9 +21,31 @@ RSpec.describe Game::World::StarterKit do
     weapon = character.inventory.inventory_items.joins(:item_template).find_by(item_templates: {key: Game::World::StarterKit::WEAPON_KEY})
     expect(weapon).to be_present
     expect(weapon).to be_equipped
+    Game::World::StarterKit::CRAFT_MATS.each do |key, want|
+      qty = character.inventory.inventory_items.joins(:item_template).where(item_templates: {key:}).sum(:quantity)
+      expect(qty).to be >= 1
+      expect(qty).to be <= want
+    end
 
     expect {
       described_class.new(character:).call
     }.not_to change { Game::World::Bait.new(character: character.reload).quantity }
+  end
+
+  it "does not raise when carrying capacity is tight" do
+    create(
+      :item_template,
+      :material,
+      key: Game::World::Bait::ITEM_KEY,
+      name: "Приманка Завесы",
+      weight: 1,
+      stack_limit: 99,
+      base_price: 5
+    )
+    character = create(:character, level: 0)
+    allow(character).to receive(:carrying_capacity).and_return(8)
+
+    expect { described_class.new(character:).call }.not_to raise_error
+    expect(character.inventory.inventory_items.joins(:item_template).find_by(item_templates: {key: Game::World::StarterKit::WEAPON_KEY})).to be_present
   end
 end
