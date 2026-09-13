@@ -633,6 +633,7 @@ en:
       airship_need_nv: "Need %{amount} NV to board"
       airship_need_nv_short: "Need NV"
       airship_earn_hint: "Earn NV via Shop sell or Ash Buyer on Coal Market."
+      airship_shop_link: "Open Shop"
       post_aria: "Ashen Post"
       post_only: "Notes are only available at the Post."
       post_title: "Personal note"

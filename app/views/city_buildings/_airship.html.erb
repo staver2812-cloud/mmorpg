@@ -30,7 +30,7 @@
                 <% if Game::World::CityBuildingCatalog.accessible?(character: current_character, building_key: "junk_dealer") %>
                   <%= link_to t("game.buildings.junk_dealer_link"), city_building_path("junk_dealer"), data: {turbo: false} %>
                 <% elsif Game::World::CityBuildingCatalog.accessible?(character: current_character, building_key: "shop") %>
-                  <%= link_to t("arena.nav.shop"), shop_path, data: {turbo: false} %>
+                  <%= link_to t("game.buildings.airship_shop_link"), shop_path, data: {turbo: false} %>
                 <% else %>
                   <%= t("game.buildings.airship_earn_hint") %>
                 <% end %>

@@ -633,6 +633,7 @@ ru:
       airship_need_nv: "Нужно %{amount} NV для посадки"
       airship_need_nv_short: "Нет NV"
       airship_earn_hint: "NV — через продажу в Лавке или Скупщику на Рынке Угля."
+      airship_shop_link: "Открыть Лавку"
       post_aria: "Пепельная Почта"
       post_only: "Записки доступны только на Почте."
       post_title: "Личная записка"
