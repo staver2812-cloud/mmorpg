@@ -254,6 +254,10 @@ def main() -> int:
             "library covers Assault and quest chain",
             ("PvP на клетке" in r.text) and ("Цепь:" in r.text or "Приманка →" in r.text),
         )
+        report.add(
+            "library covers Obelisk Law fatigue",
+            ("Обелиск" in r.text) and ("Склонность" in r.text) and ("Усталость" in r.text),
+        )
 
     ok_main2, _ = click_hotspot(s, "go_forpost1")
     report.add("return forpost1 after library", ok_main2)
