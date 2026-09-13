@@ -106,6 +106,12 @@
 
 .nl-quest-chip:hover { color: #e8fff0; border-color: #5f9a74; }
 
+.nl-quest-chip--ready {
+  border-color: #8ab86a;
+  color: #e8ffe0;
+  background: #1a2818;
+}
+
 .nl-bait-chip {
   margin-left: 6px;
   padding: 1px 6px;

@@ -81,8 +81,21 @@ module Game
         quest = entry[:quest]
         title = title_for(quest)
         where = entry[:where]
-        base = I18n.t("game.quests.chip", title:, progress: entry[:progress], target: entry[:target])
+        ready = entry[:progress].to_i >= entry[:target].to_i
+        base =
+          if ready
+            I18n.t("game.quests.chip_ready", title:, progress: entry[:progress], target: entry[:target])
+          else
+            I18n.t("game.quests.chip", title:, progress: entry[:progress], target: entry[:target])
+          end
         where.present? ? "#{base} · #{where}" : base
+      end
+
+      def active_chip_ready?
+        entry = entries.find { |row| row[:status] == "active" }
+        return false unless entry
+
+        entry[:progress].to_i >= entry[:target].to_i
       end
 
       def turn_in!(quest_key)

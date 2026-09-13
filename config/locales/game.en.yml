@@ -841,6 +841,7 @@ en:
     quests:
       title: "Ashen Veil Quests"
       chip: "%{title} %{progress}/%{target}"
+      chip_ready: "Turn in: %{title} %{progress}/%{target}"
       hint: "Starter contracts from Coal Hall. Bots ambush about every 5 minutes; forced fights need Ashen Bait."
       giver: "Giver: %{name}"
       accept: "Accept"
