@@ -62,7 +62,14 @@ Supporting documents:
 
 ## 2. Feature summary
 
-After login, the player opens the persisted allowlisted gameplay surface through a persistent Neverlands-shaped game frame, with World as the bootstrap/fallback. The live-measured `955 × 817` composition uses a 29px top strip, flexible scrolling main frame, 8px resize band, 240px chat/presence row with a 300px right presence column, 1px separator, and 30px CSS/text chat controls. The header shows name, level, stacked server-rendered HP/MP strips, Character and Inventory actions, contextual Return/Look around, and a CSS/text exit control. Character and Inventory submit the allowlisted World context-action route so a source-backed same-cell hostile encounter can replace those shell navigations with combat and return to the requested destination afterward. Offered wilderness movement away from the cell is not interrupted (escape). While an Arena match page is open, Character/Inventory/Q/A chrome stays locked until the player finishes the fight.
+After login, the player opens the persisted allowlisted gameplay surface through a persistent Neverlands-shaped game frame, with World as the bootstrap/fallback. The live-measured `955 × 817` composition uses a 29px top strip, flexible scrolling main frame, 8px resize band, 240px chat/presence row with a 300px right presence column, 1px separator, and 30px CSS/text chat controls. The header shows name, level, stacked server-rendered HP/MP strips, Character and Inventory actions, contextual Return/Look around, and a CSS/text exit control. Character and Inventory submit the allowlisted World context-action route so a
+source-backed same-cell hostile encounter can replace those shell navigations
+with combat when Ashen Bait is present, then return to the requested destination
+afterward. Without bait those navigations proceed. Offered wilderness movement
+away from the cell is not interrupted (escape). Passive outdoor ambushes still
+fire about once every five minutes without bait. While an Arena match page is
+open, Character/Inventory/Q/A chrome stays locked until the player finishes the
+fight.
 
 The server owns identity, character state, location presence, social verification, channel visibility, message and game-event persistence, event audience, ignore filtering, and authorization. The browser owns only main-frame navigation, presence sort/refresh preferences, and chat focus/scroll/reset presentation.
 

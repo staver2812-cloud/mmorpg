@@ -132,7 +132,10 @@ and delay distribution remain unobserved.
 - Enter the captured Frontier Village from its exact world cell without
   replacing the persisted outdoor coordinate, then use offered Shop/exit
   hotspots in its fixed `760 × 255` CSS-built scene.
-- Interrupt offered movement, entrance, local, Character, and Inventory actions when the current source-backed hostile encounter attacks.
+- Interrupt offered entrance, local, Character, and Inventory actions with a
+  same-cell fight only when Ashen Bait is present (one unit consumed). Without
+  bait those actions continue. Offered wilderness movement is never interrupted
+  (escape). Passive ambushes still arrive on the ~5-minute server timer without bait.
 - Deliver the same source-backed hidden encounter while the character remains
   on the outdoor surface, without a manual NPC Attack control or client-supplied
   target.
@@ -283,11 +286,20 @@ At effective fatigue `86%` or higher, the top-context row explains that Move,
 Look, and Enter are unavailable. The current map/cell still renders. City node
 navigation is not a wilderness action and is not blocked by this rule.
 
-Before an offered wilderness movement, entrance, or local action completes, World checks the authoritative current cell for its live hostile encounter. The persistent shell's **Character** and **Inventory** actions pass through the same check. An attack replaces the intended action with the shared fight screen; after the explicit result step, the player returns to the saved allowlisted destination. Arbitrary submitted URLs are never accepted as return targets.
+Before an offered wilderness entrance or local action completes, World checks the
+authoritative current cell for its live hostile encounter. Forced interruption
+requires Ashen Bait (`ashen_bait`): one unit is consumed and the shared fight
+opens. Without bait, Look / Enter / Character / Inventory continue normally.
+Offered wilderness movement away from the cell never starts a fight (escape).
+The persistent shell's **Character** and **Inventory** actions pass through the
+same bait-gated check. After an explicit fight result step, the player returns
+to the saved allowlisted destination. Arbitrary submitted URLs are never
+accepted as return targets.
 
 The outdoor shell immediately asks the same server owner for encounter state.
 When an alive hostile exists on the exact authoritative cell, the server
-creates or reuses a persisted due time and returns its remaining milliseconds.
+creates or reuses a persisted due time (~5 minutes / 300 seconds for Ashen) and
+returns its remaining milliseconds.
 The browser schedules only that response and asks again when due. A positive
 response stops the timer and replaces the current page with the existing or
 newly created shared fight; a failed check uses a bounded local retry. Reloading
@@ -501,10 +513,10 @@ source coordinates must never be mixed in services or requests.
 and atlas annotations. All members of a complete captured roster must fit a
 cell's declared NPC identities and level ranges; it never interpolates levels,
 HP, rewards or group members. The fresh starter bootstrap creates 40 additional
-Bandit placements. Their `300..360`-second passive interval is the user's
-reported five-to-six-minute rule, explicitly distinguished from the two
-captured source windows and the still-unknown general probability formula.
-The original `[7,7]` and `[14,15]` anchors retain their captured definitions.
+Bandit placements. Their `300`-second passive interval is the Ashen operator
+rule (bots ambush about once every five minutes). Forced same-cell fights from
+Look/Enter/shell actions require Ashen Bait instead. The original `[7,7]` and
+`[14,15]` anchors keep the same five-minute window.
 
 The seed checks persisted passability, existing NPCs and entrances, and the
 exact bot-free pond before creating a derived placement. Roads are not a
@@ -1584,7 +1596,17 @@ still need observation; local zero-fatigue clamping is explicitly covered.
 
 ### 8.6 Hostile interruption
 
-`Game::World::InterruptAction` resolves the live hostile encounter from the authoritative outdoor position. `WorldController` invokes it for movement, entrance, and implemented local actions, and `WorldContextActionsController` invokes it for the World shell's Character and Inventory destinations. `WorldEncounterChecksController` delegates passive delivery to `Game::World::PassiveEncounterCheck`, which resolves the same exact-cell NPC and hands due encounters to `StartNpcFight`. City positions and already-active combat do not start another encounter.
+`Game::World::InterruptAction` resolves the live hostile encounter from the
+authoritative outdoor position and starts a fight only when the character has
+Ashen Bait; one bait is consumed on a successful handoff. Without bait the
+intended action proceeds. `WorldController` invokes it for entrance and
+implemented local actions, and `WorldContextActionsController` invokes it for
+the World shell's Character and Inventory destinations. Wilderness movement
+does not call `InterruptAction` (escape). `WorldEncounterChecksController`
+delegates passive delivery to `Game::World::PassiveEncounterCheck`, which
+resolves the same exact-cell NPC on the five-minute timer and hands due
+encounters to `StartNpcFight` without consuming bait. City positions and
+already-active combat do not start another encounter.
 
 On interruption, `StartNpcFight` locks the character and encounter anchor,
 returns an existing active match on a duplicate request, and otherwise delegates
@@ -1612,8 +1634,8 @@ coordinates, encounter count, return URL, timer, or chance from the browser.
 `PassiveEncounterCheck` stores `zone_id`, `x`, `y`, `tile_npc_id`, and `due_at`
 in character metadata under a bounded key. An early retry returns remaining
 time; a mismatched cell/NPC or missing live hostile clears/replaces the old
-schedule. Delay selection uses the anchor's captured window set when present
-and otherwise the provisional `10..30`-second fallback. The same
+schedule. Delay selection uses the anchor's `passive_delay_windows` when present and
+otherwise the Ashen fallback `300..300` seconds (five minutes). The same
 character/anchor locks make concurrent due checks or retry delivery reuse the
 active match rather than creating another fight.
 

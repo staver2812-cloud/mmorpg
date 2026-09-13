@@ -7,7 +7,8 @@ if defined?(ItemTemplate)
   # Source-backed NPC material item templates.
   material_items = [
     {key: "wood_chips", name: "Щепа Смолы", item_type: "material", weight: 1},
-    {key: "rat_tail", name: "Хвост Крысы Завесы", item_type: "material", weight: 1}
+    {key: "rat_tail", name: "Хвост Крысы Завесы", item_type: "material", weight: 1},
+    {key: "ashen_bait", name: "Приманка Завесы", item_type: "material", weight: 1}
   ]
 
   material_items.each do |attrs|
@@ -21,6 +22,30 @@ if defined?(ItemTemplate)
     end
   end
   puts "Created #{material_items.size} material item templates"
+
+  # Ashen bait: sold cheaply so forced outdoor fights stay available without passive wait.
+  bait = ItemTemplate.find_or_initialize_by(key: "ashen_bait")
+  bait.assign_attributes(
+    name: "Приманка Завесы",
+    item_type: "material",
+    slot: "material",
+    weight: 1,
+    stack_limit: 99,
+    base_price: 5,
+    durability_max: 1,
+    requirements: {},
+    stat_modifiers: {},
+    enhancement_rules: {
+      "inventory_family" => "things",
+      "subcategory" => "misc",
+      "source_name" => "Приманка Завесы",
+      "description" => "Вызывает бой с ботом на текущей клетке. Без приманки боты сами нападают примерно раз в 5 минут.",
+      "icon" => "/ashen/items/consumables/ashen-bait.png",
+      "shop" => {"sold" => true, "mode" => "buy", "position" => 90},
+      "shop_stock" => {"current" => 500, "max" => 500}
+    }
+  )
+  bait.save!
 
   # Inventory-only reference definitions remain separate from the authored Shop.
   shop_items = [

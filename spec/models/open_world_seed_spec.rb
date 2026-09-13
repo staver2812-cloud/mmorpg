@@ -470,8 +470,7 @@ RSpec.describe "Open-world seed data", type: :model do
     expect(bandit.encounter_roster_samples.map { |sample| sample["members"].size }).to eq([3, 1, 1, 2])
     expect(bandit.passive_delay_windows).to eq(
       [
-        {"key" => "2026-09-01-interval-1", "min_seconds" => 230, "max_seconds" => 278},
-        {"key" => "2026-09-01-interval-2", "min_seconds" => 127, "max_seconds" => 187}
+        {"key" => "ashen_five_minutes", "min_seconds" => 300, "max_seconds" => 300}
       ]
     )
     expect(NpcTemplate.find_by!(npc_key: "wilderness_robber")).to have_attributes(

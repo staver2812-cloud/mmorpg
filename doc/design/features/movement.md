@@ -75,7 +75,9 @@ arrives at the new node or building.
   same-cell hostile. Players must be able to leave an occupied tile (escape toward
   the gate / city) without soft-lock. Look, Enter, Drink/Fish/search, and shell
   Character/Inventory navigation still resolve `InterruptAction` on the current
-  cell and can open the shared fight without changing coordinates.
+  cell; a fight opens only when Ashen Bait is available (one unit consumed).
+  Without bait those actions continue. Passive same-cell ambushes still arrive
+  on the server timer (~5 minutes) without bait.
 
 The visible wilderness is assembled from those same authoritative cells. Each
 `100 x 100` cell renders its validated explicit art or guarded starter PNG;
@@ -95,8 +97,9 @@ Neverlands-style movement is persistent server state, not browser state.
 Conflicting player actions share the character's serialization boundary.
 Movement validates the current owned offer, then starts timed travel. Same-cell
 hostiles do not interrupt leaving the tile. Look, Enter, and shell Character /
-Inventory actions still evaluate `InterruptAction` on the current cell; stale
-keys cannot trigger an encounter as a side effect of failed movement validation.
+Inventory actions still evaluate `InterruptAction` on the current cell and open
+a fight only with Ashen Bait; stale keys cannot trigger an encounter as a side
+effect of failed movement validation.
 Repeated processing cannot
 extend a deadline, apply fatigue twice, or change a completed command back to
 moving/failed.

@@ -18,7 +18,8 @@ puts "Ashen item rename: #{renamed} templates"
 
 material_names = {
   "wood_chips" => "Щепа Смолы",
-  "rat_tail" => "Хвост Крысы Завесы"
+  "rat_tail" => "Хвост Крысы Завесы",
+  "ashen_bait" => "Приманка Завесы"
 }
 material_names.each do |key, name|
   item = ItemTemplate.find_by(key: key)

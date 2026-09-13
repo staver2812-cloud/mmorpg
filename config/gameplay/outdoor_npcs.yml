@@ -20,11 +20,11 @@ outpost_surroundings:
         source_npc_key: plague_rat
       - key: forpost_captured_bandit_groups
         source_npc_key: wilderness_bandit
-    passive_delay_source: "user_reported_2026-09-09"
+    passive_delay_source: "ashen_operator_2026-09-13_five_minutes"
     passive_delay_windows:
-      - key: user_reported_five_to_six_minutes
+      - key: ashen_five_minutes
         min_seconds: 300
-        max_seconds: 360
+        max_seconds: 300
   npc_templates:
     - key: wilderness_robber
       name: Солевой контрабандист
@@ -254,12 +254,9 @@ outpost_surroundings:
         max_attacks_per_turn: 2
         encounter_selection_mode: "observed_sample_replay"
         passive_delay_windows:
-          - key: "2026-09-01-interval-1"
-            min_seconds: 230
-            max_seconds: 278
-          - key: "2026-09-01-interval-2"
-            min_seconds: 127
-            max_seconds: 187
+          - key: "ashen_five_minutes"
+            min_seconds: 300
+            max_seconds: 300
         encounter_rosters:
           - key: "2026-09-01-2334"
             trauma_percent: 30

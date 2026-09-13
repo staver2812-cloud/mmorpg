@@ -69,7 +69,7 @@ RSpec.describe Game::World::PassiveEncounterCheck do
     npc.update!(npc_template: template, npc_key: "wilderness_bandit", level: 7, max_hp: 155, current_hp: 155,
       metadata: definition.fetch(:metadata).deep_stringify_keys)
     interval_rng = instance_double(Random)
-    expect(interval_rng).to receive(:rand).with(300..360).once.and_return(300)
+    expect(interval_rng).to receive(:rand).with(300..300).once.and_return(300)
 
     initial = described_class.new(character:, clock:, rng: interval_rng).call
     expect(initial.retry_after_ms).to eq(300_000)

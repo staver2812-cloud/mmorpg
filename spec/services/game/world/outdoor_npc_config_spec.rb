@@ -51,8 +51,7 @@ RSpec.describe Game::World::OutdoorNpcConfig do
       expect(described_class.source_npc_for_tile("Пепельный Берег", 8, 7)).to be_nil
       expect(npc.dig(:metadata, :passive_delay_windows)).to eq(
         [
-          {key: "2026-09-01-interval-1", min_seconds: 230, max_seconds: 278},
-          {key: "2026-09-01-interval-2", min_seconds: 127, max_seconds: 187}
+          {key: "ashen_five_minutes", min_seconds: 300, max_seconds: 300}
         ]
       )
       expect(rosters.map { |sample| sample[:key] }).to eq(

@@ -4,6 +4,9 @@ module Game
   module World
     # Resolves whether a valid wilderness action is replaced by the hostile NPC
     # encounter anchored on the character's current cell.
+    #
+    # Ashen rule: passive ambushes happen on their own timer (~5 minutes).
+    # Forced same-cell fights from Look / Enter / shell actions require bait.
     class InterruptAction
       Result = Struct.new(:interrupted, :match, :npc, :message, keyword_init: true) do
         def interrupted?
@@ -27,28 +30,34 @@ module Game
             next Result.new(
               interrupted: true,
               match:,
-              message: "Finish the active fight before continuing."
+              message: I18n.t("game.flashes.fight_still_active")
             )
           end
 
           if MovementCommand.moving.where(character:).exists?
-            raise StartNpcFight::FightViolationError, "Movement already in progress."
+            raise StartNpcFight::FightViolationError, I18n.t("game.flashes.movement_in_progress")
           end
           if active_world_action
-            raise StartNpcFight::FightViolationError, "A local action is already in progress."
+            raise StartNpcFight::FightViolationError, I18n.t("game.world.local_action_in_progress")
           end
 
           npc = hostile_npc_at_current_cell
           next Result.new(interrupted: false) unless npc
 
+          bait = Bait.new(character:)
+          next Result.new(interrupted: false) unless bait.available?
+
+          bait.consume!
           match = StartNpcFight.new(character:, tile_npc: npc, return_context:).call
           Result.new(
             interrupted: true,
             match:,
             npc:,
-            message: "#{npc.display_name} attacks before the action completes."
+            message: I18n.t("game.world.bait_ambush", name: npc.display_name)
           )
         end
+      rescue Bait::MissingBaitError
+        Result.new(interrupted: false)
       end
 
       private

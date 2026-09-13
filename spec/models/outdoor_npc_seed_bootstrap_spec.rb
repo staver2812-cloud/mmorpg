@@ -39,7 +39,7 @@ RSpec.describe Seeds::StarterEncounterBootstrap, type: :model do
     )
     expect(npc.encounter_roster_samples).to eq(definition.dig(:metadata, :encounter_rosters).map(&:deep_stringify_keys))
     expect(npc.passive_delay_windows).to eq([
-      {"key" => "user_reported_five_to_six_minutes", "min_seconds" => 300, "max_seconds" => 360}
+      {"key" => "ashen_five_minutes", "min_seconds" => 300, "max_seconds" => 300}
     ])
     original_npc = npc.attributes
     expect(bootstrap).to eq([npc.id])

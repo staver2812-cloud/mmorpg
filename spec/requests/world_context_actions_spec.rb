@@ -19,6 +19,7 @@ RSpec.describe "World context actions", type: :request do
 
   it "persists inventory as the post-fight destination when an NPC interrupts" do
     create(:tile_npc, :multi_npc_encounter, zone: zone.name, x: 5, y: 5)
+    grant_bait!(character)
 
     expect {
       post world_context_action_path, params: {context: "inventory"}

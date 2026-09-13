@@ -2,6 +2,22 @@
 # Lightweight journal progress stored on character.metadata["ashen_quests"].
 
 quests:
+  veil_lure_drill:
+    title_ru: "Приманка Завесы"
+    title_en: "Veil Lure Drill"
+    summary_ru: "Боты сами нападают раз в 5 минут. Чтобы вызвать бой раньше — используйте Приманку Завесы (Осмотр/Вход на клетке с ботом). Победите любого врага берега и доложите."
+    summary_en: "Bots ambush on their own every 5 minutes. To force a fight earlier, use Ashen Bait (Look/Enter on a hostile cell). Defeat any shore foe and report."
+    giver: "Ратуша Угля"
+    objective:
+      type: kill_npc
+      npc_keys: [plague_rat, ash_shore_scout, wilderness_bandit, wilderness_robber, ash_bell_mite]
+      count: 1
+    reward:
+      experience: 25
+      currency_nv: 20
+      item_key: ashen_bait
+    sort: 1
+
   veil_tail_delivery:
     title_ru: "Хвост Завесы"
     title_en: "Veil Tail Delivery"

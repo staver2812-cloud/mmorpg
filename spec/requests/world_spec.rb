@@ -825,6 +825,7 @@ RSpec.describe "World", type: :request do
         current_hp: 40,
         max_hp: 40
       )
+      grant_bait!(character)
       offer = local_action_offer
 
       expect { post_local_action(offer) }.to change(ArenaMatch, :count).by(1)
@@ -852,6 +853,7 @@ RSpec.describe "World", type: :request do
         max_hp: 40
       )
       offer = local_action_offer
+      grant_bait!(character)
       allow_any_instance_of(Game::World::StartNpcFight).to receive(:call)
         .and_raise(Game::World::StartNpcFight::FightViolationError, "Combat startup failed.")
 
@@ -1067,6 +1069,7 @@ RSpec.describe "World", type: :request do
 
       it "lets a same-cell hostile NPC interrupt entry without moving the character" do
         create(:tile_npc, :multi_npc_encounter, zone: source_zone.name, x: 5, y: 5)
+        grant_bait!(character)
         offer = world_action_offer_for(
           character: character,
           position: position,

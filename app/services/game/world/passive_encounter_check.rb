@@ -10,8 +10,9 @@ module Game
     # the same locked match creation used by synchronous World interruptions.
     class PassiveEncounterCheck
       SCHEDULE_METADATA_KEY = "world_passive_encounter"
-      MIN_DELAY_SECONDS = 10
-      MAX_DELAY_SECONDS = 30
+      # Ashen rule (operator 2026-09-13): bots ambush on their own once per 5 minutes.
+      MIN_DELAY_SECONDS = 300
+      MAX_DELAY_SECONDS = 300
       EMPTY_RECHECK_SECONDS = 30
 
       Result = Struct.new(:interrupted, :match, :message, :retry_after_ms, keyword_init: true) do

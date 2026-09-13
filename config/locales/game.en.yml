@@ -282,6 +282,10 @@ en:
       quarter_pending: "This quarter is not ready yet."
       cell_actions: "Current cell actions"
       location: "Location"
+      bait_missing: "You need Ashen Bait to force a fight on this cell."
+      bait_ambush: "%{name} lunges at the bait!"
+      local_action_in_progress: "A local action is already in progress."
+      passive_rule: "Without bait, bots ambush on their own about once every 5 minutes."
     details:
       price: "Price"
       quantity: "Qty"
@@ -538,7 +542,7 @@ en:
       account_deletion_unavailable: "Account deletion is not available in the current MVP."
     quests:
       title: "Ashen Veil Quests"
-      hint: "Starter contracts from Coal Hall. Progress is stored on your character journal."
+      hint: "Starter contracts from Coal Hall. Bots ambush about every 5 minutes; forced fights need Ashen Bait."
       giver: "Giver: %{name}"
       accept: "Accept"
       turn_in: "Turn in"

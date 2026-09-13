@@ -9,16 +9,26 @@ RSpec.describe Game::World::InterruptAction do
 
   subject(:result) { described_class.new(character:, return_context: "inventory").call }
 
-  it "replaces an outdoor action with a same-cell hostile encounter" do
+  it "replaces an outdoor action with a same-cell hostile encounter when bait is present" do
     npc = create(:tile_npc, :multi_npc_encounter, zone: zone.name, x: 5, y: 5)
+    grant_bait!(character)
 
     expect(result).to be_interrupted
     expect(result.npc).to eq(npc)
     expect(result.match.arena_participations.npcs.count).to eq(2)
     expect(result.match.metadata["return_context"]).to eq("name" => "inventory")
+    expect(Game::World::Bait.new(character:).quantity).to eq(0)
+  end
+
+  it "does not interrupt without bait even when a hostile is present" do
+    create(:tile_npc, :multi_npc_encounter, zone: zone.name, x: 5, y: 5)
+
+    expect(result).not_to be_interrupted
+    expect(ArenaMatch.count).to eq(0)
   end
 
   it "does not interrupt without a source-backed hostile NPC" do
+    grant_bait!(character)
     expect(result).not_to be_interrupted
     expect(result.match).to be_nil
   end
