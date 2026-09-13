@@ -590,6 +590,13 @@ en:
       time_remaining: "Time remaining"
       disembark: "Disembark from the airship"
       board: "Buy a ticket and board the flight"
+      flight_offer_unavailable: "Flight offer is unavailable."
+      flight_route_unavailable: "Flight route or departure is no longer available."
+      flight_unavailable: "Flight is unavailable."
+      disembark_during_flight: "Disembarkation is unavailable during flight."
+      arrival_unavailable: "Arrival station is unavailable."
+      position_changed: "Position changed outside the accepted flight."
+      path_unavailable: "Accepted flight path is no longer available."
     buildings:
       hospital_title: "Treatment shop observation"
       hospital_hint: "Recovery and pharmacy"

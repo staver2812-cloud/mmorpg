@@ -590,6 +590,13 @@ ru:
       time_remaining: "Осталось времени"
       disembark: "Сойти с дирижабля"
       board: "Купить билет и сесть на рейс"
+      flight_offer_unavailable: "Предложение рейса недоступно."
+      flight_route_unavailable: "Маршрут или отправление больше недоступны."
+      flight_unavailable: "Рейс недоступен."
+      disembark_during_flight: "Во время полёта сойти нельзя."
+      arrival_unavailable: "Станция прибытия недоступна."
+      position_changed: "Позиция изменилась вне принятого рейса."
+      path_unavailable: "Принятый маршрут полёта больше недоступен."
     buildings:
       hospital_title: "Лечебница"
       hospital_hint: "Восстановление и аптека"
