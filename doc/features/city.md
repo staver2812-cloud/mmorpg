@@ -1166,7 +1166,7 @@ Final rerun results are in the
 - 2026-09-13: Pitch Bank adds deposit-all / withdraw-all CTAs plus locker/wallet/vault data markers; shows VM with Infirmary link (`data-bank-vm`).
 - 2026-09-13: Ashen Post shows used/max character count (`data-post-remaining`) and prefills the editor with the saved note; empty state marked (`data-post-empty`).
 - 2026-09-13: Library equipment card documents Inventory wear/broken badges and deferred forge repair.
-- 2026-09-13: Airship Station greys out board when wallet cannot cover fare (`data-airship-affordable`).
+- 2026-09-13: Airship Station greys out board when wallet cannot cover fare (`data-airship-affordable`); station also exposes `data-airship-any-affordable`.
 - 2026-09-13: Owner character sheet shows Pitch Bank vault NV and item-locker occupancy (private; Bank link when colocated); also private Veil Marks with Infirmary link (`data-sheet-vm`).
 - 2026-09-13: City Hall treasury exposes wallet/vault/VM data markers; quest board shows ready-to-turn-in count matching the HUD chip.
 - 2026-09-13: Bank item locker (one unequipped stack) plus alignment on the character sheet.
