@@ -269,7 +269,9 @@ def main() -> int:
         r.status_code == 200
         and 'data-building-key="clan_hall"' in r.text
         and ("Напасть" in r.text or "Attack" in r.text or "свитк" in r.text.lower())
-        and ('data-clan-hall-presence="1"' in r.text or "Кто рядом" in r.text or "Who is here" in r.text),
+        and ('data-clan-hall-presence="1"' in r.text or "Кто рядом" in r.text or "Who is here" in r.text)
+        and ("data-clan-hall-assault=" in r.text)
+        and ("data-clan-hall-heal=" in r.text),
         f"url={r.url}",
     )
     r = s.get(f"{BASE}/city/buildings/airship_station", timeout=TIMEOUT, allow_redirects=True)
