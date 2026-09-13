@@ -1,6 +1,12 @@
 <% if @building["kind"] == "airship" %>
   <div class="nl-airship-station-page" data-building-key="<%= @building_key %>">
-    <h1 class="nl-visually-hidden"><%= @building["title"] %></h1>
+    <header class="nl-city-building-header">
+      <div>
+        <h1><%= @building["title"] %></h1>
+        <p><%= @building["summary"] %></p>
+      </div>
+      <%= link_to t("arena.nav.city"), world_path, class: "lbut", data: {turbo: false} %>
+    </header>
     <%= render "city_buildings/airship", routes: @airship_routes %>
   </div>
 <% else %>

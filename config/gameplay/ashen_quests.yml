@@ -144,3 +144,19 @@ quests:
       currency_nv: 55
       item_key: set-distortion-gloves-t5
     sort: 40
+
+  dust_chanter_silence:
+    title_ru: "Заглушить пыль"
+    title_en: "Silence the Dust"
+    summary_ru: "Сбейте двух пылевых певцов Завесы и доложите в Ратушу."
+    summary_en: "Defeat two Veil dust chanters and report to City Hall."
+    giver: "Ратуша Угля"
+    objective:
+      type: kill_npc
+      npc_keys: [veil_dust_chanter]
+      count: 2
+    reward:
+      experience: 85
+      currency_nv: 40
+      item_key: set-demiurge-amulet-t5
+    sort: 45

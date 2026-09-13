@@ -14,6 +14,7 @@ outpost_surroundings:
       ash_bell_mite: "Колокольные клещи"
       salt_dock_wraith: "Солевые призраки пирса"
       soot_market_knifer: "Ножевики Сажевого рынка"
+      veil_dust_chanter: "Пылевые певцы Завесы"
     profiles:
       - key: forpost_captured_rat_pair
         source_npc_key: plague_rat
@@ -205,6 +206,34 @@ outpost_surroundings:
           currency: NV
           amount: 16
           chance: 0.55
+
+    - key: veil_dust_chanter
+      name: Пылевой певец Завесы
+      role: hostile
+      level: 6
+      x: 8
+      y: 11
+      hp: 150
+      damage: 11
+      xp: 36
+      metadata:
+        source_name: "Пылевой певец Завесы"
+        source_location: "Пепельный Берег"
+        source_observation: "ashen_sandbox_veil_dust_chanter_2026-09-13"
+        source_map: "m_1001_999"
+        encounter_count: 1
+        encounter_experience_reward: 36
+        avatar_image: "zombie.png"
+        max_attacks_per_turn: 1
+      loot:
+        - kind: item
+          item: set-demiurge-amulet-t5
+          source_name: "Амулет «Демиург» · T5"
+          chance: 0.05
+        - kind: currency
+          currency: NV
+          amount: 11
+          chance: 0.5
 
     - key: wilderness_bandit
       name: Пепельный патрульный
