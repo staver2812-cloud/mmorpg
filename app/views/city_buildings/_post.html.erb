@@ -5,11 +5,11 @@
   <% max_len = Game::World::PostOfficeNote::MAX_LEN %>
   <% used = note.to_s.length %>
   <% if note.present? %>
-    <p class="nl-quests-board__meta"><%= t("game.buildings.post_current", text: note) %></p>
+    <p class="nl-quests-board__meta" data-post-empty="0"><%= t("game.buildings.post_current", text: note) %></p>
   <% else %>
-    <p class="nl-quests-board__meta"><%= t("game.buildings.post_empty") %></p>
+    <p class="nl-quests-board__meta" data-post-empty="1"><%= t("game.buildings.post_empty") %></p>
   <% end %>
-  <p class="nl-quests-board__meta" data-post-remaining="<%= max_len - used %>">
+  <p class="nl-quests-board__meta" data-post-remaining="<%= max_len - used %>" data-post-used="<%= used %>">
     <%= t("game.buildings.post_remaining", used: used, max: max_len) %>
   </p>
   <%= form_with url: city_building_post_path("post"), method: :post, data: {turbo: false} do |f| %>
