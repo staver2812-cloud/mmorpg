@@ -77,7 +77,9 @@ class User < ApplicationRecord
   end
 
   def ensure_playable_character!
-    character || characters.create!(name: next_character_name)
+    playable = character || characters.create!(name: next_character_name)
+    Game::World::StarterKit.new(character: playable).call
+    playable
   end
 
   def suspended?

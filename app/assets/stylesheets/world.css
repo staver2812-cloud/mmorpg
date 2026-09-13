@@ -4,6 +4,16 @@
   background: #ffffff;
 }
 
+.nl-starter-tip {
+  margin: 0 0 8px;
+  padding: 8px 10px;
+  border: 1px solid var(--nl-border);
+  background: #f7f3ea;
+  color: #3a3428;
+  font-size: 13px;
+  line-height: 1.35;
+}
+
 .nl-world-container--map {
   display: grid;
   gap: 6px;

@@ -18,6 +18,17 @@ class CityBuildingsController < ApplicationController
     prepare_presence_context
   end
 
+  def rest
+    unless @building_key == "hospital"
+      redirect_to world_path, alert: I18n.t("game.buildings.hospital_only") and return
+    end
+
+    result = Game::World::HospitalRest.new(character: current_character).call
+    redirect_to city_building_path("hospital"),
+      notice: (result.message if result.success),
+      alert: (result.message unless result.success)
+  end
+
   private
 
   def load_building

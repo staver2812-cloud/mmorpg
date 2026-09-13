@@ -286,6 +286,7 @@ en:
       bait_ambush: "%{name} lunges at the bait!"
       local_action_in_progress: "A local action is already in progress."
       passive_rule: "Without bait, bots ambush on their own about once every 5 minutes."
+      starter_tip: "Ashen Shore loop: Shop / bait → West Gate → Look on a hostile cell (or wait 5 min) → fight → Quests in Coal Hall → Hospital to rest."
     details:
       price: "Price"
       quantity: "Qty"
@@ -492,6 +493,13 @@ en:
     buildings:
       hospital_title: "Treatment shop observation"
       hospital_hint: "Recovery and pharmacy"
+      hospital_rest_aria: "Hospital rest"
+      hospital_rest_lead: "Out of combat you can restore HP and MP for free. Pharmacy and paid care come later."
+      hospital_rest_cta: "Rest and recover"
+      hospital_rested: "You rested. HP and MP are restored."
+      hospital_already_full: "You are already at full vitals."
+      hospital_in_combat: "Finish the fight first."
+      hospital_only: "Rest is only available in the hospital."
       stall_tiers: "Stall tiers"
       commodity_book: "Commodity book"
       no_listings: "No MVP listings"

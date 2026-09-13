@@ -14,6 +14,14 @@
   </tbody>
 </table>
 
-<h2><%= t("game.buildings.hospital_hint") %></h2>
-<p>Rest room and hospital bed were observed as "Entry forbidden" for a full-health character.</p>
-<p>The Pharmacy is a resource-processing surface; processing controls remain deferred.</p>
+<section class="nl-handbook" aria-label="<%= t("game.buildings.hospital_rest_aria") %>">
+  <h2><%= t("game.buildings.hospital_hint") %></h2>
+  <p><%= t("game.buildings.hospital_rest_lead") %></p>
+  <p>
+    <%= button_to t("game.buildings.hospital_rest_cta"),
+          city_building_rest_path("hospital"),
+          method: :post,
+          class: "lbut",
+          form: {data: {turbo: false}} %>
+  </p>
+</section>
