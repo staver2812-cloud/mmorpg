@@ -111,6 +111,12 @@
       <h2>Зал Клана Пепла</h2>
       <p class="nl-handbook__lead">Войны секторов позже. Сейчас — место сбора и выход на Рынок кнопкой «Город».</p>
     </section>
+  <% when "dealer_house" %>
+    <section class="nl-handbook">
+      <h2>Дом Скупщика</h2>
+      <p class="nl-handbook__lead">Игровой скуп трофеев уже работает у Скупщика Пепла на Сгоревшем Рынке.</p>
+      <p><%= link_to t("game.buildings.junk_dealer_link"), city_building_path("junk_dealer"), class: "lbut" %></p>
+    </section>
   <% when "post" %>
     <section class="nl-handbook">
       <h2>Пепельная Почта</h2>
