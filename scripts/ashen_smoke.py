@@ -556,6 +556,15 @@ def main() -> int:
             "outdoor bait chip",
             ("Приманка:" in r.text) or ("nl-bait-chip" in r.text),
         )
+        ok_enter_w, d_enter_w = enter_building(s)
+        report.add("enter city after west_gate", ok_enter_w, d_enter_w)
+        r = s.get(f"{BASE}/world", timeout=TIMEOUT)
+        keys = sorted(parse_hotspot_forms(r.text))
+        report.add(
+            "central square after west re-enter",
+            "west_gate" in keys or "hospital" in keys or "tavern" in keys,
+            f"keys={keys[:8]}",
+        )
 
     failed = report.failed
     print("\n=== SUMMARY ===")

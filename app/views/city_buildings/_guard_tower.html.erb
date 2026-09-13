@@ -1,6 +1,12 @@
 <section class="nl-handbook" aria-label="<%= t("game.buildings.guard_aria") %>">
   <h2><%= t("game.buildings.guard_title") %></h2>
   <p class="nl-handbook__lead"><%= t("game.buildings.guard_lead") %></p>
+  <% here = current_character.position&.zone %>
+  <% if here %>
+    <p class="nl-quests-board__meta" data-guard-here="<%= here.name %>">
+      <%= t("game.buildings.guard_here", place: here.metadata.to_h["title"].presence || here.name) %>
+    </p>
+  <% end %>
   <% routes = local_assigns.fetch(:routes, []) %>
   <% if routes.empty? %>
     <p class="nl-quests-board__meta"><%= t("game.buildings.guard_empty") %></p>
