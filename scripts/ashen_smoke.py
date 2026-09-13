@@ -334,8 +334,10 @@ def main() -> int:
     r = s.get(f"{BASE}/world", timeout=TIMEOUT)
     report.add("locale switcher", ("RU" in r.text and "EN" in r.text) or "/locales" in r.text)
 
-    ok, _ = click_hotspot(s, "go_main")
-    report.add("return go_main", ok)
+    ok_back_f1, d_back_f1 = click_hotspot(s, "go_forpost1")
+    report.add("return forpost1 after law", ok_back_f1, d_back_f1)
+    ok, detail_main = click_hotspot(s, "go_main")
+    report.add("return go_main", ok, detail_main)
     r = s.get(f"{BASE}/city/buildings/temple", timeout=TIMEOUT, allow_redirects=True)
     gated = "/world" in r.url or 'data-building-key="temple"' not in r.text
     report.add("temple gated from main square", gated, f"url={r.url}")
