@@ -252,6 +252,8 @@ en:
       knowledge: "Knowledge"
     sheet:
       money: "Money"
+      veil_marks: "Marks"
+      veil_marks_open_cta: "Infirmary"
       vault: "Vault"
       vault_open_cta: "Bank"
       locker: "Locker"

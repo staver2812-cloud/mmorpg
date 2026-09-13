@@ -252,6 +252,8 @@ ru:
       knowledge: "Знания"
     sheet:
       money: "Деньги"
+      veil_marks: "Марки"
+      veil_marks_open_cta: "Лазарет"
       vault: "Сейф"
       vault_open_cta: "Банк"
       locker: "Ячейка"

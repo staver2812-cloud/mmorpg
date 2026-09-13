@@ -34,6 +34,15 @@
           </tr>
           <% if character == current_character %>
             <tr>
+              <th><span class="nl-money-mark" aria-hidden="true">VM</span> <%= t("game.sheet.veil_marks") %>:</th>
+              <td class="nl-sheet-vm" data-sheet-vm="<%= character.user&.currency_wallet&.veil_marks.to_i %>">
+                <%= number_with_delimiter(character.user&.currency_wallet&.veil_marks.to_i) %> VM
+                <% if Game::World::CityBuildingCatalog.accessible?(character:, building_key: "hospital") %>
+                  · <%= link_to t("game.sheet.veil_marks_open_cta"), city_building_path("hospital"), class: "nl-sheet-link" %>
+                <% end %>
+              </td>
+            </tr>
+            <tr>
               <th><%= t("game.sheet.vault") %>:</th>
               <td class="nl-sheet-vault">
                 <%= number_with_delimiter(Game::World::BankVault.balance_for(character)) %> NV
