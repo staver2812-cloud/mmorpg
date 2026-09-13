@@ -3,6 +3,18 @@
   <p class="nl-handbook__lead">
     <%= t("game.professions.tar_smith_lead", skill: local_assigns.fetch(:skill, 0)) %>
   </p>
+  <% inv = current_character.inventory %>
+  <% bag_weight = inv&.current_weight.to_i || 0 %>
+  <% bag_max = inv&.max_weight.to_i || current_character.carrying_capacity.to_i %>
+  <% bag_slots = inv&.inventory_items&.where(equipped: false)&.count.to_i || 0 %>
+  <% bag_slot_cap = inv&.slot_capacity.to_i || 0 %>
+  <p class="nl-quests-board__meta"
+     data-workshop-mass="<%= bag_weight %>"
+     data-workshop-mass-max="<%= bag_max %>"
+     data-workshop-slots="<%= bag_slots %>"
+     data-workshop-slots-max="<%= bag_slot_cap %>">
+    <%= t("game.professions.bag_capacity", weight: bag_weight, max: bag_max, slots: bag_slots, slot_max: bag_slot_cap) %>
+  </p>
   <% wear = Game::Inventory::EquippedWear.summary_for(current_character) %>
   <p class="nl-quests-board__meta" data-workshop-repair="deferred">
     <%= t("game.professions.repair_deferred") %>

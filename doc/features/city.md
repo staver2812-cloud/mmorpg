@@ -1145,7 +1145,7 @@ Final rerun results are in the
 - 2026-09-13: Relic stall sells bait/chips/herbs for NV without a license.
 - 2026-09-13: Veil Obelisk bind/recall (`POST .../obelisk`): stores coordinates in character metadata and recalls for 15 NV.
 - 2026-09-13: Outdoor Obelisk recall chip plus Tavern table fatigue clear alongside HP/MP.
-- 2026-09-13: Coal Market shows wallet NV (`data-market-wallet`) and localized stall rent column.
+- 2026-09-13: Pitch Forge shows live bag mass/slot capacity beside deferred repair (`data-workshop-mass`).
 - 2026-09-13: Law Abode alignment pledge/change (first free, later 25 NV).
 - 2026-09-13: Fatigue HUD chip; Prison/Gallows handbooks link to Law Abode.
 - 2026-09-13: Watchtower directory posts live district offers from the current node.

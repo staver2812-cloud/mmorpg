@@ -187,7 +187,7 @@ def main() -> int:
         ("/arena", ["nl-arena", "Арена", "Дуэли"]),
         ("/city/buildings/tavern", ["data-building-key=\"tavern\"", "Отдохнуть за столом", "Слухи угля", "data-tavern-vitals="]),
         ("/city/buildings/guard_tower", ["data-building-key=\"guard_tower\"", "interact_hotspot", "Карта кварталов", "data-guard-here=", "Вы здесь:"]),
-        ("/city/buildings/workshop", ["data-building-key=\"workshop\"", "Смолокур", "Скрафтить", "data-workshop-repair=\"deferred\""]),
+        ("/city/buildings/workshop", ["data-building-key=\"workshop\"", "Смолокур", "Скрафтить", "data-workshop-repair=\"deferred\"", "data-workshop-mass="]),
         ("/city/buildings/hospital", ["data-building-key=\"hospital\"", "Лазарет", "Лекарь", "в сумке:", "data-hospital-assault=", "data-hospital-heal=", "data-hospital-vitals=", "data-hospital-vm=", "data-hospital-premium-affordable=", "data-hospital-injuries="]),
     ]:
         r = s.get(urljoin(BASE + "/", path.lstrip("/")), timeout=TIMEOUT)
