@@ -170,10 +170,21 @@ def main() -> int:
         report.add("city_hall quest board", "Задания" in r.text or "/quests" in r.text)
 
     r = s.get(f"{BASE}/quests", timeout=TIMEOUT)
+    quest_needles = [
+        "Пепельный дозор",
+        "Хвост Завесы",
+        "Разведка берега",
+        "След соли",
+        "Крошки колокольного двора",
+        "Колокольный выводок",
+        "Зачистка патруля",
+        "nl-quests",
+    ]
+    quest_hits = [n for n in quest_needles if n in r.text]
     report.add(
         "GET /quests",
-        r.status_code == 200 and ("Пепельный дозор" in r.text or "Ashen Veil Quests" in r.text or "nl-quests" in r.text),
-        f"{r.status_code}",
+        r.status_code == 200 and len(quest_hits) >= 4,
+        f"{r.status_code} hits={quest_hits}",
     )
     if r.status_code == 200:
         token = csrf_from(r.text) or token
@@ -188,6 +199,10 @@ def main() -> int:
             "POST accept veil_tail_delivery",
             r_acc.status_code in (200, 302) and ("принято" in r_acc.text.lower() or "accepted" in r_acc.text.lower() or "В работе" in r_acc.text or "In progress" in r_acc.text),
             f"{r_acc.status_code}",
+        )
+        report.add(
+            "quests show rewards",
+            ("Опыт:" in r.text) or ("NV:" in r.text) or ("Предмет:" in r.text) or ("XP:" in r.text),
         )
 
     ok_main, d1 = click_hotspot(s, "go_main")

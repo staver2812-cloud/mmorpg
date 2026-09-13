@@ -11,6 +11,7 @@
       <% quest = entry[:quest] %>
       <% title = I18n.locale.to_s.start_with?("ru") ? quest["title_ru"] : quest["title_en"] %>
       <% summary = I18n.locale.to_s.start_with?("ru") ? quest["summary_ru"] : quest["summary_en"] %>
+      <% reward = quest.fetch("reward", {}) %>
       <article class="nl-quests__card nl-quests__card--<%= entry[:status] %>">
         <h2><%= title %></h2>
         <p class="nl-quests__giver"><%= t("game.quests.giver", name: quest["giver"]) %></p>
@@ -21,6 +22,17 @@
             — <%= entry[:progress] %> / <%= entry[:target] %>
           <% end %>
         </p>
+        <ul class="nl-quests__rewards">
+          <% if reward["experience"].to_i.positive? %>
+            <li><%= t("game.quests.reward_xp", amount: reward["experience"]) %></li>
+          <% end %>
+          <% if reward["currency_nv"].to_i.positive? %>
+            <li><%= t("game.quests.reward_nv", amount: reward["currency_nv"]) %></li>
+          <% end %>
+          <% if reward["item_key"].present? %>
+            <li><%= t("game.quests.reward_item", key: reward["item_key"]) %></li>
+          <% end %>
+        </ul>
         <div class="nl-quests__actions">
           <% if entry[:status] == "available" %>
             <%= button_to t("game.quests.accept"), accept_quest_path(quest["key"]), method: :post, class: "lbut" %>

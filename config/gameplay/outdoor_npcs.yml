@@ -10,6 +10,8 @@ outpost_surroundings:
       plague_rat: "Пепельные клещи"
       wilderness_bandit: "Патруль Завесы"
       wilderness_robber: "Солевые контрабандисты"
+      ash_shore_scout: "Пепельные разведчики"
+      ash_bell_mite: "Колокольные клещи"
     profiles:
       - key: forpost_captured_rat_pair
         source_npc_key: plague_rat
@@ -108,6 +110,38 @@ outpost_surroundings:
         - kind: currency
           currency: NV
           amount: 8
+          chance: 0.5
+
+    - key: ash_bell_mite
+      name: Колокольный клещ
+      role: hostile
+      level: 6
+      x: 11
+      y: 10
+      hp: 140
+      damage: 10
+      xp: 32
+      metadata:
+        source_name: "Колокольный клещ"
+        source_location: "Пепельный Берег"
+        source_observation: "ashen_sandbox_bell_mite_2026-09-12"
+        source_map: "m_1001_999"
+        encounter_count: 1
+        encounter_experience_reward: 32
+        avatar_image: "zombie.png"
+        max_attacks_per_turn: 1
+      loot:
+        - kind: item
+          item: rat_tail
+          source_name: "Хвост Крысы Завесы"
+          chance: 0.4
+        - kind: item
+          item: set-judge-helm-t5
+          source_name: "Шлем «Судия» · T5"
+          chance: 0.05
+        - kind: currency
+          currency: NV
+          amount: 10
           chance: 0.5
 
     - key: wilderness_bandit

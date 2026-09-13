@@ -2,6 +2,21 @@
 # Lightweight journal progress stored on character.metadata["ashen_quests"].
 
 quests:
+  veil_tail_delivery:
+    title_ru: "Хвост Завесы"
+    title_en: "Veil Tail Delivery"
+    summary_ru: "Добыйте «Хвост Крысы Завесы» с клещей и сдайте в Ратушу."
+    summary_en: "Collect a Veil Rat Tail from ash mites and turn it in at City Hall."
+    giver: "Ратуша Угля"
+    objective:
+      type: deliver_item
+      item_key: rat_tail
+      count: 1
+    reward:
+      experience: 30
+      currency_nv: 15
+    sort: 5
+
   ash_mite_patrol:
     title_ru: "Пепельный дозор"
     title_en: "Ash Mite Patrol"
@@ -34,6 +49,7 @@ quests:
       item_key: set-distortion-gloves-t5
     sort: 15
 
+  salt_smuggler_trace:
     title_ru: "След соли"
     title_en: "Salt Trail"
     summary_ru: "Сбейте солевых контрабандистов и патруль Завесы, затем вернитесь с докладом."
@@ -49,17 +65,50 @@ quests:
       item_key: set-judge-amulet-t5
     sort: 20
 
-  veil_tail_delivery:
-    title_ru: "Хвост Завесы"
-    title_en: "Veil Tail Delivery"
-    summary_ru: "Добыйте «Хвост Крысы Завесы» с клещей и сдайте в Ратушу."
-    summary_en: "Collect a Veil Rat Tail from ash mites and turn it in at City Hall."
+  bell_yard_crumbs:
+    title_ru: "Крошки колокольного двора"
+    title_en: "Bell Yard Crumbs"
+    summary_ru: "Принесите в Ратушу два «Хвоста Крысы Завесы» — следы клещей у берега."
+    summary_en: "Bring two Veil Rat Tails to City Hall — ash mite traces from the shore."
     giver: "Ратуша Угля"
     objective:
       type: deliver_item
       item_key: rat_tail
-      count: 1
+      count: 2
     reward:
-      experience: 30
-      currency_nv: 15
-    sort: 5
+      experience: 55
+      currency_nv: 30
+      item_key: set-swamp-amulet-t5
+    sort: 25
+
+  bell_mite_cull:
+    title_ru: "Колокольный выводок"
+    title_en: "Bell Mite Cull"
+    summary_ru: "Уничтожьте двух колокольных клещей у берега и вернитесь с докладом."
+    summary_en: "Defeat two bell mites on the shore and report back."
+    giver: "Ратуша Угля"
+    objective:
+      type: kill_npc
+      npc_keys: [ash_bell_mite]
+      count: 2
+    reward:
+      experience: 70
+      currency_nv: 35
+      item_key: set-judge-helm-t5
+    sort: 28
+
+  veil_patrol_sweep:
+    title_ru: "Зачистка патруля"
+    title_en: "Patrol Sweep"
+    summary_ru: "Победите четырёх врагов патруля/контрабанды на Пепельном Береге."
+    summary_en: "Defeat four patrol or smuggler foes on the Ashen Shore."
+    giver: "Ратуша Угля"
+    objective:
+      type: kill_npc
+      npc_keys: [wilderness_bandit, wilderness_robber, ash_shore_scout]
+      count: 4
+    reward:
+      experience: 120
+      currency_nv: 60
+      item_key: set-blood-bracers-t5
+    sort: 30
