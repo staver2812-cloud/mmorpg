@@ -301,6 +301,8 @@ ru:
       bait_ambush: "%{name} бросается на приманку!"
       bait_chip: "Приманка: %{count}"
       bait_chip_hint: "Пассивный набег ~5 мин. Осмотр/Вход с приманкой вызывает бой сразу."
+      fatigue_chip: "Усталость: %{percent}%"
+      fatigue_chip_hint: "На 86%+ блокируется ход. Таверна Угля снимает усталость сразу."
       obelisk_bound_chip: "Метка: %{place}"
       obelisk_bound_chip_hint: "Обелиск Завесы — привязка и возврат"
       obelisk_recall_chip: "К метке (−%{amount} NV)"
@@ -609,6 +611,9 @@ ru:
       law_short: "Нужно %{amount} NV для смены склонности."
       law_bad_alignment: "Неизвестная склонность."
       law_in_combat: "Сначала закончите бой."
+      law_open_cta: "В Обитель Закона"
+      prison_lead: "Камеры пока без срока. Склонность и указы — в Обители Закона рядом."
+      gallows_lead: "Показательная площадь района. Суд и склонность — в Обители Закона."
       law_alignment:
         none: "Нет"
         law: "Закон"

@@ -311,6 +311,14 @@ def main() -> int:
         and ("склонност" in r.text.lower() or "alignment" in r.text.lower()),
         f"url={r.url}",
     )
+    r = s.get(f"{BASE}/city/buildings/prison", timeout=TIMEOUT, allow_redirects=True)
+    report.add(
+        "GET /city/buildings/prison",
+        r.status_code == 200
+        and 'data-building-key="prison"' in r.text
+        and ("Обитель Закона" in r.text or "Law Abode" in r.text),
+        f"url={r.url}",
+    )
 
     for path in [
         "/ashen/items/set-blood/helm.png",

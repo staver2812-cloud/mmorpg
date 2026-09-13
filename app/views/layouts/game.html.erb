@@ -44,6 +44,19 @@
                 class: "nl-injury-chip#{' nl-injury-chip--heavy' if injury_state.blocks_movement?}",
                 title: t("game.injuries.hospital_hint") %>
         <% end %>
+        <% fatigue_pct = Characters::FatigueService.new(character: current_character).current_percent %>
+        <% if fatigue_pct.positive? %>
+          <% if Game::World::CityBuildingCatalog.accessible?(character: current_character, building_key: "tavern") %>
+            <%= link_to t("game.world.fatigue_chip", percent: fatigue_pct),
+                  city_building_path("tavern"),
+                  class: "nl-fatigue-chip#{' nl-fatigue-chip--locked' if fatigue_pct >= 86}",
+                  title: t("game.world.fatigue_chip_hint") %>
+          <% else %>
+            <span class="nl-fatigue-chip<%= ' nl-fatigue-chip--locked' if fatigue_pct >= 86 %>" title="<%= t("game.world.fatigue_chip_hint") %>">
+              <%= t("game.world.fatigue_chip", percent: fatigue_pct) %>
+            </span>
+          <% end %>
+        <% end %>
         <% if (quest_chip = Game::Quests::Journal.new(character: current_character).active_chip).present? %>
           <%= link_to quest_chip, quests_path, class: "nl-quest-chip", title: t("game.quests.title") %>
         <% end %>

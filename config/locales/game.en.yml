@@ -301,6 +301,8 @@ en:
       bait_ambush: "%{name} lunges at the bait!"
       bait_chip: "Bait: %{count}"
       bait_chip_hint: "Passive ambush ~5 min. Look/Enter with bait forces a fight now."
+      fatigue_chip: "Fatigue: %{percent}%"
+      fatigue_chip_hint: "At 86%+ movement locks. Coal Tide Tavern clears fatigue instantly."
       obelisk_bound_chip: "Mark: %{place}"
       obelisk_bound_chip_hint: "Veil Obelisk — bind and recall"
       obelisk_recall_chip: "Recall (−%{amount} NV)"
@@ -609,6 +611,9 @@ en:
       law_short: "Need %{amount} NV to change alignment."
       law_bad_alignment: "Unknown alignment."
       law_in_combat: "Finish the fight first."
+      law_open_cta: "Open Law Abode"
+      prison_lead: "Cells have no sentence loop yet. Alignment and decrees are at the Law Abode next door."
+      gallows_lead: "The quarter's public square. Court and alignment live in the Law Abode."
       law_alignment:
         none: "None"
         law: "Law"

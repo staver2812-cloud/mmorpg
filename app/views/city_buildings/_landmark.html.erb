@@ -136,13 +136,8 @@
       </p>
     </section>
   <% when "prison", "gallows" %>
-    <section class="nl-handbook">
-      <h2><%= building["title"] %></h2>
-      <p class="nl-handbook__lead">
-        Интерьер открыт для осмотра. Игровые действия — отдельным срезом.
-        Выход: кнопка «<%= t("arena.nav.city") %>» в шапке — без тупика.
-      </p>
-    </section>
+    <%= render "city_buildings/law_quarter", building: building, building_key: local_assigns[:building_key] %>
+
   <% else %>
     <ul class="nl-city-landmark__notes">
       <li>Сценарий здания доступен для входа с карты города.</li>

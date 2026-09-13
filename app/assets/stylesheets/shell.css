@@ -147,6 +147,29 @@ button.nl-obelisk-chip:hover {
   border-color: #7a90b8;
 }
 
+.nl-fatigue-chip {
+  margin-left: 6px;
+  padding: 1px 6px;
+  border: 1px solid #6a5a3b;
+  background: #1a1610;
+  color: #d8c090;
+  font-size: 11px;
+  font-weight: 700;
+  white-space: nowrap;
+  text-decoration: none;
+}
+
+a.nl-fatigue-chip:hover {
+  color: #fff0c8;
+  border-color: #a08850;
+}
+
+.nl-fatigue-chip--locked {
+  border-color: #8a4040;
+  color: #e0a0a0;
+  background: #1a1212;
+}
+
 .nl-vitals-inline {
   gap: 3px;
   margin-left: 3px;
