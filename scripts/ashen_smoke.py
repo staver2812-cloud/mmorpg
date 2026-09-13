@@ -582,6 +582,20 @@ def main() -> int:
 
     ok_main_tav, detail_main_tav = click_hotspot(s, "go_main")
     report.add("return main before tavern fatigue", ok_main_tav, detail_main_tav)
+    ok_arena, d_arena = click_hotspot(s, "arena")
+    report.add("enter arena hotspot", ok_arena, d_arena)
+    r = s.get(f"{BASE}/arena", timeout=TIMEOUT, allow_redirects=True)
+    report.add(
+        "GET /arena lobby after entry",
+        r.status_code == 200
+        and "nl-arena-frame" in r.text
+        and ("data-arena-vitals=" in r.text)
+        and ("data-arena-hp=" in r.text)
+        and ("data-arena-mp=" in r.text)
+        and ("data-arena-apps=" in r.text)
+        and ("data-arena-room-accessible=" in r.text),
+        f"url={r.url}",
+    )
     r = s.get(f"{BASE}/city/buildings/tavern", timeout=TIMEOUT, allow_redirects=True)
     report.add(
         "GET /city/buildings/tavern fatigue copy",
