@@ -164,6 +164,12 @@
   font: bold 10px/12px var(--nl-font-tahoma);
 }
 
+.nl-inventory-broken-hint {
+  margin-top: 2px;
+  color: var(--nl-text-soft);
+  font: 10px/12px var(--nl-font-tahoma);
+}
+
 .nl-inventory-durability-label {
   margin-left: 6px;
   color: var(--nl-text-soft);

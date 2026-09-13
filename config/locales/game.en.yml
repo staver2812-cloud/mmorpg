@@ -112,6 +112,8 @@ en:
       reset_filter: "Reset filter"
       mass_label: "Inventory mass"
       item_broken: "Broken"
+      repair_deferred_cta: "Repair deferred — Pitch Forge"
+      repair_deferred_hint: "Repair is not available yet. Check Pitch Forge when colocated."
       junk_cta: "Junk buyer: %{count}"
       junk_hint: "Ash Buyer on Coal Market — sell surplus for NV"
       restored_hp: "Restored %{amount} HP."

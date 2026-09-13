@@ -54,6 +54,7 @@ RSpec.describe "Inventories", type: :request do
         expect(row["class"]).to include("nl-inventory-item--broken")
         expect(response.body).to include("Broken")
         expect(html.at_css(".nl-inventory-broken-badge").text).to eq("Broken")
+        expect(html.at_css('[data-inventory-repair="deferred"]')).to be_present
       end
 
       it "displays items in the grid" do
