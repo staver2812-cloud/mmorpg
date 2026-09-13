@@ -248,6 +248,11 @@ def main() -> int:
         r.status_code == 200 and "Справочник Пепельной Завесы" in r.text,
         f"url={r.url}",
     )
+    if r.status_code == 200:
+        report.add(
+            "library covers Assault and quest chain",
+            ("PvP на клетке" in r.text) and ("Цепь:" in r.text or "Приманка →" in r.text),
+        )
 
     ok_main2, _ = click_hotspot(s, "go_forpost1")
     report.add("return forpost1 after library", ok_main2)
