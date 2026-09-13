@@ -48,6 +48,16 @@ module Game
         success(quest_key, I18n.t("game.quests.accepted", title: title_for(quest)))
       end
 
+      # Quietly arms the first Ashen shore contract once. Safe to call every login.
+      STARTER_QUEST_KEY = "veil_lure_drill"
+
+      def ensure_starter!
+        state = state_for(STARTER_QUEST_KEY)
+        return if state["status"].in?(%w[active completed])
+
+        accept!(STARTER_QUEST_KEY)
+      end
+
       def turn_in!(quest_key)
         quest = Catalog.find(quest_key)
         return failure(quest_key, I18n.t("game.quests.unknown")) unless quest

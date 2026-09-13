@@ -10,7 +10,7 @@ quests:
     giver: "Ратуша Угля"
     objective:
       type: kill_npc
-      npc_keys: [plague_rat, ash_shore_scout, wilderness_bandit, wilderness_robber, ash_bell_mite]
+      npc_keys: [plague_rat, ash_gate_mite, ash_gate_patrol, ash_shore_scout, wilderness_bandit, wilderness_robber, ash_bell_mite]
       count: 1
     reward:
       experience: 25

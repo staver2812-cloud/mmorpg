@@ -79,6 +79,7 @@ class User < ApplicationRecord
   def ensure_playable_character!
     playable = character || characters.create!(name: next_character_name)
     Game::World::StarterKit.new(character: playable).call
+    Game::Quests::Journal.new(character: playable).ensure_starter!
     playable
   end
 

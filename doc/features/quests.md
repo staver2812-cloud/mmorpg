@@ -20,10 +20,9 @@ describes only the verified Ashen runtime.
 
 ## 2. Player-facing behavior
 
-Players open quests from Coal Hall or `/quests`. They can accept available
-contracts, track kill/delivery progress, and turn in completed ones for NV and
-item rewards. Outdoor NPC victories feed kill objectives through the Arena
-finish path. Delivery objectives consume unequipped inventory stacks at turn-in.
+Players open quests from Coal Hall or `/quests`. New playable characters
+auto-accept `veil_lure_drill` once. They can accept other contracts, track
+kill/delivery progress, and turn in completed ones for NV and item rewards.
 
 ## 3. Server ownership
 
