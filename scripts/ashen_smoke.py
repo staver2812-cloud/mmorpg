@@ -186,7 +186,7 @@ def main() -> int:
         (f"/player/{nick}", ["nl-character-sheet", "Сейф", "nl-sheet-vault", "Ячейка", "nl-sheet-locker"]),
         ("/arena", ["nl-arena", "Арена", "Дуэли"]),
         ("/city/buildings/tavern", ["data-building-key=\"tavern\"", "Отдохнуть за столом", "Слухи угля"]),
-        ("/city/buildings/guard_tower", ["data-building-key=\"guard_tower\"", "interact_hotspot", "Карта кварталов"]),
+        ("/city/buildings/guard_tower", ["data-building-key=\"guard_tower\"", "interact_hotspot", "Карта кварталов", "data-guard-here=", "Вы здесь:"]),
         ("/city/buildings/workshop", ["data-building-key=\"workshop\"", "Смолокур", "Скрафтить"]),
         ("/city/buildings/hospital", ["data-building-key=\"hospital\"", "Лазарет", "Лекарь", "в сумке:"]),
     ]:
