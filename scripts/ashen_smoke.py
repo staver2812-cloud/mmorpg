@@ -353,6 +353,36 @@ def main() -> int:
             "library covers Obelisk Law fatigue",
             ("Обелиск" in r.text) and ("Склонность" in r.text) and ("Усталость" in r.text),
         )
+        report.add(
+            "library covers heal scroll chip",
+            ("Лечение" in r.text) or ("heal scroll" in r.text.lower()),
+        )
+
+    r = s.get(f"{BASE}/city/buildings/magic_school", timeout=TIMEOUT, allow_redirects=True)
+    report.add(
+        "GET /city/buildings/magic_school board",
+        r.status_code == 200
+        and 'data-building-key="magic_school"' in r.text
+        and ("Учебный зал" in r.text or "Training hall" in r.text)
+        and ("Очки характеристик" in r.text or "Stat points" in r.text or "nl-school-skill-board" in r.text),
+        f"url={r.url}",
+    )
+    r = s.get(f"{BASE}/city/buildings/military_school", timeout=TIMEOUT, allow_redirects=True)
+    report.add(
+        "GET /city/buildings/military_school board",
+        r.status_code == 200
+        and 'data-building-key="military_school"' in r.text
+        and ("Рукопашный" in r.text or "Unarmed" in r.text or "nl-school-skill-board" in r.text),
+        f"url={r.url}",
+    )
+    r = s.get(f"{BASE}/city/buildings/general_school", timeout=TIMEOUT, allow_redirects=True)
+    report.add(
+        "GET /city/buildings/general_school board",
+        r.status_code == 200
+        and 'data-building-key="general_school"' in r.text
+        and ("Смолокур" in r.text or "Tar Smith" in r.text or "Лекар" in r.text or "nl-school-skill-board" in r.text),
+        f"url={r.url}",
+    )
 
     ok_main2, _ = click_hotspot(s, "go_forpost1")
     report.add("return forpost1 after library", ok_main2)

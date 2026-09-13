@@ -30,7 +30,7 @@
         </article>
         <article class="nl-handbook__card">
           <h3>Лазарет и травмы</h3>
-          <p>Таймер на чипе — только если ждать. Отдых/сумки/свитки VM снимают травму сразу. Боевая травма — только PvP со свитком атаки; свободный отдых её не снимает.</p>
+          <p>Таймер на чипе — только если ждать. Отдых/сумки/свитки VM снимают травму сразу. Боевая травма — только PvP со свитком атаки; свободный отдых её не снимает. В шапке: «Напасть» и «Лечение» — счётчики свитков.</p>
         </article>
         <article class="nl-handbook__card">
           <h3>PvP на клетке</h3>
@@ -108,17 +108,59 @@
       <p class="nl-handbook__lead">Станки подключим после сетов. Пока — витрина того, что уже есть в мире.</p>
       <div class="nl-handbook__grid">
         <article class="nl-handbook__card"><h3>Сеты</h3><p>Кровь, Судия, Топь, Искажение, Демиург — тиры 5…50.</p></article>
-        <article class="nl-handbook__card"><h3>Починка</h3><p>Пока недоступна. Выйти на площадь — кнопка «Город» сверху.</p></article>
+        <article class="nl-handbook__card"><h3>Починка</h3><p>В Смоляной Кузнице: износ экипировки чинится за NV. Выйти — кнопка «Город» сверху.</p></article>
       </div>
     </section>
   <% when "magic_school", "general_school", "military_school" %>
-    <section class="nl-handbook">
-      <h2>Учебный зал</h2>
+    <section class="nl-handbook" aria-label="<%= t("game.buildings.school_board_aria") %>">
+      <h2><%= t("game.buildings.school_board_title") %></h2>
       <p class="nl-handbook__lead">
-        Очки параметров и умений распределяются на листе персонажа.
-        Откройте «Персонаж» в шапке — блоки характеристик и навыков уже работают.
+        <%= t("game.buildings.school_board_lead") %>
       </p>
       <% if defined?(current_character) && current_character %>
+        <% skills = current_character.passive_skills.to_h %>
+        <% professions = current_character.metadata.to_h.fetch("profession_skills", {}).to_h %>
+        <table class="nl-detail-table nl-city-building-table nl-school-skill-board">
+          <tbody>
+            <tr>
+              <th><%= t("game.buildings.school_stat_points") %></th>
+              <td><%= current_character.stat_points_available.to_i %></td>
+            </tr>
+            <tr>
+              <th><%= t("game.buildings.school_combat_points") %></th>
+              <td><%= current_character.available_combat_skill_points %></td>
+            </tr>
+            <tr>
+              <th><%= t("game.buildings.school_peace_points") %></th>
+              <td><%= current_character.available_peace_skill_points %></td>
+            </tr>
+            <% case local_assigns[:building_key].to_s %>
+            <% when "military_school" %>
+              <tr>
+                <th><%= t("game.buildings.school_unarmed") %></th>
+                <td><%= skills.fetch("unarmed_combat", 0).to_i %></td>
+              </tr>
+            <% when "general_school" %>
+              <tr>
+                <th><%= t("game.professions.tar_smith") %></th>
+                <td><%= professions.fetch("tar_smith", 0).to_i %></td>
+              </tr>
+              <tr>
+                <th><%= t("game.professions.ash_healer") %></th>
+                <td><%= professions.fetch("ash_healer", 0).to_i %></td>
+              </tr>
+            <% when "magic_school" %>
+              <tr>
+                <th><%= t("game.professions.ash_healer") %></th>
+                <td><%= professions.fetch("ash_healer", 0).to_i %></td>
+              </tr>
+              <tr>
+                <th><%= t("game.buildings.school_wisdom") %></th>
+                <td><%= current_character.metadata.to_h.fetch("wisdom", 0).to_i %></td>
+              </tr>
+            <% end %>
+          </tbody>
+        </table>
         <p><%= link_to t("nav.your_character"), player_path(name: current_character.name), class: "lbut" %></p>
       <% end %>
     </section>
