@@ -122,10 +122,18 @@
     <section class="nl-handbook">
       <h2>Зал Клана Пепла</h2>
       <p class="nl-handbook__lead">
-        Войны секторов позже. Сейчас зал — точка сбора: смотрите список рядом и профиль.
-        PvP на клетке — «Напасть», если есть свиток боевой травмы.
+        <%= t("game.buildings.clan_hall_lead") %>
       </p>
-      <p><%= link_to t("game.quests.board_open"), quests_path, class: "lbut" %></p>
+      <p>
+        <%= link_to t("game.quests.board_open"), quests_path, class: "lbut" %>
+        <% if Game::World::CityBuildingCatalog.accessible?(character: current_character, building_key: "city_hall") %>
+          <%= link_to t("game.buildings.city_hall_short"), city_building_path("city_hall"), class: "lbut" %>
+        <% end %>
+        <% if Game::World::CityBuildingCatalog.accessible?(character: current_character, building_key: "hospital") %>
+          <%= link_to t("game.buildings.hospital_title_short"), city_building_path("hospital"), class: "lbut" %>
+        <% end %>
+      </p>
+      <p class="nl-quests-board__meta"><%= t("game.buildings.clan_hall_meta") %></p>
     </section>
   <% when "dealer_house" %>
     <section class="nl-handbook">

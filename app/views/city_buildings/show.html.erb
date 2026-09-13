@@ -121,7 +121,18 @@
             <% if Game::World::CityBuildingCatalog.accessible?(character: current_character, building_key: "bank") %>
               <%= link_to t("game.buildings.bank_title"), city_building_path("bank"), class: "lbut" %>
             <% end %>
-            <%= link_to t("game.buildings.hospital_title_short"), city_building_path("hospital"), class: "lbut" if Game::World::CityBuildingCatalog.accessible?(character: current_character, building_key: "hospital") %>
+            <% if Game::World::CityBuildingCatalog.accessible?(character: current_character, building_key: "hospital") %>
+              <%= link_to t("game.buildings.hospital_title_short"), city_building_path("hospital"), class: "lbut" %>
+            <% end %>
+            <% if Game::World::CityBuildingCatalog.accessible?(character: current_character, building_key: "post") %>
+              <%= link_to t("game.buildings.post_title"), city_building_path("post"), class: "lbut" %>
+            <% end %>
+            <% if Game::World::CityBuildingCatalog.accessible?(character: current_character, building_key: "clan_hall") %>
+              <%= link_to t("game.buildings.clan_hall_short"), city_building_path("clan_hall"), class: "lbut" %>
+            <% end %>
+            <% if Game::World::CityBuildingCatalog.accessible?(character: current_character, building_key: "junk_dealer") %>
+              <%= link_to t("game.buildings.junk_dealer_link"), city_building_path("junk_dealer"), class: "lbut" %>
+            <% end %>
           </p>
         </section>
         <section class="nl-quests-board">

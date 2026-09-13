@@ -173,6 +173,23 @@ def main() -> int:
             "city_hall treasury",
             ("Казна" in r.text) or ("treasury" in r.text.lower()) or ("сейф" in r.text.lower()),
         )
+        report.add(
+            "city_hall residential links",
+            ("Пепельная Почта" in r.text or "post" in r.text.lower())
+            and ("Зал Клана" in r.text or "Clan Hall" in r.text or "clan_hall" in r.text),
+        )
+    r = s.get(f"{BASE}/city/buildings/post", timeout=TIMEOUT, allow_redirects=True)
+    report.add(
+        "GET /city/buildings/post",
+        r.status_code == 200 and 'data-building-key="post"' in r.text and ("записк" in r.text.lower() or "note" in r.text.lower()),
+        f"url={r.url}",
+    )
+    r = s.get(f"{BASE}/city/buildings/clan_hall", timeout=TIMEOUT, allow_redirects=True)
+    report.add(
+        "GET /city/buildings/clan_hall",
+        r.status_code == 200 and 'data-building-key="clan_hall"' in r.text and ("Напасть" in r.text or "Attack" in r.text or "свитк" in r.text.lower()),
+        f"url={r.url}",
+    )
 
     r = s.get(f"{BASE}/quests", timeout=TIMEOUT)
     quest_needles = [
