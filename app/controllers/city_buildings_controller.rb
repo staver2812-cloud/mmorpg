@@ -24,9 +24,11 @@ class CityBuildingsController < ApplicationController
     end
 
     result = Game::World::HospitalRest.new(character: current_character).call
-    redirect_to city_building_path("hospital"),
-      notice: (result.message if result.success),
-      alert: (result.message unless result.success)
+    if result.success
+      redirect_to city_building_path("hospital"), notice: result.message
+    else
+      redirect_to city_building_path("hospital"), alert: result.message
+    end
   end
 
   private
