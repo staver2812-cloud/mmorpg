@@ -227,7 +227,8 @@ def main() -> int:
         and ("Сдать" in r.text or "Sell" in r.text or "пусто" in r.text.lower() or "empty" in r.text.lower() or "NV" in r.text)
         and ("data-junk-total=" in r.text)
         and ("data-junk-wallet=" in r.text)
-        and ("data-market-wallet=" in r.text),
+        and ("data-market-wallet=" in r.text)
+        and ("data-junk-can-sell=" in r.text),
         f"url={r.url}",
     )
     r = s.get(f"{BASE}/city/buildings/city_hall", timeout=TIMEOUT, allow_redirects=True)
