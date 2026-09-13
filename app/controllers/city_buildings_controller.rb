@@ -40,6 +40,9 @@ class CityBuildingsController < ApplicationController
     if @building_key == "post"
       @post_note = Game::World::PostOfficeNote.current_for(current_character)
     end
+    if @building_key == "souvenir_shop"
+      Game::Professions::Templates.ensure_craft_items!
+    end
     prepare_presence_context
   end
 
@@ -158,6 +161,22 @@ class CityBuildingsController < ApplicationController
       redirect_to city_building_path("post"), notice: result.message
     else
       redirect_to city_building_path("post"), alert: result.message
+    end
+  end
+
+  def souvenir
+    unless @building_key == "souvenir_shop"
+      redirect_to world_path, alert: I18n.t("game.buildings.souvenir_only") and return
+    end
+
+    result = Game::World::SouvenirPurchase.new(
+      character: current_character,
+      item_key: params[:item_key]
+    ).call
+    if result.success
+      redirect_to city_building_path("souvenir_shop"), notice: result.message
+    else
+      redirect_to city_building_path("souvenir_shop"), alert: result.message
     end
   end
 

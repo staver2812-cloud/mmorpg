@@ -104,8 +104,8 @@ module Game
         },
         "souvenir_shop" => {
           "title" => "Лавка Реликвий",
-          "kind" => "landmark",
-          "summary" => "Сувениры и мелочи Пепельного Берега."
+          "kind" => "souvenir",
+          "summary" => "Приманка, щепа и трава за NV без лицензии."
         },
         "auction" => {
           "title" => "Аукцион Соли",

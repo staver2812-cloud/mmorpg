@@ -1,0 +1,21 @@
+<section class="nl-handbook" aria-label="<%= t("game.buildings.souvenir_aria") %>">
+  <h2><%= t("game.buildings.souvenir_title") %></h2>
+  <p class="nl-handbook__lead"><%= t("game.buildings.souvenir_lead") %></p>
+  <div class="nl-handbook__grid">
+    <% Game::World::SouvenirPurchase::OFFERINGS.each do |item_key, price| %>
+      <% template = ItemTemplate.find_by(key: item_key) %>
+      <article class="nl-handbook__card">
+        <h3><%= template&.display_name || item_key %></h3>
+        <p class="nl-quests-board__meta"><%= price %> NV</p>
+        <%= button_to t("game.buildings.souvenir_buy_cta", amount: price),
+              city_building_souvenir_path("souvenir_shop"),
+              method: :post,
+              params: {item_key: item_key},
+              class: "lbut",
+              form: {data: {turbo: false}} %>
+      </article>
+    <% end %>
+  </div>
+</section>
+
+<%= render "city_buildings/landmark", building: building, building_key: "souvenir_shop" %>
