@@ -474,7 +474,8 @@ def main() -> int:
         and ("сейф" in r.text.lower() or "vault" in r.text.lower() or "NV" in r.text)
         and ("Лавка" in r.text or "Shop" in r.text or "/shop" in r.text)
         and ("data-auction-wallet=" in r.text)
-        and ("data-auction-vault=" in r.text),
+        and ("data-auction-vault=" in r.text)
+        and ("data-auction-vm=" in r.text),
         f"url={r.url}",
     )
     r = s.get(f"{BASE}/city/buildings/dealer_house", timeout=TIMEOUT, allow_redirects=True)
@@ -541,7 +542,8 @@ def main() -> int:
         "GET /city/buildings/prison",
         r.status_code == 200
         and 'data-building-key="prison"' in r.text
-        and ("Обитель Закона" in r.text or "Law Abode" in r.text or "law_abode" in r.text),
+        and ("Обитель Закона" in r.text or "Law Abode" in r.text or "law_abode" in r.text)
+        and ('data-prison="1"' in r.text),
         f"url={r.url}",
     )
     r = s.get(f"{BASE}/city/buildings/gallows", timeout=TIMEOUT, allow_redirects=True)
@@ -549,7 +551,9 @@ def main() -> int:
         "GET /city/buildings/gallows east hint",
         r.status_code == 200
         and 'data-building-key="gallows"' in r.text
-        and ("восточн" in r.text.lower() or "east gate" in r.text.lower()),
+        and ("восточн" in r.text.lower() or "east gate" in r.text.lower())
+        and ('data-gallows="1"' in r.text)
+        and ('data-gallows-east="1"' in r.text),
         f"url={r.url}",
     )
 
