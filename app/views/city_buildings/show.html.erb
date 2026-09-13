@@ -27,6 +27,8 @@
           <%= t("game.professions.workshop_notice") %>
         <% elsif @building["kind"] == "junk_buyback" %>
           <%= t("game.buildings.junk_lead") %>
+        <% elsif @building["kind"] == "post" %>
+          <%= t("game.buildings.post_lead") %>
         <% elsif @building["kind"] == "bank" %>
           <%= t("game.buildings.bank_lead", wallet: @bank_wallet_nv, vault: @bank_vault_nv) %>
         <% elsif @building["kind"] == "temple" %>
@@ -72,6 +74,8 @@
               building: @building,
               wallet_nv: @bank_wallet_nv,
               vault_nv: @bank_vault_nv %>
+      <% when "post" %>
+        <%= render "city_buildings/post", building: @building, note: @post_note %>
       <% when "landmark" %>
         <%= render "city_buildings/landmark", building: @building, building_key: @building_key %>
       <% end %>

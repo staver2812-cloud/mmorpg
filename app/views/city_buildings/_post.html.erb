@@ -1,0 +1,26 @@
+<section class="nl-handbook" aria-label="<%= t("game.buildings.post_aria") %>">
+  <h2><%= t("game.buildings.post_title") %></h2>
+  <p class="nl-handbook__lead"><%= t("game.buildings.post_lead") %></p>
+  <% note = local_assigns.fetch(:note, "") %>
+  <% if note.present? %>
+    <p class="nl-quests-board__meta"><%= t("game.buildings.post_current", text: note) %></p>
+  <% else %>
+    <p class="nl-quests-board__meta"><%= t("game.buildings.post_empty") %></p>
+  <% end %>
+  <%= form_with url: city_building_post_path("post"), method: :post, data: {turbo: false} do |f| %>
+    <%= f.text_area :body, rows: 3, maxlength: Game::World::PostOfficeNote::MAX_LEN, class: "nl-post-body", placeholder: t("game.buildings.post_placeholder") %>
+    <p>
+      <%= f.submit t("game.buildings.post_save_cta"), class: "lbut" %>
+    </p>
+  <% end %>
+  <% if note.present? %>
+    <%= button_to t("game.buildings.post_clear_cta"),
+          city_building_post_path("post"),
+          method: :post,
+          params: {post_action: "clear"},
+          class: "lbut",
+          form: {data: {turbo: false}} %>
+  <% end %>
+</section>
+
+<%= render "city_buildings/landmark", building: building, building_key: "post" %>

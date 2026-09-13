@@ -37,6 +37,9 @@ class CityBuildingsController < ApplicationController
       @bank_wallet_nv = wallet.nv_balance.to_i
       @bank_vault_nv = Game::World::BankVault.balance_for(current_character)
     end
+    if @building_key == "post"
+      @post_note = Game::World::PostOfficeNote.current_for(current_character)
+    end
     prepare_presence_context
   end
 
@@ -137,6 +140,24 @@ class CityBuildingsController < ApplicationController
       redirect_to city_building_path("bank"), notice: result.message
     else
       redirect_to city_building_path("bank"), alert: result.message
+    end
+  end
+
+  def post
+    unless @building_key == "post"
+      redirect_to world_path, alert: I18n.t("game.buildings.post_only") and return
+    end
+
+    service = Game::World::PostOfficeNote.new(character: current_character, body: params[:body])
+    result = if params[:post_action].to_s == "clear"
+      service.clear!
+    else
+      service.save!
+    end
+    if result.success
+      redirect_to city_building_path("post"), notice: result.message
+    else
+      redirect_to city_building_path("post"), alert: result.message
     end
   end
 
