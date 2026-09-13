@@ -1148,6 +1148,7 @@ Final rerun results are in the
 - 2026-09-13: Law Abode alignment pledge/change (first free, later 25 NV).
 - 2026-09-13: Fatigue HUD chip; Prison/Gallows handbooks link to Law Abode.
 - 2026-09-13: Watchtower directory posts live district offers from the current node.
+- 2026-09-13: Law Abode notes Cistern east-gate outdoor handoff; smoke covers east exit and Enter back.
 - 2026-09-13: Owner character sheet shows Pitch Bank vault NV and item-locker occupancy (private; Bank link when colocated).
 - 2026-09-13: Bank item locker (one unequipped stack) plus alignment on the character sheet.
 - 2026-07-29: fixed existing-database City Exit interaction by making the one seed pipeline reconcile the complete historical `city2_*` graph, retire stale hotspots/offers/gates, preserve retained-node positions, recover removed-node positions to Central Square, and prove convergence plus idempotency.
