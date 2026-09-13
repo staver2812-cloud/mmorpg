@@ -298,6 +298,8 @@ en:
       location: "Location"
       bait_missing: "You need Ashen Bait to force a fight on this cell."
       bait_ambush: "%{name} lunges at the bait!"
+      bait_chip: "Bait: %{count}"
+      bait_chip_hint: "Passive ambush ~5 min. Look/Enter with bait forces a fight now."
       local_action_in_progress: "A local action is already in progress."
       passive_rule: "Without bait, bots ambush on their own about once every 5 minutes."
       starter_tip: "Loop: Shop/bait → West Gate → fight → Coal Hall → Ash Buyer → bandage/Infirmary. Healer: herbs → Infirmary bag → quest. PvP: trauma scroll → Attack in the list or on a profile → healer bag/heal scroll clears instantly."
