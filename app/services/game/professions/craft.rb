@@ -56,10 +56,14 @@ module Game
             )
           )
         end
-      rescue Game::Inventory::Manager::InventoryUnderflowError
-        failure("Не хватает материалов для крафта.")
-      rescue Game::Inventory::Manager::CapacityExceededError
-        failure("Инвентарь переполнен.")
+      rescue StandardError => error
+        raise unless error.class.name.end_with?("InventoryUnderflowError", "CapacityExceededError")
+
+        if error.class.name.end_with?("CapacityExceededError")
+          failure("Инвентарь переполнен.")
+        else
+          failure("Не хватает материалов для крафта.")
+        end
       end
 
       private
