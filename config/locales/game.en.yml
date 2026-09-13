@@ -655,6 +655,7 @@ en:
       law_bad_alignment: "Unknown alignment."
       law_in_combat: "Finish the fight first."
       law_open_cta: "Open Law Abode"
+      law_quarter_east_gate: "The Cistern east gate opens onto Ashen Shore east of the outpost; the gate cell offers Enter back into the city."
       prison_lead: "Cells have no sentence loop yet. Alignment and decrees are at the Law Abode next door."
       gallows_lead: "The quarter's public square. Court and alignment live in the Law Abode."
       guard_aria: "Watchtower"

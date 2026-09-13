@@ -96,6 +96,41 @@ def click_hotspot(session: requests.Session, key: str) -> Tuple[bool, str]:
     return r.status_code == 200, f"status={r.status_code} url={r.url} keys={sorted(parse_hotspot_forms(r.text))[:8]}"
 
 
+def enter_building(session: requests.Session) -> Tuple[bool, str]:
+    r = session.get(f"{BASE}/world", timeout=TIMEOUT)
+    m = re.search(
+        r'<form[^>]*action="/world/enter_building"[^>]*>(.*?)</form>',
+        r.text,
+        flags=re.S | re.I,
+    )
+    if not m:
+        return False, "no enter_building form"
+    block = m.group(0)
+    bid = re.search(r'name="building_id"[^>]*value="(\d+)"|value="(\d+)"[^>]*name="building_id"', block)
+    akey = re.search(r'name="action_key"[^>]*value="([^"]+)"|value="([^"]+)"[^>]*name="action_key"', block)
+    tok = re.search(
+        r'name="authenticity_token"[^>]*value="([^"]+)"|value="([^"]+)"[^>]*name="authenticity_token"',
+        block,
+    )
+    if not (bid and akey and tok):
+        return False, "enter_building fields missing"
+    building_id = bid.group(1) or bid.group(2)
+    action_key = akey.group(1) or akey.group(2)
+    authenticity = tok.group(1) or tok.group(2)
+    r = session.post(
+        f"{BASE}/world/enter_building",
+        data={
+            "authenticity_token": authenticity,
+            "building_id": building_id,
+            "action_key": action_key,
+        },
+        timeout=TIMEOUT,
+        allow_redirects=True,
+    )
+    keys = sorted(parse_hotspot_forms(r.text))
+    return r.status_code == 200 and bool(keys), f"status={r.status_code} url={r.url} keys={keys[:8]}"
+
+
 def main() -> int:
     report = Report()
     s = requests.Session()
@@ -371,7 +406,8 @@ def main() -> int:
         "GET /city/buildings/law_abode",
         r.status_code == 200
         and 'data-building-key="law_abode"' in r.text
-        and ("склонност" in r.text.lower() or "alignment" in r.text.lower()),
+        and ("склонност" in r.text.lower() or "alignment" in r.text.lower())
+        and ("Восточн" in r.text or "east gate" in r.text.lower()),
         f"url={r.url}",
     )
     r = s.get(f"{BASE}/world", timeout=TIMEOUT)
@@ -388,6 +424,22 @@ def main() -> int:
         and ("Обитель Закона" in r.text or "Law Abode" in r.text or "law_abode" in r.text),
         f"url={r.url}",
     )
+
+    ok_east, d_east = click_hotspot(s, "east_gate")
+    report.add("travel east_gate", ok_east, d_east)
+    if ok_east:
+        r = s.get(f"{BASE}/world", timeout=TIMEOUT)
+        outdoorish = ("Пепельный Берег" in r.text) or ("nl-world-map" in r.text) or ("available-actions" in r.text)
+        report.add("outdoor after east_gate", r.status_code == 200 and outdoorish, f"{r.status_code}")
+        ok_enter, d_enter = enter_building(s)
+        report.add("enter city after east_gate", ok_enter, d_enter)
+        r = s.get(f"{BASE}/world", timeout=TIMEOUT)
+        keys = sorted(parse_hotspot_forms(r.text))
+        report.add(
+            "law quarter after east re-enter",
+            "law_abode" in keys or "east_gate" in keys or "prison" in keys,
+            f"keys={keys[:8]}",
+        )
 
     for path in [
         "/ashen/items/set-blood/helm.png",
