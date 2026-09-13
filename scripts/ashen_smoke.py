@@ -478,7 +478,9 @@ def main() -> int:
         "GET /city/buildings/tavern fatigue copy",
         r.status_code == 200
         and 'data-building-key="tavern"' in r.text
-        and ("устал" in r.text.lower() or "fatigue" in r.text.lower()),
+        and ("устал" in r.text.lower() or "fatigue" in r.text.lower())
+        and ("data-tavern-vitals=" in r.text)
+        and ("data-tavern-ready=" in r.text),
         f"url={r.url}",
     )
     ok_f1_law, d_f1_law = click_hotspot(s, "go_forpost1")
