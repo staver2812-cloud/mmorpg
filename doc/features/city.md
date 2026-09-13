@@ -1155,6 +1155,7 @@ Final rerun results are in the
 - 2026-09-13: Clan Hall embeds the colocated Presence/Assault list for meetup PvP.
 - 2026-09-13: Knowledge Quarter schools show a live skill/profession snapshot board (no invented training formulas).
 - 2026-09-13: Law Abode notes Cistern east-gate outdoor handoff; smoke covers east exit and Enter back.
+- 2026-09-13: Veil Obelisk shows wallet NV and greys out recall when unbound or short on fare.
 - 2026-09-13: Relic stall shows wallet NV and greys out unaffordable buys (`data-souvenir-affordable`).
 - 2026-09-13: Infirmary premium desk shows live Assault/Heal scroll bag totals matching HUD chips.
 - 2026-09-13: Pitch Bank adds deposit-all / withdraw-all CTAs plus locker/wallet/vault data markers.

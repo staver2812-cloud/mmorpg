@@ -59,6 +59,7 @@ novice → adept → master bags.
 
 | Date | Change |
 |---|---|
+| 2026-09-13 | Active quests gate turn-in until progress meets target; ready badge + `data-quest-ready`. |
 | 2026-09-13 | Live delivery progress, journal status sort, City Hall board counts/active chip, thematic reward ensure. |
 | 2026-09-13 | Quest spine: `requires`/`unlocks`/`where_*`, Tar Smith + Healer mastery contracts, locked UI. |
 | 2026-09-13 | Added Ash Healer first-bag delivery contract (`ash_healer_first_bag`). |

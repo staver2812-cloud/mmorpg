@@ -465,7 +465,9 @@ def main() -> int:
         "GET /city/buildings/obelisk",
         r.status_code == 200
         and 'data-building-key="obelisk"' in r.text
-        and ("Привязать" in r.text or "Bind" in r.text),
+        and ("Привязать" in r.text or "Bind" in r.text)
+        and ("data-obelisk-bound=" in r.text)
+        and ("data-obelisk-wallet=" in r.text),
         f"url={r.url}",
     )
 
