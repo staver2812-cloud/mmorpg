@@ -1155,6 +1155,7 @@ Final rerun results are in the
 - 2026-09-13: Clan Hall embeds the colocated Presence/Assault list for meetup PvP.
 - 2026-09-13: Knowledge Quarter schools show a live skill/profession snapshot board (no invented training formulas).
 - 2026-09-13: Law Abode notes Cistern east-gate outdoor handoff; smoke covers east exit and Enter back.
+- 2026-09-13: Airship Station greys out board when wallet cannot cover fare (`data-airship-affordable`).
 - 2026-09-13: Owner character sheet shows Pitch Bank vault NV and item-locker occupancy (private; Bank link when colocated).
 - 2026-09-13: Bank item locker (one unequipped stack) plus alignment on the character sheet.
 - 2026-07-29: fixed existing-database City Exit interaction by making the one seed pipeline reconcile the complete historical `city2_*` graph, retire stale hotspots/offers/gates, preserve retained-node positions, recover removed-node positions to Central Square, and prove convergence plus idempotency.

@@ -628,6 +628,8 @@ en:
       auction_lead: "Player lots come after the economy layer. Live turnover today is Shop, Ash Buyer, and Bank."
       auction_treasury: "Wallet %{wallet} NV · vault %{vault} NV · %{marks} VM"
       airship_wallet: "Wallet %{amount} NV — fare is charged when you board."
+      airship_need_nv: "Need %{amount} NV to board"
+      airship_need_nv_short: "Need NV"
       post_aria: "Ashen Post"
       post_only: "Notes are only available at the Post."
       post_title: "Personal note"

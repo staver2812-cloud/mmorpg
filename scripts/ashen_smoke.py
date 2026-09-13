@@ -264,7 +264,8 @@ def main() -> int:
         "GET /city/buildings/airship_station wallet",
         r.status_code == 200
         and 'data-building-key="airship_station"' in r.text
-        and ("В кармане" in r.text or "Wallet" in r.text),
+        and ("В кармане" in r.text or "Wallet" in r.text)
+        and ("data-airship-affordable=" in r.text),
         f"url={r.url}",
     )
 
