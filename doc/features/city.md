@@ -453,7 +453,7 @@ The directionality is explicit. Code must not infer a reverse link, shortest pat
 | District | Observed landmark identities | Current local presentation |
 |---|---|---|
 | Central | Tavern, Workshop, Guard Tower | Hover/focus only |
-| Residential | Clan Hall, Post Office, City Hall | Hover/focus only |
+| Residential | Clan Hall (presence/Assault meetup), Post, City Hall treasury/quest links | Entered interiors |
 | Knowledge | Library handbook; Magic/General/Military schools show live skill snapshots (allocation still on the character sheet) | Entered interiors |
 | Business | Auction, Souvenir Shop, Dealer House, Temple of Ilana | Hover/focus only |
 | Law | Law Abode, Prison, Gallows | Hover/focus only |
