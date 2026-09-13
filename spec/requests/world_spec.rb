@@ -286,14 +286,14 @@ RSpec.describe "World", type: :request do
     end
 
     context "with valid movement offer" do
-      it "lets a same-cell hostile NPC interrupt movement before travel starts" do
+      it "allows escape travel even when a same-cell hostile is present" do
         create(:tile_npc, :multi_npc_encounter, zone: zone.name, x: 5, y: 5)
         command = movement_offer(:north)
 
-        expect { post_offer(command) }.to change(ArenaMatch, :count).by(1)
+        expect { post_offer(command) }.not_to change(ArenaMatch, :count)
 
-        expect(response).to redirect_to(arena_match_path(ArenaMatch.last))
-        expect(command.reload).to be_offered
+        expect(response).to redirect_to(world_path)
+        expect(command.reload).to be_moving
         expect(position.reload).to have_attributes(x: 5, y: 5)
       end
 

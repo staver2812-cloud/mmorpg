@@ -54,9 +54,9 @@
     <span class="badge badge--<%= @arena_match.status %>"><%= arena_match_status_badge(@arena_match.status) %></span>
     <span><%= t("game.fight.turn_timeout") %>: <b><%= (@arena_match.turn_timeout_seconds || 300) / 60 %> <%= t("game.fight.min") %></b></span>
     <span><%= t("game.fight.trauma") %>: <b><%= @arena_match.metadata.to_h.fetch("trauma", "normal") %></b></span>
-    <%= link_to t("nav.inventory"), inventory_path, class: "fr_but" %>
-    <span class="fr_but_dis"><%= t("game.fight.mercenary") %></span>
     <%= link_to t("game.fight.log"), public_fight_log_path(@arena_match), class: "fr_but" %>
+    <span class="fr_but fr_but_dis" title="<%= t("game.fight.inventory_locked") %>"><%= t("nav.inventory") %></span>
+    <span class="fr_but_dis"><%= t("game.fight.mercenary") %></span>
     <button type="button" class="fr_but" data-action="click->arena-match#requestMatchState"><%= t("game.fight.refresh") %></button>
     <button type="button"
             class="fr_but"
@@ -389,8 +389,8 @@
           <%= button_to t("game.fight.finish"),
               finish_arena_match_path(@arena_match),
               method: :post,
-              class: "btn-primary",
-              form: {data: {turbo: false}} %>
+              class: "btn-primary arena-result-finish",
+              form: {class: "arena-result-finish-form", data: {turbo: false}} %>
         <% else %>
           <% if @arena_match.metadata.to_h["source"] == "world_npc" %>
             <%= link_to t("nav.return"),

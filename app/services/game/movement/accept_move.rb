@@ -2,8 +2,9 @@
 
 module Game
   module Movement
-    # Validates an owned move before resolving same-cell interruption or starting
-    # timed travel. Both results share the character lock with other World actions.
+    # Validates an owned move before starting timed travel. Same-cell hostiles
+    # do not block leaving the tile (escape); they still interrupt Look/Enter
+    # and shell navigation through InterruptAction.
     class AcceptMove
       Result = Struct.new(:command, :position, :interruption, keyword_init: true)
 
@@ -39,11 +40,9 @@ module Game
             raise violation("Movement offer is no longer available") unless command.offered?
             validate_offer!(command, position)
 
-            interruption = Game::World::InterruptAction.new(character:).call
-            if interruption.interrupted?
-              next Result.new(command:, position:, interruption:)
-            end
-
+            # Escape is always allowed: a same-cell hostile must not soft-lock the
+            # player on the tile. Look / Enter / shell navigation still run
+            # InterruptAction and can open the fight without moving.
             now = Time.current
             command.update!(
               status: :moving,

@@ -198,6 +198,18 @@ RSpec.describe Game::Movement::AcceptMove do
     expect(command.reload).to be_moving
   end
 
+  it "starts travel despite a same-cell hostile so the player is not soft-locked" do
+    create(:tile_npc, zone: zone.name, x: 5, y: 5)
+    command = offered_move
+
+    result = described_class.new(character:, action_key: command.action_key).call
+
+    expect(result.interruption).to be_nil
+    expect(result.command.reload).to be_moving
+    expect(ArenaMatch.count).to eq(0)
+    expect(position.reload).to have_attributes(x: 5, y: 5)
+  end
+
   it "fails old-region travel before accepting a valid offer for the current region" do
     other_zone = create(:zone, location_type: "outdoor")
     active = create(:movement_command, :moving, character:, zone: other_zone)

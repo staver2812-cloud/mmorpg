@@ -360,6 +360,7 @@ en:
       accept_draw: "Accept Draw"
       surrender: "Surrender"
       finish: "Finish Fight"
+      inventory_locked: "Inventory is unavailable during a fight"
       to_arena: "To Arena"
       defeated: "Defeated"
       npc: "NPC"

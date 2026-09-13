@@ -20,7 +20,15 @@
       <% if controller_name == "world" && @zone&.outdoor? %>
         data-game-layout-encounter-url-value="<%= world_encounter_check_path %>"
       <% end %>>
-  <% world_actions_locked = controller_name == "world" && (@active_movement.present? || @active_world_action.present?) %>
+  <% world_actions_locked = begin
+    if controller_name == "world" && (@active_movement.present? || @active_world_action.present?)
+      true
+    elsif controller_name == "arena_matches" && @arena_match.present?
+      true
+    else
+      false
+    end
+  end %>
 
   <header class="nl-top-bar">
     <div class="sr-only" data-controller="online-reload" <%= online_reload_attributes %> aria-hidden="true"></div>
@@ -188,8 +196,13 @@
     <div class="nl-status-icons">
       <span class="nl-time-display"><%= Time.current.strftime("%H:%M:%S") %></span>
       <% if current_character %>
-        <%= link_to "Q", quests_path, class: "nl-chat-tool nl-chat-tool--quests", aria: {label: t("nav.quests")}, title: t("nav.quests"), data: {turbo_frame: "_top"} %>
-        <%= link_to "A", character_licenses_path, class: "nl-chat-tool nl-chat-tool--abilities", aria: {label: t("nav.abilities")}, title: t("nav.abilities"), data: {turbo_frame: "_top"} %>
+        <% if world_actions_locked %>
+          <span class="nl-chat-tool nl-chat-tool--quests nl-chat-tool--disabled" aria-disabled="true" title="<%= t("game.fight.inventory_locked") %>">Q</span>
+          <span class="nl-chat-tool nl-chat-tool--abilities nl-chat-tool--disabled" aria-disabled="true" title="<%= t("game.fight.inventory_locked") %>">A</span>
+        <% else %>
+          <%= link_to "Q", quests_path, class: "nl-chat-tool nl-chat-tool--quests", aria: {label: t("nav.quests")}, title: t("nav.quests"), data: {turbo_frame: "_top"} %>
+          <%= link_to "A", character_licenses_path, class: "nl-chat-tool nl-chat-tool--abilities", aria: {label: t("nav.abilities")}, title: t("nav.abilities"), data: {turbo_frame: "_top"} %>
+        <% end %>
       <% end %>
     </div>
   </footer>

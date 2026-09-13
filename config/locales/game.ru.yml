@@ -360,6 +360,7 @@ ru:
       accept_draw: "Принять ничью"
       surrender: "Сдаться"
       finish: "Завершить бой"
+      inventory_locked: "Инвентарь недоступен во время боя"
       to_arena: "На арену"
       defeated: "Повержен"
       npc: "NPC"
