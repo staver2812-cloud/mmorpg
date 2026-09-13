@@ -14,7 +14,10 @@ module Game
       end
 
       def entries
-        Catalog.ordered.map { |quest| present(quest) }
+        Catalog.ordered.map { |quest| present(quest) }.sort_by do |entry|
+          status_rank = {"active" => 0, "available" => 1, "locked" => 2, "completed" => 3}[entry[:status]] || 9
+          [status_rank, entry[:quest]["sort"].to_i]
+        end
       end
 
       def present(quest)
@@ -33,7 +36,7 @@ module Game
         {
           quest:,
           status:,
-          progress: state["progress"].to_i,
+          progress: progress_for(quest, state),
           target: objective_count(quest),
           completed_at: state["completed_at"],
           accepted_at: state["accepted_at"],
@@ -181,6 +184,18 @@ module Game
         quest.dig("objective", "count").to_i.clamp(1, 99)
       end
 
+      def progress_for(quest, state)
+        target = objective_count(quest)
+        case quest.dig("objective", "type")
+        when "deliver_item"
+          return target if state["status"] == "completed"
+
+          [item_quantity(quest.dig("objective", "item_key")), target].min
+        else
+          state["progress"].to_i
+        end
+      end
+
       def objective_met?(quest, state)
         case quest.dig("objective", "type")
         when "kill_npc"
@@ -240,6 +255,10 @@ module Game
 
         Game::Professions::Templates.ensure_craft_items!
         template = ItemTemplate.find_by(key: item_key)
+        if template.nil? && item_key.match?(/\Aset-.+-t\d+\z/)
+          load Rails.root.join("db/seeds/ashen_veil_thematic_sets.rb")
+          template = ItemTemplate.find_by(key: item_key)
+        end
         return unless template
 
         inventory = character.inventory || character.create_inventory!(slot_capacity: 30, weight_capacity: 100)

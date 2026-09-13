@@ -77,4 +77,18 @@ RSpec.describe Game::Quests::Journal do
     expect(chip).to include("1")
     expect(chip).to match(/Западные ворота|West Gate/)
   end
+
+  it "shows live delivery progress from inventory" do
+    complete!("veil_lure_drill")
+    journal.accept!("veil_tail_delivery")
+    Game::Professions::Templates.ensure_craft_items!
+    Game::Inventory::Manager.new(inventory: character.inventory).add_item!(
+      item_template: ItemTemplate.find_by!(key: "rat_tail"),
+      quantity: 1
+    )
+
+    entry = journal.present(Game::Quests::Catalog.find("veil_tail_delivery"))
+    expect(entry[:progress]).to eq(1)
+    expect(entry[:target]).to eq(1)
+  end
 end
