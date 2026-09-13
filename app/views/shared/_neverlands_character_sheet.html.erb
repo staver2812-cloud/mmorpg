@@ -42,6 +42,17 @@
                 <% end %>
               </td>
             </tr>
+            <% stored = Game::World::BankItemLocker.stored_for(character) %>
+            <tr>
+              <th><%= t("game.sheet.locker") %>:</th>
+              <td class="nl-sheet-locker">
+                <% if stored.present? %>
+                  <%= t("game.sheet.locker_occupied", name: stored["name"], qty: stored["quantity"]) %>
+                <% else %>
+                  <%= t("game.sheet.locker_empty") %>
+                <% end %>
+              </td>
+            </tr>
           <% end %>
         </tbody>
       </table>

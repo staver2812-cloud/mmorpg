@@ -53,6 +53,9 @@ RSpec.describe "Players", type: :request do
       vault = Nokogiri::HTML(response.body).at_css(".nl-sheet-vault")
       expect(vault).to be_present
       expect(vault.text).to include("42")
+      locker = Nokogiri::HTML(response.body).at_css(".nl-sheet-locker")
+      expect(locker).to be_present
+      expect(locker.text).to include("Empty").or include("Пусто")
     end
 
     it "hides vault balance on another player's public sheet" do
@@ -65,6 +68,7 @@ RSpec.describe "Players", type: :request do
 
       expect(response).to have_http_status(:ok)
       expect(response.body).not_to include("nl-sheet-vault")
+      expect(response.body).not_to include("nl-sheet-locker")
     end
 
     it "returns location, equipment, and public player path in JSON" do
