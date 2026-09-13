@@ -443,7 +443,8 @@ def main() -> int:
         and ("Сейф" in r.text or "vault" in r.text.lower())
         and ("Ячейка" in r.text or "locker" in r.text.lower())
         and ("data-bank-locker=" in r.text)
-        and ("data-bank-wallet=" in r.text),
+        and ("data-bank-wallet=" in r.text)
+        and ("data-bank-vm=" in r.text),
         f"url={r.url}",
     )
     r = s.get(f"{BASE}/city/buildings/souvenir_shop", timeout=TIMEOUT, allow_redirects=True)

@@ -36,6 +36,7 @@ class CityBuildingsController < ApplicationController
       wallet = current_user.currency_wallet || current_user.create_currency_wallet!(nv_balance: 0)
       @bank_wallet_nv = wallet.nv_balance.to_i
       @bank_vault_nv = Game::World::BankVault.balance_for(current_character)
+      @veil_marks = wallet.veil_marks.to_i
       @bank_item = Game::World::BankItemLocker.stored_for(current_character)
       @bank_deposit_options = current_character.inventory&.inventory_items
         &.where(equipped: false)
