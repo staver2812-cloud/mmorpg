@@ -1160,7 +1160,7 @@ Final rerun results are in the
 - 2026-09-13: Coal Tide Tavern shows live HP/MP/fatigue and disables rest when already full.
 - 2026-09-13: Veil Obelisk shows wallet NV and greys out recall when unbound or short on fare.
 - 2026-09-13: Relic stall shows wallet NV and greys out unaffordable buys (`data-souvenir-affordable`).
-- 2026-09-13: Infirmary premium desk shows live Assault/Heal scroll bag totals matching HUD chips.
+- 2026-09-13: Infirmary premium desk shows live Assault/Heal scroll bag totals matching HUD chips; greys out VM buys when short (`data-hospital-premium-affordable`).
 - 2026-09-13: Pitch Bank adds deposit-all / withdraw-all CTAs plus locker/wallet/vault data markers.
 - 2026-09-13: Ashen Post shows used/max character count (`data-post-remaining`) and prefills the editor with the saved note.
 - 2026-09-13: Library equipment card documents Inventory wear/broken badges and deferred forge repair.

@@ -71,7 +71,8 @@
 
 <section class="nl-handbook" aria-label="<%= t("game.buildings.premium_desk") %>">
   <h2><%= t("game.buildings.premium_desk") %></h2>
-  <p><%= t("game.buildings.premium_lead", marks: local_assigns.fetch(:veil_marks, 0)) %></p>
+  <% marks = local_assigns.fetch(:veil_marks, 0).to_i %>
+  <p data-hospital-vm="<%= marks %>"><%= t("game.buildings.premium_lead", marks: marks) %></p>
   <% assault_owned = Game::World::StartPlayerAssault.trauma_scroll_quantity(current_character) %>
   <% heal_owned = Game::Shop::PremiumScrollPurchase.owned_quantity(current_character, "combat_heal_scroll") %>
   <p class="nl-quests-board__meta"
@@ -95,20 +96,28 @@
            &.joins(:item_template)
            &.where(item_templates: {key: item_key}, equipped: false)
            &.sum(:quantity).to_i || 0 %>
-      <article class="nl-handbook__card">
+      <% price_i = price.to_i %>
+      <% affordable = marks >= price_i %>
+      <article class="nl-handbook__card" data-hospital-premium-affordable="<%= affordable ? "1" : "0" %>">
         <h3><%= t("game.buildings.premium_item.#{item_key}", default: item_key) %></h3>
         <p><%= t("game.buildings.premium_item_hint.#{item_key}", default: "") %></p>
         <p class="nl-quests-board__meta">
-          <%= price %> VM
+          <%= price_i %> VM
           ·
           <%= t("game.buildings.premium_owned", count: owned) %>
         </p>
-        <%= button_to t("game.buildings.premium_buy_cta", amount: price),
-              city_building_buy_premium_path("hospital"),
-              method: :post,
-              params: {item_key: item_key},
-              class: "lbut",
-              form: {data: {turbo: false}} %>
+        <% if affordable %>
+          <%= button_to t("game.buildings.premium_buy_cta", amount: price_i),
+                city_building_buy_premium_path("hospital"),
+                method: :post,
+                params: {item_key: item_key},
+                class: "lbut",
+                form: {data: {turbo: false}} %>
+        <% else %>
+          <% short = t("game.buildings.premium_short", amount: price_i) %>
+          <button type="button" class="lbut" disabled title="<%= short %>"><%= t("game.buildings.premium_buy_cta", amount: price_i) %></button>
+          <p class="nl-quests-board__meta"><%= short %></p>
+        <% end %>
       </article>
     <% end %>
   </div>
