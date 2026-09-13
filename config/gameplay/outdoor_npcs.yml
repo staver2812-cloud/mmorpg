@@ -12,6 +12,8 @@ outpost_surroundings:
       wilderness_robber: "Солевые контрабандисты"
       ash_shore_scout: "Пепельные разведчики"
       ash_bell_mite: "Колокольные клещи"
+      salt_dock_wraith: "Солевые призраки пирса"
+      soot_market_knifer: "Ножевики Сажевого рынка"
     profiles:
       - key: forpost_captured_rat_pair
         source_npc_key: plague_rat
@@ -143,6 +145,66 @@ outpost_surroundings:
           currency: NV
           amount: 10
           chance: 0.5
+
+    - key: salt_dock_wraith
+      name: Солевой призрак пирса
+      role: hostile
+      level: 7
+      x: 12
+      y: 13
+      hp: 165
+      damage: 12
+      xp: 40
+      metadata:
+        source_name: "Солевой призрак пирса"
+        source_location: "Пепельный Берег"
+        source_observation: "ashen_sandbox_salt_dock_wraith_2026-09-13"
+        source_map: "m_1001_999"
+        encounter_count: 1
+        encounter_experience_reward: 40
+        avatar_image: "zombie.png"
+        max_attacks_per_turn: 1
+      loot:
+        - kind: item
+          item: set-swamp-amulet-t5
+          source_name: "Амулет «Топь» · T5"
+          chance: 0.06
+        - kind: currency
+          currency: NV
+          amount: 14
+          chance: 0.55
+
+    - key: soot_market_knifer
+      name: Ножевик Сажевого рынка
+      role: hostile
+      level: 8
+      x: 16
+      y: 12
+      hp: 190
+      damage: 14
+      xp: 48
+      metadata:
+        source_name: "Ножевик Сажевого рынка"
+        source_location: "Пепельный Берег"
+        source_observation: "ashen_sandbox_soot_knifer_2026-09-13"
+        source_map: "m_1001_999"
+        encounter_count: 1
+        encounter_experience_reward: 48
+        avatar_image: "zombie.png"
+        max_attacks_per_turn: 2
+      loot:
+        - kind: item
+          item: set-distortion-gloves-t5
+          source_name: "Перчатки «Искажение» · T5"
+          chance: 0.05
+        - kind: item
+          item: set-blood-bracers-t5
+          source_name: "Наручи «Кровь Завесы» · T5"
+          chance: 0.04
+        - kind: currency
+          currency: NV
+          amount: 16
+          chance: 0.55
 
     - key: wilderness_bandit
       name: Пепельный патрульный

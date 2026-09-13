@@ -1,19 +1,18 @@
-# Overnight note — 2026-09-12
+# Overnight note — 2026-09-13
 
-## Shipped without operator
-- Ashen quest journal MVP (`/quests`, City Hall board, kill/deliver objectives)
-- Arena training dummy RU reskin
-- Paperdoll/remove aria + outdoor fight flash i18n polish
-- Smoke extended for quest board/accept
-- Local commits: `68f9ce1` (+ prior 3) — **ahead of origin** (push needs GitHub login)
-- Bundle backup: `%USERPROFILE%\tidekeep-backups\neverlands-mmorpg-ashen-*.bundle`
+## Decision
+- Keep developing this Rails Ashen sandbox (no better open Mist-War-complete base found).
+- Mist War = clarity/density tutor; Neverlands = shell/movement/combat ownership.
+- Mist War content/mechanics come after Ashen authored loop is playable.
 
-## Still blocked / next
-- `git push` needs interactive Credential Manager
-- Full Neverlands-faithful quest engine remains NOT_IMPLEMENTED; this is sandbox Ashen loop
-- Outdoor fight e2e in smoke (move to cell + fight) still heavy — optional next
-- More quests / friendly talk NPCs / AFK bait — later slices
+## Shipped locally (commit pending / follow-up)
+- Outdoor: `salt_dock_wraith`, `soot_market_knifer` (+ prior bell mite / scout)
+- Quests: `salt_pier_haunt`, `soot_knifer_bounty` (+ board summary / formula / chips)
+- City: Архив Колоколов handbook; Ратуша board meta
+- Reference: `doc/design/reference/mistwar_ui_patterns.md`
+- Bundle: `%USERPROFILE%\tidekeep-backups\neverlands-mmorpg-ashen-*.bundle`
+- GitHub push still needs your interactive login (do **not** paste passwords in chat)
 
-## Follow-up same night
-- Added `ash_shore_scout` outdoor NPC + quest `ash_scout_watch`
-- Smoke now checks `west_gate` → outdoor
+## Next
+- `railway up` + migrate pier threats + `ashen_smoke.py`
+- More shore foes from Ashen roster; then Mist-style combat formula sheet with our numbers

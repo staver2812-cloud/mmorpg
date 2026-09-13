@@ -112,3 +112,35 @@ quests:
       currency_nv: 60
       item_key: set-blood-bracers-t5
     sort: 30
+
+  salt_pier_haunt:
+    title_ru: "Призраки соляного пирса"
+    title_en: "Salt Pier Haunt"
+    summary_ru: "Сбейте двух солевых призраков у пирса и доложите в Ратушу."
+    summary_en: "Defeat two salt dock wraiths near the pier and report to City Hall."
+    giver: "Ратуша Угля"
+    objective:
+      type: kill_npc
+      npc_keys: [salt_dock_wraith]
+      count: 2
+    reward:
+      experience: 90
+      currency_nv: 50
+      item_key: set-swamp-amulet-t5
+    sort: 35
+
+  soot_knifer_bounty:
+    title_ru: "Награда за ножевика"
+    title_en: "Knifer Bounty"
+    summary_ru: "Устраните ножевика Сажевого рынка на берегу и вернитесь с докладом."
+    summary_en: "Eliminate a soot-market knifer on the shore and report back."
+    giver: "Ратуша Угля"
+    objective:
+      type: kill_npc
+      npc_keys: [soot_market_knifer]
+      count: 1
+    reward:
+      experience: 100
+      currency_nv: 55
+      item_key: set-distortion-gloves-t5
+    sort: 40

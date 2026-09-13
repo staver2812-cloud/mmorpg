@@ -34,7 +34,7 @@
       <% when "hospital" %>
         <%= render "city_buildings/hospital", building: @building %>
       <% when "landmark" %>
-        <%= render "city_buildings/landmark", building: @building %>
+        <%= render "city_buildings/landmark", building: @building, building_key: @building_key %>
       <% end %>
 
       <% if @building_key == "city_hall" %>
@@ -42,6 +42,7 @@
           <h2><%= t("game.quests.board_title") %></h2>
           <p><%= t("game.quests.hint") %></p>
           <%= link_to t("game.quests.board_open"), quests_path, class: "lbut" %>
+          <p class="nl-quests-board__meta"><%= t("game.quests.board_meta") %></p>
         </section>
       <% end %>
     </section>

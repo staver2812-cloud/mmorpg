@@ -3,8 +3,37 @@
     Вы внутри: <strong><%= building["title"] %></strong>
   </p>
   <p><%= building["summary"] %></p>
-  <ul class="nl-city-landmark__notes">
-    <li>Сценарий здания уже доступен для входа с карты города.</li>
-    <li>Торговля, крафт, квесты и услуги этого места подключим отдельными срезами.</li>
-  </ul>
+
+  <% if local_assigns[:building_key] == "library" || building["title"].to_s.include?("Архив") %>
+    <section class="nl-handbook" aria-label="Справочник механик">
+      <h2>Справочник Пепельной Завесы</h2>
+      <p class="nl-handbook__lead">
+        Как у сильных браузерных MMORPG: правила читаются прямо в городе.
+        Формулы Mist War подключим отдельно; сейчас — наши рабочие контуры.
+      </p>
+      <div class="nl-handbook__grid">
+        <article class="nl-handbook__card">
+          <h3>Бой</h3>
+          <p>Атака / блок по зонам. Сервер считает удар, клиент только показывает лог и выбор.</p>
+        </article>
+        <article class="nl-handbook__card">
+          <h3>Снаряжение</h3>
+          <p>Тематические сеты T5→T50. Требования и статы на предмете; носить можно только при выполнении условий.</p>
+        </article>
+        <article class="nl-handbook__card">
+          <h3>Задания</h3>
+          <p>Доска в Ратуше Угля. Цель = победа над NPC или сдача предмета. Награды: опыт, NV, кусок сета.</p>
+        </article>
+        <article class="nl-handbook__card">
+          <h3>Пепельный Берег</h3>
+          <p>Клещи, разведчики, патруль, контрабанда, колокольные клещи, призраки пирса, ножевики.</p>
+        </article>
+      </div>
+    </section>
+  <% else %>
+    <ul class="nl-city-landmark__notes">
+      <li>Сценарий здания уже доступен для входа с карты города.</li>
+      <li>Торговля, крафт, квесты и услуги этого места подключим отдельными срезами.</li>
+    </ul>
+  <% end %>
 </section>

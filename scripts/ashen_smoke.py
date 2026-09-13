@@ -178,12 +178,15 @@ def main() -> int:
         "Крошки колокольного двора",
         "Колокольный выводок",
         "Зачистка патруля",
+        "Призраки соляного пирса",
+        "Награда за ножевика",
         "nl-quests",
+        "nl-quests__summary",
     ]
     quest_hits = [n for n in quest_needles if n in r.text]
     report.add(
         "GET /quests",
-        r.status_code == 200 and len(quest_hits) >= 4,
+        r.status_code == 200 and len(quest_hits) >= 5,
         f"{r.status_code} hits={quest_hits}",
     )
     if r.status_code == 200:
@@ -209,6 +212,13 @@ def main() -> int:
     report.add("travel go_main", ok_main, d1)
     ok, detail = click_hotspot(s, "go_forpost3")
     report.add("travel go_forpost3", ok, detail)
+
+    r = s.get(f"{BASE}/city/buildings/library", timeout=TIMEOUT, allow_redirects=True)
+    report.add(
+        "GET /city/buildings/library handbook",
+        r.status_code == 200 and "Справочник Пепельной Завесы" in r.text,
+        f"url={r.url}",
+    )
 
     r = s.get(f"{BASE}/city/buildings/temple", timeout=TIMEOUT, allow_redirects=True)
     report.add(
