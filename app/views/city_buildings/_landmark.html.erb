@@ -195,6 +195,15 @@
           <%= link_to t("game.buildings.hospital_title_short"), city_building_path("hospital"), class: "lbut" %>
         <% end %>
       </p>
+      <% assault_owned = Game::World::StartPlayerAssault.trauma_scroll_quantity(current_character) %>
+      <% heal_owned = Game::Shop::PremiumScrollPurchase.owned_quantity(current_character, "combat_heal_scroll") %>
+      <p class="nl-quests-board__meta"
+         data-clan-hall-assault="<%= assault_owned %>"
+         data-clan-hall-heal="<%= heal_owned %>">
+        <%= t("game.world.trauma_scroll_chip", count: assault_owned) %>
+        ·
+        <%= t("game.world.heal_scroll_chip", count: heal_owned) %>
+      </p>
       <h3><%= t("game.buildings.clan_hall_presence_title") %></h3>
       <p class="nl-quests-board__meta"><%= t("game.buildings.clan_hall_presence_lead") %></p>
       <div class="nl-clan-hall-presence" data-clan-hall-presence="1">
