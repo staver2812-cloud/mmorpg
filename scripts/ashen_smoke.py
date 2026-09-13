@@ -159,6 +159,15 @@ def main() -> int:
         report.add(f"GET {path}", r.status_code == 200 and hit, f"{r.status_code} needles={hit}")
         time.sleep(0.1)
 
+    r = s.get(f"{BASE}/shop?mode=sell", timeout=TIMEOUT)
+    report.add(
+        "shop sell junk hint",
+        r.status_code == 200
+        and 'nl-shop' in r.text
+        and (("Скупщик" in r.text) or ("Ash Buyer" in r.text) or ("junk_dealer" in r.text)),
+        f"url={r.url}",
+    )
+
     r = s.get(f"{BASE}/world", timeout=TIMEOUT)
     report.add(
         "trauma scroll chip on square",
@@ -393,12 +402,6 @@ def main() -> int:
     banned_shop = ["You carry", "Shop funds", "Refresh to buy", "There are no items"]
     found_shop = [w for w in banned_shop if w in r.text]
     report.add("shop no English chrome", not found_shop, f"found={found_shop}")
-    r = s.get(f"{BASE}/shop?mode=sell", timeout=TIMEOUT)
-    report.add(
-        "shop sell junk hint",
-        r.status_code == 200 and (("Скупщик" in r.text) or ("Ash Buyer" in r.text) or ("junk_dealer" in r.text)),
-        f"url={r.url}",
-    )
 
     r = s.get(f"{BASE}/world", timeout=TIMEOUT)
     report.add("locale switcher", ("RU" in r.text and "EN" in r.text) or "/locales" in r.text)
