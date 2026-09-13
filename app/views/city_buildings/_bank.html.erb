@@ -1,10 +1,15 @@
+<% stored = local_assigns[:stored_item] %>
+<% deposit_options = local_assigns.fetch(:deposit_options, []) %>
 <section class="nl-handbook" aria-label="<%= t("game.buildings.bank_aria") %>"
-         data-bank-locker="<%= local_assigns[:stored_item].present? ? "occupied" : "empty" %>"
+         data-bank-locker="<%= stored.present? ? "occupied" : "empty" %>"
          data-bank-wallet="<%= local_assigns.fetch(:wallet_nv, 0) %>"
          data-bank-vault="<%= local_assigns.fetch(:vault_nv, 0) %>"
          data-bank-vm="<%= local_assigns.fetch(:veil_marks, 0) %>"
          data-bank-can-deposit="<%= local_assigns.fetch(:wallet_nv, 0).to_i.positive? ? "1" : "0" %>"
-         data-bank-can-withdraw="<%= local_assigns.fetch(:vault_nv, 0).to_i.positive? ? "1" : "0" %>">
+         data-bank-can-withdraw="<%= local_assigns.fetch(:vault_nv, 0).to_i.positive? ? "1" : "0" %>"
+         data-bank-can-store="<%= stored.blank? && deposit_options.any? ? "1" : "0" %>"
+         data-bank-can-retrieve="<%= stored.present? ? "1" : "0" %>"
+         data-bank-item-options="<%= deposit_options.size %>">
   <h2><%= t("game.buildings.bank_title") %></h2>
   <p class="nl-handbook__lead">
     <%= t("game.buildings.bank_lead",
@@ -64,7 +69,6 @@
 
   <h3><%= t("game.buildings.bank_item_title") %></h3>
   <p class="nl-quests-board__meta"><%= t("game.buildings.bank_item_lead") %></p>
-  <% stored = local_assigns[:stored_item] %>
   <% if stored.present? %>
     <p data-bank-item="<%= stored["key"] %>">
       <%= t("game.buildings.bank_item_stored", name: stored["name"], qty: stored["quantity"]) %>
@@ -76,11 +80,10 @@
             form: {data: {turbo: false}} %>
     </p>
   <% else %>
-    <% options = local_assigns.fetch(:deposit_options, []) %>
-    <% if options.empty? %>
+    <% if deposit_options.empty? %>
       <p class="nl-quests-board__meta"><%= t("game.buildings.bank_item_no_bags") %></p>
     <% else %>
-      <% options.each do |name, key, qty| %>
+      <% deposit_options.each do |name, key, qty| %>
         <p>
           <%= name %> ×<%= qty %>
           <%= button_to t("game.buildings.bank_item_deposit_cta"),
