@@ -584,6 +584,8 @@ en:
       bank_withdraw: "Withdraw"
       bank_deposit_cta: "Deposit"
       bank_withdraw_cta: "Withdraw"
+      bank_deposit_all_cta: "Deposit all %{amount} NV"
+      bank_withdraw_all_cta: "Withdraw all %{amount} NV"
       bank_deposited: "Deposited %{amount} NV. Vault balance: %{balance}."
       bank_withdrawn: "Withdrew %{amount} NV. Vault balance: %{balance}."
       bank_short_wallet: "Wallet needs %{amount} NV."

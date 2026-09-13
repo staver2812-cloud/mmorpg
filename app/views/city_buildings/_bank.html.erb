@@ -1,4 +1,7 @@
-<section class="nl-handbook" aria-label="<%= t("game.buildings.bank_aria") %>">
+<section class="nl-handbook" aria-label="<%= t("game.buildings.bank_aria") %>"
+         data-bank-locker="<%= local_assigns[:stored_item].present? ? "occupied" : "empty" %>"
+         data-bank-wallet="<%= local_assigns.fetch(:wallet_nv, 0) %>"
+         data-bank-vault="<%= local_assigns.fetch(:vault_nv, 0) %>">
   <h2><%= t("game.buildings.bank_title") %></h2>
   <p class="nl-handbook__lead">
     <%= t("game.buildings.bank_lead",
@@ -8,18 +11,44 @@
   <div class="nl-handbook__grid">
     <article class="nl-handbook__card">
       <h3><%= t("game.buildings.bank_deposit") %></h3>
+      <% wallet_nv = local_assigns.fetch(:wallet_nv, 0).to_i %>
       <%= form_with url: city_building_bank_path("bank"), method: :post, data: {turbo: false} do |f| %>
         <%= f.hidden_field :bank_action, value: "deposit" %>
-        <%= f.number_field :amount, value: 10, min: 1, class: "nl-bank-amount" %>
-        <%= f.submit t("game.buildings.bank_deposit_cta"), class: "lbut" %>
+        <%= f.number_field :amount,
+              value: wallet_nv.positive? ? [10, wallet_nv].min : 1,
+              min: 1,
+              max: [wallet_nv, 1].max,
+              class: "nl-bank-amount" %>
+        <%= f.submit t("game.buildings.bank_deposit_cta"), class: "lbut", disabled: wallet_nv <= 0 %>
+      <% end %>
+      <% if wallet_nv.positive? %>
+        <%= button_to t("game.buildings.bank_deposit_all_cta", amount: wallet_nv),
+              city_building_bank_path("bank"),
+              method: :post,
+              params: {bank_action: "deposit", amount: wallet_nv},
+              class: "lbut",
+              form: {data: {turbo: false, bank_quick: "deposit_all"}} %>
       <% end %>
     </article>
     <article class="nl-handbook__card">
       <h3><%= t("game.buildings.bank_withdraw") %></h3>
+      <% vault_nv = local_assigns.fetch(:vault_nv, 0).to_i %>
       <%= form_with url: city_building_bank_path("bank"), method: :post, data: {turbo: false} do |f| %>
         <%= f.hidden_field :bank_action, value: "withdraw" %>
-        <%= f.number_field :amount, value: 10, min: 1, class: "nl-bank-amount" %>
-        <%= f.submit t("game.buildings.bank_withdraw_cta"), class: "lbut" %>
+        <%= f.number_field :amount,
+              value: vault_nv.positive? ? [10, vault_nv].min : 1,
+              min: 1,
+              max: [vault_nv, 1].max,
+              class: "nl-bank-amount" %>
+        <%= f.submit t("game.buildings.bank_withdraw_cta"), class: "lbut", disabled: vault_nv <= 0 %>
+      <% end %>
+      <% if vault_nv.positive? %>
+        <%= button_to t("game.buildings.bank_withdraw_all_cta", amount: vault_nv),
+              city_building_bank_path("bank"),
+              method: :post,
+              params: {bank_action: "withdraw", amount: vault_nv},
+              class: "lbut",
+              form: {data: {turbo: false, bank_quick: "withdraw_all"}} %>
       <% end %>
     </article>
   </div>
@@ -28,7 +57,7 @@
   <p class="nl-quests-board__meta"><%= t("game.buildings.bank_item_lead") %></p>
   <% stored = local_assigns[:stored_item] %>
   <% if stored.present? %>
-    <p>
+    <p data-bank-item="<%= stored["key"] %>">
       <%= t("game.buildings.bank_item_stored", name: stored["name"], qty: stored["quantity"]) %>
       <%= button_to t("game.buildings.bank_item_withdraw_cta"),
             city_building_bank_item_path("bank"),

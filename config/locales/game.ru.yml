@@ -584,6 +584,8 @@ ru:
       bank_withdraw: "Снятие"
       bank_deposit_cta: "Положить"
       bank_withdraw_cta: "Снять"
+      bank_deposit_all_cta: "Положить все %{amount} NV"
+      bank_withdraw_all_cta: "Снять все %{amount} NV"
       bank_deposited: "В сейф положено %{amount} NV. Остаток сейфа: %{balance}."
       bank_withdrawn: "Из сейфа снято %{amount} NV. Остаток сейфа: %{balance}."
       bank_short_wallet: "В кармане нет %{amount} NV."
