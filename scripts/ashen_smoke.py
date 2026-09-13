@@ -365,6 +365,10 @@ def main() -> int:
             "library covers heal scroll chip",
             ("Лечение" in r.text) or ("heal scroll" in r.text.lower()),
         )
+        report.add(
+            "library covers gear wear",
+            ('data-library-gear-wear="1"' in r.text) and ("Сломано" in r.text),
+        )
 
     r = s.get(f"{BASE}/city/buildings/magic_school", timeout=TIMEOUT, allow_redirects=True)
     report.add(
