@@ -1876,6 +1876,7 @@ A wilderness fight does not move `CharacterPosition`. Its match metadata stores 
 | Submitted direction/target differs from offer | Reject as mismatch. |
 | Target becomes impassable before completion | Fail command; do not update position. |
 | Deferred local action definition | Do not create an offer. |
+| Local-action / location-feature boundary failures | Player-facing alerts use `game.world.*` / `game.flashes.*` i18n keys (ru/en); English copy preserves the prior rejection vocabulary for specs. |
 | `Look Around` with no hostile interruption | Return authored message; grant no invented reward. |
 | Valid wilderness action with a live hostile encounter | Do not complete its intended domain transition; start or reuse the shared fight and preserve its allowlisted destination. |
 | Passive check with a live hostile encounter | Start or reuse the same shared fight and return only its application-local redirect path. |

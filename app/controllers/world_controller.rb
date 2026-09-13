@@ -212,11 +212,11 @@ class WorldController < ApplicationController
   # Accept a Neverlands-shaped current-cell action such as `look`.
   def perform_local_action
     tile = MapTileTemplate.find_by(id: params[:tile_id])
-    return respond_with_world_action_error("Local action is no longer available.") unless tile
+    return respond_with_world_action_error(I18n.t("game.world.local_action_unavailable")) unless tile
 
     local_action_type = params[:local_action_type].to_s
     world_action_type = MapTileTemplate.world_action_type_for(local_action_type)
-    return respond_with_world_action_error("Local action is not supported.") unless world_action_type
+    return respond_with_world_action_error(I18n.t("game.world.local_action_unsupported")) unless world_action_type
 
     result = nil
     ActiveRecord::Base.transaction do

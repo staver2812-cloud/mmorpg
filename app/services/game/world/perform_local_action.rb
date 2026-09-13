@@ -23,23 +23,23 @@ module Game
         character.with_lock do
           character.reload
           @tile = MapTileTemplate.find_by(id: tile&.id)
-          next failure("Local action is no longer available.") unless tile
-          next failure("Local action is not implemented.") unless MapTileTemplate.local_action_implemented?(local_action_type)
+          next failure(I18n.t("game.world.local_action_unavailable")) unless tile
+          next failure(I18n.t("game.world.local_action_not_implemented")) unless MapTileTemplate.local_action_implemented?(local_action_type)
 
           @action_offer = WorldActionOffer.where(character:).lock.find_by(id: action_offer&.id)
-          next failure("Action offer does not match this local action.") unless offer_matches_action?
+          next failure(I18n.t("game.world.action_offer_mismatch")) unless offer_matches_action?
 
           if action_offer.local_action_ends_at && (action_offer.accepted? || action_offer.completed?)
             LocalActionState.new(character:, clock:).call
             action_offer.reload
             next success if action_offer.accepted? || action_offer.completed?
           end
-          next failure("Action offer is no longer accepted.") unless action_offer.accepted?
-          next failure("Local action is not on the current cell.") unless tile_matches_position? && action_offer.matches_position?(character.position)
-          next failure("A local action is still in progress.") if LocalActionState.new(character:, clock:).call
+          next failure(I18n.t("game.world.action_offer_not_accepted")) unless action_offer.accepted?
+          next failure(I18n.t("game.world.local_action_wrong_cell")) unless tile_matches_position? && action_offer.matches_position?(character.position)
+          next failure(I18n.t("game.world.local_action_still_in_progress")) if LocalActionState.new(character:, clock:).call
 
           local_action = tile.local_action(local_action_type)
-          next failure("Local action is no longer available.") unless local_action
+          next failure(I18n.t("game.world.local_action_unavailable")) unless local_action
 
           interruption = InterruptAction.new(character:).call
           if interruption.interrupted?

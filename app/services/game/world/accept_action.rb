@@ -22,18 +22,18 @@ module Game
         character.with_lock do
           character.reload
           if character.active_airship_journey
-            raise ActionViolationError, "Disembark before interacting with the ground"
+            raise ActionViolationError, I18n.t("game.flashes.disembark_first")
           end
 
           @position = character.position&.reload
           if MovementCommand.moving.where(character:).exists?
-            raise ActionViolationError, "Movement already in progress"
+            raise ActionViolationError, I18n.t("game.flashes.movement_in_progress")
           end
           if LocalActionState.new(character:).call
-            raise ActionViolationError, "A local action is already in progress"
+            raise ActionViolationError, I18n.t("game.world.local_action_in_progress")
           end
           if character.arena_participations.joins(:arena_match).merge(ArenaMatch.active).exists?
-            raise ActionViolationError, "Finish the active fight before continuing"
+            raise ActionViolationError, I18n.t("game.world.finish_active_fight")
           end
 
           offer = find_offer

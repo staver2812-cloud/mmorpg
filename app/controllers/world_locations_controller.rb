@@ -32,7 +32,7 @@ class WorldLocationsController < ApplicationController
 
     feature_key = params[:feature_key].to_s
     feature = @building.location_feature(feature_key)
-    raise Game::World::AcceptAction::ActionViolationError, "Location feature is unavailable" unless feature
+    raise Game::World::AcceptAction::ActionViolationError, I18n.t("game.world.location_feature_unavailable") unless feature
 
     offer = Game::World::AcceptAction.new(
       character: current_character,
@@ -95,8 +95,8 @@ class WorldLocationsController < ApplicationController
       metadata["feature"] == feature["feature"]
     return if matches
 
-    offer.fail!("Location feature does not match the offer")
-    raise Game::World::AcceptAction::ActionViolationError, "Location feature does not match the offer"
+    offer.fail!(I18n.t("game.world.location_feature_mismatch"))
+    raise Game::World::AcceptAction::ActionViolationError, I18n.t("game.world.location_feature_mismatch")
   end
 
   def location_feature_path(feature)
@@ -105,6 +105,6 @@ class WorldLocationsController < ApplicationController
     path = CityHotspot.feature_route(feature["feature"])
     return path if path.present?
 
-    raise Game::World::AcceptAction::ActionViolationError, "Location feature is unavailable"
+    raise Game::World::AcceptAction::ActionViolationError, I18n.t("game.world.location_feature_unavailable")
   end
 end
