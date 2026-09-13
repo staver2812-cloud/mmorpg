@@ -224,7 +224,9 @@
       <p class="nl-quests-board__meta" data-dealer-wallet="<%= dealer_wallet.nv_balance.to_i %>">
         <%= t("game.buildings.junk_wallet", amount: dealer_wallet.nv_balance.to_i) %>
       </p>
-      <p class="nl-quests-board__meta" data-dealer-buyback-total="<%= total %>">
+      <p class="nl-quests-board__meta"
+         data-dealer-buyback-total="<%= total %>"
+         data-dealer-can-sell="<%= offers.any? ? "1" : "0" %>">
         <%= t("game.buildings.dealer_house_buyback", total: total, lines: offers.size) %>
       </p>
       <p>
@@ -245,7 +247,8 @@
       <p class="nl-quests-board__meta"
          data-auction-wallet="<%= wallet.nv_balance.to_i %>"
          data-auction-vault="<%= vault %>"
-         data-auction-vm="<%= wallet.veil_marks.to_i %>">
+         data-auction-vm="<%= wallet.veil_marks.to_i %>"
+         data-auction-lots="deferred">
         <%= t("game.buildings.auction_treasury",
               wallet: wallet.nv_balance.to_i,
               vault: vault,

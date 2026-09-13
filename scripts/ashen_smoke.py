@@ -539,6 +539,7 @@ def main() -> int:
         and 'data-building-key="dealer_house"' in r.text
         and ("data-dealer-buyback-total=" in r.text)
         and ("data-dealer-wallet=" in r.text)
+        and ("data-dealer-can-sell=" in r.text)
         and ("Скупщик" in r.text or "Ash Buyer" in r.text or "junk_dealer" in r.text),
         f"url={r.url}",
     )
