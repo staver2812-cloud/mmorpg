@@ -210,8 +210,10 @@ def main() -> int:
 
     ok_main, d1 = click_hotspot(s, "go_main")
     report.add("travel go_main", ok_main, d1)
-    ok, detail = click_hotspot(s, "go_forpost3")
-    report.add("travel go_forpost3", ok, detail)
+    ok_f1, d_f1 = click_hotspot(s, "go_forpost1")
+    report.add("travel go_forpost1 for library", ok_f1, d_f1)
+    ok_f2, d_f2 = click_hotspot(s, "go_forpost2")
+    report.add("travel go_forpost2", ok_f2, d_f2)
 
     r = s.get(f"{BASE}/city/buildings/library", timeout=TIMEOUT, allow_redirects=True)
     report.add(
@@ -219,6 +221,13 @@ def main() -> int:
         r.status_code == 200 and "Справочник Пепельной Завесы" in r.text,
         f"url={r.url}",
     )
+
+    ok_main2, _ = click_hotspot(s, "go_forpost1")
+    report.add("return forpost1 after library", ok_main2)
+    ok_main3, d1b = click_hotspot(s, "go_main")
+    report.add("return main before forpost3", ok_main3, d1b)
+    ok, detail = click_hotspot(s, "go_forpost3")
+    report.add("travel go_forpost3", ok, detail)
 
     r = s.get(f"{BASE}/city/buildings/temple", timeout=TIMEOUT, allow_redirects=True)
     report.add(
