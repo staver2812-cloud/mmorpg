@@ -286,7 +286,7 @@ en:
       bait_ambush: "%{name} lunges at the bait!"
       local_action_in_progress: "A local action is already in progress."
       passive_rule: "Without bait, bots ambush on their own about once every 5 minutes."
-      starter_tip: "Ashen Shore loop: Shop / bait → West Gate → Look on a hostile cell (or wait 5 min) → fight → Quests in Coal Hall → Hospital to rest."
+      starter_tip: "Ashen Shore loop: Shop / bait → West Gate → Look (or wait 5 min) → fight → Coal Hall quests → Ash Buyer on Burned Market → Infirmary if injured."
     details:
       price: "Price"
       quantity: "Qty"
@@ -504,6 +504,7 @@ en:
       junk_aria: "Material buyback"
       junk_title: "Ash Buyer"
       junk_lead: "Buys chips, tails, bait, and bandages for NV. No license required."
+      junk_dealer_link: "Open Ash Buyer"
       junk_empty: "Nothing to sell to the buyer."
       junk_sell_one: "Sell 1"
       junk_sell_all: "Sell all"
@@ -570,6 +571,11 @@ en:
       account_deletion_unavailable: "Account deletion is not available in the current MVP."
     injuries:
       blocks_movement: "Heavy injury: wilderness travel locked. Visit Coal Infirmary first."
+      summary: "Injuries: %{list}"
+      hospital_hint: "Open Coal Infirmary"
+      severity:
+        light: "light"
+        heavy: "heavy"
     quests:
       title: "Ashen Veil Quests"
       hint: "Starter contracts from Coal Hall. Bots ambush about every 5 minutes; forced fights need Ashen Bait."

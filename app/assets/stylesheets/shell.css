@@ -69,6 +69,26 @@
 .nl-player-link:hover { color: var(--nl-link); }
 .nl-player-level { color: var(--nl-text-soft); }
 
+.nl-injury-chip {
+  margin-left: 6px;
+  padding: 1px 6px;
+  border: 1px solid #8a5a2b;
+  background: #2a1c12;
+  color: #e6c38a;
+  font-size: 11px;
+  font-weight: 700;
+  text-decoration: none;
+  white-space: nowrap;
+}
+
+.nl-injury-chip:hover { color: #fff3d0; border-color: #c48a3c; }
+
+.nl-injury-chip--heavy {
+  border-color: #a33;
+  color: #f0a0a0;
+  background: #2a1212;
+}
+
 .nl-vitals-inline {
   gap: 3px;
   margin-left: 3px;

@@ -54,12 +54,17 @@ module Game
       end
 
       def summary_ru
+        summary
+      end
+
+      def summary
         labels = active.map do |row|
-          row["severity"].to_s == "heavy" ? "тяжёлая" : "лёгкая"
+          key = (row["severity"].to_s == "heavy") ? "heavy" : "light"
+          I18n.t("game.injuries.severity.#{key}")
         end
         return nil if labels.empty?
 
-        "Травмы: #{labels.join(", ")}"
+        I18n.t("game.injuries.summary", list: labels.join(", "))
       end
 
       private
