@@ -1155,7 +1155,7 @@ Final rerun results are in the
 - 2026-09-13: Salt Auction shows wallet/vault/VM treasury snapshot with Shop/Buyer/Bank links (lots still deferred; `data-auction-wallet`/`vault`/`vm`). Library repair card corrected to deferred `[EVIDENCE]`.
 - 2026-09-13: Dealer House mirrors Ash Buyer wallet NV beside buyback estimate (`data-dealer-wallet`).
 - 2026-09-13: Clan Hall embeds the colocated Presence/Assault list for meetup PvP.
-- 2026-09-13: Knowledge Quarter schools show a live skill/profession snapshot board (no invented training formulas).
+- 2026-09-13: Knowledge Quarter schools show a live skill/profession snapshot board (no invented training formulas); unspent points link to allocate stats/skills (`data-school-unspent`).
 - 2026-09-13: Law Abode notes Cistern east-gate outdoor handoff; smoke covers east exit and Enter back.
 - 2026-09-13: Law Abode shows wallet NV and greys out paid alignment changes when short on NV.
 - 2026-09-13: Temple rite greys out without light injuries or NV; shows wallet + injury markers.
