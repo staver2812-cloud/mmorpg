@@ -602,6 +602,11 @@ def main() -> int:
             "outdoor bait chip",
             ("Приманка:" in r.text) or ("nl-bait-chip" in r.text),
         )
+        if "nl-obelisk-chip" in r.text or "data-obelisk-chip-affordable=" in r.text:
+            report.add(
+                "outdoor obelisk chip affordability",
+                ("data-obelisk-chip-affordable=" in r.text) or ("nl-obelisk-chip-form" in r.text),
+            )
         ok_enter_w, d_enter_w = enter_building(s)
         report.add("enter city after west_gate", ok_enter_w, d_enter_w)
         r = s.get(f"{BASE}/world", timeout=TIMEOUT)
