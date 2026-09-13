@@ -751,6 +751,7 @@ en:
       junk_lead: "Buys chips, tails, bait, bandages, ash herbs, and surplus thematic T5 gear for NV. No license required."
       junk_dealer_link: "Open Ash Buyer"
       junk_empty: "Nothing to sell to the buyer."
+      junk_estimate: "Ready to sell: %{lines} lines · up to %{total} NV"
       junk_sell_one: "Sell 1"
       junk_sell_all: "Sell all"
       junk_sold: "Sold %{name} ×%{qty} for %{amount} NV."

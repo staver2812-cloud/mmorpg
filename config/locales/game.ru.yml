@@ -751,6 +751,7 @@ ru:
       junk_lead: "Берёт щепу, хвосты, приманки, бинты, траву и лишние тематические вещи T5 за NV. Лицензия не нужна."
       junk_dealer_link: "Открыть Скупщика Пепла"
       junk_empty: "Нечего сдать скупщику."
+      junk_estimate: "К сдаче: %{lines} поз. · до %{total} NV"
       junk_sell_one: "Сдать 1"
       junk_sell_all: "Сдать всё"
       junk_sold: "Скупщик взял %{name} ×%{qty} за %{amount} NV."

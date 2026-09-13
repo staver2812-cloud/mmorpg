@@ -1,11 +1,16 @@
-<section class="nl-handbook" aria-label="<%= t("game.buildings.junk_aria") %>">
+<section class="nl-handbook" aria-label="<%= t("game.buildings.junk_aria") %>"
+         data-junk-lines="<%= local_assigns.fetch(:offers, []).size %>">
   <h2><%= t("game.buildings.junk_title") %></h2>
   <p class="nl-handbook__lead"><%= t("game.buildings.junk_lead") %></p>
 
   <% rows = local_assigns.fetch(:offers, []) %>
+  <% total = rows.sum { |row| row[:quantity].to_i * row[:price].to_i } %>
   <% if rows.empty? %>
-    <p class="nl-empty-note"><%= t("game.buildings.junk_empty") %></p>
+    <p class="nl-empty-note" data-junk-total="0"><%= t("game.buildings.junk_empty") %></p>
   <% else %>
+    <p class="nl-quests-board__meta" data-junk-total="<%= total %>">
+      <%= t("game.buildings.junk_estimate", total: total, lines: rows.size) %>
+    </p>
     <table class="nl-detail-table nl-city-building-table">
       <thead>
         <tr>
@@ -17,10 +22,10 @@
       </thead>
       <tbody>
         <% rows.each do |row| %>
-          <tr>
+          <tr data-junk-item="<%= row[:key] %>">
             <td><%= row[:name] %></td>
             <td><%= row[:quantity] %></td>
-            <td><%= row[:price] %> NV</td>
+            <td><%= row[:price] %> NV · <%= row[:quantity].to_i * row[:price].to_i %> NV</td>
             <td>
               <%= button_to t("game.buildings.junk_sell_one"),
                     city_building_sell_path("junk_dealer"),
