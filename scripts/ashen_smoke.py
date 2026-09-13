@@ -593,7 +593,8 @@ def main() -> int:
         and ("data-arena-hp=" in r.text)
         and ("data-arena-mp=" in r.text)
         and ("data-arena-apps=" in r.text)
-        and ("data-arena-room-accessible=" in r.text),
+        and ("data-arena-room-accessible=" in r.text)
+        and ("A character is required" not in r.text),
         f"url={r.url}",
     )
     r = s.get(f"{BASE}/city/buildings/tavern", timeout=TIMEOUT, allow_redirects=True)
