@@ -617,5 +617,15 @@ RSpec.describe "ArenaMatches", type: :request do
 
       expect(response).to redirect_to(world_path)
     end
+
+    it "appends a combat trauma infirmary hint on finish" do
+      character.update!(in_combat: true)
+      Game::Combat::InjuryState.new(character:).apply!(severity: "combat", duration: 12.hours)
+
+      post finish_arena_match_path(completed_match)
+
+      expect(response).to redirect_to(arena_index_path)
+      expect(flash[:notice]).to include(I18n.t("game.injuries.combat_finish_hint"))
+    end
   end
 end

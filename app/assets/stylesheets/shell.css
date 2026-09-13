@@ -338,6 +338,15 @@ button.nl-nav-link:disabled {
   background: #e8c0c0;
 }
 
+.nl-profile-assault {
+  margin-top: 8px;
+}
+
+.nl-profile-assault .nl-quests-board__meta {
+  margin-top: 4px;
+  font-size: 11px;
+}
+
 .nl-player-arrow,
 .nl-player-icon,
 .nl-player-lvl,

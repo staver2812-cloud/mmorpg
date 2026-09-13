@@ -34,6 +34,22 @@ quests:
       item_key: wood_chips
     sort: 2
 
+  ash_healer_first_bag:
+    title_ru: "Первая сумка Лекаря"
+    title_en: "First Healer Bag"
+    summary_ru: "Скрафтите «Сумку новичка-лекаря» в Лазарете Угля (бинт + трава + щепа) и сдайте её в Ратушу."
+    summary_en: "Craft a Novice Healer Bag at Coal Infirmary (bandage + herb + chips) and turn it in at City Hall."
+    giver: "Ратуша Угля"
+    objective:
+      type: deliver_item
+      item_key: healer_bag_light
+      count: 1
+    reward:
+      experience: 40
+      currency_nv: 30
+      item_key: ash_herb
+    sort: 3
+
   veil_tail_delivery:
     title_ru: "Хвост Завесы"
     title_en: "Veil Tail Delivery"

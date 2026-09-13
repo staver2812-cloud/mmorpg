@@ -24,4 +24,19 @@ RSpec.describe Game::Shop::JunkBuyback do
     expect(wallet.reload.nv_balance).to eq(before + 2)
     expect(character.inventory.inventory_items.joins(:item_template).where(item_templates: {key: "wood_chips"}).sum(:quantity)).to eq(1)
   end
+
+  it "buys ash herbs for NV" do
+    Game::Inventory::Manager.new(inventory: character.inventory).add_item!(
+      item_template: ItemTemplate.find_by!(key: "ash_herb"),
+      quantity: 2
+    )
+    wallet = character.user.currency_wallet || character.user.create_currency_wallet!(nv_balance: 0)
+    before = wallet.nv_balance
+
+    result = described_class.new(character:, item_key: "ash_herb", quantity: 1).call
+
+    expect(result.success).to be(true)
+    expect(result.paid).to eq(2)
+    expect(wallet.reload.nv_balance).to eq(before + 2)
+  end
 end

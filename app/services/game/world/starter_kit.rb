@@ -6,20 +6,22 @@ module Game
     # Grants bait, starter NV, and a free equipped blade so the shore loop is
     # reachable without an empty wallet or bare fists.
     class StarterKit
-      METADATA_KEY = "ashen_starter_kit_v4"
-      LEGACY_METADATA_KEYS = %w[ashen_starter_kit_v1 ashen_starter_kit_v2 ashen_starter_kit_v3].freeze
+      METADATA_KEY = "ashen_starter_kit_v5"
+      LEGACY_METADATA_KEYS = %w[ashen_starter_kit_v1 ashen_starter_kit_v2 ashen_starter_kit_v3 ashen_starter_kit_v4].freeze
       STARTER_NV = 100
       STARTER_VEIL_MARKS = 40
       NV_REASON = "ashen.starter_kit_nv"
       VM_REASON = "ashen.starter_kit_veil_marks"
       WEAPON_KEY = "ashen_starter_blade"
-      # Keep craft mats inside a level-0 carrying capacity (~15) after bait+blade+bandage.
+      # Keep craft mats inside a level-0 carrying capacity (~15) after bait+blade+bandage+herbs.
       CRAFT_MATS = {
         "wood_chips" => 3,
         "rat_tail" => 2
       }.freeze
       STARTER_BANDAGE = 1
       BANDAGE_KEY = "ashen_bandage"
+      STARTER_HERB = 2
+      HERB_KEY = "ash_herb"
 
       def initialize(character:)
         @character = character
@@ -32,6 +34,7 @@ module Game
           grant_bait!
           grant_craft_mats!
           grant_bandage!
+          grant_herbs!
           grant_starter_nv!
           grant_starter_veil_marks!
           mark_granted!
@@ -105,6 +108,19 @@ module Game
         inventory = ensure_inventory!
         have = inventory.inventory_items.where(item_template: template, equipped: false).sum(:quantity)
         need = STARTER_BANDAGE - have
+        return unless need.positive?
+
+        add_fitting!(inventory:, template:, quantity: need)
+      end
+
+      def grant_herbs!
+        Game::Professions::Templates.ensure_craft_items!
+        template = ItemTemplate.find_by(key: HERB_KEY)
+        return unless template
+
+        inventory = ensure_inventory!
+        have = inventory.inventory_items.where(item_template: template, equipped: false).sum(:quantity)
+        need = STARTER_HERB - have
         return unless need.positive?
 
         add_fitting!(inventory:, template:, quantity: need)
@@ -194,7 +210,8 @@ module Game
               "veil_marks" => STARTER_VEIL_MARKS,
               "weapon" => WEAPON_KEY,
               "craft_mats" => CRAFT_MATS,
-              "bandage" => STARTER_BANDAGE
+              "bandage" => STARTER_BANDAGE,
+              "herbs" => STARTER_HERB
             }
           )
         )

@@ -10,7 +10,8 @@ module Game
         "wood_chips" => 1,
         "rat_tail" => 2,
         "ashen_bait" => 2,
-        "ashen_bandage" => 4
+        "ashen_bandage" => 4,
+        "ash_herb" => 2
       }.freeze
 
       def initialize(character:, item_key:, quantity: 1)

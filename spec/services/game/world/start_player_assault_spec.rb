@@ -63,4 +63,11 @@ RSpec.describe Game::World::StartPlayerAssault do
     expect(result.success).to be(false)
     expect(result.message).to eq(I18n.t("game.world.assault_safe_zone"))
   end
+
+  it "reports offerable presence for colocated online players outside safe zones" do
+    expect(described_class.offerable?(attacker:, defender:)).to be(true)
+
+    defender_position.update!(x: 9, y: 9)
+    expect(described_class.offerable?(attacker:, defender: defender.reload)).to be(false)
+  end
 end

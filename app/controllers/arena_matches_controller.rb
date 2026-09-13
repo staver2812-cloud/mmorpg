@@ -128,12 +128,16 @@ class ArenaMatchesController < ApplicationController
     current_character.exit_combat! if current_character.in_combat?
 
     recovery = Game::World::DefeatRecovery.new(character: current_character).call
-    injury_note = Game::Combat::InjuryState.new(character: current_character).summary_ru
+    injury_state = Game::Combat::InjuryState.new(character: current_character)
+    injury_note = injury_state.summary
+    combat_hint = if injury_state.active.any? { |row| row["severity"].to_s == "combat" }
+      I18n.t("game.injuries.combat_finish_hint")
+    end
+    notice_parts = [recovery.recovered ? recovery.message : I18n.t("game.flashes.fight_finished"), injury_note, combat_hint]
+    notice = notice_parts.compact.join(" ")
     if recovery.recovered
-      notice = [recovery.message, injury_note].compact.join(" ")
       redirect_to recovery.path, notice:, status: :see_other
     else
-      notice = [I18n.t("game.flashes.fight_finished"), injury_note].compact.join(" ")
       redirect_to finish_destination_path, notice:, status: :see_other
     end
   end

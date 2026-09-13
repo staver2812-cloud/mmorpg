@@ -18,12 +18,12 @@ RSpec.describe Game::Quests::Journal do
     expect(state["progress"]).to eq(0)
   end
 
-  it "advances kill objectives for matching npc keys" do
-    journal.accept!("ash_mite_patrol")
-    journal.record_npc_kill!(npc_key: "plague_rat")
-    journal.record_npc_kill!(npc_key: "plague_rat")
+  it "accepts the Ash Healer first-bag delivery contract" do
+    result = journal.accept!("ash_healer_first_bag")
 
-    state = character.reload.metadata.dig("ashen_quests", "ash_mite_patrol")
-    expect(state["progress"]).to eq(2)
+    expect(result.success).to eq(true)
+    state = character.reload.metadata.dig("ashen_quests", "ash_healer_first_bag")
+    expect(state["status"]).to eq("active")
+    expect(Game::Quests::Catalog.find("ash_healer_first_bag").dig("objective", "item_key")).to eq("healer_bag_light")
   end
 end

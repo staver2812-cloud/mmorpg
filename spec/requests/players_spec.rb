@@ -207,5 +207,38 @@ RSpec.describe "Players", type: :request do
 
       expect(response).to have_http_status(:not_found)
     end
+
+    it "shows colocated Assault on a foreign player profile" do
+      zone = create(:zone, name: "Assault Square", location_type: "outdoor")
+      viewer = create(:character, name: "ViewerAsh", level: 4)
+      target = create(:character, name: "TargetAsh", level: 4)
+      create(:character_position, character: viewer, zone:, x: 4, y: 4)
+      create(:character_position, character: target, zone:, x: 4, y: 4)
+      create(:user_session, user: viewer.user)
+      create(:user_session, user: target.user)
+      sign_in viewer.user, scope: :user
+
+      get player_path(name: target.name)
+
+      expect(response).to have_http_status(:ok)
+      expect(response.body).to include(world_assault_path)
+      expect(response.body).to include(I18n.t("game.world.assault_cta"))
+    end
+
+    it "hides Assault on a foreign profile when not colocated" do
+      zone = create(:zone, name: "Assault Far", location_type: "outdoor")
+      viewer = create(:character, name: "ViewerFar", level: 4)
+      target = create(:character, name: "TargetFar", level: 4)
+      create(:character_position, character: viewer, zone:, x: 1, y: 1)
+      create(:character_position, character: target, zone:, x: 8, y: 8)
+      create(:user_session, user: viewer.user)
+      create(:user_session, user: target.user)
+      sign_in viewer.user, scope: :user
+
+      get player_path(name: target.name)
+
+      expect(response).to have_http_status(:ok)
+      expect(response.body).not_to include('action="' + world_assault_path + '"')
+    end
   end
 end

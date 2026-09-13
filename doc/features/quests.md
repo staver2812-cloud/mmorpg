@@ -42,7 +42,8 @@ reject safely.
 
 Focused service/request coverage exists for accept, incomplete turn-in, and
 reward grant paths where present. Live smoke exercises accept on
-`veil_tail_delivery`.
+`veil_tail_delivery`. Starter craft contracts include Tar Smith bandage and
+Ash Healer novice bag (`ash_healer_first_bag`).
 
 ## 6. Non-goals
 
@@ -54,6 +55,7 @@ reward grant paths where present. Live smoke exercises accept on
 
 | Date | Change |
 |---|---|
+| 2026-09-13 | Added Ash Healer first-bag delivery contract (`ash_healer_first_bag`). |
 | 2026-09-13 | Promoted from NOT_IMPLEMENTED: Ashen starter journal + kill/delivery loop. |
 | 2026-08-26 | Gap record under feature-gap-v2. |
 | 2026-07-29 | Recorded audited NOT_IMPLEMENTED boundary. |
