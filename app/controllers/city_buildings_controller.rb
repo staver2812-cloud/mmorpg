@@ -32,6 +32,11 @@ class CityBuildingsController < ApplicationController
       @veil_marks = (current_user.currency_wallet || current_user.create_currency_wallet!(nv_balance: 0)).veil_marks.to_i
       @premium_offers = Game::Shop::PremiumScrollPurchase::OFFERINGS
     end
+    if @building_key == "bank"
+      wallet = current_user.currency_wallet || current_user.create_currency_wallet!(nv_balance: 0)
+      @bank_wallet_nv = wallet.nv_balance.to_i
+      @bank_vault_nv = Game::World::BankVault.balance_for(current_character)
+    end
     prepare_presence_context
   end
 
@@ -115,6 +120,23 @@ class CityBuildingsController < ApplicationController
       redirect_to city_building_path("temple"), notice: result.message
     else
       redirect_to city_building_path("temple"), alert: result.message
+    end
+  end
+
+  def bank
+    unless @building_key == "bank"
+      redirect_to world_path, alert: I18n.t("game.buildings.bank_only") and return
+    end
+
+    result = Game::World::BankVault.new(
+      character: current_character,
+      amount: params[:amount],
+      action: params[:bank_action]
+    ).call
+    if result.success
+      redirect_to city_building_path("bank"), notice: result.message
+    else
+      redirect_to city_building_path("bank"), alert: result.message
     end
   end
 

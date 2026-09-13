@@ -27,6 +27,8 @@
           <%= t("game.professions.workshop_notice") %>
         <% elsif @building["kind"] == "junk_buyback" %>
           <%= t("game.buildings.junk_lead") %>
+        <% elsif @building["kind"] == "bank" %>
+          <%= t("game.buildings.bank_lead", wallet: @bank_wallet_nv, vault: @bank_vault_nv) %>
         <% elsif @building["kind"] == "temple" %>
           <%= t("game.buildings.temple_rite_lead", amount: Game::World::TempleBlessing::COST_NV) %>
         <% elsif @building["kind"] == "tavern" %>
@@ -65,6 +67,11 @@
         <%= render "city_buildings/tavern", building: @building %>
       <% when "temple" %>
         <%= render "city_buildings/temple", building: @building %>
+      <% when "bank" %>
+        <%= render "city_buildings/bank",
+              building: @building,
+              wallet_nv: @bank_wallet_nv,
+              vault_nv: @bank_vault_nv %>
       <% when "landmark" %>
         <%= render "city_buildings/landmark", building: @building, building_key: @building_key %>
       <% end %>

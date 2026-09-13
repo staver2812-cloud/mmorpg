@@ -1,0 +1,28 @@
+<section class="nl-handbook" aria-label="<%= t("game.buildings.bank_aria") %>">
+  <h2><%= t("game.buildings.bank_title") %></h2>
+  <p class="nl-handbook__lead">
+    <%= t("game.buildings.bank_lead",
+          wallet: local_assigns.fetch(:wallet_nv, 0),
+          vault: local_assigns.fetch(:vault_nv, 0)) %>
+  </p>
+  <div class="nl-handbook__grid">
+    <article class="nl-handbook__card">
+      <h3><%= t("game.buildings.bank_deposit") %></h3>
+      <%= form_with url: city_building_bank_path("bank"), method: :post, data: {turbo: false} do |f| %>
+        <%= f.hidden_field :bank_action, value: "deposit" %>
+        <%= f.number_field :amount, value: 10, min: 1, class: "nl-bank-amount" %>
+        <%= f.submit t("game.buildings.bank_deposit_cta"), class: "lbut" %>
+      <% end %>
+    </article>
+    <article class="nl-handbook__card">
+      <h3><%= t("game.buildings.bank_withdraw") %></h3>
+      <%= form_with url: city_building_bank_path("bank"), method: :post, data: {turbo: false} do |f| %>
+        <%= f.hidden_field :bank_action, value: "withdraw" %>
+        <%= f.number_field :amount, value: 10, min: 1, class: "nl-bank-amount" %>
+        <%= f.submit t("game.buildings.bank_withdraw_cta"), class: "lbut" %>
+      <% end %>
+    </article>
+  </div>
+</section>
+
+<%= render "city_buildings/landmark", building: building, building_key: "bank" %>
