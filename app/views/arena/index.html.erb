@@ -62,7 +62,10 @@
         <tr>
           <% row.each do |room| %>
             <% accessible = room.accessible_by?(current_character) %>
-            <td class="nl-arena-room-cell <%= accessible ? 'nl-arena-room-cell--open' : 'nl-arena-room-cell--locked' %>">
+            <td class="nl-arena-room-cell <%= accessible ? 'nl-arena-room-cell--open' : 'nl-arena-room-cell--locked' %>"
+                data-arena-room="<%= room.id %>"
+                data-arena-room-accessible="<%= accessible ? "1" : "0" %>"
+                data-arena-room-apps="<%= room.open_application_count %>">
               <b><%= room_type_badge(room.room_type) %></b> [ <%= room.open_application_count %> ]<br>
               <span><%= room.level_min %>-<%= room.level_max %></span><br>
               <% if accessible %>
