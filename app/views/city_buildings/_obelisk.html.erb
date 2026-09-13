@@ -7,7 +7,7 @@
   <% balance = wallet.nv_balance.to_d %>
   <% recall_cost = Game::World::ObeliskRecall::RECALL_COST.to_d %>
   <% can_recall = bound.present? && balance >= recall_cost %>
-  <p class="nl-quests-board__meta" data-obelisk-wallet="<%= balance.to_i %>">
+  <p class="nl-quests-board__meta" data-obelisk-wallet="<%= balance.to_i %>" data-obelisk-can-recall="<%= can_recall ? "1" : "0" %>">
     <%= t("game.buildings.obelisk_wallet", amount: balance.to_i) %>
   </p>
   <% if bound.present? %>
