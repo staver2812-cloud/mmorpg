@@ -201,6 +201,8 @@ en:
       max_price: "Maximum price"
       empty_section: "There are no items in this shop section."
       empty_sell: "There are no sellable items in inventory."
+      junk_hint_short: "Ash Buyer — on the Market"
+      junk_hint: "No license needed: chips, tails, bait, bandages, and spare T5 sell to the Ash Buyer on Coal Market."
       cost: "Cost"
       stock: "Stock"
       merchant_title: "Merchant qualification"

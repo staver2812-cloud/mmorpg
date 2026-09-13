@@ -55,6 +55,15 @@
             <div><%= t("game.shop.shop_funds_html",
               nv: number_with_precision(@shop_account.nv_balance, precision: 2)).html_safe %></div>
           <% end %>
+          <% if @mode == "sell" %>
+            <div>
+              <% if Game::World::CityBuildingCatalog.accessible?(character: current_character, building_key: "junk_dealer") %>
+                <%= link_to t("game.buildings.junk_dealer_link"), city_building_path("junk_dealer"), class: "nl-shop-junk-link" %>
+              <% else %>
+                <span class="nl-shop-junk-hint" title="<%= t("game.shop.junk_hint") %>"><%= t("game.shop.junk_hint_short") %></span>
+              <% end %>
+            </div>
+          <% end %>
         </div>
       <% end %>
       <% if @mode == "licenses" %>
