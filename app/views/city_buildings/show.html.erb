@@ -48,14 +48,14 @@
         <% elsif @building["kind"] == "tavern" %>
           <%= t("game.buildings.tavern_rest_lead") %>
         <% elsif @building["kind"] == "landmark" %>
-          Интерьер открыт. Игровые действия здания появятся в следующих срезах.
+          <%= t("game.buildings.landmark_open_lead") %>
         <% elsif @building["kind"] == "hospital" %>
           <%= t("game.buildings.hospital_rest_lead") %>
           <% if @injury_summary.present? %>
             <br><strong><%= @injury_summary %></strong>
           <% end %>
         <% else %>
-          Поверхность пока read-only: без покупки, продажи, лечения и аренды.
+          <%= t("game.buildings.landmark_readonly_lead") %>
         <% end %>
       </p>
 

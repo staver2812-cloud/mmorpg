@@ -9,9 +9,8 @@
     <p><%= link_to t("game.buildings.law_open_cta"), city_building_path("law_abode"), class: "lbut" %></p>
     <p class="nl-quests-board__meta" data-gallows-east="1"><%= t("game.buildings.gallows_east_gate") %></p>
   <% else %>
-    <p class="nl-handbook__lead">
-      Интерьер открыт для осмотра. Игровые действия — отдельным срезом.
-      Выход: кнопка «<%= t("arena.nav.city") %>» в шапке — без тупика.
+    <p class="nl-handbook__lead" data-landmark-inspect="1">
+      <%= t("game.buildings.landmark_inspect_lead", city: t("arena.nav.city")) %>
     </p>
   <% end %>
 </section>
