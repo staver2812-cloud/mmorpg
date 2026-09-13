@@ -28,6 +28,10 @@ module Game
         active.any? { |row| %w[heavy combat].include?(row["severity"].to_s) }
       end
 
+      def combat_trauma?
+        active.any? { |row| row["severity"].to_s == "combat" }
+      end
+
       def apply!(severity:, duration:, source_match_id: nil)
         raise ArgumentError, "unknown severity" unless SEVERITIES.include?(severity.to_s)
 

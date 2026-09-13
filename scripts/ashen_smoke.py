@@ -210,6 +210,11 @@ def main() -> int:
         r.status_code == 200 and (("Напасть:" in r.text) or ("nl-trauma-chip" in r.text) or ("Attack:" in r.text)),
         f"url={r.url}",
     )
+    report.add(
+        "heal scroll chip on square",
+        r.status_code == 200 and (("Лечение:" in r.text) or ("nl-heal-chip" in r.text) or ("Heal:" in r.text)),
+        f"url={r.url}",
+    )
 
     ok, detail = click_hotspot(s, "go_forpost1")
     report.add("travel go_forpost1", ok, detail)

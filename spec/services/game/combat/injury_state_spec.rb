@@ -21,5 +21,6 @@ RSpec.describe Game::Combat::InjuryState do
 
     expect(state.summary).to match(/боевая|combat/i)
     expect(state.summary).to match(/11ч|11h|12ч|12h/)
+    expect(state.combat_trauma?).to be(true)
   end
 end

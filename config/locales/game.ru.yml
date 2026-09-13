@@ -316,6 +316,8 @@ ru:
       bait_chip_city_hint: "Купите Приманку Завесы в Лавке Реликвий или Соляной Лавке"
       trauma_scroll_chip: "Напасть: %{count}"
       trauma_scroll_chip_hint: "Свитки боевой травмы для «Напасть». Покупка — в Лазарете за VM."
+      heal_scroll_chip: "Лечение: %{count}"
+      heal_scroll_chip_hint: "Свитки снятия боевой травмы. Покупка — в Лазарете за VM; применение из инвентаря."
       fatigue_chip: "Усталость: %{percent}%"
       fatigue_chip_hint: "На 86%+ блокируется ход. Таверна Угля снимает усталость сразу."
       alignment_chip: "Склонность?"

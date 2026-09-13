@@ -16,4 +16,14 @@ RSpec.describe Game::Shop::PremiumScrollPurchase do
       character.inventory.inventory_items.joins(:item_template).where(item_templates: {key: "combat_trauma_scroll"}).sum(:quantity)
     ).to eq(1)
   end
+
+  it "reports owned premium scroll quantities" do
+    character = create(:character)
+    Game::Professions::Templates.ensure_craft_items!
+    template = ItemTemplate.find_by!(key: "combat_heal_scroll")
+    create(:inventory_item, inventory: character.inventory, item_template: template, quantity: 2, equipped: false)
+
+    expect(described_class.owned_quantity(character, "combat_heal_scroll")).to eq(2)
+    expect(described_class.owned_quantity(character, "combat_trauma_scroll")).to eq(0)
+  end
 end

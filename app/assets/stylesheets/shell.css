@@ -215,6 +215,29 @@ a.nl-trauma-chip:hover {
   opacity: 0.9;
 }
 
+.nl-heal-chip {
+  margin-left: 6px;
+  padding: 1px 6px;
+  border: 1px solid #3a6a4a;
+  background: #101a12;
+  color: #a8e0b8;
+  font-size: 11px;
+  font-weight: 700;
+  white-space: nowrap;
+  text-decoration: none;
+}
+
+a.nl-heal-chip:hover {
+  color: #d0ffd8;
+  border-color: #60a070;
+}
+
+.nl-heal-chip--empty {
+  border-color: #405a48;
+  color: #90c0a0;
+  opacity: 0.9;
+}
+
 .nl-vitals-inline {
   gap: 3px;
   margin-left: 3px;

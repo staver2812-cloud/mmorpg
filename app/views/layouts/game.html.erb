@@ -57,6 +57,19 @@
             </span>
           <% end %>
         <% end %>
+        <% heal_scrolls = Game::Shop::PremiumScrollPurchase.owned_quantity(current_character, "combat_heal_scroll") %>
+        <% if heal_scrolls.positive? || Game::World::CityBuildingCatalog.accessible?(character: current_character, building_key: "hospital") %>
+          <% if Game::World::CityBuildingCatalog.accessible?(character: current_character, building_key: "hospital") %>
+            <%= link_to t("game.world.heal_scroll_chip", count: heal_scrolls),
+                  city_building_path("hospital"),
+                  class: "nl-heal-chip#{' nl-heal-chip--empty' if heal_scrolls <= 0}",
+                  title: t("game.world.heal_scroll_chip_hint") %>
+          <% elsif heal_scrolls.positive? %>
+            <span class="nl-heal-chip" title="<%= t("game.world.heal_scroll_chip_hint") %>">
+              <%= t("game.world.heal_scroll_chip", count: heal_scrolls) %>
+            </span>
+          <% end %>
+        <% end %>
         <% if current_character.alignment.to_s == "none" && Game::World::CityBuildingCatalog.accessible?(character: current_character, building_key: "law_abode") %>
           <%= link_to t("game.world.alignment_chip"),
                 city_building_path("law_abode"),

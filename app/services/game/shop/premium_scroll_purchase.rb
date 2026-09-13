@@ -10,6 +10,16 @@ module Game
         "combat_heal_scroll" => 20
       }.freeze
 
+      def self.owned_quantity(character, item_key)
+        return 0 unless character&.inventory
+
+        Game::Professions::Templates.ensure_craft_items!
+        template = ItemTemplate.find_by(key: item_key.to_s)
+        return 0 unless template
+
+        character.inventory.inventory_items.where(item_template: template, equipped: false).sum(:quantity)
+      end
+
       def initialize(character:, item_key:)
         @character = character
         @item_key = item_key.to_s
