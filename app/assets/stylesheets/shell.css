@@ -117,6 +117,11 @@
   white-space: nowrap;
 }
 
+a.nl-bait-chip:hover {
+  color: #fff0c0;
+  border-color: #a08840;
+}
+
 .nl-bait-chip--empty {
   border-color: #5a4040;
   color: #c09090;
