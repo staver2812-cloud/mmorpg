@@ -99,11 +99,13 @@
       <tbody>
         <% @rooms.each do |room| %>
           <% accessible = room.accessible_by?(current_character) %>
-          <tr class="<%= accessible ? '' : 'nl-arena-row--locked' %>">
+          <tr class="<%= accessible ? '' : 'nl-arena-row--locked' %>"
+              data-arena-room-row="<%= room.id %>"
+              data-arena-room-accessible="<%= accessible ? "1" : "0" %>">
             <td><%= room_type_badge(room.room_type) %></td>
             <td><%= room.level_min %>-<%= room.level_max %></td>
-            <td><%= room.open_application_count %></td>
-            <td><%= room.current_match_count %></td>
+            <td data-arena-room-apps="<%= room.open_application_count %>"><%= room.open_application_count %></td>
+            <td data-arena-room-fights="<%= room.current_match_count %>"><%= room.current_match_count %></td>
             <td>
               <% if accessible %>
                 <%= link_to t("arena.enter"), arena_room_path(room), class: "nl-arena-small-button", data: {turbo_frame: "_top"} %>
