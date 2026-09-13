@@ -46,6 +46,9 @@ class CityBuildingsController < ApplicationController
     if @building_key == "obelisk"
       @obelisk_bound = Game::World::ObeliskRecall.bound_for(current_character)
     end
+    if @building_key == "guard_tower"
+      @guard_routes = Game::World::GuardTowerRoutes.new(character: current_character).call
+    end
     prepare_presence_context
   end
 

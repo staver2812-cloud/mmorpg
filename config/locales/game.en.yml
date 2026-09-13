@@ -614,6 +614,11 @@ en:
       law_open_cta: "Open Law Abode"
       prison_lead: "Cells have no sentence loop yet. Alignment and decrees are at the Law Abode next door."
       gallows_lead: "The quarter's public square. Court and alignment live in the Law Abode."
+      guard_aria: "Watchtower"
+      guard_title: "District map"
+      guard_lead: "Live routes into neighboring districts. Each button consumes the current server offer."
+      guard_empty: "No watchtower routes from this cell."
+      guard_meta: "Outdoor gates stay on Central and Law Quarter, not inside the tower."
       law_alignment:
         none: "None"
         law: "Law"

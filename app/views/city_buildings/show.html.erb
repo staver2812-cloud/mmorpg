@@ -27,6 +27,8 @@
           <%= t("game.professions.workshop_notice") %>
         <% elsif @building["kind"] == "junk_buyback" %>
           <%= t("game.buildings.junk_lead") %>
+        <% elsif @building["kind"] == "guard" %>
+          <%= t("game.buildings.guard_lead") %>
         <% elsif @building["kind"] == "law" %>
           <%= t(
                 "game.buildings.law_lead",
@@ -92,6 +94,8 @@
         <%= render "city_buildings/obelisk", building: @building, bound: @obelisk_bound %>
       <% when "law" %>
         <%= render "city_buildings/law_abode", building: @building %>
+      <% when "guard" %>
+        <%= render "city_buildings/guard_tower", building: @building, routes: @guard_routes %>
       <% when "landmark" %>
         <%= render "city_buildings/landmark", building: @building, building_key: @building_key %>
       <% end %>

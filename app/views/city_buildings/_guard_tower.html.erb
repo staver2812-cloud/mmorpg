@@ -1,0 +1,22 @@
+<section class="nl-handbook" aria-label="<%= t("game.buildings.guard_aria") %>">
+  <h2><%= t("game.buildings.guard_title") %></h2>
+  <p class="nl-handbook__lead"><%= t("game.buildings.guard_lead") %></p>
+  <% routes = local_assigns.fetch(:routes, []) %>
+  <% if routes.empty? %>
+    <p class="nl-quests-board__meta"><%= t("game.buildings.guard_empty") %></p>
+  <% else %>
+    <ul class="nl-city-landmark__notes">
+      <% routes.each do |route| %>
+        <li>
+          <%= button_to route.hotspot.name,
+                interact_hotspot_world_path,
+                method: :post,
+                params: {hotspot_id: route.hotspot.id, action_key: route.offer.action_key},
+                class: "lbut",
+                form: {data: {turbo: false}} %>
+        </li>
+      <% end %>
+    </ul>
+  <% end %>
+  <p class="nl-quests-board__meta"><%= t("game.buildings.guard_meta") %></p>
+</section>
