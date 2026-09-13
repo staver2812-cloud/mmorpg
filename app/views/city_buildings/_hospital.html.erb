@@ -13,12 +13,18 @@
   <% ordinary = injuries.active.any? { |row| %w[light heavy].include?(row["severity"].to_s) } %>
   <% combat_left = injuries.active.any? { |row| row["severity"].to_s == "combat" } %>
   <% needs_rest = hp < max_hp || mp < max_mp || ordinary %>
+  <% injury_summary = injuries.summary %>
   <h2><%= t("game.buildings.hospital_hint") %></h2>
   <p><%= t("game.buildings.hospital_rest_lead") %></p>
   <p class="nl-quests-board__meta"><%= t("game.buildings.hospital_combat_rule") %></p>
   <p class="nl-quests-board__meta" data-hospital-vitals="1" data-hospital-rest-ready="<%= needs_rest ? "1" : "0" %>">
     <%= t("game.buildings.hospital_vitals", hp: hp, max_hp: max_hp, mp: mp, max_mp: max_mp) %>
   </p>
+  <% if injury_summary.present? %>
+    <p class="nl-quests-board__meta" data-hospital-injuries="<%= injuries.active.size %>"><%= injury_summary %></p>
+  <% else %>
+    <p class="nl-quests-board__meta" data-hospital-injuries="0"><%= t("game.buildings.hospital_no_injuries") %></p>
+  <% end %>
   <p>
     <% if needs_rest %>
       <%= button_to t("game.buildings.hospital_rest_cta"),
