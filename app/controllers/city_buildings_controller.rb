@@ -25,7 +25,12 @@ class CityBuildingsController < ApplicationController
       @junk_offers = Game::Shop::JunkBuyback.offer_rows_for(current_character)
     end
     if @building_key == "hospital"
-      @injury_summary = Game::Combat::InjuryState.new(character: current_character).summary_ru
+      Game::Professions::Templates.ensure_craft_items!
+      @injury_summary = Game::Combat::InjuryState.new(character: current_character).summary
+      @profession_recipes = Game::Professions::Catalog.recipes_for_building("hospital")
+      @ash_healer_skill = current_character.metadata.to_h.dig("profession_skills", "ash_healer").to_i
+      @veil_marks = (current_user.currency_wallet || current_user.create_currency_wallet!(nv_balance: 0)).veil_marks.to_i
+      @premium_offers = Game::Shop::PremiumScrollPurchase::OFFERINGS
     end
     prepare_presence_context
   end
@@ -44,8 +49,14 @@ class CityBuildingsController < ApplicationController
   end
 
   def craft
-    unless @building_key == "workshop"
+    unless %w[workshop hospital].include?(@building_key)
       redirect_to world_path, alert: I18n.t("game.professions.workshop_only") and return
+    end
+
+    recipe = Game::Professions::Catalog.recipe(params[:recipe_key])
+    profession = recipe && Game::Professions::Catalog.professions[recipe["profession"].to_s]
+    if profession && profession["building_key"].to_s != @building_key
+      redirect_to city_building_path(@building_key), alert: I18n.t("game.professions.wrong_building") and return
     end
 
     result = Game::Professions::Craft.new(
@@ -53,9 +64,25 @@ class CityBuildingsController < ApplicationController
       recipe_key: params[:recipe_key]
     ).call
     if result.success
-      redirect_to city_building_path("workshop"), notice: result.message
+      redirect_to city_building_path(@building_key), notice: result.message
     else
-      redirect_to city_building_path("workshop"), alert: result.message
+      redirect_to city_building_path(@building_key), alert: result.message
+    end
+  end
+
+  def buy_premium
+    unless @building_key == "hospital"
+      redirect_to world_path, alert: I18n.t("game.buildings.hospital_only") and return
+    end
+
+    result = Game::Shop::PremiumScrollPurchase.new(
+      character: current_character,
+      item_key: params[:item_key]
+    ).call
+    if result.success
+      redirect_to city_building_path("hospital"), notice: result.message
+    else
+      redirect_to city_building_path("hospital"), alert: result.message
     end
   end
 

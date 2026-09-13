@@ -49,7 +49,12 @@
       <% when "numismatics" %>
         <%= render "city_buildings/numismatics", building: @building %>
       <% when "hospital" %>
-        <%= render "city_buildings/hospital", building: @building %>
+        <%= render "city_buildings/hospital",
+              building: @building,
+              recipes: @profession_recipes,
+              skill: @ash_healer_skill,
+              veil_marks: @veil_marks,
+              premium_offers: @premium_offers %>
       <% when "workshop" %>
         <%= render "city_buildings/workshop", recipes: @profession_recipes, skill: @tar_smith_skill %>
       <% when "landmark" %>

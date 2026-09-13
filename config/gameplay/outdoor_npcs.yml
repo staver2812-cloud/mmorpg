@@ -121,6 +121,10 @@ outpost_surroundings:
           item: wood_chips
           source_name: "Щепа Смолы"
           chance: 0.55
+        - kind: item
+          item: ash_herb
+          source_name: "Пепельная трава"
+          chance: 0.45
         - kind: currency
           currency: NV
           amount: 3
@@ -152,6 +156,10 @@ outpost_surroundings:
         - kind: item
           item: wood_chips
           source_name: "Щепа Смолы"
+          chance: 0.4
+        - kind: item
+          item: ash_herb
+          source_name: "Пепельная трава"
           chance: 0.4
         - kind: currency
           currency: NV

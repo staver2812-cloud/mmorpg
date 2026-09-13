@@ -19,7 +19,10 @@ timers remain deferred; those flows are not invented here.
 - Related runtime: `doc/features/city.md`, `doc/features/player_inventory.md`, `doc/features/world.md`
 
 Shipped now: workshop recipes, material consumption, output grant, profession
-skill bump in `character.metadata["profession_skills"]["tar_smith"]`.
+skill bump in `character.metadata["profession_skills"]["tar_smith"]`, plus Ash
+Healer bags crafted at Coal Infirmary (`ash_healer`) that clear light/heavy/combat
+injuries by tier. Combat trauma scrolls and heal scrolls are bought for Veil Marks
+(VM) at the Infirmary premium desk.
 
 ## 2. Player-facing behavior
 

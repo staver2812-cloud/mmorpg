@@ -104,6 +104,12 @@ module Game
           notes << I18n.t("game.injuries.cleared_light", count: removed) if removed.positive?
         end
 
+        if stats["clear_injury_tier"].present?
+          tier = stats["clear_injury_tier"].to_s
+          removed = Game::Combat::InjuryState.new(character:).clear_up_to!(tier)
+          notes << I18n.t("game.injuries.cleared_tier", tier: I18n.t("game.injuries.severity.#{tier}", default: tier), count: removed) if removed.positive?
+        end
+
         if stats["heal_hp"]
           amount = stats["heal_hp"].to_i
           actual_healed = Characters::VitalsService.new(character).apply_healing(amount, source: template.name)

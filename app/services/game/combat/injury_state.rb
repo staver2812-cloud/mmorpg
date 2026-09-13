@@ -3,10 +3,12 @@
 module Game
   module Combat
     # Ashen sandbox injury state on character.metadata.
-    # Explicitly sandbox-tuned (not Neverlands-parity probabilities).
+    # Severities: light < heavy < combat.
+    # Combat trauma only comes from PvP matches that consumed a combat scroll.
     class InjuryState
       METADATA_KEY = "ashen_injuries"
-      SEVERITIES = %w[light heavy].freeze
+      SEVERITIES = %w[light heavy combat].freeze
+      RANK = {"light" => 1, "heavy" => 2, "combat" => 3}.freeze
 
       def initialize(character:, clock: -> { Time.current })
         @character = character
@@ -23,7 +25,7 @@ module Game
       end
 
       def blocks_movement?
-        active.any? { |row| row["severity"].to_s == "heavy" }
+        active.any? { |row| %w[heavy combat].include?(row["severity"].to_s) }
       end
 
       def apply!(severity:, duration:, source_match_id: nil)
@@ -53,15 +55,35 @@ module Game
         end
       end
 
-      # Field bandages clear light injuries only. Heavy trauma stays hospital-only.
-      # @return [Integer] number of light injuries removed
+      # Free hospital rest clears ordinary wounds, not paid combat trauma.
+      def clear_non_combat!
+        clear_up_to!("heavy")
+      end
+
       def clear_light!
+        clear_up_to!("light")
+      end
+
+      # Clears active injuries whose rank is <= the given severity.
+      # @return [Integer] removed count
+      def clear_up_to!(max_severity)
+        max_rank = RANK.fetch(max_severity.to_s)
         character.with_lock do
           character.reload
           metadata = character.metadata.to_h
           rows = Array(metadata[METADATA_KEY]).map(&:deep_stringify_keys)
-          keep = rows.select { |row| active_row?(row) && row["severity"].to_s != "light" }
-          removed = rows.count { |row| active_row?(row) && row["severity"].to_s == "light" }
+          keep = []
+          removed = 0
+          rows.each do |row|
+            next unless active_row?(row)
+
+            rank = RANK.fetch(row["severity"].to_s, 0)
+            if rank.positive? && rank <= max_rank
+              removed += 1
+            else
+              keep << row
+            end
+          end
           return 0 if removed.zero?
 
           character.update!(metadata: metadata.merge(METADATA_KEY => keep))
@@ -75,8 +97,7 @@ module Game
 
       def summary
         labels = active.map do |row|
-          key = (row["severity"].to_s == "heavy") ? "heavy" : "light"
-          I18n.t("game.injuries.severity.#{key}")
+          I18n.t("game.injuries.severity.#{row["severity"]}", default: row["severity"].to_s)
         end
         return nil if labels.empty?
 

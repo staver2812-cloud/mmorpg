@@ -10,6 +10,14 @@ professions:
     skill_key: tar_smith
     building_key: workshop
 
+  ash_healer:
+    title_ru: "Лекарь Угля"
+    title_en: "Ash Healer"
+    summary_ru: "Сумки лечения травм в Лазарете Угля."
+    summary_en: "Injury healer bags at Coal Infirmary."
+    skill_key: ash_healer
+    building_key: hospital
+
 recipes:
   ashen_bandage:
     profession: tar_smith
@@ -55,3 +63,51 @@ recipes:
       quantity: 5
     skill_gain: 1
     min_skill: 1
+
+  healer_bag_light:
+    profession: ash_healer
+    title_ru: "Сумка новичка-лекаря"
+    title_en: "Novice Healer Bag"
+    summary_ru: "Бинт + трава + щепа → сумка (лёгкие травмы)."
+    summary_en: "Bandage + herb + chips → bag (light injuries)."
+    inputs:
+      ashen_bandage: 1
+      ash_herb: 2
+      wood_chips: 1
+    output:
+      item_key: healer_bag_light
+      quantity: 1
+    skill_gain: 1
+    min_skill: 0
+
+  healer_bag_heavy:
+    profession: ash_healer
+    title_ru: "Сумка опытного лекаря"
+    title_en: "Adept Healer Bag"
+    summary_ru: "2 бинта + 3 травы + хвост → сумка (лёгкие и тяжёлые)."
+    summary_en: "2 bandages + 3 herbs + tail → bag (light and heavy)."
+    inputs:
+      ashen_bandage: 2
+      ash_herb: 3
+      rat_tail: 1
+    output:
+      item_key: healer_bag_heavy
+      quantity: 1
+    skill_gain: 2
+    min_skill: 3
+
+  healer_bag_combat:
+    profession: ash_healer
+    title_ru: "Сумка мастера-лекаря"
+    title_en: "Master Healer Bag"
+    summary_ru: "Сумка опытного + полевой набор + 4 травы → сумка (включая боевые травмы)."
+    summary_en: "Adept bag + field kit + 4 herbs → bag (including combat trauma)."
+    inputs:
+      healer_bag_heavy: 1
+      veil_field_kit: 1
+      ash_herb: 4
+    output:
+      item_key: healer_bag_combat
+      quantity: 1
+    skill_gain: 3
+    min_skill: 8

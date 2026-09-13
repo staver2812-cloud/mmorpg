@@ -39,20 +39,26 @@ module Arena
         if (error = application_creation_error(character, room))
           Result.new(success?: false, errors: [error])
         else
+          combat_trauma = combat_trauma_requested?(params)
+          if combat_trauma && (scroll_error = consume_combat_trauma_scroll!(character))
+            next Result.new(success?: false, errors: [scroll_error])
+          end
+
           application = ArenaApplication.new(
             arena_room: room,
             applicant: character,
             fight_type: params[:fight_type] || :duel,
             fight_kind: params[:fight_kind] || :free,
             timeout_seconds: params[:timeout_seconds] || 180,
-            trauma_percent: params[:trauma_percent] || 30,
+            trauma_percent: combat_trauma ? 100 : (params[:trauma_percent] || 30),
             team_count: params[:team_count],
             team_level_min: params[:team_level_min],
             team_level_max: params[:team_level_max],
             enemy_count: params[:enemy_count],
             enemy_level_min: params[:enemy_level_min],
             enemy_level_max: params[:enemy_level_max],
-            wait_minutes: params[:wait_minutes] || 10
+            wait_minutes: params[:wait_minutes] || 10,
+            metadata: combat_trauma ? {"combat_trauma" => true} : {}
           )
 
           if application.save
@@ -243,6 +249,8 @@ module Arena
     end
 
     def create_match_from_applications(application, acceptor)
+      combat_trauma = application.metadata.to_h["combat_trauma"] == true ||
+        application.metadata.to_h["combat_trauma"].to_s == "true"
       match = ArenaMatch.create!(
         arena_room: application.arena_room,
         match_type: application.fight_type,
@@ -250,8 +258,9 @@ module Arena
         turn_timeout_seconds: application.timeout_seconds,
         trauma_percent: application.trauma_percent,
         metadata: {
-          fight_kind: application.fight_kind
-        }
+          fight_kind: application.fight_kind,
+          "combat_trauma" => combat_trauma
+        }.compact
       )
 
       # Add participants
@@ -400,7 +409,8 @@ module Arena
         timeout_seconds: application.timeout_seconds,
         trauma_percent: application.trauma_percent,
         expires_at: application.expires_at&.iso8601,
-        expires_in: application.time_until_expiration
+        expires_in: application.time_until_expiration,
+        combat_trauma: application.metadata.to_h["combat_trauma"] == true
       }
 
       # Add NPC-specific fields
@@ -412,6 +422,30 @@ module Arena
       end
 
       payload
+    end
+
+    def combat_trauma_requested?(params)
+      value = params[:combat_trauma]
+      value == true || value.to_s.in?(%w[1 true on yes])
+    end
+
+    def consume_combat_trauma_scroll!(character)
+      Game::Professions::Templates.ensure_craft_items!
+      template = ItemTemplate.find_by(key: "combat_trauma_scroll")
+      return I18n.t("arena.combat_scroll_missing") unless template
+
+      inventory = character.inventory
+      return I18n.t("arena.combat_scroll_missing") unless inventory
+
+      stack = inventory.inventory_items.find_by(item_template: template, equipped: false)
+      return I18n.t("arena.combat_scroll_missing") if stack.blank? || stack.quantity.to_i <= 0
+
+      Game::Inventory::Manager.new(inventory:).remove_item!(item_template: template, quantity: 1)
+      nil
+    rescue StandardError => error
+      raise unless error.class.name.end_with?("InventoryUnderflowError")
+
+      I18n.t("arena.combat_scroll_missing")
     end
   end
 end

@@ -99,6 +99,11 @@
             {},
             class: "nl-arena-select",
             required: true %>
+        <label class="nl-arena-combat-trauma">
+          <%= f.check_box :combat_trauma, {}, "1", "0" %>
+          <%= t("arena.form.combat_trauma") %>
+        </label>
+        <p class="nl-arena-hint"><%= t("arena.form.combat_trauma_hint") %></p>
 
         <% if active_tab != "1" %>
           <%= f.select :wait_minutes,

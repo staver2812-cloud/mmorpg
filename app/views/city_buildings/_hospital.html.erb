@@ -4,19 +4,10 @@
   <% end %>
 </div>
 
-<h2><%= t("game.buildings.hospital_title") %></h2>
-<table class="nl-detail-table nl-city-building-table">
-  <thead><tr><th><%= t("game.common.item") %></th><th><%= t("game.common.resource") %></th><th><%= t("game.common.price") %></th><th><%= t("game.common.observed_stock") %></th></tr></thead>
-  <tbody>
-    <% building["goods"].each do |name, resource, price, stock| %>
-      <tr><td><%= name %></td><td><%= resource %></td><td><%= number_with_delimiter(price) %> NV</td><td><%= stock %></td></tr>
-    <% end %>
-  </tbody>
-</table>
-
 <section class="nl-handbook" aria-label="<%= t("game.buildings.hospital_rest_aria") %>">
   <h2><%= t("game.buildings.hospital_hint") %></h2>
   <p><%= t("game.buildings.hospital_rest_lead") %></p>
+  <p class="nl-quests-board__meta"><%= t("game.buildings.hospital_combat_rule") %></p>
   <p>
     <%= button_to t("game.buildings.hospital_rest_cta"),
           city_building_rest_path("hospital"),
@@ -24,4 +15,53 @@
           class: "lbut",
           form: {data: {turbo: false}} %>
   </p>
+</section>
+
+<section class="nl-handbook" aria-label="<%= t("game.professions.ash_healer") %>">
+  <h2><%= t("game.professions.ash_healer") %></h2>
+  <p class="nl-handbook__lead">
+    <%= t("game.professions.ash_healer_lead", skill: local_assigns.fetch(:skill, 0)) %>
+  </p>
+  <div class="nl-handbook__grid">
+    <% local_assigns.fetch(:recipes, {}).each do |key, recipe| %>
+      <% title = I18n.locale.to_s.start_with?("ru") ? recipe["title_ru"] : recipe["title_en"] %>
+      <% summary = I18n.locale.to_s.start_with?("ru") ? recipe["summary_ru"] : recipe["summary_en"] %>
+      <article class="nl-handbook__card">
+        <h3><%= title %></h3>
+        <p><%= summary %></p>
+        <p class="nl-quests-board__meta">
+          <%= t("game.professions.min_skill", amount: recipe.fetch("min_skill", 0)) %>
+          ·
+          <%= t("game.professions.inputs") %>:
+          <%= recipe.fetch("inputs").map { |item_key, qty| "#{item_key}×#{qty}" }.join(", ") %>
+        </p>
+        <%= button_to t("game.professions.craft_cta"),
+              city_building_craft_path("hospital"),
+              method: :post,
+              params: {recipe_key: key},
+              class: "lbut",
+              form: {data: {turbo: false}} %>
+      </article>
+    <% end %>
+  </div>
+</section>
+
+<section class="nl-handbook" aria-label="<%= t("game.buildings.premium_desk") %>">
+  <h2><%= t("game.buildings.premium_desk") %></h2>
+  <p><%= t("game.buildings.premium_lead", marks: local_assigns.fetch(:veil_marks, 0)) %></p>
+  <div class="nl-handbook__grid">
+    <% local_assigns.fetch(:premium_offers, {}).each do |item_key, price| %>
+      <article class="nl-handbook__card">
+        <h3><%= t("game.buildings.premium_item.#{item_key}", default: item_key) %></h3>
+        <p><%= t("game.buildings.premium_item_hint.#{item_key}", default: "") %></p>
+        <p class="nl-quests-board__meta"><%= price %> VM</p>
+        <%= button_to t("game.buildings.premium_buy_cta", amount: price),
+              city_building_buy_premium_path("hospital"),
+              method: :post,
+              params: {item_key: item_key},
+              class: "lbut",
+              form: {data: {turbo: false}} %>
+      </article>
+    <% end %>
+  </div>
 </section>

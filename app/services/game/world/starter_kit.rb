@@ -9,7 +9,9 @@ module Game
       METADATA_KEY = "ashen_starter_kit_v4"
       LEGACY_METADATA_KEYS = %w[ashen_starter_kit_v1 ashen_starter_kit_v2 ashen_starter_kit_v3].freeze
       STARTER_NV = 100
+      STARTER_VEIL_MARKS = 40
       NV_REASON = "ashen.starter_kit_nv"
+      VM_REASON = "ashen.starter_kit_veil_marks"
       WEAPON_KEY = "ashen_starter_blade"
       # Keep craft mats inside a level-0 carrying capacity (~15) after bait+blade+bandage.
       CRAFT_MATS = {
@@ -31,6 +33,7 @@ module Game
           grant_craft_mats!
           grant_bandage!
           grant_starter_nv!
+          grant_starter_veil_marks!
           mark_granted!
         end
 
@@ -147,6 +150,22 @@ module Game
         end
       end
 
+      def grant_starter_veil_marks!
+        user = character.user
+        return unless user
+
+        wallet = user.currency_wallet || user.create_currency_wallet!(nv_balance: 0)
+        wallet.with_lock do
+          next if wallet.currency_transactions.where(reason: VM_REASON).exists?
+
+          wallet.adjust_veil_marks!(
+            amount: STARTER_VEIL_MARKS,
+            reason: VM_REASON,
+            metadata: {"source" => "ashen_starter_kit", "character_id" => character.id}
+          )
+        end
+      end
+
       def grant_weapon!
         template = self.class.ensure_weapon_template!
         inventory = ensure_inventory!
@@ -172,6 +191,7 @@ module Game
               "granted_at" => Time.current.iso8601(6),
               "bait" => Bait::STARTER_GRANT,
               "nv" => STARTER_NV,
+              "veil_marks" => STARTER_VEIL_MARKS,
               "weapon" => WEAPON_KEY,
               "craft_mats" => CRAFT_MATS,
               "bandage" => STARTER_BANDAGE

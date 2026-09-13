@@ -71,6 +71,7 @@ Rails.application.routes.draw do
   post "city/buildings/:building_key/rest", to: "city_buildings#rest", as: :city_building_rest
   post "city/buildings/:building_key/craft", to: "city_buildings#craft", as: :city_building_craft
   post "city/buildings/:building_key/sell", to: "city_buildings#sell", as: :city_building_sell
+  post "city/buildings/:building_key/buy_premium", to: "city_buildings#buy_premium", as: :city_building_buy_premium
   resources :quests, only: [:index] do
     member do
       post :accept
