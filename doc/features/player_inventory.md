@@ -494,6 +494,7 @@ shipped Inventory management routes.
 | 2026-08-25 | Made the shared multi-unit item-add contract explicitly atomic: an Inventory lock plus nested savepoint rolls back partial stack and carried-mass writes before a caller records a capacity failure. |
 | 2026-08-26 | Clarified the Combat-owned Careful Fighter wear handoff and recorded repair as a deferred workshop/profession transaction rather than an inventory durability reset. |
 | 2026-09-13 | Equipment-set save/wear/delete success and failure alerts use `game.inventory.set_*` i18n. |
+| 2026-09-13 | Direct transfer/gift/NV and deferred player-sale alerts use `game.inventory.*` i18n. |
 | 2026-09-13 | Equipment-set save field uses localized placeholder (`game.common.set_name`) with `data-equipment-set-name`. |
 | 2026-09-13 | Transfer price field uses `game.common.nv_short` placeholder with `data-inventory-transfer-price`. |
 | 2026-09-13 | Broken rows link to Pitch Forge (or show deferred hint) without inventing a repair transaction. |
