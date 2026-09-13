@@ -416,7 +416,10 @@ def main() -> int:
     r = s.get(f"{BASE}/city/buildings/souvenir_shop", timeout=TIMEOUT, allow_redirects=True)
     report.add(
         "GET /city/buildings/souvenir_shop",
-        r.status_code == 200 and 'data-building-key="souvenir_shop"' in r.text and ("Приманка" in r.text or "bait" in r.text.lower()),
+        r.status_code == 200
+        and 'data-building-key="souvenir_shop"' in r.text
+        and ("Приманка" in r.text or "bait" in r.text.lower())
+        and ("в сумке:" in r.text or "in bag:" in r.text),
         f"url={r.url}",
     )
     r = s.get(f"{BASE}/city/buildings/auction", timeout=TIMEOUT, allow_redirects=True)

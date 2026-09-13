@@ -92,6 +92,15 @@
 
       <div class="nl-inventory-mass">
         <%= t("game.inventory.mass_label") %>: <b><%= @inventory.current_weight %>/<%= @inventory.max_weight %></b>
+        <% wear = Game::Inventory::EquippedWear.summary_for(current_character) %>
+        <% if wear.worn.positive? %>
+          ·
+          <span class="nl-inventory-wear<%= ' nl-inventory-wear--broken' if wear.broken.positive? %>"
+                data-inventory-wear="<%= wear.worn %>"
+                title="<%= t("game.world.wear_chip_hint") %>">
+            <%= wear.broken.positive? ? t("game.world.wear_chip_broken", count: wear.broken) : t("game.world.wear_chip", count: wear.worn) %>
+          </span>
+        <% end %>
         <% if @junk_offer_count.to_i.positive? %>
           ·
           <% if Game::World::CityBuildingCatalog.accessible?(character: current_character, building_key: "junk_dealer") %>

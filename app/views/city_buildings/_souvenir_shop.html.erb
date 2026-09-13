@@ -4,9 +4,13 @@
   <div class="nl-handbook__grid">
     <% Game::World::SouvenirPurchase::OFFERINGS.each do |item_key, price| %>
       <% template = ItemTemplate.find_by(key: item_key) %>
+      <% owned = template ? current_character.inventory&.inventory_items&.where(item_template: template, equipped: false)&.sum(:quantity).to_i : 0 %>
       <article class="nl-handbook__card">
         <h3><%= template&.display_name || item_key %></h3>
-        <p class="nl-quests-board__meta"><%= price %> NV</p>
+        <p class="nl-quests-board__meta">
+          <%= price %> NV
+          · <%= t("game.buildings.souvenir_owned", count: owned) %>
+        </p>
         <%= button_to t("game.buildings.souvenir_buy_cta", amount: price),
               city_building_souvenir_path("souvenir_shop"),
               method: :post,

@@ -493,5 +493,5 @@ shipped Inventory management routes.
 | 2026-08-23 | Documented the successful NPC item-loot handoff to Arena's item-found feedback, distinguished Economy-owned NV loot from Inventory state, and kept inventory validation on the shared flash surface after removal of the legacy toast path; equip/unequip Turbo failures now return 422 without mutating equipment. |
 | 2026-08-25 | Made the shared multi-unit item-add contract explicitly atomic: an Inventory lock plus nested savepoint rolls back partial stack and carried-mass writes before a caller records a capacity failure. |
 | 2026-08-26 | Clarified the Combat-owned Careful Fighter wear handoff and recorded repair as a deferred workshop/profession transaction rather than an inventory durability reset. |
-| 2026-09-13 | HUD wear chip (`Game::Inventory::EquippedWear`) links to Inventory when equipped durable gear is worn or broken; workshop repair remains deferred. |
+| 2026-09-13 | HUD wear chip (`Game::Inventory::EquippedWear`) links to Inventory when equipped durable gear is worn or broken; inventory mass row repeats the wear count; workshop repair remains deferred. |
 | 2026-09-10 | Integrated seven original Shop-item illustrations into carried rows and shared equipment slots; extended the Shop browser flow through wear, persisted slot/stat confirmation, removal and resale. |

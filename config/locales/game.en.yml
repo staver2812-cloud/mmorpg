@@ -645,6 +645,7 @@ en:
       souvenir_title: "Shore smallwares"
       souvenir_lead: "Bait, chips, and herbs for NV. No license required."
       souvenir_buy_cta: "Buy (−%{amount} NV)"
+      souvenir_owned: "in bag: %{count}"
       souvenir_bought: "Bought %{name} (−%{amount} NV)."
       souvenir_unknown: "Unknown offering."
       souvenir_short: "Need %{amount} NV."
