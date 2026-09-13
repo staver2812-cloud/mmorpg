@@ -208,12 +208,16 @@ def main() -> int:
     r = s.get(f"{BASE}/world", timeout=TIMEOUT)
     report.add(
         "trauma scroll chip on square",
-        r.status_code == 200 and (("Напасть:" in r.text) or ("nl-trauma-chip" in r.text) or ("Attack:" in r.text)),
+        r.status_code == 200
+        and (("Напасть:" in r.text) or ("nl-trauma-chip" in r.text) or ("Attack:" in r.text))
+        and ("data-trauma-scrolls=" in r.text),
         f"url={r.url}",
     )
     report.add(
         "heal scroll chip on square",
-        r.status_code == 200 and (("Лечение:" in r.text) or ("nl-heal-chip" in r.text) or ("Heal:" in r.text)),
+        r.status_code == 200
+        and (("Лечение:" in r.text) or ("nl-heal-chip" in r.text) or ("Heal:" in r.text))
+        and ("data-heal-scrolls=" in r.text),
         f"url={r.url}",
     )
 
