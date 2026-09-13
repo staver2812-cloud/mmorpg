@@ -304,6 +304,8 @@ en:
       bait_chip_hint: "Passive ambush ~5 min. Look/Enter with bait forces a fight now."
       fatigue_chip: "Fatigue: %{percent}%"
       fatigue_chip_hint: "At 86%+ movement locks. Coal Tide Tavern clears fatigue instantly."
+      alignment_chip: "Alignment?"
+      alignment_chip_hint: "Declare alignment at the Law Abode"
       obelisk_bound_chip: "Mark: %{place}"
       obelisk_bound_chip_hint: "Veil Obelisk — bind and recall"
       obelisk_recall_chip: "Recall (−%{amount} NV)"

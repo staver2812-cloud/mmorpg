@@ -304,6 +304,8 @@ ru:
       bait_chip_hint: "Пассивный набег ~5 мин. Осмотр/Вход с приманкой вызывает бой сразу."
       fatigue_chip: "Усталость: %{percent}%"
       fatigue_chip_hint: "На 86%+ блокируется ход. Таверна Угля снимает усталость сразу."
+      alignment_chip: "Склонность?"
+      alignment_chip_hint: "Объявите склонность в Обители Закона"
       obelisk_bound_chip: "Метка: %{place}"
       obelisk_bound_chip_hint: "Обелиск Завесы — привязка и возврат"
       obelisk_recall_chip: "К метке (−%{amount} NV)"

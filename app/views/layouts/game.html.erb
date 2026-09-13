@@ -44,6 +44,12 @@
                 class: "nl-injury-chip#{' nl-injury-chip--heavy' if injury_state.blocks_movement?}",
                 title: t("game.injuries.hospital_hint") %>
         <% end %>
+        <% if current_character.alignment.to_s == "none" && Game::World::CityBuildingCatalog.accessible?(character: current_character, building_key: "law_abode") %>
+          <%= link_to t("game.world.alignment_chip"),
+                city_building_path("law_abode"),
+                class: "nl-alignment-chip",
+                title: t("game.world.alignment_chip_hint") %>
+        <% end %>
         <% fatigue_pct = Characters::FatigueService.new(character: current_character).current_percent %>
         <% if fatigue_pct.positive? %>
           <% if Game::World::CityBuildingCatalog.accessible?(character: current_character, building_key: "tavern") %>
