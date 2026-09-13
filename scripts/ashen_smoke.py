@@ -599,9 +599,14 @@ def main() -> int:
         report.add(f"GET {path}", ok, f"{r.status_code} bytes={len(r.content)}")
 
     r = s.get(f"{BASE}/inventory", timeout=TIMEOUT)
-    banned = ["Wear", "Properties", "Requirements", "Inventory mass", "Equipment Sets", "Transfer"]
+    banned = ["Wear", "Properties", "Requirements", "Inventory mass", "Equipment Sets", "Transfer", "Set name"]
     found_en = [w for w in banned if w in r.text]
     report.add("inventory no English chrome", not found_en, f"found={found_en}")
+    report.add(
+        "inventory equipment set name field",
+        ("data-equipment-set-name=" in r.text) and (("Имя комплекта" in r.text) or ("Set name" not in r.text)),
+        f"url={r.url}",
+    )
     report.add(
         "inventory junk hint or link",
         ("Скупщику:" in r.text) or ("Junk buyer:" in r.text),

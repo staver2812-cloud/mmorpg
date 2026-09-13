@@ -5,7 +5,7 @@
     <%= f.hidden_field :category, value: @category %>
     <%= f.hidden_field :subcategory, value: @subcategory %>
     <%= f.hidden_field :info, value: @info_mode %>
-    <%= f.text_field :set_name, placeholder: "Set name", maxlength: 30, class: "LogintextBox4" %>
+    <%= f.text_field :set_name, placeholder: t("game.common.set_name"), maxlength: 30, class: "LogintextBox4", data: {equipment_set_name: "1"} %>
     <%= f.submit t("game.common.remember"), class: "lbut" %>
   <% end %>
 
