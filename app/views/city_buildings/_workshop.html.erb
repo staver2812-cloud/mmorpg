@@ -3,6 +3,21 @@
   <p class="nl-handbook__lead">
     <%= t("game.professions.tar_smith_lead", skill: local_assigns.fetch(:skill, 0)) %>
   </p>
+  <% wear = Game::Inventory::EquippedWear.summary_for(current_character) %>
+  <p class="nl-quests-board__meta" data-workshop-repair="deferred">
+    <%= t("game.professions.repair_deferred") %>
+    <% if wear.worn.positive? || wear.broken.positive? %>
+      ·
+      <%= link_to(
+            wear.broken.positive? ? t("game.world.wear_chip_broken", count: wear.broken) : t("game.world.wear_chip", count: wear.worn),
+            inventory_path,
+            data: {turbo: false}
+          ) %>
+    <% else %>
+      ·
+      <%= link_to t("game.inventory.title"), inventory_path, data: {turbo: false} %>
+    <% end %>
+  </p>
 
   <div class="nl-handbook__grid">
     <% local_assigns.fetch(:recipes, {}).each do |key, recipe| %>

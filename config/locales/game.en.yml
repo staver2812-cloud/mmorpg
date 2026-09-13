@@ -744,6 +744,7 @@ en:
       ash_healer: "Ash Healer"
       ash_healer_lead: "Healer skill: %{skill}. Herbs drop near the gate; bags crafted here clear the matching injury tier instantly."
       workshop_notice: "Crafting is live. Recipes below consume materials and raise Tar Smith skill."
+      repair_deferred: "Gear repair is not available yet. Check Inventory for wear and broken badges."
       workshop_only: "Crafting is only available at the Pitch Forge or Infirmary."
       wrong_building: "That recipe belongs to another building."
       craft_cta: "Craft"

@@ -69,6 +69,7 @@ modifiers, and profession quests remain unimplemented.
 
 | Date | Change |
 |---|---|
+| 2026-09-13 | Pitch Forge states gear repair is deferred and links to Inventory wear/broken clarity. |
 | 2026-09-13 | Sandbox Veil Marks hourly top-up at Infirmary desk for trauma/heal scroll testing. |
 | 2026-09-13 | Craft buttons gate on skill/materials; craft flash names the correct profession. |
 | 2026-09-13 | Workshop/Infirmary craft cards show owned/needed material counts with display names. |
