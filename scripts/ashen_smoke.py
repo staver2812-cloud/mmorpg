@@ -304,6 +304,7 @@ def main() -> int:
         and 'data-building-key="clan_hall"' in r.text
         and ("Напасть" in r.text or "Attack" in r.text or "свитк" in r.text.lower())
         and ('data-clan-hall-presence="1"' in r.text or "Кто рядом" in r.text or "Who is here" in r.text)
+        and ("data-clan-hall-presence-count=" in r.text)
         and ("data-clan-hall-assault=" in r.text)
         and ("data-clan-hall-heal=" in r.text),
         f"url={r.url}",

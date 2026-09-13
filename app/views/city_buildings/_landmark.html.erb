@@ -209,7 +209,9 @@
       </p>
       <h3><%= t("game.buildings.clan_hall_presence_title") %></h3>
       <p class="nl-quests-board__meta"><%= t("game.buildings.clan_hall_presence_lead") %></p>
-      <div class="nl-clan-hall-presence" data-clan-hall-presence="1">
+      <div class="nl-clan-hall-presence"
+           data-clan-hall-presence="1"
+           data-clan-hall-presence-count="<%= (@presence_player_count || (@players_here || []).size).to_i %>">
         <%= render "shared/nl_players_list", viewer: current_character %>
       </div>
       <p class="nl-quests-board__meta"><%= t("game.buildings.clan_hall_meta") %></p>
