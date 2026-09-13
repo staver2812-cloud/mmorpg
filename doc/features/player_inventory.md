@@ -495,6 +495,7 @@ shipped Inventory management routes.
 | 2026-08-26 | Clarified the Combat-owned Careful Fighter wear handoff and recorded repair as a deferred workshop/profession transaction rather than an inventory durability reset. |
 | 2026-09-13 | Broken rows link to Pitch Forge (or show deferred hint) without inventing a repair transaction. |
 | 2026-09-13 | Carried durable rows expose `data-inventory-broken`, a Broken badge, and low/broken durability bar states; workshop repair remains deferred. |
+| 2026-09-13 | Junk CTA shows offer count plus estimated buyback NV (`data-inventory-junk-total`); same estimate authority as Ash Buyer. |
 | 2026-09-13 | Inventory mass row exposes mass/slot capacity markers (`data-inventory-mass`, `data-inventory-slots`) plus slot copy. |
 | 2026-09-13 | HUD wear chip (`Game::Inventory::EquippedWear`) links to Inventory when equipped durable gear is worn or broken; inventory mass row repeats the wear count; workshop repair remains deferred. |
 | 2026-09-10 | Integrated seven original Shop-item illustrations into carried rows and shared equipment slots; extended the Shop browser flow through wear, persisted slot/stat confirmation, removal and resale. |
