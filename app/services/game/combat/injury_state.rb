@@ -97,7 +97,9 @@ module Game
 
       def summary
         labels = active.map do |row|
-          I18n.t("game.injuries.severity.#{row["severity"]}", default: row["severity"].to_s)
+          severity = I18n.t("game.injuries.severity.#{row["severity"]}", default: row["severity"].to_s)
+          remain = remaining_label(row)
+          remain ? "#{severity} (~#{remain})" : severity
         end
         return nil if labels.empty?
 
@@ -107,6 +109,22 @@ module Game
       private
 
       attr_reader :character, :clock
+
+      def remaining_label(row)
+        expires = Time.iso8601(row["expires_at"].to_s)
+        seconds = (expires - clock.call).to_i
+        return nil if seconds <= 0
+
+        hours = seconds / 3600
+        minutes = (seconds % 3600) / 60
+        if hours.positive?
+          I18n.t("game.injuries.remain_h_m", hours:, minutes:)
+        else
+          I18n.t("game.injuries.remain_m", minutes: [minutes, 1].max)
+        end
+      rescue ArgumentError, TypeError
+        nil
+      end
 
       def purge_expired!
         metadata = character.metadata.to_h

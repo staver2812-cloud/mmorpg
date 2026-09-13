@@ -15,4 +15,11 @@ RSpec.describe Game::Combat::InjuryState do
     expect(state.blocks_movement?).to be(true)
     expect(state.summary).to include(I18n.t("game.injuries.severity.heavy"))
   end
+
+  it "includes remaining untreated time in the summary" do
+    state.apply!(severity: "combat", duration: 12.hours)
+
+    expect(state.summary).to match(/боевая|combat/i)
+    expect(state.summary).to match(/11ч|11h|12ч|12h/)
+  end
 end

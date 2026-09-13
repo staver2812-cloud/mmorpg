@@ -620,6 +620,8 @@ ru:
         light: "лёгкая"
         heavy: "тяжёлая"
         combat: "боевая"
+      remain_h_m: "%{hours}ч %{minutes}м"
+      remain_m: "%{minutes}м"
     quests:
       title: "Задания Пепельной Завесы"
       chip: "%{title} %{progress}/%{target}"
