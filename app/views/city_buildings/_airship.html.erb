@@ -1,7 +1,11 @@
-<div class="nl-airship-station" data-airship-station="1">
-  <% wallet = current_user.currency_wallet || current_user.create_currency_wallet!(nv_balance: 0) %>
-  <% balance = wallet.nv_balance.to_d %>
-  <% any_affordable = routes.any? { |route| route.available && balance >= route.fare_nv.to_d } %>
+<% wallet = current_user.currency_wallet || current_user.create_currency_wallet!(nv_balance: 0) %>
+<% balance = wallet.nv_balance.to_d %>
+<% any_affordable = routes.any? { |route| route.available && balance >= route.fare_nv.to_d } %>
+<% can_board = any_affordable %>
+<div class="nl-airship-station"
+     data-airship-station="1"
+     data-airship-routes="<%= routes.size %>"
+     data-airship-can-board="<%= can_board ? "1" : "0" %>">
   <p class="nl-quests-board__meta" data-airship-wallet="<%= balance.to_i %>" data-airship-any-affordable="<%= any_affordable ? "1" : "0" %>">
     <%= t("game.buildings.airship_wallet", amount: balance.to_i) %>
   </p>

@@ -323,7 +323,9 @@ def main() -> int:
             or "data-airship-wallet=" in r.text
             or "data-airship-any-affordable=" in r.text
             or 'data-airship-station="1"' in r.text
-        ),
+        )
+        and ("data-airship-routes=" in r.text)
+        and ("data-airship-can-board=" in r.text),
         f"url={r.url}",
     )
 
