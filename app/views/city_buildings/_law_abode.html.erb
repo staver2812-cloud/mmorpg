@@ -4,7 +4,8 @@
 <% first_pledge = current_character.alignment.to_s == "none" %>
 <section class="nl-handbook" aria-label="<%= t("game.buildings.law_aria") %>"
          data-law-alignment="<%= current_character.alignment %>"
-         data-law-wallet="<%= balance.to_i %>">
+         data-law-wallet="<%= balance.to_i %>"
+         data-law-first-pledge="<%= first_pledge ? "1" : "0" %>">
   <h2><%= t("game.buildings.law_title") %></h2>
   <p class="nl-handbook__lead">
     <%= t(
@@ -14,6 +15,9 @@
         ) %>
   </p>
   <p class="nl-quests-board__meta"><%= t("game.buildings.law_wallet", amount: balance.to_i) %></p>
+  <p class="nl-quests-board__meta" data-law-pledge-mode="<%= first_pledge ? "free" : "paid" %>">
+    <%= first_pledge ? t("game.buildings.law_first_free") : t("game.buildings.law_change_cost", amount: Game::World::LawAlignmentPledge::CHANGE_COST) %>
+  </p>
   <p class="nl-quests-board__meta"><%= t("game.buildings.law_quarter_east_gate") %></p>
   <div class="nl-handbook__grid">
     <% Game::World::LawAlignmentPledge::CHOICES.each do |key| %>

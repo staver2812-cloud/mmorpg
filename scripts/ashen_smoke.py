@@ -516,7 +516,9 @@ def main() -> int:
         and ("склонност" in r.text.lower() or "alignment" in r.text.lower())
         and ("восточн" in r.text.lower() or "east gate" in r.text.lower())
         and ("data-law-wallet=" in r.text)
-        and ("data-law-alignment=" in r.text),
+        and ("data-law-alignment=" in r.text)
+        and ("data-law-first-pledge=" in r.text)
+        and ("data-law-pledge-mode=" in r.text),
         f"url={r.url}",
     )
     r = s.get(f"{BASE}/world", timeout=TIMEOUT)
