@@ -6,7 +6,7 @@
         <tr data-airship-route="<%= route.key %>">
           <td><%= route.label %></td>
           <td><%= number_with_precision(route.fare_nv, precision: 2) %> NV</td>
-          <td><%= route.departs_at ? l(route.departs_at, format: "%Y-%m-%d %H:%M:%S") : "Schedule unavailable" %></td>
+          <td><%= route.departs_at ? l(route.departs_at, format: "%Y-%m-%d %H:%M:%S") : t("game.common.unavailable") %></td>
           <td>
             <% if route.available %>
               <%= button_to t("game.airship.board"), airship_path,

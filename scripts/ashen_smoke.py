@@ -180,13 +180,14 @@ def main() -> int:
         "Зачистка патруля",
         "Призраки соляного пирса",
         "Награда за ножевика",
+        "Заглушить пыль",
         "nl-quests",
         "nl-quests__summary",
     ]
     quest_hits = [n for n in quest_needles if n in r.text]
     report.add(
         "GET /quests",
-        r.status_code == 200 and len(quest_hits) >= 5,
+        r.status_code == 200 and len(quest_hits) >= 6,
         f"{r.status_code} hits={quest_hits}",
     )
     if r.status_code == 200:
