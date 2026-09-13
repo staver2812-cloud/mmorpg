@@ -204,6 +204,17 @@ def main() -> int:
         and ("data-shop-any-sellable=" in r.text),
         f"url={r.url}",
     )
+    r = s.get(f"{BASE}/shop?mode=licenses", timeout=TIMEOUT)
+    report.add(
+        "shop licenses localized",
+        r.status_code == 200
+        and 'nl-shop' in r.text
+        and ("data-shop-license=" in r.text)
+        and ("data-shop-license-affordable=" in r.text)
+        and ("Valid for" not in r.text)
+        and (("Срок:" in r.text) or ("дн." in r.text)),
+        f"url={r.url}",
+    )
 
     r = s.get(f"{BASE}/world", timeout=TIMEOUT)
     report.add(
