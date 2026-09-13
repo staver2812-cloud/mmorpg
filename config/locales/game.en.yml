@@ -668,6 +668,7 @@ en:
       law_quarter_east_gate: "The Cistern east gate opens onto Ashen Shore east of the outpost; the gate cell offers Enter back into the city."
       prison_lead: "Cells have no sentence loop yet. Alignment and decrees are at the Law Abode next door."
       gallows_lead: "The quarter's public square. Court and alignment live in the Law Abode."
+      gallows_east_gate: "From this quarter the east gate opens onto Ashen Shore; the gate cell offers Enter back into the city."
       guard_aria: "Watchtower"
       guard_title: "District map"
       guard_lead: "Live routes into neighboring districts. Each button consumes the current server offer."
