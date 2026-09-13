@@ -122,7 +122,16 @@
       <h2>Пепельная Почта</h2>
       <p class="nl-handbook__lead">Письма между городами подключим после соцслоя. Выход всегда на карту квартала.</p>
     </section>
-  <% when "bank", "temple", "auction", "dealer_house", "souvenir_shop", "obelisk", "law_abode", "prison", "gallows" %>
+  <% when "auction" %>
+    <section class="nl-handbook">
+      <h2>Аукцион Соли</h2>
+      <p class="nl-handbook__lead">Игровые лоты позже. Сейчас живой оборот — Лавка и Скупщик Пепла.</p>
+      <p>
+        <%= link_to t("game.shop.title"), shop_path, class: "lbut" %>
+        <%= link_to t("game.buildings.junk_dealer_link"), city_building_path("junk_dealer"), class: "lbut" %>
+      </p>
+    </section>
+  <% when "bank", "temple", "souvenir_shop", "obelisk", "law_abode", "prison", "gallows" %>
     <section class="nl-handbook">
       <h2><%= building["title"] %></h2>
       <p class="nl-handbook__lead">
