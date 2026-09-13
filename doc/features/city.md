@@ -1139,7 +1139,7 @@ Final rerun results are in the
 ## 18. Version history
 
 - 2026-09-13: Coal Tide Tavern table rest restores HP/MP without clearing injuries.
-- 2026-09-13: Black Bell Temple light rite clears light injuries for 5 NV.
+- 2026-09-13: Black Bell Temple light rite clears light injuries for 5 NV; desk separates wallet affordability (`data-temple-can-afford`) from rite readiness (`data-temple-rite-ready`).
 - 2026-09-13: Pitch Bank NV vault deposit/withdraw on character metadata.
 - 2026-09-13: Ashen Post personal note (single metadata memo).
 - 2026-09-13: Relic stall sells bait/chips/herbs for NV without a license.
