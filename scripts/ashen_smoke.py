@@ -529,7 +529,8 @@ def main() -> int:
         and ("Лавка" in r.text or "Shop" in r.text or "/shop" in r.text)
         and ("data-auction-wallet=" in r.text)
         and ("data-auction-vault=" in r.text)
-        and ("data-auction-vm=" in r.text),
+        and ("data-auction-vm=" in r.text)
+        and ('data-auction-lots="deferred"' in r.text),
         f"url={r.url}",
     )
     r = s.get(f"{BASE}/city/buildings/dealer_house", timeout=TIMEOUT, allow_redirects=True)
