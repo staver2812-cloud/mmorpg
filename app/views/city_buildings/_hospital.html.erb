@@ -55,6 +55,15 @@
 <section class="nl-handbook" aria-label="<%= t("game.buildings.premium_desk") %>">
   <h2><%= t("game.buildings.premium_desk") %></h2>
   <p><%= t("game.buildings.premium_lead", marks: local_assigns.fetch(:veil_marks, 0)) %></p>
+  <% assault_owned = Game::World::StartPlayerAssault.trauma_scroll_quantity(current_character) %>
+  <% heal_owned = Game::Shop::PremiumScrollPurchase.owned_quantity(current_character, "combat_heal_scroll") %>
+  <p class="nl-quests-board__meta"
+     data-hospital-assault="<%= assault_owned %>"
+     data-hospital-heal="<%= heal_owned %>">
+    <%= t("game.world.trauma_scroll_chip", count: assault_owned) %>
+    ·
+    <%= t("game.world.heal_scroll_chip", count: heal_owned) %>
+  </p>
   <p>
     <%= button_to t("game.buildings.premium_topup_cta", amount: Game::Shop::VeilMarksTopUp::AMOUNT),
           city_building_topup_vm_path("hospital"),

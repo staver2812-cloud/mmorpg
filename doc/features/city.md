@@ -1155,6 +1155,7 @@ Final rerun results are in the
 - 2026-09-13: Clan Hall embeds the colocated Presence/Assault list for meetup PvP.
 - 2026-09-13: Knowledge Quarter schools show a live skill/profession snapshot board (no invented training formulas).
 - 2026-09-13: Law Abode notes Cistern east-gate outdoor handoff; smoke covers east exit and Enter back.
+- 2026-09-13: Infirmary premium desk shows live Assault/Heal scroll bag totals matching HUD chips.
 - 2026-09-13: Pitch Bank adds deposit-all / withdraw-all CTAs plus locker/wallet/vault data markers.
 - 2026-09-13: Ashen Post shows used/max character count (`data-post-remaining`) and prefills the editor with the saved note.
 - 2026-09-13: Library equipment card documents Inventory wear/broken badges and deferred forge repair.
