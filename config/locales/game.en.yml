@@ -638,6 +638,7 @@ en:
       post_clear_cta: "Clear"
       post_saved: "Note saved."
       post_cleared: "Note cleared."
+      post_landmark_meta: "Intercity mail later. Edit the note above; exit via City in the header."
       post_blank: "Enter note text."
       post_too_long: "Too long (max %{max})."
       souvenir_aria: "Relic stall"
