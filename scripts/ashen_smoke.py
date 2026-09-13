@@ -184,7 +184,7 @@ def main() -> int:
         ("/shop", ["Лавка", "nl-shop", "NV", "Купить", "data-shop-wallet=", "data-shop-any-affordable="]),
         ("/inventory", ["nl-inventory", "Вес инвентаря", "Надеть", "Свойства"]),
         (f"/player/{nick}", ["nl-character-sheet", "Сейф", "nl-sheet-vault", "data-sheet-vault=", "Ячейка", "nl-sheet-locker", "data-sheet-locker=", "nl-sheet-vm", "data-sheet-vm=", "data-sheet-nv="]),
-        ("/arena", ["nl-arena", "Арена", "Дуэли", "data-arena-vitals=", "data-arena-hp=", "data-arena-mp=", "data-arena-apps=", "data-arena-room-accessible="]),
+        # Arena lobby markers are asserted after city arena entry; early GET redirects to /world.
         ("/city/buildings/tavern", ["data-building-key=\"tavern\"", "Отдохнуть за столом", "data-tavern-rumors=", "data-tavern-vitals=", "data-tavern-hp=", "data-tavern-mp=", "data-tavern-ready="]),
         ("/city/buildings/guard_tower", ["data-building-key=\"guard_tower\"", "interact_hotspot", "data-guard-square=", "data-guard-here=", "data-guard-routes="]),
         ("/city/buildings/workshop", ["data-building-key=\"workshop\"", "Смолокур", "Скрафтить", "data-workshop-repair=\"deferred\"", "data-workshop-mass=", "data-workshop-any-ready=", "data-workshop-recipe=", "data-workshop-ready=", "data-workshop-landmark="]),

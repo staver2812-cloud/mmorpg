@@ -76,7 +76,10 @@
               veil_marks: @veil_marks,
               premium_offers: @premium_offers %>
       <% when "workshop" %>
-        <%= render "city_buildings/workshop", recipes: @profession_recipes, skill: @tar_smith_skill %>
+        <%= render "city_buildings/workshop",
+              building: @building,
+              recipes: @profession_recipes,
+              skill: @tar_smith_skill %>
       <% when "tavern" %>
         <%= render "city_buildings/tavern", building: @building %>
       <% when "temple" %>
