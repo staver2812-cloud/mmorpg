@@ -77,7 +77,11 @@ outpost_surroundings:
         - kind: item
           item: rat_tail
           source_name: "Хвост Крысы Завесы"
-          chance: 0.35
+          chance: 0.55
+        - kind: item
+          item: wood_chips
+          source_name: "Щепа Смолы"
+          chance: 0.4
         - kind: item
           item: set-blood-helm-t5
           source_name: "Шлем «Кровь Завесы» · T5"
@@ -137,7 +141,11 @@ outpost_surroundings:
         - kind: item
           item: rat_tail
           source_name: "Хвост Крысы Завесы"
-          chance: 0.4
+          chance: 0.45
+        - kind: item
+          item: wood_chips
+          source_name: "Щепа Смолы"
+          chance: 0.35
         - kind: item
           item: set-judge-helm-t5
           source_name: "Шлем «Судия» · T5"

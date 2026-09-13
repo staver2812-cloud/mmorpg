@@ -18,6 +18,22 @@ quests:
       item_key: ashen_bait
     sort: 1
 
+  tar_smith_first_bandage:
+    title_ru: "Первый бинт Смолокура"
+    title_en: "First Tar Smith Bandage"
+    summary_ru: "Скрафтите «Пепельный бинт» в Смоляной Кузнице (щепа + хвост) и сдайте его в Ратушу."
+    summary_en: "Craft an Ashen Bandage at the Pitch Forge (chips + tail) and turn it in at City Hall."
+    giver: "Ратуша Угля"
+    objective:
+      type: deliver_item
+      item_key: ashen_bandage
+      count: 1
+    reward:
+      experience: 35
+      currency_nv: 25
+      item_key: wood_chips
+    sort: 2
+
   veil_tail_delivery:
     title_ru: "Хвост Завесы"
     title_en: "Veil Tail Delivery"
