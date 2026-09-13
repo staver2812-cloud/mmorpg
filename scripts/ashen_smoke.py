@@ -433,7 +433,8 @@ def main() -> int:
         and ("обряд" in r.text.lower() or "rite" in r.text.lower())
         and ('data-temple-injury="' in r.text)
         and ("data-temple-wallet=" in r.text)
-        and ("data-temple-light=" in r.text),
+        and ("data-temple-light=" in r.text)
+        and ("data-temple-rite-ready=" in r.text),
         f"url={r.url}",
     )
 
