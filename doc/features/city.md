@@ -1166,7 +1166,7 @@ Final rerun results are in the
 - 2026-09-13: Infirmary premium desk shows live Assault/Heal scroll bag totals matching HUD chips; greys out VM buys when short (`data-hospital-premium-affordable`); rest desk lists live injury summary (`data-hospital-injuries`); healer craft shows bag mass/slots (`data-hospital-mass`); rest readiness exposed as `data-hospital-rest-ready`.
 - 2026-09-13: Pitch Bank adds deposit-all / withdraw-all CTAs plus locker/wallet/vault data markers; shows VM with Infirmary link (`data-bank-vm`); deposit/withdraw readiness via `data-bank-can-deposit` / `data-bank-can-withdraw`.
 - 2026-09-13: Ashen Post shows used/max character count (`data-post-remaining`) and prefills the editor with the saved note; empty state marked (`data-post-empty`).
-- 2026-09-13: Library equipment card documents Inventory wear/broken badges and deferred forge repair.
+- 2026-09-13: Library equipment card documents Inventory wear/broken badges and deferred forge repair; Ashen handbook chrome/cards are localized (`data-library-handbook` / `landmark_inside_lead`).
 - 2026-09-13: Airship Station greys out board when wallet cannot cover fare (`data-airship-affordable`); station also exposes `data-airship-any-affordable`.
 - 2026-09-13: Owner character sheet shows Pitch Bank vault NV and item-locker occupancy (private; Bank link when colocated); also private Veil Marks with Infirmary link (`data-sheet-vm`).
 - 2026-09-13: City Hall treasury exposes wallet/vault/VM data markers; quest board shows ready-to-turn-in count matching the HUD chip.

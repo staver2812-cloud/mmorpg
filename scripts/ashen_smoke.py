@@ -418,25 +418,30 @@ def main() -> int:
     r = s.get(f"{BASE}/city/buildings/library", timeout=TIMEOUT, allow_redirects=True)
     report.add(
         "GET /city/buildings/library handbook",
-        r.status_code == 200 and "Справочник Пепельной Завесы" in r.text,
+        r.status_code == 200
+        and ('data-library-handbook="1"' in r.text)
+        and ("Справочник Пепельной Завесы" in r.text or "Ashen Veil handbook" in r.text),
         f"url={r.url}",
     )
     if r.status_code == 200:
         report.add(
             "library covers Assault and quest chain",
-            ("PvP на клетке" in r.text) and ("Цепь:" in r.text or "Приманка →" in r.text),
+            (("PvP на клетке" in r.text) or ("Cell PvP" in r.text))
+            and ("Цепь:" in r.text or "Приманка →" in r.text or "Chain:" in r.text or "Bait →" in r.text),
         )
         report.add(
             "library covers Obelisk Law fatigue",
-            ("Обелиск" in r.text) and ("Склонность" in r.text) and ("Усталость" in r.text),
+            (("Обелиск" in r.text) or ("Obelisk" in r.text))
+            and (("Склонность" in r.text) or ("Alignment" in r.text))
+            and (("Усталость" in r.text) or ("Fatigue" in r.text)),
         )
         report.add(
             "library covers heal scroll chip",
-            ("Лечение" in r.text) or ("heal scroll" in r.text.lower()),
+            ("Лечение" in r.text) or ("heal scroll" in r.text.lower()) or ("Heal" in r.text),
         )
         report.add(
             "library covers gear wear",
-            ('data-library-gear-wear="1"' in r.text) and ("Сломано" in r.text),
+            ('data-library-gear-wear="1"' in r.text) and ("Сломано" in r.text or "Broken" in r.text),
         )
 
     r = s.get(f"{BASE}/city/buildings/magic_school", timeout=TIMEOUT, allow_redirects=True)
