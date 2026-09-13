@@ -253,7 +253,10 @@ def main() -> int:
     r = s.get(f"{BASE}/city/buildings/clan_hall", timeout=TIMEOUT, allow_redirects=True)
     report.add(
         "GET /city/buildings/clan_hall",
-        r.status_code == 200 and 'data-building-key="clan_hall"' in r.text and ("Напасть" in r.text or "Attack" in r.text or "свитк" in r.text.lower()),
+        r.status_code == 200
+        and 'data-building-key="clan_hall"' in r.text
+        and ("Напасть" in r.text or "Attack" in r.text or "свитк" in r.text.lower())
+        and ('data-clan-hall-presence="1"' in r.text or "Кто рядом" in r.text or "Who is here" in r.text),
         f"url={r.url}",
     )
     r = s.get(f"{BASE}/city/buildings/airship_station", timeout=TIMEOUT, allow_redirects=True)

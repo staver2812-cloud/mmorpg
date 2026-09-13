@@ -238,6 +238,15 @@ a.nl-heal-chip:hover {
   opacity: 0.9;
 }
 
+.nl-clan-hall-presence {
+  margin: 8px 0 12px;
+  padding: 6px 8px;
+  border: 1px solid #3a4a5a;
+  background: #101418;
+  max-height: 160px;
+  overflow: auto;
+}
+
 .nl-vitals-inline {
   gap: 3px;
   margin-left: 3px;

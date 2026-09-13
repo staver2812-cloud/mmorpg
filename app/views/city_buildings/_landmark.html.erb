@@ -165,7 +165,7 @@
       <% end %>
     </section>
   <% when "clan_hall" %>
-    <section class="nl-handbook">
+    <section class="nl-handbook" aria-label="<%= t("game.buildings.clan_hall_short") %>">
       <h2>Зал Клана Пепла</h2>
       <p class="nl-handbook__lead">
         <%= t("game.buildings.clan_hall_lead") %>
@@ -179,6 +179,11 @@
           <%= link_to t("game.buildings.hospital_title_short"), city_building_path("hospital"), class: "lbut" %>
         <% end %>
       </p>
+      <h3><%= t("game.buildings.clan_hall_presence_title") %></h3>
+      <p class="nl-quests-board__meta"><%= t("game.buildings.clan_hall_presence_lead") %></p>
+      <div class="nl-clan-hall-presence" data-clan-hall-presence="1">
+        <%= render "shared/nl_players_list", viewer: current_character %>
+      </div>
       <p class="nl-quests-board__meta"><%= t("game.buildings.clan_hall_meta") %></p>
     </section>
   <% when "dealer_house" %>
