@@ -284,6 +284,7 @@ def main() -> int:
         and (
             "data-airship-affordable=" in r.text
             or "data-airship-wallet=" in r.text
+            or "data-airship-any-affordable=" in r.text
             or 'data-airship-station="1"' in r.text
         ),
         f"url={r.url}",
