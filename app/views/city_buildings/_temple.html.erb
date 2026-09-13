@@ -1,6 +1,17 @@
 <section class="nl-handbook" aria-label="<%= t("game.buildings.temple_aria") %>">
   <h2><%= t("game.buildings.temple_rite_title") %></h2>
   <p class="nl-handbook__lead"><%= t("game.buildings.temple_rite_lead", amount: Game::World::TempleBlessing::COST_NV) %></p>
+  <% injury_state = Game::Combat::InjuryState.new(character: current_character) %>
+  <% if (injury_summary = injury_state.summary).present? %>
+    <p class="nl-quests-board__meta" data-temple-injury="1">
+      <%= injury_summary %>
+      <% if injury_state.active.any? { |row| %w[heavy combat].include?(row["severity"].to_s) } %>
+        · <%= link_to t("game.buildings.hospital_title_short"), city_building_path("hospital"), class: "nl-sheet-link" %>
+      <% end %>
+    </p>
+  <% else %>
+    <p class="nl-quests-board__meta" data-temple-injury="0"><%= t("game.buildings.temple_no_injuries") %></p>
+  <% end %>
   <p>
     <%= button_to t("game.buildings.temple_rite_cta", amount: Game::World::TempleBlessing::COST_NV),
           city_building_bless_path("temple"),

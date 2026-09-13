@@ -187,10 +187,20 @@
       <p class="nl-quests-board__meta"><%= t("game.buildings.clan_hall_meta") %></p>
     </section>
   <% when "dealer_house" %>
-    <section class="nl-handbook">
-      <h2>Дом Скупщика</h2>
-      <p class="nl-handbook__lead">Игровой скуп трофеев уже работает у Скупщика Пепла на Сгоревшем Рынке.</p>
-      <p><%= link_to t("game.buildings.junk_dealer_link"), city_building_path("junk_dealer"), class: "lbut" %></p>
+    <section class="nl-handbook" aria-label="<%= t("game.buildings.dealer_house_aria") %>">
+      <h2><%= t("game.buildings.dealer_house_title") %></h2>
+      <p class="nl-handbook__lead"><%= t("game.buildings.dealer_house_lead") %></p>
+      <% offers = Game::Shop::JunkBuyback.offer_rows_for(current_character) %>
+      <% total = offers.sum { |row| row[:quantity].to_i * row[:price].to_i } %>
+      <p class="nl-quests-board__meta" data-dealer-buyback-total="<%= total %>">
+        <%= t("game.buildings.dealer_house_buyback", total: total, lines: offers.size) %>
+      </p>
+      <p>
+        <%= link_to t("game.buildings.junk_dealer_link"), city_building_path("junk_dealer"), class: "lbut" %>
+        <% if Game::World::CityBuildingCatalog.accessible?(character: current_character, building_key: "market") %>
+          <%= link_to t("game.buildings.market_short"), city_building_path("market"), class: "lbut" %>
+        <% end %>
+      </p>
     </section>
   <% when "post" %>
     <section class="nl-handbook">

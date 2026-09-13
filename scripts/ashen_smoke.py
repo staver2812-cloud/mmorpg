@@ -397,7 +397,10 @@ def main() -> int:
     r = s.get(f"{BASE}/city/buildings/temple", timeout=TIMEOUT, allow_redirects=True)
     report.add(
         "GET /city/buildings/temple",
-        r.status_code == 200 and 'data-building-key="temple"' in r.text and ("обряд" in r.text.lower() or "rite" in r.text.lower()),
+        r.status_code == 200
+        and 'data-building-key="temple"' in r.text
+        and ("обряд" in r.text.lower() or "rite" in r.text.lower())
+        and ('data-temple-injury="' in r.text),
         f"url={r.url}",
     )
 
