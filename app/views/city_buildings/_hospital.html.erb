@@ -5,15 +5,32 @@
 </div>
 
 <section class="nl-handbook" aria-label="<%= t("game.buildings.hospital_rest_aria") %>">
+  <% hp = current_character.current_hp.to_i %>
+  <% max_hp = current_character.effective_max_hp.to_i %>
+  <% mp = current_character.current_mp.to_i %>
+  <% max_mp = current_character.effective_max_mp.to_i %>
+  <% injuries = Game::Combat::InjuryState.new(character: current_character) %>
+  <% ordinary = injuries.active.any? { |row| %w[light heavy].include?(row["severity"].to_s) } %>
+  <% combat_left = injuries.active.any? { |row| row["severity"].to_s == "combat" } %>
+  <% needs_rest = hp < max_hp || mp < max_mp || ordinary %>
   <h2><%= t("game.buildings.hospital_hint") %></h2>
   <p><%= t("game.buildings.hospital_rest_lead") %></p>
   <p class="nl-quests-board__meta"><%= t("game.buildings.hospital_combat_rule") %></p>
+  <p class="nl-quests-board__meta" data-hospital-vitals="1" data-hospital-rest-ready="<%= needs_rest ? "1" : "0" %>">
+    <%= t("game.buildings.hospital_vitals", hp: hp, max_hp: max_hp, mp: mp, max_mp: max_mp) %>
+  </p>
   <p>
-    <%= button_to t("game.buildings.hospital_rest_cta"),
-          city_building_rest_path("hospital"),
-          method: :post,
-          class: "lbut",
-          form: {data: {turbo: false}} %>
+    <% if needs_rest %>
+      <%= button_to t("game.buildings.hospital_rest_cta"),
+            city_building_rest_path("hospital"),
+            method: :post,
+            class: "lbut",
+            form: {data: {turbo: false}} %>
+    <% else %>
+      <% blocked = combat_left ? t("game.buildings.hospital_combat_only") : t("game.buildings.hospital_already_full") %>
+      <button type="button" class="lbut" disabled title="<%= blocked %>"><%= t("game.buildings.hospital_rest_cta") %></button>
+      <span class="nl-quests-board__meta"><%= blocked %></span>
+    <% end %>
   </p>
 </section>
 

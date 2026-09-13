@@ -546,6 +546,7 @@ en:
       hospital_rest_lead: "Injury timers (light ~20–45 min, heavy ~2 h, combat ~12 h) are how long an untreated injury lasts — not the heal cast time. Rest, healer bags, and scrolls clear injuries instantly."
       hospital_combat_rule: "Combat trauma only from PvP that consumes a trauma scroll (arena checkbox or nearby Attack). Healer bag/heal scroll clears it instantly; waiting ~12 h also works."
       hospital_rest_cta: "Rest and recover"
+      hospital_vitals: "Now: %{hp}/%{max_hp} HP · %{mp}/%{max_mp} MP"
       hospital_rested: "You rested. HP and MP are restored."
       hospital_rested_injuries: "You rested. HP/MP restored and ordinary injuries cleared instantly."
       hospital_rested_combat_remains: "Rest helped, but combat trauma remains — use a master bag or VM heal scroll (instant)."
