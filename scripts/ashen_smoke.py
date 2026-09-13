@@ -496,7 +496,9 @@ def main() -> int:
         and ("Ячейка" in r.text or "locker" in r.text.lower())
         and ("data-bank-locker=" in r.text)
         and ("data-bank-wallet=" in r.text)
-        and ("data-bank-vm=" in r.text),
+        and ("data-bank-vm=" in r.text)
+        and ("data-bank-can-deposit=" in r.text)
+        and ("data-bank-can-withdraw=" in r.text),
         f"url={r.url}",
     )
     r = s.get(f"{BASE}/city/buildings/souvenir_shop", timeout=TIMEOUT, allow_redirects=True)
