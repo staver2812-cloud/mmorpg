@@ -582,6 +582,11 @@ def main() -> int:
         f"url={r.url}",
     )
     report.add(
+        "inventory mass/slot capacity",
+        ("data-inventory-mass=" in r.text) and ("data-inventory-slots=" in r.text),
+        f"url={r.url}",
+    )
+    report.add(
         "inventory durability markers",
         ("data-inventory-broken=" in r.text) or ("nl-durability-bar" in r.text),
         f"url={r.url}",

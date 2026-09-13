@@ -111,6 +111,7 @@ ru:
       short_info: "Краткая информация"
       reset_filter: "Сбросить фильтр"
       mass_label: "Вес инвентаря"
+      slots_label: "слоты %{slots}/%{max}"
       item_broken: "Сломано"
       repair_deferred_cta: "Ремонт отложен — Смоляная Кузница"
       repair_deferred_hint: "Ремонт пока недоступен. Смотрите Смоляную Кузницу, когда рядом."

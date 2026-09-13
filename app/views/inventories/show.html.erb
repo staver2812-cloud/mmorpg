@@ -90,8 +90,16 @@
         </nav>
       <% end %>
 
-      <div class="nl-inventory-mass">
+      <% bag_slots = @inventory.inventory_items.where(equipped: false).count %>
+      <% bag_slot_cap = @inventory.slot_capacity.to_i %>
+      <div class="nl-inventory-mass"
+           data-inventory-mass="<%= @inventory.current_weight %>"
+           data-inventory-mass-max="<%= @inventory.max_weight %>"
+           data-inventory-slots="<%= bag_slots %>"
+           data-inventory-slots-max="<%= bag_slot_cap %>">
         <%= t("game.inventory.mass_label") %>: <b><%= @inventory.current_weight %>/<%= @inventory.max_weight %></b>
+        ·
+        <%= t("game.inventory.slots_label", slots: bag_slots, max: bag_slot_cap) %>
         <% wear = Game::Inventory::EquippedWear.summary_for(current_character) %>
         <% if wear.worn.positive? %>
           ·
