@@ -43,6 +43,9 @@ class CityBuildingsController < ApplicationController
     if @building_key == "souvenir_shop"
       Game::Professions::Templates.ensure_craft_items!
     end
+    if @building_key == "obelisk"
+      @obelisk_bound = Game::World::ObeliskRecall.bound_for(current_character)
+    end
     prepare_presence_context
   end
 
@@ -177,6 +180,26 @@ class CityBuildingsController < ApplicationController
       redirect_to city_building_path("souvenir_shop"), notice: result.message
     else
       redirect_to city_building_path("souvenir_shop"), alert: result.message
+    end
+  end
+
+  def obelisk
+    unless @building_key == "obelisk"
+      redirect_to world_path, alert: I18n.t("game.buildings.obelisk_only") and return
+    end
+
+    result = Game::World::ObeliskRecall.new(
+      character: current_character,
+      action: params[:obelisk_action]
+    ).call
+    if result.success
+      if params[:obelisk_action].to_s == "recall"
+        redirect_to world_path, notice: result.message
+      else
+        redirect_to city_building_path("obelisk"), notice: result.message
+      end
+    else
+      redirect_to city_building_path("obelisk"), alert: result.message
     end
   end
 

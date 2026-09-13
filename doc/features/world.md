@@ -2969,6 +2969,7 @@ Before extending the World feature:
 | 2026-09-13 | Presence/profile Assault CTA only when colocated and legal; disabled state when trauma scroll is missing. |
 | 2026-09-13 | Outdoor HUD bait count chip; Library/Tavern handbook copy for quest spine, injuries, Assault, and T5 junk. |
 | 2026-09-13 | Look/Enter without bait appends a hostile-cell hint while passive ambush timer remains authoritative. |
+| 2026-09-13 | City Obelisk bind/recall for 15 NV via `Game::World::ObeliskRecall` and `POST /city/buildings/:building_key/obelisk`. |
 
 
 ## 19. Open-world parity audit (updated 2026-09-09)

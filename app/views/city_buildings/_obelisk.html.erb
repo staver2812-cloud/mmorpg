@@ -1,0 +1,27 @@
+<section class="nl-handbook" aria-label="<%= t("game.buildings.obelisk_aria") %>">
+  <h2><%= t("game.buildings.obelisk_title") %></h2>
+  <p class="nl-handbook__lead"><%= t("game.buildings.obelisk_lead", amount: Game::World::ObeliskRecall::RECALL_COST) %></p>
+  <% bound = local_assigns[:bound] %>
+  <% if bound.present? %>
+    <p class="nl-quests-board__meta">
+      <%= t("game.buildings.obelisk_bound_meta", place: bound["zone_name"], x: bound["x"], y: bound["y"]) %>
+    </p>
+  <% else %>
+    <p class="nl-quests-board__meta"><%= t("game.buildings.obelisk_unbound_meta") %></p>
+  <% end %>
+  <p>
+    <%= button_to t("game.buildings.obelisk_bind_cta"),
+          city_building_obelisk_path("obelisk"),
+          method: :post,
+          params: {obelisk_action: "bind"},
+          class: "lbut",
+          form: {data: {turbo: false}} %>
+    <%= button_to t("game.buildings.obelisk_recall_cta", amount: Game::World::ObeliskRecall::RECALL_COST),
+          city_building_obelisk_path("obelisk"),
+          method: :post,
+          params: {obelisk_action: "recall"},
+          class: "lbut",
+          form: {data: {turbo: false}},
+          disabled: bound.blank? %>
+  </p>
+</section>

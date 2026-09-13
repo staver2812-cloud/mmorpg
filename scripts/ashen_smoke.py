@@ -280,6 +280,14 @@ def main() -> int:
         r.status_code == 200 and 'data-building-key="souvenir_shop"' in r.text and ("Приманка" in r.text or "bait" in r.text.lower()),
         f"url={r.url}",
     )
+    r = s.get(f"{BASE}/city/buildings/obelisk", timeout=TIMEOUT, allow_redirects=True)
+    report.add(
+        "GET /city/buildings/obelisk",
+        r.status_code == 200
+        and 'data-building-key="obelisk"' in r.text
+        and ("Привязать" in r.text or "Bind" in r.text),
+        f"url={r.url}",
+    )
 
     for path in [
         "/ashen/items/set-blood/helm.png",

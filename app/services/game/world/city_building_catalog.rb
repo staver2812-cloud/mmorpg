@@ -114,8 +114,8 @@ module Game
         },
         "obelisk" => {
           "title" => "Обелиск Завесы",
-          "kind" => "landmark",
-          "summary" => "Точка привязки и телепорта между районами."
+          "kind" => "obelisk",
+          "summary" => "Привязка координат и возврат за NV."
         },
         "bank" => {
           "title" => "Банк Смолы",
