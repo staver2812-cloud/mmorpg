@@ -59,6 +59,7 @@ novice → adept → master bags.
 
 | Date | Change |
 |---|---|
+| 2026-09-13 | Journal summary exposes available/active/locked/completed counts (`data-quest-summary` / `data-quest-available` / `active` / `locked` / `completed`); HUD chip exposes `data-quest-chip`. |
 | 2026-09-13 | HUD quest chip marks ready-to-turn-in state (`chip_ready` / `nl-quest-chip--ready`). |
 | 2026-09-13 | Active quests gate turn-in until progress meets target; ready badge + `data-quest-ready`. |
 | 2026-09-13 | Live delivery progress, journal status sort, City Hall board counts/active chip, thematic reward ensure. |
