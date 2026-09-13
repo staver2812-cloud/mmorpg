@@ -246,7 +246,8 @@ def main() -> int:
         and ("data-market-wallet=" in r.text)
         and ("data-junk-can-sell=" in r.text)
         and ("data-market-stalls=" in r.text)
-        and ("data-market-any-stall-affordable=" in r.text),
+        and ("data-market-any-stall-affordable=" in r.text)
+        and ('data-market-notice="1"' in r.text),
         f"url={r.url}",
     )
     r = s.get(f"{BASE}/city/buildings/numismatics", timeout=TIMEOUT, allow_redirects=True)

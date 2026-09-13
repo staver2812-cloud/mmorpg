@@ -20,7 +20,7 @@
         <%= link_to t("arena.nav.city"), world_path, class: "lbut", data: {turbo: false} %>
       </header>
 
-      <p class="nl-city-building-notice"<%= ' data-market-notice="1"'.html_safe if @building["kind"] == "market" %>>
+      <p class="nl-city-building-notice"<% if @building["kind"] == "market" %> data-market-notice="1"<% end %>>
         <% if @building["kind"] == "market" %>
           <%= t("game.buildings.market_notice") %>
         <% elsif @building["kind"] == "workshop" %>
