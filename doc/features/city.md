@@ -108,7 +108,7 @@ The current slice contains:
 - A generic town grid, city movement timer, pathfinding avatar, or inferred reverse routes.
 - Copying Neverlands city/Shop images, tooltips as bitmaps, logos, or identity prose.
 - Treating presentation geometry, arrow visibility, or labels as authorization.
-- Inventing services for Auction, schools, or other landmarks still marked presentation-only.
+- Inventing Auction lot trading or Neverlands repair formulas without authenticated evidence.
 - Assigning an unobserved outdoor destination to another city exit.
 - Preserving the superseded nine-node `city2_*` topology as current Forpost behavior.
 

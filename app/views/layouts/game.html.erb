@@ -70,6 +70,15 @@
             </span>
           <% end %>
         <% end %>
+        <% wear = Game::Inventory::EquippedWear.summary_for(current_character) %>
+        <% if wear.worn.positive? %>
+          <%= link_to(
+                wear.broken.positive? ? t("game.world.wear_chip_broken", count: wear.broken) : t("game.world.wear_chip", count: wear.worn),
+                inventory_path,
+                class: "nl-wear-chip#{' nl-wear-chip--broken' if wear.broken.positive?}",
+                title: t("game.world.wear_chip_hint")
+              ) %>
+        <% end %>
         <% if current_character.alignment.to_s == "none" && Game::World::CityBuildingCatalog.accessible?(character: current_character, building_key: "law_abode") %>
           <%= link_to t("game.world.alignment_chip"),
                 city_building_path("law_abode"),

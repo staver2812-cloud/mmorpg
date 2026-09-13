@@ -247,6 +247,29 @@ a.nl-heal-chip:hover {
   overflow: auto;
 }
 
+.nl-wear-chip {
+  margin-left: 6px;
+  padding: 1px 6px;
+  border: 1px solid #6a5a3a;
+  background: #1a1610;
+  color: #e0c8a8;
+  font-size: 11px;
+  font-weight: 700;
+  white-space: nowrap;
+  text-decoration: none;
+}
+
+a.nl-wear-chip:hover {
+  color: #ffe8c8;
+  border-color: #a08850;
+}
+
+.nl-wear-chip--broken {
+  border-color: #8a4040;
+  color: #f0a0a0;
+  background: #1a1010;
+}
+
 .nl-vitals-inline {
   gap: 3px;
   margin-left: 3px;
