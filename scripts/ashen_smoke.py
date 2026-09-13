@@ -412,6 +412,7 @@ def main() -> int:
             ("data-quest-summary=" in r.text)
             and ("data-quest-available=" in r.text)
             and ("data-quest-active=" in r.text)
+            and ("data-quest-ready-count=" in r.text)
             and ("data-quest-locked=" in r.text),
         )
         r_hud = s.get(f"{BASE}/world", timeout=TIMEOUT)

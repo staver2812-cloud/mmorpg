@@ -10,6 +10,7 @@
         data-quest-summary="1"
         data-quest-available="<%= counts.fetch("available", 0) %>"
         data-quest-active="<%= counts.fetch("active", 0) %>"
+        data-quest-ready-count="<%= @entries.count { |e| e[:status] == "active" && e[:progress].to_i >= e[:target].to_i } %>"
         data-quest-locked="<%= counts.fetch("locked", 0) %>"
         data-quest-completed="<%= counts.fetch("completed", 0) %>">
       <li><span><%= t("game.quests.status.available") %></span> <b><%= counts.fetch("available", 0) %></b></li>
