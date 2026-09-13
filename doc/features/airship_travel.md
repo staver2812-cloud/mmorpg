@@ -210,5 +210,6 @@ or generic job/reconciler framework is introduced.
 
 | Date | Change |
 |---|---|
+| 2026-09-13 | Station greys out Board when wallet NV cannot cover fare; rows expose `data-airship-affordable`. |
 | 2026-09-08 | Added evidence-backed flight lifecycle and region-ready transport capability without populated destination content. |
 | 2026-09-08 | Retained identical same-region airship DOM cells across snapshots; changed art and cross-region replacement covered in Chrome. Full bounded server snapshots remain an explicit efficiency gap. |
