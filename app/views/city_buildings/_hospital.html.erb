@@ -65,10 +65,18 @@
   </p>
   <div class="nl-handbook__grid">
     <% local_assigns.fetch(:premium_offers, {}).each do |item_key, price| %>
+      <% owned = current_character.inventory&.inventory_items
+           &.joins(:item_template)
+           &.where(item_templates: {key: item_key}, equipped: false)
+           &.sum(:quantity).to_i || 0 %>
       <article class="nl-handbook__card">
         <h3><%= t("game.buildings.premium_item.#{item_key}", default: item_key) %></h3>
         <p><%= t("game.buildings.premium_item_hint.#{item_key}", default: "") %></p>
-        <p class="nl-quests-board__meta"><%= price %> VM</p>
+        <p class="nl-quests-board__meta">
+          <%= price %> VM
+          ·
+          <%= t("game.buildings.premium_owned", count: owned) %>
+        </p>
         <%= button_to t("game.buildings.premium_buy_cta", amount: price),
               city_building_buy_premium_path("hospital"),
               method: :post,

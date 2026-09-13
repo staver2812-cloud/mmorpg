@@ -671,6 +671,7 @@ ru:
       premium_topup_ok: "Касса выдала +%{amount} VM."
       premium_topup_wait: "Следующее пополнение через ~%{minutes} мин."
       premium_buy_cta: "Купить за %{amount} VM"
+      premium_owned: "в сумке: %{count}"
       premium_bought: "Куплено: %{name} (−%{amount} VM)."
       premium_short: "Нужно %{amount} VM."
       premium_unknown: "Такого свитка нет."
