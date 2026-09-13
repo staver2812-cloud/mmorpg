@@ -543,7 +543,8 @@ def main() -> int:
         and ("Привязать" in r.text or "Bind" in r.text)
         and ("data-obelisk-bound=" in r.text)
         and ("data-obelisk-wallet=" in r.text)
-        and ("data-obelisk-can-recall=" in r.text),
+        and ("data-obelisk-can-recall=" in r.text)
+        and ("data-obelisk-can-bind=" in r.text),
         f"url={r.url}",
     )
 
