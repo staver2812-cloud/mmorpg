@@ -73,9 +73,9 @@ class CityHotspot < ApplicationRecord
   # @param character [Character] the character trying to interact
   # @return [String, nil] error message or nil if can interact
   def interaction_blocked_reason(character)
-    return "Location is currently unavailable." unless active?
-    return "Character is unavailable." unless character
-    return "Requires level #{required_level}." if character.level < required_level
+    return I18n.t("game.world.location_unavailable") unless active?
+    return I18n.t("game.world.character_unavailable") unless character
+    return I18n.t("game.world.requires_level", level: required_level) if character.level < required_level
 
     nil
   end
