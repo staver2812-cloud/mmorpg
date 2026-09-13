@@ -49,3 +49,7 @@
     </tbody>
   </table>
 </div>
+
+<%= render "city_buildings/landmark",
+      building: local_assigns.fetch(:building, {}),
+      building_key: "airship_station" %>

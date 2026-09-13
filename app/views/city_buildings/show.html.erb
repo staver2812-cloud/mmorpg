@@ -7,7 +7,7 @@
       </div>
       <%= link_to t("arena.nav.city"), world_path, class: "lbut", data: {turbo: false} %>
     </header>
-    <%= render "city_buildings/airship", routes: @airship_routes %>
+    <%= render "city_buildings/airship", routes: @airship_routes, building: @building %>
   </div>
 <% else %>
 <div class="nl-city-building-page" data-building-key="<%= @building_key %>">
@@ -65,9 +65,14 @@
       <% when "shop_shell" %>
         <%= render "city_buildings/shop_shell", building: @building %>
       <% when "junk_buyback" %>
-        <%= render "city_buildings/junk_buyback", offers: @junk_offers %>
+        <%= render "city_buildings/junk_buyback",
+              offers: @junk_offers,
+              building: @building,
+              building_key: @building_key,
+              with_landmark: true %>
       <% when "numismatics" %>
         <%= render "city_buildings/numismatics", building: @building %>
+        <%= render "city_buildings/landmark", building: @building, building_key: @building_key %>
       <% when "hospital" %>
         <%= render "city_buildings/hospital",
               building: @building,

@@ -54,3 +54,9 @@
     </table>
   <% end %>
 </section>
+
+<% if local_assigns[:with_landmark] %>
+  <%= render "city_buildings/landmark",
+        building: local_assigns.fetch(:building, {}),
+        building_key: local_assigns.fetch(:building_key, "junk_dealer") %>
+<% end %>
