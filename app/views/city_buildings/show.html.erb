@@ -106,6 +106,24 @@
         <% quest_journal = Game::Quests::Journal.new(character: current_character) %>
         <% quest_entries = quest_journal.entries %>
         <% quest_counts = quest_entries.group_by { |e| e[:status] }.transform_values(&:size) %>
+        <% hall_wallet = current_user.currency_wallet || current_user.create_currency_wallet!(nv_balance: 0) %>
+        <section class="nl-quests-board" aria-label="<%= t("game.buildings.city_hall_treasury_aria") %>">
+          <h2><%= t("game.buildings.city_hall_treasury_title") %></h2>
+          <p class="nl-quests-board__meta">
+            <%= t(
+                  "game.buildings.city_hall_treasury_lead",
+                  wallet: hall_wallet.nv_balance.to_i,
+                  vault: Game::World::BankVault.balance_for(current_character),
+                  marks: hall_wallet.veil_marks.to_i
+                ) %>
+          </p>
+          <p>
+            <% if Game::World::CityBuildingCatalog.accessible?(character: current_character, building_key: "bank") %>
+              <%= link_to t("game.buildings.bank_title"), city_building_path("bank"), class: "lbut" %>
+            <% end %>
+            <%= link_to t("game.buildings.hospital_title_short"), city_building_path("hospital"), class: "lbut" if Game::World::CityBuildingCatalog.accessible?(character: current_character, building_key: "hospital") %>
+          </p>
+        </section>
         <section class="nl-quests-board">
           <h2><%= t("game.quests.board_title") %></h2>
           <p><%= t("game.quests.hint") %></p>
