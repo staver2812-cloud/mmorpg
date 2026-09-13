@@ -85,7 +85,9 @@
         <%= render "city_buildings/bank",
               building: @building,
               wallet_nv: @bank_wallet_nv,
-              vault_nv: @bank_vault_nv %>
+              vault_nv: @bank_vault_nv,
+              stored_item: @bank_item,
+              deposit_options: @bank_deposit_options %>
       <% when "post" %>
         <%= render "city_buildings/post", building: @building, note: @post_note %>
       <% when "souvenir" %>

@@ -36,6 +36,13 @@ class CityBuildingsController < ApplicationController
       wallet = current_user.currency_wallet || current_user.create_currency_wallet!(nv_balance: 0)
       @bank_wallet_nv = wallet.nv_balance.to_i
       @bank_vault_nv = Game::World::BankVault.balance_for(current_character)
+      @bank_item = Game::World::BankItemLocker.stored_for(current_character)
+      @bank_deposit_options = current_character.inventory&.inventory_items
+        &.where(equipped: false)
+        &.includes(:item_template)
+        &.select { |row| row.quantity.to_i.positive? }
+        &.map { |row| [row.item_template.display_name, row.item_template.key, row.quantity.to_i] }
+        &.uniq { |(_, key, _)| key } || []
     end
     if @building_key == "post"
       @post_note = Game::World::PostOfficeNote.current_for(current_character)
@@ -144,6 +151,24 @@ class CityBuildingsController < ApplicationController
       character: current_character,
       amount: params[:amount],
       action: params[:bank_action]
+    ).call
+    if result.success
+      redirect_to city_building_path("bank"), notice: result.message
+    else
+      redirect_to city_building_path("bank"), alert: result.message
+    end
+  end
+
+  def bank_item
+    unless @building_key == "bank"
+      redirect_to world_path, alert: I18n.t("game.buildings.bank_only") and return
+    end
+
+    result = Game::World::BankItemLocker.new(
+      character: current_character,
+      action: params[:bank_item_action],
+      item_key: params[:item_key],
+      quantity: params[:quantity]
     ).call
     if result.success
       redirect_to city_building_path("bank"), notice: result.message
