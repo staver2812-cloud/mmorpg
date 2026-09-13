@@ -63,7 +63,7 @@
       <% when "market" %>
         <%= render "city_buildings/market", building: @building, offers: @junk_offers %>
       <% when "shop_shell" %>
-        <%= render "city_buildings/shop_shell", building: @building %>
+        <%= render "city_buildings/shop_shell", building: @building, building_key: @building_key %>
       <% when "junk_buyback" %>
         <%= render "city_buildings/junk_buyback",
               offers: @junk_offers,

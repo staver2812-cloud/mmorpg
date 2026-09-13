@@ -5,3 +5,7 @@
   <% end %>
 </div>
 <p class="nl-empty-note" data-shop-shell-stock="deferred"><%= t("game.buildings.stock_note") %></p>
+
+<%= render "city_buildings/landmark",
+      building: building,
+      building_key: local_assigns.fetch(:building_key, "shop") %>
