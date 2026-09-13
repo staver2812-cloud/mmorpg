@@ -442,7 +442,7 @@ def main() -> int:
         r.status_code == 200
         and 'data-building-key="law_abode"' in r.text
         and ("склонност" in r.text.lower() or "alignment" in r.text.lower())
-        and ("Восточн" in r.text or "east gate" in r.text.lower()),
+        and ("восточн" in r.text.lower() or "east gate" in r.text.lower()),
         f"url={r.url}",
     )
     r = s.get(f"{BASE}/world", timeout=TIMEOUT)
@@ -464,7 +464,7 @@ def main() -> int:
         "GET /city/buildings/gallows east hint",
         r.status_code == 200
         and 'data-building-key="gallows"' in r.text
-        and ("Восточн" in r.text or "east gate" in r.text.lower()),
+        and ("восточн" in r.text.lower() or "east gate" in r.text.lower()),
         f"url={r.url}",
     )
 
