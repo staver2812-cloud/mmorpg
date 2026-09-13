@@ -51,8 +51,8 @@ module Game
       end
 
       def call
-        return failure("Item is broken") if item.broken?
-        return failure("Item has expired") if item.expired?
+        return failure(I18n.t("game.inventory.item_broken")) if item.broken?
+        return failure(I18n.t("game.inventory.item_expired")) if item.expired?
 
         missing = missing_requirements
         return {allowed: true, missing: []} if missing.empty?
@@ -60,7 +60,7 @@ module Game
         {
           allowed: false,
           missing: missing,
-          error: "Requirements not met: #{missing.map { |entry| entry[:label] }.join(", ")}"
+          error: I18n.t("game.inventory.requirements_not_met", list: missing.map { |entry| entry[:label] }.join(", "))
         }
       end
 
@@ -79,7 +79,17 @@ module Game
           current = current_value_for(key)
           next if current.nil? || current >= required.to_i
 
-          {key:, required: required.to_i, current:, label: "#{key.to_s.titleize} #{required} (current #{current})"}
+          {
+            key:,
+            required: required.to_i,
+            current:,
+            label: I18n.t(
+              "game.inventory.requirement_label",
+              name: key.to_s.titleize,
+              required: required.to_i,
+              current:
+            )
+          }
         end
       end
 
