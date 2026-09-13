@@ -1,7 +1,7 @@
 <h2><%= t("game.buildings.captured_modes") %></h2>
-<div class="nl-city-building-tabs">
+<div class="nl-city-building-tabs" data-shop-shell-modes="<%= building["modes"].size %>">
   <% building["modes"].each do |mode| %>
-    <span class="nl-city-building-tab"><%= mode %></span>
+    <span class="nl-city-building-tab" data-shop-shell-mode="<%= mode %>"><%= mode %></span>
   <% end %>
 </div>
-<p class="nl-empty-note"><%= t("game.buildings.stock_note") %></p>
+<p class="nl-empty-note" data-shop-shell-stock="deferred"><%= t("game.buildings.stock_note") %></p>
