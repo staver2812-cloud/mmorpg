@@ -577,7 +577,9 @@ def main() -> int:
         and ("data-law-wallet=" in r.text)
         and ("data-law-alignment=" in r.text)
         and ("data-law-first-pledge=" in r.text)
-        and ("data-law-pledge-mode=" in r.text),
+        and ("data-law-pledge-mode=" in r.text)
+        and ("data-law-can-afford=" in r.text)
+        and ("data-law-choice-ready=" in r.text),
         f"url={r.url}",
     )
     r = s.get(f"{BASE}/world", timeout=TIMEOUT)

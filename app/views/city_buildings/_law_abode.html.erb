@@ -2,10 +2,12 @@
 <% wallet = current_user.currency_wallet || current_user.create_currency_wallet!(nv_balance: 0) %>
 <% balance = wallet.nv_balance.to_d %>
 <% first_pledge = current_character.alignment.to_s == "none" %>
+<% can_afford_change = first_pledge || balance >= cost %>
 <section class="nl-handbook" aria-label="<%= t("game.buildings.law_aria") %>"
          data-law-alignment="<%= current_character.alignment %>"
          data-law-wallet="<%= balance.to_i %>"
-         data-law-first-pledge="<%= first_pledge ? "1" : "0" %>">
+         data-law-first-pledge="<%= first_pledge ? "1" : "0" %>"
+         data-law-can-afford="<%= can_afford_change ? "1" : "0" %>">
   <h2><%= t("game.buildings.law_title") %></h2>
   <p class="nl-handbook__lead">
     <%= t(
@@ -21,10 +23,15 @@
   <p class="nl-quests-board__meta"><%= t("game.buildings.law_quarter_east_gate") %></p>
   <div class="nl-handbook__grid">
     <% Game::World::LawAlignmentPledge::CHOICES.each do |key| %>
-      <article class="nl-handbook__card" data-law-choice="<%= key %>">
+      <% current_choice = current_character.alignment == key %>
+      <% choice_ready = current_choice ? false : (first_pledge || balance >= cost) %>
+      <article class="nl-handbook__card"
+               data-law-choice="<%= key %>"
+               data-law-choice-current="<%= current_choice ? "1" : "0" %>"
+               data-law-choice-ready="<%= choice_ready ? "1" : "0" %>">
         <h3><%= t("game.buildings.law_alignment.#{key}") %></h3>
         <p><%= t("game.buildings.law_alignment_hint.#{key}") %></p>
-        <% if current_character.alignment == key %>
+        <% if current_choice %>
           <button type="button" class="lbut" disabled><%= t("game.buildings.law_current_cta") %></button>
         <% elsif first_pledge %>
           <%= button_to t("game.buildings.law_pledge_cta"),
