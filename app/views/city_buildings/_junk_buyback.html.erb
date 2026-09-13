@@ -2,6 +2,11 @@
          data-junk-lines="<%= local_assigns.fetch(:offers, []).size %>">
   <h2><%= t("game.buildings.junk_title") %></h2>
   <p class="nl-handbook__lead"><%= t("game.buildings.junk_lead") %></p>
+  <% wallet = current_user.currency_wallet || current_user.create_currency_wallet!(nv_balance: 0) %>
+  <% balance = wallet.nv_balance.to_i %>
+  <p class="nl-quests-board__meta" data-junk-wallet="<%= balance %>">
+    <%= t("game.buildings.junk_wallet", amount: balance) %>
+  </p>
 
   <% rows = local_assigns.fetch(:offers, []) %>
   <% total = rows.sum { |row| row[:quantity].to_i * row[:price].to_i } %>
