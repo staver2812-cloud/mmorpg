@@ -204,6 +204,13 @@ def main() -> int:
         )
         time.sleep(0.1)
 
+    r = s.get(f"{BASE}/city/buildings/hospital", timeout=TIMEOUT, allow_redirects=True)
+    report.add(
+        "hospital landmark inside chrome",
+        r.status_code == 200 and 'data-landmark-inside="1"' in r.text,
+        f"url={r.url}",
+    )
+
     r = s.get(f"{BASE}/shop?mode=sell", timeout=TIMEOUT)
     report.add(
         "shop sell junk hint",
