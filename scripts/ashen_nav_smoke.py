@@ -95,7 +95,7 @@ def click_hotspot(session: requests.Session, key: str) -> Tuple[bool, str, str]:
 
 def register(session: requests.Session) -> Tuple[bool, str]:
     nick = f"Nav{uuid.uuid4().hex[:8]}"
-    email = f"{nick.lower()}@example.com"
+    email = f"nav_{uuid.uuid4().hex[:10]}@example.com"
     password = "NavTest123!"
     r = session.get(f"{BASE}/users/sign_up", timeout=TIMEOUT)
     token = csrf_from(r.text)
@@ -105,16 +105,18 @@ def register(session: requests.Session) -> Tuple[bool, str]:
         f"{BASE}/users",
         data={
             "authenticity_token": token,
+            "user[profile_name]": nick,
             "user[email]": email,
             "user[password]": password,
             "user[password_confirmation]": password,
-            "user[nickname]": nick,
-            "commit": "Sign up",
+            "commit": "Создать аккаунт",
         },
         timeout=TIMEOUT,
         allow_redirects=True,
     )
-    ok = r2.status_code == 200 and ("/world" in r2.url or "nl-world" in r2.text or nick in r2.text)
+    ok = r2.status_code in (200, 302) and (
+        nick in r2.text or "/world" in r2.url or "nl-map" in r2.text or "city-view" in r2.text
+    )
     return ok, nick if ok else f"status={r2.status_code} url={r2.url}"
 
 
@@ -158,7 +160,7 @@ def enter_building_from_outdoor(session: requests.Session) -> Tuple[bool, str]:
 def main() -> int:
     report = Report()
     s = requests.Session()
-    s.headers.update({"User-Agent": "ashen-nav-smoke/1.0"})
+    s.headers.update({"User-Agent": "ashen-nav-smoke/1.0", "Accept-Language": "ru"})
 
     ok, detail = register(s)
     report.add("register", ok, detail)
