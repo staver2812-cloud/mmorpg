@@ -35,7 +35,7 @@ module Game
           return Result.new(
             interrupted: true,
             match:,
-            message: "Finish the active fight before continuing."
+            message: I18n.t("game.world.finish_active_fight")
           )
         end
 

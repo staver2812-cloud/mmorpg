@@ -66,10 +66,10 @@ class TileBuilding < ApplicationRecord
   # @param character [Character] the character trying to enter
   # @return [String, nil] error message or nil if can enter
   def entry_blocked_reason(character)
-    return "Entrance is currently unavailable." unless accessible?
-    return "Character is unavailable." unless character&.position
-    return "Disembark before entering this location." if character.active_airship_journey
-    return "Entrance is not on your current cell." unless on_current_cell?(character.position)
+    return I18n.t("game.world.entrance_unavailable") unless accessible?
+    return I18n.t("game.world.character_unavailable") unless character&.position
+    return I18n.t("game.world.disembark_location") if character.active_airship_journey
+    return I18n.t("game.world.entrance_wrong_cell") unless on_current_cell?(character.position)
 
     nil
   end
