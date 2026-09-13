@@ -1,7 +1,7 @@
-<% hp = current_character.hp.to_i %>
-<% max_hp = current_character.max_hp.to_i %>
-<% mp = current_character.mp.to_i %>
-<% max_mp = current_character.max_mp.to_i %>
+<% hp = current_character.current_hp.to_i %>
+<% max_hp = current_character.effective_max_hp.to_i %>
+<% mp = current_character.current_mp.to_i %>
+<% max_mp = current_character.effective_max_mp.to_i %>
 <% fatigue = Characters::FatigueService.new(character: current_character).current_percent.to_i %>
 <% already_full = hp >= max_hp && mp >= max_mp && fatigue <= 0 %>
 <section class="nl-handbook" aria-label="<%= t("game.buildings.tavern_aria") %>"
