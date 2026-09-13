@@ -260,6 +260,8 @@ ru:
       combat_params: "Боевые параметры"
       fatigue: "Усталость"
       alignment: "Склонность"
+      post_note: "Записка"
+      post_note_hint: "Личная записка из Пепельной Почты"
       total_effects: "Всего эффектов"
       ap_per_strike: "ОД за удар"
       armor_class: "Класс брони"

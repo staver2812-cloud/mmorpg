@@ -112,5 +112,11 @@
     </table>
 
     <p class="nl-sheet-effects"><%= t("game.sheet.total_effects") %>: <%= metadata.fetch("active_effects", []).size %> / 99</p>
+    <% post_note = Game::World::PostOfficeNote.current_for(character) %>
+    <% if post_note.present? %>
+      <p class="nl-sheet-effects" title="<%= t("game.sheet.post_note_hint") %>">
+        <%= t("game.sheet.post_note") %>: <%= truncate(post_note, length: 80) %>
+      </p>
+    <% end %>
   </div>
 </section>

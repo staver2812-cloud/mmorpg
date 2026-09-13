@@ -260,6 +260,8 @@ en:
       combat_params: "Combat parameters"
       fatigue: "Fatigue"
       alignment: "Alignment"
+      post_note: "Note"
+      post_note_hint: "Personal note from Ashen Post"
       total_effects: "Total effects"
       ap_per_strike: "AP per strike"
       armor_class: "Armor class"
