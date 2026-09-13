@@ -611,6 +611,8 @@ en:
       school_unarmed: "Unarmed combat"
       school_wisdom: "Wisdom"
       clan_hall_meta: "Attack/heal scrolls are at Coal Infirmary (VM). Quest board is in City Hall."
+      clan_hall_presence_title: "Who is here"
+      clan_hall_presence_lead: "Same Presence list as the chat panel. Assault is available when colocated with a trauma scroll."
       airship_wallet: "Wallet %{amount} NV — fare is charged when you board."
       post_aria: "Ashen Post"
       post_only: "Notes are only available at the Post."
