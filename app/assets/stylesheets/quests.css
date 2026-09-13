@@ -145,6 +145,19 @@
   font: 12px Verdana, Tahoma, sans-serif;
 }
 
+.nl-quests-board__active {
+  margin: 0 0 10px;
+  padding: 8px 10px;
+  border: 1px solid #c9b48a;
+  background: #f7efdc;
+  font: 700 12px Verdana, Tahoma, sans-serif;
+}
+
+.nl-quests-board__active a {
+  color: #4a3818;
+  text-decoration: none;
+}
+
 .nl-chat-tool--quests {
   font-weight: 700;
 }

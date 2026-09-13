@@ -15,7 +15,7 @@
           <%= t("game.professions.min_skill", amount: recipe.fetch("min_skill", 0)) %>
           ·
           <%= t("game.professions.inputs") %>:
-          <%= recipe.fetch("inputs").map { |item_key, qty| "#{item_key}×#{qty}" }.join(", ") %>
+          <%= craft_input_labels(recipe, character: current_character) %>
         </p>
         <%= button_to t("game.professions.craft_cta"),
               city_building_craft_path("workshop"),
