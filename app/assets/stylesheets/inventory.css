@@ -108,6 +108,19 @@
   text-align: center;
 }
 
+.nl-inventory-junk-link {
+  color: #5a7040;
+  text-decoration: underline;
+}
+
+.nl-inventory-junk-link:hover {
+  color: #3a5020;
+}
+
+.nl-inventory-junk-hint {
+  color: #8a8050;
+}
+
 /* ---------------------------------------------------------------- *
  * Item rows
  * ---------------------------------------------------------------- */
