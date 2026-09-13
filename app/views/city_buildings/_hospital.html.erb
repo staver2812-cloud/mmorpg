@@ -96,7 +96,17 @@
 <section class="nl-handbook" aria-label="<%= t("game.buildings.premium_desk") %>">
   <h2><%= t("game.buildings.premium_desk") %></h2>
   <% marks = local_assigns.fetch(:veil_marks, 0).to_i %>
-  <p data-hospital-vm="<%= marks %>"><%= t("game.buildings.premium_lead", marks: marks) %></p>
+  <% premium_offers = local_assigns.fetch(:premium_offers, {}) %>
+  <% any_premium_affordable = premium_offers.any? { |_key, price| marks >= price.to_i } %>
+  <% topup = Game::Shop::VeilMarksTopUp.new(character: current_character) %>
+  <% topup_wait = topup.seconds_until_ready %>
+  <% topup_ready = topup_wait <= 0 %>
+  <p data-hospital-vm="<%= marks %>"
+     data-hospital-premium-any-affordable="<%= any_premium_affordable ? "1" : "0" %>"
+     data-hospital-topup-ready="<%= topup_ready ? "1" : "0" %>"
+     data-hospital-topup-wait="<%= topup_wait %>">
+    <%= t("game.buildings.premium_lead", marks: marks) %>
+  </p>
   <% assault_owned = Game::World::StartPlayerAssault.trauma_scroll_quantity(current_character) %>
   <% heal_owned = Game::Shop::PremiumScrollPurchase.owned_quantity(current_character, "combat_heal_scroll") %>
   <p class="nl-quests-board__meta"
@@ -107,22 +117,30 @@
     <%= t("game.world.heal_scroll_chip", count: heal_owned) %>
   </p>
   <p>
-    <%= button_to t("game.buildings.premium_topup_cta", amount: Game::Shop::VeilMarksTopUp::AMOUNT),
-          city_building_topup_vm_path("hospital"),
-          method: :post,
-          class: "lbut",
-          form: {data: {turbo: false}},
-          title: t("game.buildings.premium_topup_hint") %>
+    <% if topup_ready %>
+      <%= button_to t("game.buildings.premium_topup_cta", amount: Game::Shop::VeilMarksTopUp::AMOUNT),
+            city_building_topup_vm_path("hospital"),
+            method: :post,
+            class: "lbut",
+            form: {data: {turbo: false}},
+            title: t("game.buildings.premium_topup_hint") %>
+    <% else %>
+      <% wait_hint = t("game.buildings.premium_topup_wait", minutes: (topup_wait / 60.0).ceil) %>
+      <button type="button" class="lbut" disabled title="<%= wait_hint %>"><%= t("game.buildings.premium_topup_cta", amount: Game::Shop::VeilMarksTopUp::AMOUNT) %></button>
+      <span class="nl-quests-board__meta"><%= wait_hint %></span>
+    <% end %>
   </p>
   <div class="nl-handbook__grid">
-    <% local_assigns.fetch(:premium_offers, {}).each do |item_key, price| %>
+    <% premium_offers.each do |item_key, price| %>
       <% owned = current_character.inventory&.inventory_items
            &.joins(:item_template)
            &.where(item_templates: {key: item_key}, equipped: false)
            &.sum(:quantity).to_i || 0 %>
       <% price_i = price.to_i %>
       <% affordable = marks >= price_i %>
-      <article class="nl-handbook__card" data-hospital-premium-affordable="<%= affordable ? "1" : "0" %>">
+      <article class="nl-handbook__card"
+               data-hospital-premium-item="<%= item_key %>"
+               data-hospital-premium-affordable="<%= affordable ? "1" : "0" %>">
         <h3><%= t("game.buildings.premium_item.#{item_key}", default: item_key) %></h3>
         <p><%= t("game.buildings.premium_item_hint.#{item_key}", default: "") %></p>
         <p class="nl-quests-board__meta">
