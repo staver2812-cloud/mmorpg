@@ -657,6 +657,9 @@ en:
       souvenir_lead: "Bait, chips, and herbs for NV. No license required."
       souvenir_buy_cta: "Buy (−%{amount} NV)"
       souvenir_owned: "in bag: %{count}"
+      souvenir_wallet: "Wallet %{amount} NV"
+      souvenir_need_nv: "Need %{amount} NV"
+      souvenir_need_nv_short: "Need NV"
       souvenir_bought: "Bought %{name} (−%{amount} NV)."
       souvenir_unknown: "Unknown offering."
       souvenir_short: "Need %{amount} NV."
@@ -845,6 +848,7 @@ en:
       status:
         available: "Available"
         active: "In progress"
+        ready: "Ready to turn in"
         locked: "Locked"
         completed: "Completed"
       board_title: "Quest board"

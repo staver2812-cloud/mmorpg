@@ -341,6 +341,10 @@ def main() -> int:
             "quests show where hints",
             ("Где:" in r.text) or ("Where:" in r.text),
         )
+        report.add(
+            "quests progress markers",
+            ("data-quest-progress=" in r.text) and ("data-quest-ready=" in r.text),
+        )
 
     ok_main, d1 = click_hotspot(s, "go_main")
     report.add("travel go_main", ok_main, d1)
@@ -433,7 +437,9 @@ def main() -> int:
         r.status_code == 200
         and 'data-building-key="souvenir_shop"' in r.text
         and ("Приманка" in r.text or "bait" in r.text.lower())
-        and ("в сумке:" in r.text or "in bag:" in r.text),
+        and ("в сумке:" in r.text or "in bag:" in r.text)
+        and ("data-souvenir-wallet=" in r.text)
+        and ("data-souvenir-affordable=" in r.text),
         f"url={r.url}",
     )
     r = s.get(f"{BASE}/city/buildings/auction", timeout=TIMEOUT, allow_redirects=True)

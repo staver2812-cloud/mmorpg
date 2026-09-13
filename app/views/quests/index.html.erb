@@ -20,11 +20,17 @@
       <% summary = I18n.locale.to_s.start_with?("ru") ? quest["summary_ru"] : quest["summary_en"] %>
       <% reward = quest.fetch("reward", {}) %>
       <% objective = quest.fetch("objective", {}) %>
-      <article class="nl-quests__card nl-quests__card--<%= entry[:status] %>">
+      <% ready = entry[:status] == "active" && entry[:progress].to_i >= entry[:target].to_i %>
+      <article class="nl-quests__card nl-quests__card--<%= entry[:status] %><%= ' nl-quests__card--ready' if ready %>"
+               data-quest-key="<%= quest["key"] %>"
+               data-quest-status="<%= entry[:status] %>"
+               data-quest-progress="<%= entry[:progress] %>"
+               data-quest-target="<%= entry[:target] %>"
+               data-quest-ready="<%= ready ? "1" : "0" %>">
         <div class="nl-quests__card-top">
           <h2><%= title %></h2>
           <span class="nl-quests__badge nl-quests__badge--<%= entry[:status] %>">
-            <%= t("game.quests.status.#{entry[:status]}") %>
+            <%= ready ? t("game.quests.status.ready") : t("game.quests.status.#{entry[:status]}") %>
           </span>
         </div>
         <p class="nl-quests__giver"><%= t("game.quests.giver", name: quest["giver"]) %></p>
@@ -54,8 +60,11 @@
         <div class="nl-quests__actions">
           <% if entry[:status] == "available" %>
             <%= button_to t("game.quests.accept"), accept_quest_path(quest["key"]), method: :post, class: "lbut" %>
-          <% elsif entry[:status] == "active" %>
+          <% elsif entry[:status] == "active" && ready %>
             <%= button_to t("game.quests.turn_in"), turn_in_quest_path(quest["key"]), method: :post, class: "lbut" %>
+          <% elsif entry[:status] == "active" %>
+            <button type="button" class="lbut" disabled title="<%= t("game.quests.objective_incomplete") %>"><%= t("game.quests.turn_in") %></button>
+            <span class="nl-quests__done"><%= t("game.quests.objective_incomplete") %></span>
           <% elsif entry[:status] == "locked" %>
             <span class="nl-quests__done"><%= t("game.quests.locked_hint") %></span>
           <% else %>

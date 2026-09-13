@@ -92,6 +92,11 @@
   opacity: 0.72;
 }
 
+.nl-quests__card--ready {
+  outline: 1px solid var(--nl-rule-blue, #4a6fa5);
+  outline-offset: -1px;
+}
+
 .nl-quests__card--completed {
   opacity: 0.82;
 }

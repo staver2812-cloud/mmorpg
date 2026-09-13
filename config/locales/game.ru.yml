@@ -657,6 +657,9 @@ ru:
       souvenir_lead: "Приманка, щепа и трава за NV. Лицензия не нужна."
       souvenir_buy_cta: "Купить (−%{amount} NV)"
       souvenir_owned: "в сумке: %{count}"
+      souvenir_wallet: "В кармане %{amount} NV"
+      souvenir_need_nv: "Нужно %{amount} NV"
+      souvenir_need_nv_short: "Нет NV"
       souvenir_bought: "Куплено: %{name} (−%{amount} NV)."
       souvenir_unknown: "Такого товара нет."
       souvenir_short: "Нужно %{amount} NV."
@@ -845,6 +848,7 @@ ru:
       status:
         available: "Доступно"
         active: "В работе"
+        ready: "Готово к сдаче"
         locked: "Закрыто"
         completed: "Сдано"
       board_title: "Доска заданий"
