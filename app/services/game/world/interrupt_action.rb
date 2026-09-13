@@ -8,7 +8,7 @@ module Game
     # Ashen rule: passive ambushes happen on their own timer (~5 minutes).
     # Forced same-cell fights from Look / Enter / shell actions require bait.
     class InterruptAction
-      Result = Struct.new(:interrupted, :match, :npc, :message, keyword_init: true) do
+      Result = Struct.new(:interrupted, :match, :npc, :message, :hint, keyword_init: true) do
         def interrupted?
           interrupted
         end
@@ -45,7 +45,13 @@ module Game
           next Result.new(interrupted: false) unless npc
 
           bait = Bait.new(character:)
-          next Result.new(interrupted: false) unless bait.available?
+          unless bait.available?
+            next Result.new(
+              interrupted: false,
+              npc:,
+              hint: I18n.t("game.world.hostile_without_bait", name: npc.display_name)
+            )
+          end
 
           bait.consume!
           match = StartNpcFight.new(character:, tile_npc: npc, return_context:).call
@@ -57,7 +63,7 @@ module Game
           )
         end
       rescue Bait::MissingBaitError
-        Result.new(interrupted: false)
+        Result.new(interrupted: false, hint: I18n.t("game.world.bait_missing"))
       end
 
       private

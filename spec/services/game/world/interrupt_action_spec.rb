@@ -24,6 +24,7 @@ RSpec.describe Game::World::InterruptAction do
     create(:tile_npc, :multi_npc_encounter, zone: zone.name, x: 5, y: 5)
 
     expect(result).not_to be_interrupted
+    expect(result.hint).to include("5")
     expect(ArenaMatch.count).to eq(0)
   end
 
