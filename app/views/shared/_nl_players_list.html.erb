@@ -11,14 +11,23 @@
         <span class="nl-player-icon">&gt;</span>
       <% end %>
       <a href="<%= player_path(name: player.name) %>" class="nl-player-name-link"><%= player.name %></a><span class="nl-player-lvl">[<%= player.level %>]</span><span class="nl-player-status">g</span>
-      <% if viewer.present? && viewer.id != player.id %>
-        <%= button_to t("game.world.assault_cta"),
-              world_assault_path,
-              method: :post,
-              params: {defender_id: player.id},
-              class: "nl-assault-btn",
-              form: {class: "nl-assault-form", data: {turbo: false}},
-              title: t("game.world.assault_hint") %>
+      <% if viewer.present? && viewer.id != player.id && Game::World::StartPlayerAssault.offerable?(attacker: viewer, defender: player) %>
+        <% if Game::World::StartPlayerAssault.has_trauma_scroll?(viewer) %>
+          <%= button_to t("game.world.assault_cta"),
+                world_assault_path,
+                method: :post,
+                params: {defender_id: player.id},
+                class: "nl-assault-btn",
+                form: {class: "nl-assault-form", data: {turbo: false}},
+                title: t("game.world.assault_hint") %>
+        <% else %>
+          <button type="button"
+                  class="nl-assault-btn nl-assault-btn--blocked"
+                  disabled
+                  title="<%= t("game.world.assault_need_scroll") %>">
+            <%= t("game.world.assault_cta") %>
+          </button>
+        <% end %>
       <% end %>
     </div>
   <% end %>

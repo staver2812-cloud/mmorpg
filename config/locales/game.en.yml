@@ -285,6 +285,7 @@ en:
       no_players: "No players nearby."
       assault_cta: "Attack"
       assault_hint: "Consumes a combat trauma scroll. Must share the same cell/room."
+      assault_need_scroll: "Need a combat trauma scroll (Infirmary, VM)."
       assault_started: "Assault on %{name}! The loser receives combat trauma."
       assault_missing_target: "Target not found."
       assault_self: "You cannot attack yourself."

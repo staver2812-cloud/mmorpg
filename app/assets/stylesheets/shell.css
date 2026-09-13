@@ -355,6 +355,19 @@ button.nl-nav-link:disabled {
   background: #e8c0c0;
 }
 
+.nl-assault-btn--blocked,
+.nl-assault-btn:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+  background: #eee4e4;
+  color: #7a5555;
+}
+
+.nl-assault-btn--blocked:hover,
+.nl-assault-btn:disabled:hover {
+  background: #eee4e4;
+}
+
 .nl-profile-assault {
   margin-top: 8px;
 }

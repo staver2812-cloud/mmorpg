@@ -32,6 +32,20 @@ module Game
         true
       end
 
+      def self.has_trauma_scroll?(character)
+        trauma_scroll_quantity(character).positive?
+      end
+
+      def self.trauma_scroll_quantity(character)
+        return 0 unless character&.inventory
+
+        Game::Professions::Templates.ensure_craft_items!
+        template = ItemTemplate.find_by(key: SCROLL_KEY)
+        return 0 unless template
+
+        character.inventory.inventory_items.where(item_template: template, equipped: false).sum(:quantity)
+      end
+
       def self.co_located?(attacker, defender)
         a = attacker.position
         d = defender.position

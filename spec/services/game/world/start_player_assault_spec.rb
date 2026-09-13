@@ -66,6 +66,7 @@ RSpec.describe Game::World::StartPlayerAssault do
 
   it "reports offerable presence for colocated online players outside safe zones" do
     expect(described_class.offerable?(attacker:, defender:)).to be(true)
+    expect(described_class.has_trauma_scroll?(attacker)).to be(true)
 
     defender_position.update!(x: 9, y: 9)
     expect(described_class.offerable?(attacker:, defender: defender.reload)).to be(false)

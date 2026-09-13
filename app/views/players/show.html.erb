@@ -25,14 +25,21 @@
       <p class="nl-profile-location" aria-label="<%= t("game.world.location") %>"><%= profile_location(@character) %></p>
       <% if !@own_profile && @viewer_character.present? && Game::World::StartPlayerAssault.offerable?(attacker: @viewer_character, defender: @character) %>
         <div class="nl-profile-assault">
-          <%= button_to t("game.world.assault_cta"),
-                world_assault_path,
-                method: :post,
-                params: {defender_id: @character.id},
-                class: "nl-assault-btn",
-                form: {class: "nl-assault-form", data: {turbo: false}},
-                title: t("game.world.assault_hint") %>
-          <p class="nl-quests-board__meta"><%= t("game.world.assault_hint") %></p>
+          <% if Game::World::StartPlayerAssault.has_trauma_scroll?(@viewer_character) %>
+            <%= button_to t("game.world.assault_cta"),
+                  world_assault_path,
+                  method: :post,
+                  params: {defender_id: @character.id},
+                  class: "nl-assault-btn",
+                  form: {class: "nl-assault-form", data: {turbo: false}},
+                  title: t("game.world.assault_hint") %>
+            <p class="nl-quests-board__meta"><%= t("game.world.assault_hint") %></p>
+          <% else %>
+            <button type="button" class="nl-assault-btn nl-assault-btn--blocked" disabled title="<%= t("game.world.assault_need_scroll") %>">
+              <%= t("game.world.assault_cta") %>
+            </button>
+            <p class="nl-quests-board__meta"><%= t("game.world.assault_need_scroll") %></p>
+          <% end %>
         </div>
       <% end %>
     </aside>
