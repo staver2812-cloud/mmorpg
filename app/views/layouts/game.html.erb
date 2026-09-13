@@ -108,13 +108,25 @@
         <% obelisk_bound = Game::World::ObeliskRecall.bound_for(current_character) %>
         <% if obelisk_bound.present? %>
           <% if @zone&.outdoor? %>
-            <%= button_to t("game.world.obelisk_recall_chip", amount: Game::World::ObeliskRecall::RECALL_COST),
-                  world_obelisk_path,
-                  method: :post,
-                  params: {obelisk_action: "recall"},
-                  class: "nl-obelisk-chip",
-                  title: t("game.world.obelisk_recall_chip_hint"),
-                  form: {class: "nl-obelisk-chip-form", data: {turbo: false}} %>
+            <% obelisk_wallet = current_user.currency_wallet&.nv_balance.to_d %>
+            <% recall_cost = Game::World::ObeliskRecall::RECALL_COST.to_d %>
+            <% can_outdoor_recall = obelisk_wallet >= recall_cost %>
+            <% if can_outdoor_recall %>
+              <%= button_to t("game.world.obelisk_recall_chip", amount: Game::World::ObeliskRecall::RECALL_COST),
+                    world_obelisk_path,
+                    method: :post,
+                    params: {obelisk_action: "recall"},
+                    class: "nl-obelisk-chip",
+                    title: t("game.world.obelisk_recall_chip_hint"),
+                    form: {class: "nl-obelisk-chip-form", data: {turbo: false, obelisk_chip_affordable: "1"}} %>
+            <% else %>
+              <span class="nl-obelisk-chip nl-obelisk-chip--short"
+                    data-obelisk-chip-affordable="0"
+                    title="<%= t("game.buildings.obelisk_need_nv", amount: Game::World::ObeliskRecall::RECALL_COST) %>">
+                <%= t("game.world.obelisk_recall_chip", amount: Game::World::ObeliskRecall::RECALL_COST) %>
+                · <%= t("game.buildings.obelisk_need_nv_short") %>
+              </span>
+            <% end %>
           <% elsif Game::World::CityBuildingCatalog.accessible?(character: current_character, building_key: "obelisk") %>
             <%= link_to t("game.world.obelisk_bound_chip", place: obelisk_bound["zone_name"]),
                   city_building_path("obelisk"),

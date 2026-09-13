@@ -158,6 +158,13 @@ button.nl-obelisk-chip:hover {
   border-color: #7a90b8;
 }
 
+.nl-obelisk-chip--short {
+  border-color: #5a4040;
+  color: #c09090;
+  background: #1a1212;
+  cursor: default;
+}
+
 .nl-fatigue-chip {
   margin-left: 6px;
   padding: 1px 6px;
