@@ -880,6 +880,8 @@ en:
       shop_location_required: "Shop is only available from an accessible trading location."
       verify_email: "Verify your email to access this feature."
       arena_gate: "Enter the arena through the city building."
+      arena_character_required: "A character is required to enter the arena."
+      arena_character_required_participate: "A character is required to participate."
       active_fight: "You already have an active fight."
       arena_room_unavailable: "This arena room is unavailable."
       application_submitted: "Application submitted."

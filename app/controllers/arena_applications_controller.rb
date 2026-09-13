@@ -116,7 +116,7 @@ class ArenaApplicationsController < ApplicationController
 
   def require_character
     unless current_character
-      redirect_to root_path, alert: "A character is required to enter the arena."
+      redirect_to root_path, alert: I18n.t("game.flashes.arena_character_required")
     end
   end
 

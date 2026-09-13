@@ -146,7 +146,7 @@ class ArenaMatchesController < ApplicationController
 
   def require_character
     unless current_character
-      redirect_to arena_index_path, alert: "A character is required to participate."
+      redirect_to arena_index_path, alert: I18n.t("game.flashes.arena_character_required_participate")
     end
   end
 

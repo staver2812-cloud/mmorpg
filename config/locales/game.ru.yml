@@ -880,6 +880,8 @@ ru:
       shop_location_required: "Лавка доступна только из торгового места."
       verify_email: "Подтвердите почту, чтобы пользоваться этой функцией."
       arena_gate: "Входите на арену через здание города."
+      arena_character_required: "Нужен персонаж, чтобы войти на арену."
+      arena_character_required_participate: "Нужен персонаж, чтобы участвовать."
       active_fight: "У вас уже есть активный бой."
       arena_room_unavailable: "Этот зал арены недоступен."
       application_submitted: "Заявка подана."
