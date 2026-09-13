@@ -126,7 +126,10 @@
         <% unspent = stat_pts + combat_pts + peace_pts %>
         <table class="nl-detail-table nl-city-building-table nl-school-skill-board"
                data-school-board="1"
-               data-school-unspent="<%= unspent %>">
+               data-school-unspent="<%= unspent %>"
+               data-school-can-allocate="<%= unspent.positive? ? "1" : "0" %>"
+               data-school-can-allocate-stats="<%= stat_pts.positive? ? "1" : "0" %>"
+               data-school-can-allocate-skills="<%= (combat_pts.positive? || peace_pts.positive?) ? "1" : "0" %>">
           <tbody>
             <tr>
               <th><%= t("game.buildings.school_stat_points") %></th>
