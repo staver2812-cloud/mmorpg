@@ -392,6 +392,13 @@ def main() -> int:
             "quests progress markers",
             ("data-quest-progress=" in r.text) and ("data-quest-ready=" in r.text),
         )
+        r_hud = s.get(f"{BASE}/world", timeout=TIMEOUT)
+        report.add(
+            "quest HUD chip after journal",
+            r_hud.status_code == 200
+            and (("data-quest-chip=" in r_hud.text) or ("nl-quest-chip" in r_hud.text)),
+            f"url={r_hud.url}",
+        )
 
     ok_main, d1 = click_hotspot(s, "go_main")
     report.add("travel go_main", ok_main, d1)
