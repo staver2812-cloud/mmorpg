@@ -26,7 +26,7 @@ module Game
         template = inventory_item.item_template
 
         unless template.consumable?
-          return {success: false, error: "This item cannot be used"}
+          return {success: false, error: I18n.t("game.inventory.cannot_use")}
         end
 
         requirements = Game::Inventory::RequirementChecker.call(character:, item: inventory_item)
@@ -41,12 +41,12 @@ module Game
 
       def self.discard_item(inventory_item)
         if inventory_item.protected_from_discard?
-          return {success: false, error: "This item cannot be discarded"}
+          return {success: false, error: I18n.t("game.inventory.cannot_discard")}
         end
 
         decrement_inventory_weight!(inventory_item.inventory, inventory_item.weight * inventory_item.quantity)
         inventory_item.destroy!
-        {success: true, message: "Item discarded."}
+        {success: true, message: I18n.t("game.inventory.item_discarded")}
       end
 
       def self.consume_item_unit!(inventory_item)
