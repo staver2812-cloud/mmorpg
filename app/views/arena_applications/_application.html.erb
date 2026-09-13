@@ -66,11 +66,14 @@
             data: {
               turbo: false,
               action: "click->arena#acceptApplication",
-              application_id: application.id
+              application_id: application.id,
+              arena_app_acceptable: "1"
             } %>
       <% else %>
-        <span class="text-muted text-sm" title="<%= t("arena.level_mismatch") %>">
-          Unavailable
+        <span class="text-muted text-sm"
+              data-arena-app-acceptable="0"
+              title="<%= t("arena.level_mismatch") %>">
+          <%= t("arena.unavailable") %>
         </span>
       <% end %>
     <% end %>
