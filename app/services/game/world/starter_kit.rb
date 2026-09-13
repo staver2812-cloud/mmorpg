@@ -142,7 +142,9 @@ module Game
         return if owned.equipped?
 
         Game::Inventory::EquipmentService.new(character:, item: owned.reload).equip!
-      rescue Game::Inventory::Manager::CapacityExceededError
+      rescue StandardError => error
+        raise unless error.class.name.end_with?("CapacityExceededError")
+
         nil
       end
 
