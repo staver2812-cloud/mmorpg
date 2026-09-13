@@ -44,9 +44,17 @@
       </div>
     <% end %>
 
-    <div class="nl-shop-table-viewport">
+    <div class="nl-shop-table-viewport" data-shop-mode="<%= @mode %>">
       <% unless @mode == "licenses" %>
-        <div class="nl-shop-status-row">
+        <% shop_balance = @wallet.nv_balance.to_d %>
+        <% shop_any_affordable =
+             @mode != "sell" &&
+             @shop_items.present? &&
+             @shop_items.any? { |template| shop_buy_block_reason(template).nil? && @shop_buy_offers[template.id].present? } %>
+        <div class="nl-shop-status-row"
+             data-shop-wallet="<%= shop_balance.to_i %>"
+             data-shop-weight="<%= number_with_precision(@inventory.current_weight, precision: 2) %>"
+             data-shop-any-affordable="<%= shop_any_affordable ? "1" : "0" %>">
           <div><%= t("game.shop.carry_html",
             nv: number_with_precision(@wallet.nv_balance, precision: 2),
             weight: number_with_precision(@inventory.current_weight, precision: 2),

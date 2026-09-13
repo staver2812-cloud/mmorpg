@@ -181,7 +181,7 @@ def main() -> int:
 
     for path, needles in [
         ("/world", ["city-view", "nl-city", "Пепельный", "Город", "Площадь"]),
-        ("/shop", ["Лавка", "nl-shop", "NV", "Купить"]),
+        ("/shop", ["Лавка", "nl-shop", "NV", "Купить", "data-shop-wallet=", "data-shop-any-affordable="]),
         ("/inventory", ["nl-inventory", "Вес инвентаря", "Надеть", "Свойства"]),
         (f"/player/{nick}", ["nl-character-sheet", "Сейф", "nl-sheet-vault", "Ячейка", "nl-sheet-locker", "nl-sheet-vm", "data-sheet-vm="]),
         ("/arena", ["nl-arena", "Арена", "Дуэли", "data-arena-vitals=", "data-arena-hp=", "data-arena-mp=", "data-arena-apps="]),
