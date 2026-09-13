@@ -238,7 +238,14 @@ def main() -> int:
         report.add("city_hall quest board", "Задания" in r.text or "/quests" in r.text)
         report.add(
             "city_hall treasury",
-            ("Казна" in r.text) or ("treasury" in r.text.lower()) or ("сейф" in r.text.lower()),
+            (("Казна" in r.text) or ("treasury" in r.text.lower()) or ("сейф" in r.text.lower()))
+            and ("data-city-hall-wallet=" in r.text)
+            and ("data-city-hall-vault=" in r.text)
+            and ("data-city-hall-vm=" in r.text),
+        )
+        report.add(
+            "city_hall quest ready count",
+            ("data-city-hall-quest-ready=" in r.text) and ("Готово к сдаче" in r.text or "Ready to turn in" in r.text),
         )
         report.add(
             "city_hall residential links",

@@ -107,13 +107,18 @@
         <% quest_entries = quest_journal.entries %>
         <% quest_counts = quest_entries.group_by { |e| e[:status] }.transform_values(&:size) %>
         <% hall_wallet = current_user.currency_wallet || current_user.create_currency_wallet!(nv_balance: 0) %>
-        <section class="nl-quests-board" aria-label="<%= t("game.buildings.city_hall_treasury_aria") %>">
+        <% hall_vault = Game::World::BankVault.balance_for(current_character) %>
+        <% ready_count = quest_entries.count { |e| e[:status] == "active" && e[:progress].to_i >= e[:target].to_i } %>
+        <section class="nl-quests-board" aria-label="<%= t("game.buildings.city_hall_treasury_aria") %>"
+                 data-city-hall-wallet="<%= hall_wallet.nv_balance.to_i %>"
+                 data-city-hall-vault="<%= hall_vault %>"
+                 data-city-hall-vm="<%= hall_wallet.veil_marks.to_i %>">
           <h2><%= t("game.buildings.city_hall_treasury_title") %></h2>
           <p class="nl-quests-board__meta">
             <%= t(
                   "game.buildings.city_hall_treasury_lead",
                   wallet: hall_wallet.nv_balance.to_i,
-                  vault: Game::World::BankVault.balance_for(current_character),
+                  vault: hall_vault,
                   marks: hall_wallet.veil_marks.to_i
                 ) %>
           </p>
@@ -135,14 +140,19 @@
             <% end %>
           </p>
         </section>
-        <section class="nl-quests-board">
+        <section class="nl-quests-board"
+                 data-city-hall-quest-ready="<%= ready_count %>">
           <h2><%= t("game.quests.board_title") %></h2>
           <p><%= t("game.quests.hint") %></p>
           <% if (chip = quest_journal.active_chip).present? %>
-            <p class="nl-quests-board__active"><%= link_to chip, quests_path %></p>
+            <p class="nl-quests-board__active<%= " nl-quests-board__active--ready" if quest_journal.active_chip_ready? %>"
+               data-city-hall-chip-ready="<%= quest_journal.active_chip_ready? ? "1" : "0" %>">
+              <%= link_to chip, quests_path %>
+            </p>
           <% end %>
           <ul class="nl-quests__summary" aria-label="<%= t("game.quests.summary_aria") %>">
             <li><span><%= t("game.quests.status.active") %></span> <b><%= quest_counts.fetch("active", 0) %></b></li>
+            <li data-city-hall-ready-count="<%= ready_count %>"><span><%= t("game.quests.status.ready") %></span> <b><%= ready_count %></b></li>
             <li><span><%= t("game.quests.status.available") %></span> <b><%= quest_counts.fetch("available", 0) %></b></li>
             <li><span><%= t("game.quests.status.locked") %></span> <b><%= quest_counts.fetch("locked", 0) %></b></li>
             <li><span><%= t("game.quests.status.completed") %></span> <b><%= quest_counts.fetch("completed", 0) %></b></li>
