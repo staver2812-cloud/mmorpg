@@ -150,6 +150,7 @@ def main() -> int:
         ("/inventory", ["nl-inventory", "Вес инвентаря", "Надеть", "Свойства"]),
         ("/arena", ["nl-arena", "Арена", "Дуэли"]),
         ("/city/buildings/tavern", ["data-building-key=\"tavern\"", "Отдохнуть за столом", "Слухи угля"]),
+        ("/city/buildings/guard_tower", ["data-building-key=\"guard_tower\"", "interact_hotspot", "Карта кварталов"]),
         ("/city/buildings/workshop", ["data-building-key=\"workshop\"", "Смолокур", "Скрафтить"]),
         ("/city/buildings/hospital", ["data-building-key=\"hospital\"", "Лазарет", "Лекарь"]),
     ]:
@@ -316,7 +317,7 @@ def main() -> int:
         "GET /city/buildings/prison",
         r.status_code == 200
         and 'data-building-key="prison"' in r.text
-        and ("Обитель Закона" in r.text or "Law Abode" in r.text),
+        and ("Обитель Закона" in r.text or "Law Abode" in r.text or "law_abode" in r.text),
         f"url={r.url}",
     )
 
