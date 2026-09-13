@@ -633,6 +633,8 @@ en:
       school_peace_points: "Peace skill points"
       school_unarmed: "Unarmed combat"
       school_wisdom: "Wisdom"
+      school_allocate_stats: "Allocate stats"
+      school_allocate_skills: "Allocate skills"
       clan_hall_meta: "Attack/heal scrolls are at Coal Infirmary (VM). Quest board is in City Hall."
       clan_hall_presence_title: "Who is here"
       clan_hall_presence_lead: "Same Presence list as the chat panel. Assault is available when colocated with a trauma scroll."

@@ -120,19 +120,25 @@
       <% if defined?(current_character) && current_character %>
         <% skills = current_character.passive_skills.to_h %>
         <% professions = current_character.metadata.to_h.fetch("profession_skills", {}).to_h %>
-        <table class="nl-detail-table nl-city-building-table nl-school-skill-board">
+        <% stat_pts = current_character.stat_points_available.to_i %>
+        <% combat_pts = current_character.available_combat_skill_points.to_i %>
+        <% peace_pts = current_character.available_peace_skill_points.to_i %>
+        <% unspent = stat_pts + combat_pts + peace_pts %>
+        <table class="nl-detail-table nl-city-building-table nl-school-skill-board"
+               data-school-board="1"
+               data-school-unspent="<%= unspent %>">
           <tbody>
             <tr>
               <th><%= t("game.buildings.school_stat_points") %></th>
-              <td><%= current_character.stat_points_available.to_i %></td>
+              <td><%= stat_pts %></td>
             </tr>
             <tr>
               <th><%= t("game.buildings.school_combat_points") %></th>
-              <td><%= current_character.available_combat_skill_points %></td>
+              <td><%= combat_pts %></td>
             </tr>
             <tr>
               <th><%= t("game.buildings.school_peace_points") %></th>
-              <td><%= current_character.available_peace_skill_points %></td>
+              <td><%= peace_pts %></td>
             </tr>
             <% case local_assigns[:building_key].to_s %>
             <% when "military_school" %>
@@ -161,7 +167,17 @@
             <% end %>
           </tbody>
         </table>
-        <p><%= link_to t("nav.your_character"), player_path(name: current_character.name), class: "lbut" %></p>
+        <p>
+          <%= link_to t("nav.your_character"), player_path(name: current_character.name), class: "lbut" %>
+          <% if unspent.positive? %>
+            <% if stat_pts.positive? %>
+              <%= link_to t("game.buildings.school_allocate_stats"), stats_character_path(current_character), class: "lbut", data: {school_allocate: "stats"} %>
+            <% end %>
+            <% if combat_pts.positive? || peace_pts.positive? %>
+              <%= link_to t("game.buildings.school_allocate_skills"), skills_character_path(current_character), class: "lbut", data: {school_allocate: "skills"} %>
+            <% end %>
+          <% end %>
+        </p>
       <% end %>
     </section>
   <% when "clan_hall" %>

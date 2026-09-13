@@ -392,7 +392,8 @@ def main() -> int:
         r.status_code == 200
         and 'data-building-key="magic_school"' in r.text
         and ("Учебный зал" in r.text or "Training hall" in r.text)
-        and ("Очки характеристик" in r.text or "Stat points" in r.text or "nl-school-skill-board" in r.text),
+        and ("Очки характеристик" in r.text or "Stat points" in r.text or "nl-school-skill-board" in r.text)
+        and ("data-school-unspent=" in r.text),
         f"url={r.url}",
     )
     r = s.get(f"{BASE}/city/buildings/military_school", timeout=TIMEOUT, allow_redirects=True)
@@ -400,7 +401,8 @@ def main() -> int:
         "GET /city/buildings/military_school board",
         r.status_code == 200
         and 'data-building-key="military_school"' in r.text
-        and ("Рукопашный" in r.text or "Unarmed" in r.text or "nl-school-skill-board" in r.text),
+        and ("Рукопашный" in r.text or "Unarmed" in r.text or "nl-school-skill-board" in r.text)
+        and ("data-school-board=" in r.text),
         f"url={r.url}",
     )
     r = s.get(f"{BASE}/city/buildings/general_school", timeout=TIMEOUT, allow_redirects=True)
@@ -408,7 +410,8 @@ def main() -> int:
         "GET /city/buildings/general_school board",
         r.status_code == 200
         and 'data-building-key="general_school"' in r.text
-        and ("Смолокур" in r.text or "Tar Smith" in r.text or "Лекар" in r.text or "nl-school-skill-board" in r.text),
+        and ("Смолокур" in r.text or "Tar Smith" in r.text or "Лекар" in r.text or "nl-school-skill-board" in r.text)
+        and ("data-school-unspent=" in r.text),
         f"url={r.url}",
     )
 

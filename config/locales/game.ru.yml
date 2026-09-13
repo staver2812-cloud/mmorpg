@@ -633,6 +633,8 @@ ru:
       school_peace_points: "Мирные очки умений"
       school_unarmed: "Рукопашный бой"
       school_wisdom: "Мудрость"
+      school_allocate_stats: "Распределить характеристики"
+      school_allocate_skills: "Распределить умения"
       clan_hall_meta: "Свитки атаки/лечения — в Лазарете Угля (VM). Доска договоров — в Ратуше."
       clan_hall_presence_title: "Кто рядом"
       clan_hall_presence_lead: "Тот же список Presence, что в панели чата. «Напасть» доступно при общей клетке и свитке боевой травмы."
