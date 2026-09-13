@@ -98,7 +98,13 @@
   <% when "magic_school", "general_school", "military_school" %>
     <section class="nl-handbook">
       <h2>Учебный зал</h2>
-      <p class="nl-handbook__lead">Обучение умений — следующим срезом. Выход: стрелка назад в квартал Маяка, затем на Рынок.</p>
+      <p class="nl-handbook__lead">
+        Очки параметров и умений распределяются на листе персонажа.
+        Откройте «Персонаж» в шапке — блоки характеристик и навыков уже работают.
+      </p>
+      <% if defined?(current_character) && current_character %>
+        <p><%= link_to t("nav.your_character"), player_path(name: current_character.name), class: "lbut" %></p>
+      <% end %>
     </section>
   <% when "clan_hall" %>
     <section class="nl-handbook">
