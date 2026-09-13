@@ -4,13 +4,18 @@
       <% offer = @shop_buy_offers[template.id] %>
       <% block_reason = shop_buy_block_reason(template) %>
       <% unavailable_reason = block_reason || (t("game.shop.refresh_buy") unless offer) %>
+      <% affordable = unavailable_reason.blank? %>
       <% reason_id = dom_id(template, :shop_license_unavailable) if unavailable_reason %>
       <% quantity_id = dom_id(template, :shop_license_quantity) %>
-      <article class="nl-shop-license" aria-label="<%= template.display_name %>">
+      <% duration_days = template.enhancement_rules.fetch("license").fetch("duration_days") %>
+      <article class="nl-shop-license"
+               data-shop-license="<%= template.id %>"
+               data-shop-license-affordable="<%= affordable ? "1" : "0" %>"
+               aria-label="<%= template.display_name %>">
         <h2><%= template.display_name %></h2>
         <p class="nl-shop-license__description">
           <%= template.description %>
-          Valid for <%= template.enhancement_rules.fetch("license").fetch("duration_days") %> days.
+          <%= t("game.shop.license_valid_for", days: duration_days) %>
         </p>
         <div class="nl-shop-license__facts">
           <div><%= t("game.common.durability") %>: <b><%= template.durability_max %>/<%= template.durability_max %></b></div>

@@ -210,6 +210,7 @@ en:
       junk_hint: "No license needed: chips, tails, bait, bandages, and spare T5 sell to the Ash Buyer on Coal Market."
       cost: "Cost"
       stock: "Stock"
+      license_valid_for: "Valid for %{days} days."
       merchant_title: "Merchant qualification"
       merchant_done: "Merchant qualification completed. Trading licenses are available in the Shop."
       merchant_collect_market: "Collect the qualification receipt for 1,000 NV, then return to the Market."
