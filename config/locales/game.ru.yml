@@ -707,6 +707,8 @@ ru:
       law_pledge_cta: "Объявить"
       law_change_cta: "Сменить (−%{amount} NV)"
       law_wallet: "В кармане %{amount} NV"
+      law_first_free: "Сейчас первое объявление — бесплатно."
+      law_change_cost: "Смена склонности: %{amount} NV."
       law_need_nv: "Нужно %{amount} NV для смены"
       law_need_nv_short: "Нет NV"
       law_current_cta: "Текущая"
