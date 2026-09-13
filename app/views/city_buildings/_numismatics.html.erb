@@ -1,5 +1,5 @@
 <h2><%= t("game.buildings.commodity_book") %></h2>
-<table class="nl-detail-table nl-city-building-table">
+<table class="nl-detail-table nl-city-building-table" data-numismatics="1" data-numismatics-listings="0">
   <thead><tr><th><%= t("game.common.commodity") %></th><th><%= t("game.common.count") %></th><th><%= t("game.common.unit_price") %></th><th><%= t("game.common.total") %></th></tr></thead>
-  <tbody><tr><td><%= building["commodity"] %></td><td colspan="3"><%= t("game.buildings.no_listings") %></td></tr></tbody>
+  <tbody><tr data-numismatics-empty="1"><td><%= building["commodity"] %></td><td colspan="3"><%= t("game.buildings.no_listings") %></td></tr></tbody>
 </table>

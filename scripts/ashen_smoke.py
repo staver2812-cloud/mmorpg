@@ -247,6 +247,16 @@ def main() -> int:
         and ("data-junk-can-sell=" in r.text),
         f"url={r.url}",
     )
+    r = s.get(f"{BASE}/city/buildings/numismatics", timeout=TIMEOUT, allow_redirects=True)
+    report.add(
+        "GET /city/buildings/numismatics empty book",
+        r.status_code == 200
+        and 'data-building-key="numismatics"' in r.text
+        and ("data-numismatics=" in r.text)
+        and ('data-numismatics-listings="0"' in r.text)
+        and ("Нет предложений" in r.text or "No MVP listings" in r.text),
+        f"url={r.url}",
+    )
     r = s.get(f"{BASE}/city/buildings/city_hall", timeout=TIMEOUT, allow_redirects=True)
     report.add(
         "GET /city/buildings/city_hall",
