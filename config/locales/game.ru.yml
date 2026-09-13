@@ -876,6 +876,7 @@ ru:
       move_started: "Перемещение начато."
       location_gone: "Эта локация больше недоступна."
       building_not_found: "Здание не найдено."
+      building_district_required: "Войдите в здание из текущего района города."
       location_not_found: "Локация не найдена."
       shop_location_required: "Лавка доступна только из торгового места."
       verify_email: "Подтвердите почту, чтобы пользоваться этой функцией."

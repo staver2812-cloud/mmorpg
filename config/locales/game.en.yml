@@ -876,6 +876,7 @@ en:
       move_started: "Move started."
       location_gone: "This location is no longer available."
       building_not_found: "Building not found."
+      building_district_required: "Enter the building from the current city district."
       location_not_found: "Location not found."
       shop_location_required: "Shop is only available from an accessible trading location."
       verify_email: "Verify your email to access this feature."
