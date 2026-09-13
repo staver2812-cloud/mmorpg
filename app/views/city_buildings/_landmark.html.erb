@@ -109,7 +109,11 @@
   <% when "clan_hall" %>
     <section class="nl-handbook">
       <h2>Зал Клана Пепла</h2>
-      <p class="nl-handbook__lead">Войны секторов позже. Сейчас — место сбора и выход на Рынок кнопкой «Город».</p>
+      <p class="nl-handbook__lead">
+        Войны секторов позже. Сейчас зал — точка сбора: смотрите список рядом и профиль.
+        PvP на клетке — «Напасть», если есть свиток боевой травмы.
+      </p>
+      <p><%= link_to t("game.quests.board_open"), quests_path, class: "lbut" %></p>
     </section>
   <% when "dealer_house" %>
     <section class="nl-handbook">
