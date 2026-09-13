@@ -153,6 +153,23 @@
   grid-template-columns: 72px minmax(0, 1fr);
 }
 
+.nl-inventory-item--broken {
+  outline: 1px solid #a33;
+  outline-offset: -1px;
+}
+
+.nl-inventory-broken-badge {
+  margin-left: 6px;
+  color: #a33;
+  font: bold 10px/12px var(--nl-font-tahoma);
+}
+
+.nl-inventory-durability-label {
+  margin-left: 6px;
+  color: var(--nl-text-soft);
+  font: 10px/12px var(--nl-font-tahoma);
+}
+
 .nl-inventory-item-icon {
   position: relative;
   display: flex;
@@ -194,6 +211,19 @@
   display: block;
   height: 100%;
   background: var(--nl-rule-blue);
+}
+
+.nl-durability-bar--low span {
+  background: #c9782a;
+}
+
+.nl-durability-bar--broken {
+  background: #e0b8b8;
+}
+
+.nl-durability-bar--broken span {
+  background: #a33;
+  width: 0 !important;
 }
 
 .nl-inventory-item-body {

@@ -7,8 +7,12 @@
   <% items.each do |item| %>
     <% action_availability = inventory_action_availability(item) %>
     <% requirements_allowed = action_availability.fetch(:allowed) %>
-    <div class="inventory-slot filled nl-inventory-item"
+    <% durable = item.durable? %>
+    <% broken = item.broken? %>
+    <% durability_pct = inventory_item_durability_percent(item) %>
+    <div class="inventory-slot filled nl-inventory-item<%= ' nl-inventory-item--broken' if broken %>"
          data-item-id="<%= item.id %>"
+         <% if durable %>data-inventory-broken="<%= broken ? "1" : "0" %>"<% end %>
          data-action="click->inventory#selectItem">
       <div class="nl-inventory-item-icon">
         <% if artwork = item_artwork_path(item.item_template) %>
@@ -19,9 +23,11 @@
         <% if item.quantity > 1 %>
           <strong><%= item.quantity %></strong>
         <% end %>
-        <div class="nl-durability-bar">
-          <span style="width: <%= inventory_item_durability_percent(item) %>%"></span>
-        </div>
+        <% if durable %>
+          <div class="nl-durability-bar<%= ' nl-durability-bar--broken' if broken %><%= ' nl-durability-bar--low' if !broken && durability_pct <= 25 %>">
+            <span style="width: <%= durability_pct %>%"></span>
+          </div>
+        <% end %>
       </div>
 
       <div class="nl-inventory-item-body">
@@ -90,7 +96,14 @@
             <table class="nl-detail-table">
               <tr>
                 <th><%= t("game.common.name") %></th>
-                <td><%= item.item_template.display_name %></td>
+                <td>
+                  <%= item.item_template.display_name %>
+                  <% if broken %>
+                    <span class="nl-inventory-broken-badge"><%= t("game.inventory.item_broken") %></span>
+                  <% elsif durable && (label = inventory_item_durability(item)).present? %>
+                    <span class="nl-inventory-durability-label"><%= label %></span>
+                  <% end %>
+                </td>
               </tr>
               <% if info_mode == "full" %>
                 <% inventory_item_properties(item).each do |label, value| %>

@@ -529,6 +529,11 @@ def main() -> int:
         ("Скупщику:" in r.text) or ("Junk buyer:" in r.text),
         f"url={r.url}",
     )
+    report.add(
+        "inventory durability markers",
+        ("data-inventory-broken=" in r.text) or ("nl-durability-bar" in r.text),
+        f"url={r.url}",
+    )
 
     r = s.get(f"{BASE}/shop", timeout=TIMEOUT)
     banned_shop = ["You carry", "Shop funds", "Refresh to buy", "There are no items"]

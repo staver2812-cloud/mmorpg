@@ -37,6 +37,25 @@ RSpec.describe "Inventories", type: :request do
       let(:item_template) { create(:item_template, name: "Pocket Knife", item_type: "equipment", slot: "main_hand") }
       let!(:inventory_item) { create(:inventory_item, inventory: inventory, item_template: item_template) }
 
+      it "marks broken durable items in the grid" do
+        blade = create(:item_template, :durable, name: "Cracked Blade", item_type: "equipment", slot: "main_hand")
+        create(
+          :inventory_item,
+          inventory: inventory,
+          item_template: blade,
+          properties: {"current_durability" => 0, "max_durability" => 10}
+        )
+
+        get inventory_path
+
+        html = Nokogiri::HTML(response.body)
+        row = html.at_css('.nl-inventory-item[data-inventory-broken="1"]')
+        expect(row).to be_present
+        expect(row["class"]).to include("nl-inventory-item--broken")
+        expect(response.body).to include("Broken")
+        expect(html.at_css(".nl-inventory-broken-badge").text).to eq("Broken")
+      end
+
       it "displays items in the grid" do
         get inventory_path
 
