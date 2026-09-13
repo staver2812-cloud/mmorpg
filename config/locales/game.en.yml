@@ -590,6 +590,7 @@ en:
       city_hall_short: "City Hall"
       clan_hall_lead: "Sector wars later. For now this hall is a meetup: presence list and profiles. Attack needs a combat trauma scroll."
       clan_hall_meta: "Attack/heal scrolls are at Coal Infirmary (VM). Quest board is in City Hall."
+      airship_wallet: "Wallet %{amount} NV — fare is charged when you board."
       post_aria: "Ashen Post"
       post_only: "Notes are only available at the Post."
       post_title: "Personal note"

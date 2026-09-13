@@ -175,8 +175,8 @@ def main() -> int:
         )
         report.add(
             "city_hall residential links",
-            ("Пепельная Почта" in r.text or "post" in r.text.lower())
-            and ("Зал Клана" in r.text or "Clan Hall" in r.text or "clan_hall" in r.text),
+            ("записк" in r.text.lower() or "/city/buildings/post" in r.text)
+            and ("Зал Клана" in r.text or "/city/buildings/clan_hall" in r.text),
         )
     r = s.get(f"{BASE}/city/buildings/post", timeout=TIMEOUT, allow_redirects=True)
     report.add(

@@ -1,4 +1,8 @@
 <div class="nl-airship-station">
+  <% wallet = current_user.currency_wallet || current_user.create_currency_wallet!(nv_balance: 0) %>
+  <p class="nl-quests-board__meta">
+    <%= t("game.buildings.airship_wallet", amount: wallet.nv_balance.to_i) %>
+  </p>
   <table class="nl-airship-routes">
     <thead><tr><th><%= t("game.common.route") %></th><th><%= t("game.common.price") %></th><th><%= t("game.common.next_departure") %></th><th></th></tr></thead>
     <tbody>
