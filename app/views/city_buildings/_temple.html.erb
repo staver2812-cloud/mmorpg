@@ -6,7 +6,8 @@
 <% can_rite = light_count.positive? && balance >= cost %>
 <section class="nl-handbook" aria-label="<%= t("game.buildings.temple_aria") %>"
          data-temple-light="<%= light_count %>"
-         data-temple-wallet="<%= balance.to_i %>">
+         data-temple-wallet="<%= balance.to_i %>"
+         data-temple-rite-ready="<%= can_rite ? "1" : "0" %>">
   <h2><%= t("game.buildings.temple_rite_title") %></h2>
   <p class="nl-handbook__lead"><%= t("game.buildings.temple_rite_lead", amount: Game::World::TempleBlessing::COST_NV) %></p>
   <p class="nl-quests-board__meta"><%= t("game.buildings.temple_wallet", amount: balance.to_i) %></p>

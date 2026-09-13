@@ -1158,7 +1158,7 @@ Final rerun results are in the
 - 2026-09-13: Knowledge Quarter schools show a live skill/profession snapshot board (no invented training formulas); unspent points link to allocate stats/skills (`data-school-unspent`).
 - 2026-09-13: Law Abode notes Cistern east-gate outdoor handoff; smoke covers east exit and Enter back.
 - 2026-09-13: Law Abode shows wallet NV and greys out paid alignment changes when short on NV; explicit first-free vs paid mode markers (`data-law-first-pledge`).
-- 2026-09-13: Temple rite greys out without light injuries or NV; shows wallet + injury markers.
+- 2026-09-13: Temple rite greys out without light injuries or NV; shows wallet + injury markers; `data-temple-rite-ready` mirrors the gate.
 - 2026-09-13: Coal Tide Tavern shows live HP/MP/fatigue and disables rest when already full; vitals expose `data-tavern-hp`/`mp` markers.
 - 2026-09-13: Veil Obelisk shows wallet NV and greys out recall when unbound or short on fare.
 - 2026-09-13: Relic stall shows wallet NV and greys out unaffordable buys (`data-souvenir-affordable`).
