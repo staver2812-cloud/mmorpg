@@ -459,6 +459,14 @@ def main() -> int:
         and ("Обитель Закона" in r.text or "Law Abode" in r.text or "law_abode" in r.text),
         f"url={r.url}",
     )
+    r = s.get(f"{BASE}/city/buildings/gallows", timeout=TIMEOUT, allow_redirects=True)
+    report.add(
+        "GET /city/buildings/gallows east hint",
+        r.status_code == 200
+        and 'data-building-key="gallows"' in r.text
+        and ("Восточн" in r.text or "east gate" in r.text.lower()),
+        f"url={r.url}",
+    )
 
     ok_east, d_east = click_hotspot(s, "east_gate")
     report.add("travel east_gate", ok_east, d_east)
