@@ -183,7 +183,7 @@ def main() -> int:
         ("/world", ["city-view", "nl-city", "Пепельный", "Город", "Площадь"]),
         ("/shop", ["Лавка", "nl-shop", "NV", "Купить", "data-shop-wallet=", "data-shop-any-affordable="]),
         ("/inventory", ["nl-inventory", "Вес инвентаря", "Надеть", "Свойства"]),
-        (f"/player/{nick}", ["nl-character-sheet", "Сейф", "nl-sheet-vault", "Ячейка", "nl-sheet-locker", "data-sheet-locker=", "nl-sheet-vm", "data-sheet-vm=", "data-sheet-nv="]),
+        (f"/player/{nick}", ["nl-character-sheet", "Сейф", "nl-sheet-vault", "data-sheet-vault=", "Ячейка", "nl-sheet-locker", "data-sheet-locker=", "nl-sheet-vm", "data-sheet-vm=", "data-sheet-nv="]),
         ("/arena", ["nl-arena", "Арена", "Дуэли", "data-arena-vitals=", "data-arena-hp=", "data-arena-mp=", "data-arena-apps="]),
         ("/city/buildings/tavern", ["data-building-key=\"tavern\"", "Отдохнуть за столом", "Слухи угля", "data-tavern-vitals=", "data-tavern-hp=", "data-tavern-mp="]),
         ("/city/buildings/guard_tower", ["data-building-key=\"guard_tower\"", "interact_hotspot", "Карта кварталов", "data-guard-here=", "Вы здесь:", "data-guard-routes="]),
