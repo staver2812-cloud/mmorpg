@@ -1,7 +1,15 @@
-<section class="nl-handbook" aria-label="<%= t("game.buildings.temple_aria") %>">
+<% cost = Game::World::TempleBlessing::COST_NV.to_d %>
+<% wallet = current_user.currency_wallet || current_user.create_currency_wallet!(nv_balance: 0) %>
+<% balance = wallet.nv_balance.to_d %>
+<% injury_state = Game::Combat::InjuryState.new(character: current_character) %>
+<% light_count = injury_state.active.count { |row| row["severity"].to_s == "light" } %>
+<% can_rite = light_count.positive? && balance >= cost %>
+<section class="nl-handbook" aria-label="<%= t("game.buildings.temple_aria") %>"
+         data-temple-light="<%= light_count %>"
+         data-temple-wallet="<%= balance.to_i %>">
   <h2><%= t("game.buildings.temple_rite_title") %></h2>
   <p class="nl-handbook__lead"><%= t("game.buildings.temple_rite_lead", amount: Game::World::TempleBlessing::COST_NV) %></p>
-  <% injury_state = Game::Combat::InjuryState.new(character: current_character) %>
+  <p class="nl-quests-board__meta"><%= t("game.buildings.temple_wallet", amount: balance.to_i) %></p>
   <% if (injury_summary = injury_state.summary).present? %>
     <p class="nl-quests-board__meta" data-temple-injury="1">
       <%= injury_summary %>
@@ -13,11 +21,19 @@
     <p class="nl-quests-board__meta" data-temple-injury="0"><%= t("game.buildings.temple_no_injuries") %></p>
   <% end %>
   <p>
-    <%= button_to t("game.buildings.temple_rite_cta", amount: Game::World::TempleBlessing::COST_NV),
-          city_building_bless_path("temple"),
-          method: :post,
-          class: "lbut",
-          form: {data: {turbo: false}} %>
+    <% if can_rite %>
+      <%= button_to t("game.buildings.temple_rite_cta", amount: Game::World::TempleBlessing::COST_NV),
+            city_building_bless_path("temple"),
+            method: :post,
+            class: "lbut",
+            form: {data: {turbo: false}} %>
+    <% elsif balance < cost %>
+      <button type="button" class="lbut" disabled title="<%= t("game.buildings.temple_need_nv", amount: Game::World::TempleBlessing::COST_NV) %>"><%= t("game.buildings.temple_need_nv_short") %></button>
+      <span class="nl-quests-board__meta"><%= t("game.buildings.temple_need_nv", amount: Game::World::TempleBlessing::COST_NV) %></span>
+    <% else %>
+      <button type="button" class="lbut" disabled title="<%= t("game.buildings.temple_no_light") %>"><%= t("game.buildings.temple_rite_cta", amount: Game::World::TempleBlessing::COST_NV) %></button>
+      <span class="nl-quests-board__meta"><%= t("game.buildings.temple_no_light") %></span>
+    <% end %>
   </p>
 </section>
 

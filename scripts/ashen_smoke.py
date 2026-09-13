@@ -416,7 +416,9 @@ def main() -> int:
         r.status_code == 200
         and 'data-building-key="temple"' in r.text
         and ("обряд" in r.text.lower() or "rite" in r.text.lower())
-        and ('data-temple-injury="' in r.text),
+        and ('data-temple-injury="' in r.text)
+        and ("data-temple-wallet=" in r.text)
+        and ("data-temple-light=" in r.text),
         f"url={r.url}",
     )
 
