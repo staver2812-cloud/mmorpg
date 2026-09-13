@@ -5,7 +5,13 @@
     <h1><%= t("game.quests.title") %></h1>
     <p><%= t("game.quests.hint") %></p>
     <% counts = @entries.group_by { |e| e[:status] }.transform_values(&:size) %>
-    <ul class="nl-quests__summary" aria-label="<%= t("game.quests.summary_aria") %>">
+    <ul class="nl-quests__summary"
+        aria-label="<%= t("game.quests.summary_aria") %>"
+        data-quest-summary="1"
+        data-quest-available="<%= counts.fetch("available", 0) %>"
+        data-quest-active="<%= counts.fetch("active", 0) %>"
+        data-quest-locked="<%= counts.fetch("locked", 0) %>"
+        data-quest-completed="<%= counts.fetch("completed", 0) %>">
       <li><span><%= t("game.quests.status.available") %></span> <b><%= counts.fetch("available", 0) %></b></li>
       <li><span><%= t("game.quests.status.active") %></span> <b><%= counts.fetch("active", 0) %></b></li>
       <li><span><%= t("game.quests.status.locked") %></span> <b><%= counts.fetch("locked", 0) %></b></li>

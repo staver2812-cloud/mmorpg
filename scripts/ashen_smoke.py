@@ -392,6 +392,13 @@ def main() -> int:
             "quests progress markers",
             ("data-quest-progress=" in r.text) and ("data-quest-ready=" in r.text),
         )
+        report.add(
+            "quests summary counts",
+            ("data-quest-summary=" in r.text)
+            and ("data-quest-available=" in r.text)
+            and ("data-quest-active=" in r.text)
+            and ("data-quest-locked=" in r.text),
+        )
         r_hud = s.get(f"{BASE}/world", timeout=TIMEOUT)
         report.add(
             "quest HUD chip after journal",
