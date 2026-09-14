@@ -350,7 +350,7 @@
       <span class="match-bar-item"><%= t("game.fight.duration") %>: <%= format_duration(@arena_match.duration) %></span>
     <% end %>
     <% if @arena_match.turn_timeout_seconds %>
-      <span class="match-bar-item"><%= t("game.fight.timeout") %>: <%= @arena_match.turn_timeout_seconds / 60 %> min</span>
+      <span class="match-bar-item"><%= t("game.fight.timeout") %>: <%= @arena_match.turn_timeout_seconds / 60 %> <%= t("game.fight.min") %></span>
     <% end %>
     <% unless current_user_participating? %>
       <span class="match-bar-item text-muted"><%= t("game.fight.spectating") %></span>
