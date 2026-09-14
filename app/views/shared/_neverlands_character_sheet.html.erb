@@ -63,6 +63,8 @@
                 <%= number_with_delimiter(vault_nv) %> NV
                 <% if Game::World::CityBuildingCatalog.accessible?(character:, building_key: "bank") %>
                   · <%= link_to t("game.sheet.vault_open_cta"), city_building_path("bank"), class: "nl-sheet-link" %>
+                <% elsif character == current_character %>
+                  · <%= link_to t("arena.nav.city"), world_path, class: "nl-sheet-link", data: {sheet_recovery: "world"} %>
                 <% end %>
               </td>
             </tr>
