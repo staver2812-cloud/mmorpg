@@ -4,7 +4,13 @@
     <span class="nl-city-building-tab" data-shop-shell-mode="<%= mode %>"><%= mode %></span>
   <% end %>
 </div>
-<p class="nl-empty-note" data-shop-shell-stock="deferred"><%= t("game.buildings.stock_note") %></p>
+<p class="nl-empty-note" data-shop-shell-stock="deferred">
+  <%= t("game.buildings.stock_note") %>
+  ·
+  <%= link_to t("game.shop.title"), shop_path, class: "nl-sheet-link", data: {shop_shell_recovery: "shop"} %>
+  ·
+  <%= link_to t("arena.nav.city"), world_path, class: "nl-sheet-link", data: {shop_shell_recovery: "world"} %>
+</p>
 
 <%= render "city_buildings/landmark",
       building: building,

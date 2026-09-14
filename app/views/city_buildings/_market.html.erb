@@ -32,6 +32,12 @@
     <% end %>
   </tbody>
 </table>
-<p class="nl-quests-board__meta" data-market-stalls-deferred="1"><%= t("game.buildings.stall_rent_deferred") %></p>
+<p class="nl-quests-board__meta" data-market-stalls-deferred="1">
+  <%= t("game.buildings.stall_rent_deferred") %>
+  ·
+  <%= link_to t("game.shop.modes.sell"), shop_path(mode: "sell"), class: "nl-sheet-link", data: {market_recovery: "shop_sell"} %>
+  ·
+  <%= link_to t("game.buildings.junk_dealer_link"), city_building_path("junk_dealer"), class: "nl-sheet-link", data: {market_recovery: "junk"} %>
+</p>
 
 <%= render "city_buildings/landmark", building: building, building_key: "market" %>
