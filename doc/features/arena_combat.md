@@ -1131,6 +1131,7 @@ supplies only authoritative completion/loot facts and stable source keys.
 | 2026-09-13 | Arena lobby exposes live HP/MP vitals and open-application markers (`data-arena-hp`/`mp`/`apps`/`has-application`) for smoke and HUD clarity. Application cards localize unavailable copy and mark accept readiness (`data-arena-app-acceptable`). Room grid and summary rows expose accessibility (`data-arena-room-accessible`). |
 | 2026-09-13 | Application card expiry/remaining/level-range chrome uses `game.fight.expires_title` / `remaining` / `level_range`. |
 | 2026-09-14 | Arena room alignment restriction and match participant result badges use `game.buildings.law_alignment.*` / `arena.results.*`. |
+| 2026-09-14 | Fight result table XP column uses `game.sheet.experience`; alignment icon helper uses `game.buildings.law_alignment.*`. |
 | 2026-09-13 | Arena lobby Stimulus client errors/confirm/countdown use `arena.client.*` via `data-arena-copy-value`. |
 | 2026-07-28 | Created the canonical bounded Arena Combat runtime handbook after implementing the full-width source fight hierarchy, shared player/NPC equipment rails, public shell-free fight log, eager-loaded equipment rendering, and responsive tablet/mobile adaptation. |
 | 2026-08-23 | Added the injected handoff of successful NPC loot and final participant results to the Game Shell-owned durable chat event timeline, with deterministic keys and retry coverage while preserving `CombatLogEntry` as the canonical fight log. |
