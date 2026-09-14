@@ -67,5 +67,8 @@
     </tbody>
   </table>
 <% else %>
-  <p class="nl-empty-note nl-shop-empty"><%= t("game.shop.empty_section") %></p>
+  <p class="nl-empty-note nl-shop-empty" data-shop-buy-empty="1">
+    <%= t("game.shop.empty_section") %>
+    <%= link_to t("game.shop.modes.licenses"), shop_path(mode: "licenses"), class: "nl-sheet-link", data: {shop_recovery: "licenses"} %>
+  </p>
 <% end %>

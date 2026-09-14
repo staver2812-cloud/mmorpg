@@ -68,6 +68,9 @@
               class: "nl-bank-amount" %>
         <%= f.submit t("game.buildings.bank_withdraw_cta"), class: "lbut", disabled: vault_nv <= 0 %>
       <% end %>
+      <% if vault_nv <= 0 %>
+        <p class="nl-quests-board__meta" data-bank-vault-empty="1"><%= t("game.buildings.bank_vault_empty") %></p>
+      <% end %>
       <% if vault_nv.positive? %>
         <%= button_to t("game.buildings.bank_withdraw_all_cta", amount: vault_nv),
               city_building_bank_path("bank"),

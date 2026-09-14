@@ -25,18 +25,18 @@ module Game
 
       def call
         price_each = price_for(item_key)
-        return failure("Скупщик это не берёт.") unless price_each
+        return failure(I18n.t("game.buildings.junk_not_accepted")) unless price_each
 
         character.with_lock do
           character.reload
           template = ItemTemplate.find_by(key: item_key)
-          return failure("Предмет не найден.") unless template
+          return failure(I18n.t("game.buildings.junk_item_missing")) unless template
 
           inventory = character.inventory
-          return failure("Инвентарь пуст.") unless inventory
+          return failure(I18n.t("game.buildings.junk_inventory_empty")) unless inventory
 
           have = inventory.inventory_items.where(item_template: template, equipped: false).sum(:quantity)
-          return failure("Недостаточно предметов.") if have < quantity
+          return failure(I18n.t("game.buildings.junk_not_enough")) if have < quantity
 
           Game::Inventory::Manager.new(inventory:).remove_item!(item_template: template, quantity:)
           paid = price_each * quantity
@@ -56,7 +56,7 @@ module Game
       rescue StandardError => error
         raise unless error.class.name.end_with?("InventoryUnderflowError")
 
-        failure("Недостаточно предметов.")
+        failure(I18n.t("game.buildings.junk_not_enough"))
       end
 
       def self.price_for(item_key)

@@ -56,7 +56,7 @@ module Game
       rescue StandardError => error
         raise unless error.class.name.end_with?("CapacityExceededError")
 
-        failure(I18n.t("game.professions.inventory_full", default: "Инвентарь переполнен."))
+        failure(I18n.t("game.inventory.craft_inventory_full"))
       end
 
       private
