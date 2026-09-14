@@ -639,6 +639,12 @@ def main() -> int:
         and ('data-landmark-inside="1"' in r.text),
         f"url={r.url}",
     )
+    if r.status_code == 200 and 'data-school-spent="1"' in r.text:
+        report.add(
+            "magic school spent recovery",
+            'data-school-recovery="world"' in r.text,
+            f"url={r.url}",
+        )
     r = s.get(f"{BASE}/city/buildings/military_school", timeout=TIMEOUT, allow_redirects=True)
     report.add(
         "GET /city/buildings/military_school board",
@@ -690,6 +696,16 @@ def main() -> int:
         and ('data-landmark-inside="1"' in r.text),
         f"url={r.url}",
     )
+    if r.status_code == 200 and (
+        'data-temple-no-light="1"' in r.text
+        or 'data-temple-injury="0"' in r.text
+        or 'data-temple-can-afford="0"' in r.text
+    ):
+        report.add(
+            "temple blocked recovery",
+            "data-temple-recovery=" in r.text,
+            f"url={r.url}",
+        )
 
     r = s.get(f"{BASE}/city/buildings/bank", timeout=TIMEOUT, allow_redirects=True)
     report.add(
