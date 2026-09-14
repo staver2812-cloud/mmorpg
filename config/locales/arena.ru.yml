@@ -15,6 +15,7 @@ ru:
     room_map: "Карта залов"
     enter: "Войти"
     unavailable: "Недоступно"
+    room_locked_hint: "Ограничение по уровню — выберите открытую комнату под ваш уровень."
     level_mismatch: "не ваш уровень"
     levels: "уровни %{min}–%{max}"
     tabs:
