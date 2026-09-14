@@ -687,6 +687,12 @@ def main() -> int:
         and ('data-landmark-inside="1"' in r.text),
         f"url={r.url}",
     )
+    if 'data-souvenir-any-affordable="0"' in r.text:
+        report.add(
+            "souvenir short-NV recovery",
+            "data-souvenir-recovery=" in r.text,
+            f"url={r.url}",
+        )
     r = s.get(f"{BASE}/city/buildings/auction", timeout=TIMEOUT, allow_redirects=True)
     report.add(
         "GET /city/buildings/auction treasury",
