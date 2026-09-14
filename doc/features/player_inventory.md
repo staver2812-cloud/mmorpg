@@ -509,4 +509,5 @@ shipped Inventory management routes.
 | 2026-09-14 | Equip/use requirement labels resolve through `game.details.*` / `game.skills.*` instead of English `titleize`. |
 | 2026-09-14 | Inventory item-type / unknown detail fallbacks use `game.inventory.item_types.*` and non-titleized keys. |
 | 2026-09-14 | Material underflow raises `game.inventory.missing_material` instead of English `Missing …`. |
+| 2026-09-14 | Inventory/shop request chrome assertions use RU-default `game.inventory.*` / `game.shop.*` i18n. |
 | 2026-09-10 | Integrated seven original Shop-item illustrations into carried rows and shared equipment slots; extended the Shop browser flow through wear, persisted slot/stat confirmation, removal and resale. |

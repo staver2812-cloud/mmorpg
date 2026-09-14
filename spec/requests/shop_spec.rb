@@ -38,11 +38,11 @@ RSpec.describe "Shop", type: :request do
       get shop_path
 
       expect(response).to have_http_status(:success)
-      expect(response.body).to include("Shop")
-      expect(response.body).to include("Buy")
+      expect(response.body).to include(I18n.t("game.shop.title"))
+      expect(response.body).to include(I18n.t("game.common.buy"))
       expect(response.body).to include("Shop Spec Knife")
-      expect(response.body).to include("Mass")
-      expect(response.body).to include("Shop funds:")
+      expect(response.body).to include(I18n.t("game.common.mass"))
+      expect(response.body).to include(I18n.t("game.shop.shop_funds_html", nv: "0").split("<", 1).first)
       expect(response.body).to include(ApplicationController.helpers.number_with_precision(shop_account.nv_balance, precision: 2))
       row = Nokogiri::HTML(response.body).at_css(".nl-shop-table > tbody > tr")
       expect(row.at_css("span.nl-shop-category__icon.nl-shop-item-icon")).to be_present
@@ -70,9 +70,9 @@ RSpec.describe "Shop", type: :request do
       get shop_path
 
       expect(response).to have_http_status(:success)
-      expect(response.body).to include("There are no items in this shop section.")
+      expect(response.body).to include(I18n.t("game.shop.empty_section"))
       expect(response.body).not_to include(item_template.name)
-      expect(response.body).not_to include("Shop funds:")
+      expect(response.body).not_to include(I18n.t("game.shop.shop_funds_html", nv: "0").split("<", 1).first)
       expect(WorldActionOffer.offered.where(character:, action_type: %w[shop_buy shop_sell])).to be_empty
       expect(ShopAccount.where(location: shop_hotspot)).to be_empty
     end

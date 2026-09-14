@@ -25,9 +25,9 @@ RSpec.describe "Inventories", type: :request do
     it "displays inventory slots and weight" do
       get inventory_path
 
-      expect(response.body).to include("Inventory")
-      expect(response.body).to include("Inventory mass")
-      expect(response.body).to include("Inventory categories")
+      expect(response.body).to include(I18n.t("game.inventory.title"))
+      expect(response.body).to include(I18n.t("game.inventory.mass_label"))
+      expect(response.body).to include(I18n.t("game.inventory.categories_aria"))
       expect(response.body).to include("nl-icon-strip-item")
       expect(response.body).not_to include("assets/neverlands")
       expect(response.body).not_to include("nl-inventory-empty-slot")
@@ -52,8 +52,8 @@ RSpec.describe "Inventories", type: :request do
         row = html.at_css('.nl-inventory-item[data-inventory-broken="1"]')
         expect(row).to be_present
         expect(row["class"]).to include("nl-inventory-item--broken")
-        expect(response.body).to include("Broken")
-        expect(html.at_css(".nl-inventory-broken-badge").text).to eq("Broken")
+        expect(response.body).to include(I18n.t("game.inventory.item_broken"))
+        expect(html.at_css(".nl-inventory-broken-badge").text).to eq(I18n.t("game.inventory.item_broken"))
         expect(html.at_css('[data-inventory-repair="deferred"]')).to be_present
       end
 
@@ -81,9 +81,9 @@ RSpec.describe "Inventories", type: :request do
     it "renders Neverlands inventory family empty states" do
       get inventory_path(category: "alchemy")
 
-      expect(response.body).to include("Alchemy Inventory")
-      expect(response.body).to include("Alchemy Resources")
-      expect(response.body).to include("No alchemy inventory items available.")
+      expect(response.body).to include(I18n.t("game.inventory.item_types.alchemy_inventory"))
+      expect(response.body).to include(I18n.t("game.inventory.item_types.alchemy_resources"))
+      expect(response.body).to include(I18n.t("game.inventory.item_types.alchemy_inventory_empty"))
     end
 
     it "shows unmet requirements and hides wear action" do
@@ -94,8 +94,8 @@ RSpec.describe "Inventories", type: :request do
       get inventory_path
 
       expect(response.body).to include("Mage Dagger")
-      expect(response.body).to include("Requirements not met")
-      expect(response.body).not_to include("Wear")
+      expect(response.body).to include(I18n.t("game.inventory.requirements_not_met", list: ""))
+      expect(response.body).not_to include(I18n.t("game.common.wear"))
     end
 
     it "flattens nested Neverlands-style stat and skill requirements" do
@@ -106,9 +106,9 @@ RSpec.describe "Inventories", type: :request do
       get inventory_path
 
       expect(response.body).to include("Hunter Knife")
-      expect(response.body).to include("Knowledge")
-      expect(response.body).to include("Knife Skill")
-      expect(response.body).to include("current 0")
+      expect(response.body).to include(I18n.t("game.details.knowledge"))
+      expect(response.body).to include(I18n.t("game.skills.knife_skill"))
+      expect(response.body).to include(I18n.t("game.inventory.requirement_label", name: "x", required: 1, current: 0).split("(").last.sub(")", ""))
     end
 
     it "renders equipped items only in the equipment doll, not as carried rows" do
@@ -122,13 +122,13 @@ RSpec.describe "Inventories", type: :request do
       page = Nokogiri::HTML(response.body)
       expect(page.css(".nl-doll-slot--ring_1").text).to include("Knowledge Ring")
       expect(page.css(".nl-inventory-list").text).not_to include("Knowledge Ring")
-      expect(response.body).to include("Remove all gear")
+      expect(response.body).to include(I18n.t("game.inventory.strip_title"))
     end
 
     it "does not show bulk unequip when no items are equipped" do
       get inventory_path
 
-      expect(response.body).not_to include("Remove all gear")
+      expect(response.body).not_to include(I18n.t("game.inventory.strip_title"))
     end
   end
 
