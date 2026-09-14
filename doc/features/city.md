@@ -1228,6 +1228,7 @@ Final rerun results are in the
 - 2026-09-14: Smoke asserts Coal Hall/Post/Clan Hall/Airship building chrome City recoveries.
 - 2026-09-14: Smoke asserts Library and school building chrome City recoveries.
 - 2026-09-14: Smoke asserts Law Abode/Prison/Gallows building chrome City recoveries.
+- 2026-09-14: Smoke asserts Numismatics/Ash Buyer building chrome City recoveries when those desks open.
 - 2026-09-14: Shop sell Junk link and doctor/perk onboarding expose `data-shop-recovery` / `data-doctor-recovery`; Airship short-NV Junk/Shop links expose `data-airship-recovery`.
 - 2026-09-14: Obelisk bind-first note recovers to City (`data-obelisk-recovery="world"`).
 - 2026-09-14: Law Abode current-alignment state recovers to City.
