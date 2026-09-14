@@ -1301,6 +1301,7 @@ en:
       locked_hint: "Locked by chain"
       not_active: "Accept the quest first."
       objective_incomplete: "Objective is not complete yet."
+      missing_delivery_items: "Not enough items to turn in."
       unlocked: "Unlocked next: %{list}."
       where: "Where: %{place}"
       status:
