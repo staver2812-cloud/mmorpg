@@ -80,6 +80,14 @@
       <% end %>
     </nav>
     <% end %>
+    <% building_hotspots = hotspots.reject { |hotspot| hotspot.hotspot_type == "district" } %>
+    <% if building_hotspots.any? %>
+    <nav class="nl-city-building-controls" aria-label="<%= t("game.world.city_building_controls") %>" data-city-building-controls="1">
+      <% building_hotspots.each_with_index do |hotspot, index| %>
+        <%= render "world/city_action", hotspot:, index:, node_key:, image_asset:, tooltip_actions:, offers_by_hotspot_id:, named_layout: true %>
+      <% end %>
+    </nav>
+    <% end %>
     <% if image_asset %>
     <div class="nl-city-tooltip"
          data-nl-city-map-target="tooltip"

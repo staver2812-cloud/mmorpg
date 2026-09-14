@@ -443,6 +443,7 @@ en:
       move: "Move"
       city_buildings: "City buildings"
       city_landmarks: "City landmarks"
+      city_building_controls: "City building controls"
       city_routes: "City quarter routes"
       close_result: "Close result"
       action_result: "Action result"
@@ -1245,6 +1246,10 @@ en:
       resource_type: "Resource type"
       all_resources: "All resources"
       quantity_for: "Quantity for %{name}"
+      lobby_deferred: "Lobby only — underground mining and exchange operations need live Neverlands capture before they can open."
+      descend_deferred: "Descent is closed until underground mine travel is captured."
+      choose_deferred: "Resource query stays disabled until exchange listings are captured."
+      buy_deferred: "Buy stays disabled until exchange settlement is captured."
     events:
       attention: "Attention!"
       system: "System information."

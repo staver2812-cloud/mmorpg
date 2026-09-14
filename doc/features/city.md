@@ -232,10 +232,12 @@ Missing-art content uses the fallback described in section 4.2.
   duplicate route form is introduced.
 
 The named coarse-pointer alternative currently covers district routes only.
-Building and exit masks still shrink with the scene and have no equivalent
-always-visible named control outside it. Full coarse-pointer compliance for
-small building targets under `UI-ADAPT-005` remains an `[IMPL]` gap; the recorded
-phone-width pointer checks do not establish that broader requirement.
+Building and exit masks still shrink with the scene. At `(max-width: 700px)` or
+`(pointer: coarse)`, named building controls also reflow below the illustrated
+scene with a 48px minimum height (`nl-city-building-controls`), closing the
+`UI-ADAPT-005` gap for small building targets. Scene masks remain for fine-pointer
+desktop use. Phone-width pointer checks and the coarse-route system coverage
+remain the acceptance baseline for route taps.
 
 #### 4.3.1 Hotspot geometry and highlight algorithm
 
@@ -1148,6 +1150,7 @@ Final rerun results are in the
 - 2026-09-13: Outdoor Obelisk recall chip plus Tavern table fatigue clear alongside HP/MP.
 - 2026-09-14: Manage index titles/empty rows/pagination and NPC state labels use `manage.*` i18n.
 - 2026-09-14: Manage building/hotspot show+form destination labels and NPC template key fallback use `manage.views.*` i18n.
+- 2026-09-14: Narrow/coarse city building controls reflow below the scene (`nl-city-building-controls`, `UI-ADAPT-005`).
 - 2026-09-14: Manage world-cell resource groups, local-action toggles, and NPC encounter roster form chrome use `manage.views.*` i18n.
 - 2026-09-14: Manage NPC template detail Attack/Dialogue/Metadata labels use `manage.views.*` i18n.
 - 2026-09-14: Manage world-cell/NPC/audit show detail rows use `manage.views.*` i18n.

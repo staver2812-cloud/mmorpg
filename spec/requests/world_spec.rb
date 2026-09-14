@@ -1767,6 +1767,14 @@ RSpec.describe "World", type: :request do
         expect(response.body).to include(shop.id.to_s)
       end
 
+      it "renders named building controls beside scene hotspots" do
+        get world_path
+
+        expect(response.body).to include('data-city-building-controls="1"')
+        expect(response.body).to include(I18n.t("game.world.city_building_controls"))
+        expect(response.body.scan(/nl-city-hotspot--named/).size).to be >= 2
+      end
+
       it "arena hotspot navigates to arena page" do
         post interact_hotspot_world_path,
           params: city_hotspot_action_params(character:, position:, hotspot: arena)

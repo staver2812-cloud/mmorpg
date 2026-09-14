@@ -1181,6 +1181,64 @@ button.nl-city-hotspot,
     outline-offset: -4px;
     background: #294654;
   }
+
+  .nl-city-viewport .nl-city-building-controls {
+    position: relative;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    padding: 8px 2px 2px;
+  }
+
+  .nl-city-viewport .nl-city-building-controls .nl-city-hotspot {
+    position: relative;
+    inset: auto;
+    flex: 1 1 110px;
+    width: auto;
+    height: auto;
+    min-height: 48px;
+    padding: 8px 10px;
+    border: 2px solid #ddc68d;
+    border-radius: 6px;
+    background: #152631;
+    color: #fff7de;
+    font-size: 12px;
+    line-height: 1.25;
+    white-space: normal;
+  }
+
+  .nl-city-viewport .nl-city-building-controls .nl-city-hotspot:hover,
+  .nl-city-viewport .nl-city-building-controls .nl-city-hotspot:focus-visible {
+    border-color: #fff;
+    outline: 2px solid #fff0ba;
+    outline-offset: -4px;
+    background: #294654;
+  }
+}
+
+.nl-city-building-controls {
+  display: none;
+}
+
+.nl-city-viewport--pending .nl-city-building-controls {
+  position: relative;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  padding: 0 16px 16px;
+}
+
+.nl-city-viewport--pending .nl-city-building-controls .nl-city-hotspot {
+  position: relative;
+  inset: auto;
+  width: auto;
+  height: auto;
+  min-height: 48px;
+  padding: 8px 12px;
+  border: 1px solid #808080;
+  background: #fff;
+  color: #111;
+  white-space: normal;
 }
 
 /* Missing-art content keeps the same named controls without image geometry. */

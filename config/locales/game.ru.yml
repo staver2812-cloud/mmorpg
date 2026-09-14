@@ -443,6 +443,7 @@ ru:
       move: "Идти"
       city_buildings: "Здания города"
       city_landmarks: "Ориентиры"
+      city_building_controls: "Кнопки зданий"
       city_routes: "Переходы кварталов"
       close_result: "Закрыть результат"
       action_result: "Результат действия"
@@ -1245,6 +1246,10 @@ ru:
       resource_type: "Тип ресурса"
       all_resources: "Все ресурсы"
       quantity_for: "Количество для %{name}"
+      lobby_deferred: "Только лобби — подземная шахта и биржевые операции ждут живой записи Neverlands."
+      descend_deferred: "Спуск закрыт, пока не зафиксирован подземный мир шахты."
+      choose_deferred: "Запрос ресурсов отключён, пока нет захваченных листингов биржи."
+      buy_deferred: "Покупка отключена, пока нет захваченного расчёта биржи."
     events:
       attention: "Внимание!"
       system: "Системное сообщение."

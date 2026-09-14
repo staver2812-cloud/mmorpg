@@ -2992,6 +2992,7 @@ Before extending the World feature:
 | 2026-09-14 | Fatigue actions-unavailable title and city enter flash request specs assert via `game.world.actions_unavailable_title` / `entered` (RU-safe). |
 | 2026-09-14 | Movement-offer and empty players-here specs assert via `game.flashes.movement_offer_unavailable` / `game.world.no_players` (RU-safe). |
 | 2026-09-14 | Owned Nature Child perk recovers four fatigue on Drink; without it, recovery remains two points. |
+| 2026-09-14 | Mine/exchange lobbies show explicit deferred reasons on disabled Descend/Choose/Buy controls. |
 
 
 ## 19. Open-world parity audit (updated 2026-09-09)

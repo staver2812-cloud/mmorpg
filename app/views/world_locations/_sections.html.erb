@@ -9,6 +9,7 @@
   <% if @building.location_kind == "exchange" %>
     <p class="nl-world-location-wallet"><%= t("game.locations.you_have") %>: <b><%= number_with_delimiter(@wallet&.nv_balance || 0) %> NV</b></p>
   <% end %>
+  <p class="nl-empty-note" data-location-lobby-deferred="1"><%= t("game.locations.lobby_deferred") %></p>
   <% if @location_section %>
     <section class="nl-world-location-section" aria-label="<%= @location_section.fetch('label') %>">
       <% if @building.location_kind == "mine" && @location_section["summary_label"].present? %>
@@ -18,7 +19,8 @@
           <thead><tr><th><%= t("game.common.name") %></th><th><%= t("game.locations.available_levels") %></th><th><%= t("game.locations.available_caves") %></th><th><%= t("game.locations.resource_veins") %></th></tr></thead>
           <tbody><tr><td><%= @location_section.fetch("summary_label") %></td><td>—</td><td>—</td><td>—</td></tr></tbody>
         </table>
-        <button type="button" class="lbut" disabled><%= t("game.locations.descend") %></button>
+        <button type="button" class="lbut" disabled title="<%= t("game.locations.descend_deferred") %>"><%= t("game.locations.descend") %></button>
+        <p class="nl-quests-board__meta"><%= t("game.locations.descend_deferred") %></p>
       <% end %>
       <% if @building.location_resource_categories.any? %>
         <%# The captured query controls remain unavailable until their actual
@@ -26,8 +28,9 @@
         <div class="nl-world-location-resource-filters">
           <%= select_tag :resource_type, options_for_select(@building.location_resource_categories), aria: {label: t("game.locations.resource_type")} %>
           <%= select_tag :resource_kind, options_for_select([t("game.locations.all_resources")]), aria: {label: t("game.common.resource")} %>
-          <button type="button" class="lbut" disabled><%= t("game.common.choose") %></button>
+          <button type="button" class="lbut" disabled title="<%= t("game.locations.choose_deferred") %>"><%= t("game.common.choose") %></button>
         </div>
+        <p class="nl-quests-board__meta"><%= t("game.locations.choose_deferred") %></p>
       <% end %>
       <% if @location_section["read_only_items"].present? %>
         <div class="nl-world-location-item-previews">
@@ -36,10 +39,11 @@
               <h2><%= item.fetch("name") %></h2>
               <% item.fetch("details").each do |detail| %><p><%= detail %></p><% end %>
               <input type="number" value="1" min="1" disabled aria-label="<%= t("game.locations.quantity_for", name: item.fetch('name')) %>">
-              <button type="button" class="lbut" disabled><%= t("game.common.buy") %></button>
+              <button type="button" class="lbut" disabled title="<%= t("game.locations.buy_deferred") %>"><%= t("game.common.buy") %></button>
             </article>
           <% end %>
         </div>
+        <p class="nl-quests-board__meta"><%= t("game.locations.buy_deferred") %></p>
       <% end %>
     </section>
   <% end %>
