@@ -603,6 +603,8 @@ en:
       location_required: "Current location required"
       login_required: "Active login required"
       system_readonly: "System chat is read-only."
+      system_sender: "System"
+      unknown_sender: "Unknown"
       muted: "You cannot post in chat."
       unavailable_here: "Chat is unavailable at your current location"
       private_unavailable: "Private messaging is not available here."

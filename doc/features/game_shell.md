@@ -1248,6 +1248,7 @@ Before extending Game Shell:
 | 2026-09-13 | EventPublisher fight/search timeline bodies use `game.events.*` i18n. |
 | 2026-09-13 | Chat channel create names (global/local/whisper/arena) use `game.chat.*` i18n. |
 | 2026-09-14 | Local chat channel router location denial uses `game.chat.location_required`. |
+| 2026-09-14 | Chat timeline system/unknown sender labels use `game.chat.system_sender` / `unknown_sender`. |
 | 2026-09-13 | Fight/chat browser titles use `game.fight.*_title` / `game.chat.page_title`. |
 | 2026-09-13 | Presence unknown/Shop labels and profile combat location text use `game.profile.unknown_location` / `game.world.shop_presence` / `game.profile.location_in_combat` i18n. |
 | 2026-09-13 | Presence player-list unknown location data attribute uses `game.profile.unknown_location`. |

@@ -603,6 +603,8 @@ ru:
       location_required: "Нужна текущая локация"
       login_required: "Нужен активный вход"
       system_readonly: "Системный чат только для чтения."
+      system_sender: "Система"
+      unknown_sender: "Неизвестно"
       muted: "Вы не можете писать в чат."
       unavailable_here: "Чат недоступен в вашей текущей локации"
       private_unavailable: "Личные сообщения здесь недоступны."
