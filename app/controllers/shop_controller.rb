@@ -10,7 +10,7 @@ class ShopController < ApplicationController
   before_action :set_inventory_and_wallet
 
   rescue_from Game::Shop::TradeOffers::Unavailable do |error|
-    redirect_to world_path, alert: error.message
+    redirect_to world_path(shop_denied: 1), alert: error.message
   end
 
   def show
@@ -74,7 +74,7 @@ class ShopController < ApplicationController
 
   def ensure_shop_access!
     unless Game::World::ResumeContext.new(character: current_character).shop_available?
-      redirect_to world_path, alert: I18n.t("game.flashes.shop_location_required")
+      redirect_to world_path(shop_denied: 1), alert: I18n.t("game.flashes.shop_location_required")
     end
   end
 

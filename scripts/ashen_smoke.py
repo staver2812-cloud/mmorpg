@@ -1465,25 +1465,35 @@ def main() -> int:
         )
 
     # Late buy-desk check (explicit mode); wallet may already fund a knife tab.
-    r = s.get(f"{BASE}/shop?mode=buy", timeout=TIMEOUT)
-    banned_shop = ["You carry", "Shop funds", "Refresh to buy", "There are no items", "Valid for", "(quantity:"]
-    found_shop = [w for w in banned_shop if w in r.text]
-    report.add("shop no English chrome", not found_shop, f"found={found_shop}")
-    if r.status_code == 200 and 'data-shop-short-nv="1"' in r.text:
+    # After quarter travel Shop may deny access and recover on World.
+    r = s.get(f"{BASE}/shop?mode=buy", timeout=TIMEOUT, allow_redirects=True)
+    if 'data-shop-denied="1"' in r.text:
         report.add(
-            "shop short-NV desk recovery",
-            'data-shop-recovery="bank"' in r.text
-            or 'data-shop-recovery="junk"' in r.text
+            "shop denied district recovery",
+            'data-shop-recovery="main"' in r.text
+            or 'data-shop-recovery="shop"' in r.text
             or 'data-shop-recovery="world"' in r.text,
             f"url={r.url}",
         )
-    elif r.status_code == 200 and 'data-shop-buy-blocked="1"' in r.text:
-        report.add(
-            "shop buy-blocked desk recovery",
-            'data-shop-recovery="inventory"' in r.text
-            and 'data-shop-recovery="world"' in r.text,
-            f"url={r.url}",
-        )
+    else:
+        banned_shop = ["You carry", "Shop funds", "Refresh to buy", "There are no items", "Valid for", "(quantity:"]
+        found_shop = [w for w in banned_shop if w in r.text]
+        report.add("shop no English chrome", not found_shop, f"found={found_shop}")
+        if r.status_code == 200 and 'data-shop-short-nv="1"' in r.text:
+            report.add(
+                "shop short-NV desk recovery",
+                'data-shop-recovery="bank"' in r.text
+                or 'data-shop-recovery="junk"' in r.text
+                or 'data-shop-recovery="world"' in r.text,
+                f"url={r.url}",
+            )
+        elif r.status_code == 200 and 'data-shop-buy-blocked="1"' in r.text:
+            report.add(
+                "shop buy-blocked desk recovery",
+                'data-shop-recovery="inventory"' in r.text
+                and 'data-shop-recovery="world"' in r.text,
+                f"url={r.url}",
+            )
     r = s.get(f"{BASE}/shop?mode=novice", timeout=TIMEOUT)
     if r.status_code == 200 and "data-shop-novice=" in r.text:
         report.add(
