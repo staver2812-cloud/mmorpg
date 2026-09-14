@@ -19,6 +19,15 @@
      data-workshop-any-ready="<%= any_ready ? "1" : "0" %>">
     <%= t("game.professions.bag_capacity", weight: bag_weight, max: bag_max, slots: bag_slots, slot_max: bag_slot_cap) %>
   </p>
+  <% unless any_ready %>
+    <p class="nl-quests-board__meta" data-workshop-none-ready="1">
+      <%= t("game.professions.workshop_none_ready") %>
+      ·
+      <%= link_to t("game.inventory.title"), inventory_path, data: {turbo: false, workshop_recovery: "inventory"} %>
+      ·
+      <%= link_to t("arena.nav.city"), world_path, data: {turbo: false, workshop_recovery: "world"} %>
+    </p>
+  <% end %>
   <% wear = Game::Inventory::EquippedWear.summary_for(current_character) %>
   <p class="nl-quests-board__meta" data-workshop-repair="deferred">
     <%= t("game.professions.repair_deferred") %>
