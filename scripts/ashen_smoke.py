@@ -794,6 +794,12 @@ def main() -> int:
             or 'data-library-recovery="hospital"' in r.text,
             f"url={r.url}",
         )
+    if r.status_code == 200 and 'data-building-key="library"' in r.text:
+        report.add(
+            "library building chrome recovery",
+            'data-building-recovery="world"' in r.text,
+            f"url={r.url}",
+        )
     if r.status_code == 200:
         report.add(
             "library covers Assault and quest chain",
@@ -845,6 +851,12 @@ def main() -> int:
             'data-school-recovery="world"' in r.text,
             f"url={r.url}",
         )
+    if r.status_code == 200 and 'data-building-key="magic_school"' in r.text:
+        report.add(
+            "magic school building chrome recovery",
+            'data-building-recovery="world"' in r.text,
+            f"url={r.url}",
+        )
     r = s.get(f"{BASE}/city/buildings/military_school", timeout=TIMEOUT, allow_redirects=True)
     report.add(
         "GET /city/buildings/military_school board",
@@ -856,6 +868,12 @@ def main() -> int:
         and ('data-landmark-inside="1"' in r.text),
         f"url={r.url}",
     )
+    if r.status_code == 200 and 'data-building-key="military_school"' in r.text:
+        report.add(
+            "military school building chrome recovery",
+            'data-building-recovery="world"' in r.text,
+            f"url={r.url}",
+        )
     r = s.get(f"{BASE}/city/buildings/general_school", timeout=TIMEOUT, allow_redirects=True)
     report.add(
         "GET /city/buildings/general_school board",
@@ -868,6 +886,12 @@ def main() -> int:
         and ('data-landmark-inside="1"' in r.text),
         f"url={r.url}",
     )
+    if r.status_code == 200 and 'data-building-key="general_school"' in r.text:
+        report.add(
+            "general school building chrome recovery",
+            'data-building-recovery="world"' in r.text,
+            f"url={r.url}",
+        )
 
     ok_main2, _ = click_hotspot(s, "go_forpost1")
     report.add("return forpost1 after library", ok_main2)
