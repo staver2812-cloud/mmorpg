@@ -3,3 +3,10 @@
   <thead><tr><th><%= t("game.common.commodity") %></th><th><%= t("game.common.count") %></th><th><%= t("game.common.unit_price") %></th><th><%= t("game.common.total") %></th></tr></thead>
   <tbody><tr data-numismatics-empty="1"><td><%= building["commodity"] %></td><td colspan="3"><%= t("game.buildings.no_listings") %></td></tr></tbody>
 </table>
+<p class="nl-quests-board__meta" data-numismatics-deferred="1">
+  <%= t("game.buildings.numismatics_deferred") %>
+  <%= link_to t("game.shop.title"), shop_path, class: "nl-sheet-link" %>
+  <% if Game::World::CityBuildingCatalog.accessible?(character: current_character, building_key: "junk_dealer") %>
+    · <%= link_to t("game.buildings.junk_dealer_link"), city_building_path("junk_dealer"), class: "nl-sheet-link" %>
+  <% end %>
+</p>

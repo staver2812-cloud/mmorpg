@@ -281,6 +281,7 @@ def main() -> int:
         and ("data-junk-can-sell=" in r.text)
         and ("data-market-stalls=" in r.text)
         and ("data-market-any-stall-affordable=" in r.text)
+        and ('data-market-stalls-deferred="1"' in r.text)
         and ('data-market-notice="1"' in r.text)
         and ('data-landmark-inside="1"' in r.text),
         f"url={r.url}",
