@@ -842,6 +842,25 @@ def main() -> int:
         ("data-inventory-broken=" in r.text) or ("nl-durability-bar" in r.text),
         f"url={r.url}",
     )
+    if 'data-equipment-sets-empty="1"' in r.text:
+        report.add(
+            "inventory empty equipment-sets recovery",
+            'data-inventory-recovery="shop"' in r.text,
+            f"url={r.url}",
+        )
+
+    r = s.get(f"{BASE}/character/licenses", timeout=TIMEOUT, allow_redirects=True)
+    report.add(
+        "GET /character/licenses",
+        r.status_code == 200 and ("data-licenses-empty=" in r.text or "nl-profile-license-list" in r.text),
+        f"url={r.url}",
+    )
+    if 'data-licenses-empty="1"' in r.text:
+        report.add(
+            "licenses empty Shop recovery",
+            'data-licenses-recovery="shop"' in r.text,
+            f"url={r.url}",
+        )
 
     r = s.get(f"{BASE}/shop", timeout=TIMEOUT)
     banned_shop = ["You carry", "Shop funds", "Refresh to buy", "There are no items", "Valid for", "(quantity:"]
