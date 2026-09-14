@@ -1150,6 +1150,7 @@ supplies only authoritative completion/loot facts and stable source keys.
 | 2026-09-14 | Fight AP/HP/MP chrome and shell player-sort links use fight/social i18n. |
 | 2026-09-14 | Empty Arena application lists recover to City (`data-arena-apps-empty`); locked rooms show level-gate hint (`data-arena-room-locked`). |
 | 2026-09-14 | Arena room form shows combat-trauma scroll shortage with Infirmary/City recovery (`data-arena-need-scroll`). |
+| 2026-09-14 | Arena statistics tab and empty recent-fights recover to Duels/City; empty public fight logs link Arena/City. |
 | 2026-09-13 | Arena lobby Stimulus client errors/confirm/countdown use `arena.client.*` via `data-arena-copy-value`. |
 | 2026-07-28 | Created the canonical bounded Arena Combat runtime handbook after implementing the full-width source fight hierarchy, shared player/NPC equipment rails, public shell-free fight log, eager-loaded equipment rendering, and responsive tablet/mobile adaptation. |
 | 2026-08-23 | Added the injected handoff of successful NPC loot and final participant results to the Game Shell-owned durable chat event timeline, with deterministic keys and retry coverage while preserving `CombatLogEntry` as the canonical fight log. |
