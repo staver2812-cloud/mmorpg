@@ -289,6 +289,8 @@ ru:
     json_object: "должен быть JSON-объектом"
     json_invalid: "некорректный JSON: %{detail}"
     cannot_destroy: "Нельзя удалить запись: %{detail}"
+    npc_key_referenced: "нельзя менять, пока ключ используется в столкновениях клеток"
+    npc_template_roster_referenced: "Нельзя удалить шаблон NPC, на который ссылаются составы столкновений"
 en:
   manage:
     title: "World Management"
@@ -578,3 +580,5 @@ en:
     json_object: "must be a JSON object"
     json_invalid: "is not valid JSON: %{detail}"
     cannot_destroy: "Cannot delete this record: %{detail}"
+    npc_key_referenced: "cannot change while referenced by cell encounters"
+    npc_template_roster_referenced: "Cannot delete an NPC template referenced by cell encounter rosters"
