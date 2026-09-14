@@ -1361,6 +1361,7 @@ en:
       giver: "Giver: %{name}"
       accept: "Accept"
       turn_in: "Turn in"
+      continue_world: "Continue in World"
       done: "Completed"
       accepted: "Quest accepted: %{title}"
       completed: "Quest turned in: %{title}"
