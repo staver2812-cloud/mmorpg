@@ -393,6 +393,20 @@ def main() -> int:
             or 'data-heal-recovery="world"' in r.text,
             f"url={r.url}",
         )
+    if r.status_code == 200 and 'data-injury-chip="1"' in r.text:
+        report.add(
+            "injury chip recovery",
+            'data-injury-recovery="hospital"' in r.text
+            or 'data-injury-recovery="inventory"' in r.text,
+            f"url={r.url}",
+        )
+    if r.status_code == 200 and ("data-wear-worn=" in r.text or "nl-wear-chip" in r.text):
+        report.add(
+            "wear chip recovery",
+            'data-wear-recovery="workshop"' in r.text
+            or 'data-wear-recovery="inventory"' in r.text,
+            f"url={r.url}",
+        )
 
     ok, detail = click_hotspot(s, "go_forpost1")
     report.add("travel go_forpost1", ok, detail)
