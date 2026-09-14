@@ -25,7 +25,8 @@ export default class extends Controller {
     turnNumber: Number,
     waiting: Boolean,
     selectedTargetId: String,
-    startsAt: String
+    startsAt: String,
+    copy: { type: Object, default: {} }
   }
 
   connect() {
@@ -206,7 +207,7 @@ export default class extends Controller {
 
     this.appendSystemMessage({
       timestamp: new Date().toLocaleTimeString(),
-      message: data.error || "Action was not accepted",
+      message: data.error || this.copyValue.action_rejected || "Action was not accepted",
       severity: "error"
     })
   }
@@ -215,7 +216,9 @@ export default class extends Controller {
     let html = `<span class="combat-time">${action.timestamp}</span> `
 
     // Description already contains actor and target names, don't duplicate
-    html += action.description || `${action.actor_name || "Someone"} attacks`
+    const someone = this.copyValue.someone || "Someone"
+    const attacks = this.copyValue.attacks_fallback || "attacks"
+    html += action.description || `${action.actor_name || someone} ${attacks}`
 
     if (action.result) {
       html += ` <span class="combat-result">(${action.result})</span>`
@@ -225,22 +228,37 @@ export default class extends Controller {
   }
 
   formatNpcAction(action) {
-    const target = action.target_name || "opponent"
+    const copy = this.copyValue || {}
+    const target = action.target_name || copy.opponent || "opponent"
     const bodyPart = action.body_part ? ` (${action.body_part})` : ""
+    const actor = action.npc_name || copy.someone || "Someone"
+    const fill = (template, vars) => {
+      if (!template) return null
+      return Object.keys(vars).reduce(
+        (text, key) => text.split(`%{${key}}`).join(vars[key]),
+        template
+      )
+    }
 
     switch (action.action) {
       case "attack":
-        return `${action.npc_name} hits ${target}${bodyPart} for ${action.damage} damage${action.critical ? " CRITICAL" : ""}`
+        return fill(copy.npc_hit, {
+          actor,
+          target,
+          part: bodyPart,
+          damage: action.damage,
+          crit: action.critical ? (copy.npc_crit || " CRITICAL") : ""
+        }) || `${actor} hits ${target}${bodyPart} for ${action.damage} damage${action.critical ? " CRITICAL" : ""}`
       case "miss":
-        return `${action.npc_name} misses ${target}${bodyPart}`
+        return fill(copy.npc_miss, { actor, target, part: bodyPart }) || `${actor} misses ${target}${bodyPart}`
       case "dodge":
-        return `${target} dodges ${action.npc_name}${bodyPart}`
+        return fill(copy.npc_dodge, { actor, target, part: bodyPart }) || `${target} dodges ${actor}${bodyPart}`
       case "blocked":
-        return `${target} blocked attack${bodyPart} from ${action.npc_name}`
+        return fill(copy.npc_blocked, { actor, target, part: bodyPart }) || `${target} blocked attack${bodyPart} from ${actor}`
       case "defend":
-        return `${action.npc_name} takes a defensive stance`
+        return fill(copy.npc_defend, { actor }) || `${actor} takes a defensive stance`
       default:
-        return `${action.npc_name} acts`
+        return fill(copy.npc_acts, { actor }) || `${actor} acts`
     }
   }
 

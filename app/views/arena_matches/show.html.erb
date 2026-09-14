@@ -47,7 +47,20 @@
      data-arena-match-turn-number-value="<%= @arena_match.current_turn_number.to_i %>"
      data-arena-match-waiting-value="<%= current_user_pending_arena_turn? %>"
      data-arena-match-selected-target-id-value="<%= participant_data(target_participation).id if target_participation %>"
-     data-arena-match-starts-at-value="<%= @arena_match.scheduled_start_at&.iso8601 %>">
+     data-arena-match-starts-at-value="<%= @arena_match.scheduled_start_at&.iso8601 %>"
+     data-arena-match-copy-value="<%= {
+       opponent: t("game.fight.log.opponent"),
+       someone: t("game.fight.log.someone"),
+       attacks_fallback: t("game.fight.log.attacks_fallback"),
+       action_rejected: t("game.fight.log.action_rejected"),
+       npc_hit: t("game.fight.log.npc_hit", actor: "%{actor}", target: "%{target}", part: "%{part}", damage: "%{damage}", crit: "%{crit}"),
+       npc_crit: t("game.fight.log.npc_crit"),
+       npc_miss: t("game.fight.log.npc_miss", actor: "%{actor}", target: "%{target}", part: "%{part}"),
+       npc_dodge: t("game.fight.log.npc_dodge", actor: "%{actor}", target: "%{target}", part: "%{part}"),
+       npc_blocked: t("game.fight.log.npc_blocked", actor: "%{actor}", target: "%{target}", part: "%{part}"),
+       npc_defend: t("game.fight.log.npc_defend", actor: "%{actor}"),
+       npc_acts: t("game.fight.log.npc_acts", actor: "%{actor}")
+     }.to_json %>">
 
   <div class="nl-fight-topline fighttxt">
     <span><b><%= fight_type_label(@arena_match.match_type) %></b></span>
