@@ -104,7 +104,7 @@ class TileNpc < ApplicationRecord
 
   # Get display name
   def display_name
-    npc_template&.name || npc_key.titleize
+    npc_template&.name.presence || I18n.t("manage.views.npc_key_fallback", key: npc_key)
   end
 
   # Check if hostile (can be attacked)
