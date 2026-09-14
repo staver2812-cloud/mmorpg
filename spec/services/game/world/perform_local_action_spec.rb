@@ -227,7 +227,7 @@ RSpec.describe Game::World::PerformLocalAction do
       expect(character.reload.fatigue_percent).to eq(5)
       expect(action_offer.reload.local_action_ends_at).to eq(Time.current + 60.seconds)
       expect(action_offer.metadata).to include("fatigue_recovery_points" => 2, "fatigue_recovery_applied" => 2,
-        "fatigue_recovered_at" => Time.current.iso8601(6))
+        "fatigue_recovered_at" => Time.current.iso8601(6), "nature_child" => false)
       expect(Game::World::LocalActionState.new(character:).call).to eq(action_offer)
       expect(position.reload).to have_attributes(x: 5, y: 5)
     end
@@ -258,11 +258,27 @@ RSpec.describe Game::World::PerformLocalAction do
       expect(action_offer.reload.metadata["fatigue_recovery_applied"]).to eq(1)
     end
 
-    it "does not grant an unsupported Nature Child perk from a stored unknown key" do
+    it "recovers four fatigue points when Nature Child is owned" do
       character.update!(perks: {"nature_child" => true})
 
       expect(result.success).to be true
+      expect(character.reload.fatigue_percent).to eq(3)
+      expect(action_offer.reload.metadata).to include(
+        "fatigue_recovery_points" => 4,
+        "fatigue_recovery_applied" => 4,
+        "nature_child" => true
+      )
+    end
+
+    it "ignores an unknown perk key for drinking recovery" do
+      character.update!(perks: {"child_of_nature" => true})
+
+      expect(result.success).to be true
       expect(character.reload.fatigue_percent).to eq(5)
+      expect(action_offer.reload.metadata).to include(
+        "fatigue_recovery_points" => 2,
+        "nature_child" => false
+      )
     end
 
     it "does not recover fatigue after the action is removed" do

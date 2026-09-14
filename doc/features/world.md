@@ -1575,13 +1575,14 @@ The seeded pond is local `[13,10]`, source `[1007,1002]`.
 
 `PerformLocalAction` validates the owned offer and current cell under the
 character/offer lock and checks hostile interruption before applying effects.
-Drink immediately removes two effective fatigue points, clamped at zero, and
-saves the requested/actual recovery and application time together with its
-60-second deadline and success result. `FatigueService#recover!(amount:, at:)`
-returns the points removed after natural recovery; the enclosing offer
-transaction owns retry safety. A failed or interrupted start cannot grant a
-sip, and retries/reloads cannot apply another recovery. The four-point Nature
-Child parameter is reserved data; that perk is not implemented.
+Drink immediately removes two effective fatigue points without Nature Child, or
+four when the character owns selectable perk `nature_child` (source ID `22`),
+clamped at zero, and saves the requested/actual recovery, Nature Child flag,
+and application time together with its 60-second deadline and success result.
+`FatigueService#recover!(amount:, at:)` returns the points removed after
+natural recovery; the enclosing offer transaction owns retry safety. A failed
+or interrupted start cannot grant a sip, and retries/reloads cannot apply
+another recovery.
 
 Fish currently supports only the captured no-bait entry: the immediate result
 “No bait available.” and a 30-second lock. It creates no cast, inventory
@@ -1591,8 +1592,8 @@ profession flow. Resource-group identifiers do not grant those outcomes.
 
 Look, Fish and Drink share persisted deadlines, conflict checks and one-time
 result delivery. Closing a dialog affects presentation only; reloading resumes
-the saved lock. Source behavior at zero fatigue and Nature Child interaction
-still need observation; local zero-fatigue clamping is explicitly covered.
+the saved lock. Source behavior at zero fatigue still needs observation; local
+zero-fatigue clamping is explicitly covered.
 
 ### 8.6 Hostile interruption
 
@@ -2990,7 +2991,7 @@ Before extending the World feature:
 | 2026-09-14 | World move/entry closed-failure request specs assert via `game.flashes.move_started` / `building_not_found` / `game.world.*` (RU-safe). |
 | 2026-09-14 | Fatigue actions-unavailable title and city enter flash request specs assert via `game.world.actions_unavailable_title` / `entered` (RU-safe). |
 | 2026-09-14 | Movement-offer and empty players-here specs assert via `game.flashes.movement_offer_unavailable` / `game.world.no_players` (RU-safe). |
-| 2026-09-14 | Look Around action descriptions translate known English defaults via `MapTileTemplate.player_local_action_description`. |
+| 2026-09-14 | Owned Nature Child perk recovers four fatigue on Drink; without it, recovery remains two points. |
 
 
 ## 19. Open-world parity audit (updated 2026-09-09)
@@ -3010,7 +3011,7 @@ not automatically an after-MVP commitment.
 |---|---|---|
 | Full-zone terrain, artwork, passability, labels, entrances and cell content | [World map design](../design/areas/world_map.md), this handbook and [content management](../guides/managing_game_content.md) | Stage 2 beyond the bounded 273-cell starter catalog; atlas annotations do not establish every cell's complete live action set. |
 | Movement and local-action formulas | [Movement](../design/features/movement.md#travel-time) and this handbook's configurable rules/local-action sections | Refine the captured durations and provisional fallback with isolated evidence; do not invent terrain/equipment/effect coefficients. |
-| Nature Child and skill/perk handoffs | [Character Progression, section 6.5](character_progression.md#65-world-related-skill-and-perk-gaps) | The four-point sip is published but its perk integration is not implemented; other coefficients/variants need evidence. |
+| Nature Child and skill/perk handoffs | [Character Progression, section 6.5](character_progression.md#65-world-related-skill-and-perk-gaps) | Four-point sip ships when `nature_child` is owned; Wanderer/outdoor HP coefficients and zero-fatigue variants still need evidence. |
 | Inactive-player expiry | [Social domain](../domains/social.md#evidence-and-implementation-gaps) and [Game Shell presence](game_shell.md#63-presence-and-layout-preferences) | Five-minute freshness is a local policy; exact source expiry needs evidence. |
 | NPC statistics, pools, compositions, weights and encounter timing/probability | [NPC gap record](../design/reference/npcs_quests/observations/evidence_needed_world_npc_content_and_formulas.md#remaining-npc-gaps) and [NPC design](../design/features/npcs_quests.md) | Captured starter groups work; broader content and formulas require evidence. Level-zero support does not supply unknown rat statistics. |
 | Successful fishing/proficiency, gathering and digging | [Professions](professions.md) | Deferred profession work, with explicit user eligibility decisions and remaining evidence/implementation gaps. |
@@ -3045,7 +3046,7 @@ not automatically an after-MVP commitment.
 | Remaining `[EVIDENCE]` | Exact Neverlands disconnect/logout expiry remains unpublished and unobserved. The confirmed audience is one cell or room; the existing five-minute open-session window is a local technical liveness policy, not a claimed Neverlands interval. |
 | Deferred by user | Successful gathering remains deferred to later profession work, originally grouped by the user with alchemy. Wiki evidence distinguishes Naturalist/Herbalist discovery from Alchemy potion making. The current empty Look result remains supported; yields, eligibility, and profession progression are not invented. |
 | Current delivery boundary | Release one zone; full authored population is Stage 2. Configured airship journeys now use persisted region-qualified paths and bounded map cells, with atomic payment, explicit landing, resume, and flight audience isolation; see `doc/features/airship_travel.md`. Default routes await destination/path/schedule content. Additional populated zones, normal airship route activation and walking border mappings are TODO after the one-zone MVP. |
-| Remaining `[EVIDENCE]` / deferred `[IMPL]` | General movement/search coefficients and exact encounter pools/weights/probability/timing need evidence. Nature Child's four-point recovery is known but its perk handoff is absent; successful professions, underground mine gameplay and exchange operations are unfinished. The domain owners above separate known requirements from unknown rules. Lobby support/configurability does not complete those mechanics. |
+| Remaining `[EVIDENCE]` / deferred `[IMPL]` | General movement/search coefficients and exact encounter pools/weights/probability/timing need evidence. Nature Child's four-point drinking recovery ships with owned `nature_child`; Wanderer/outdoor HP variants remain evidence gaps. Successful professions, underground mine gameplay and exchange operations are unfinished. The domain owners above separate known requirements from unknown rules. Lobby support/configurability does not complete those mechanics. |
 
 The September 8 walking follow-up now reuses overlapping DOM terrain and sends
 only entering cells, with bounded full-snapshot recovery. Configurable numeric

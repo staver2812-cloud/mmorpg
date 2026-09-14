@@ -76,14 +76,14 @@ module Game
       def apply_effect(at:)
         return {} unless local_action_type == "drinking"
 
-        # Nature Child's 4-point value is preserved in Rules for its future
-        # perk implementation. No unsupported perk flag grants an effect here.
-        points = rules.drinking_fatigue_recovery_points
+        nature_child = character.owns_perk?(:nature_child)
+        points = rules.drinking_fatigue_recovery_points(nature_child:)
         applied = Characters::FatigueService.new(character:, rules:).recover!(amount: points, at:)
         {
           "fatigue_recovery_points" => points,
           "fatigue_recovery_applied" => applied,
-          "fatigue_recovered_at" => at.iso8601(6)
+          "fatigue_recovered_at" => at.iso8601(6),
+          "nature_child" => nature_child
         }
       end
 

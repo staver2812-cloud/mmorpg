@@ -600,6 +600,7 @@ en:
       descriptions:
         more_strength: "Adds one effective Strength for every two character levels, rounded down."
         careful_fighter: "Halves each equipped item's post-fight durability-loss chance."
+        nature_child: "Waterbody drinking recovers four fatigue points instead of two."
         merchant: "Allows entry into the trading profession. Shop selling also requires an active trading license."
         healer: "Allows entry into the medical profession. Medical practice also requires a doctor license."
     licenses:

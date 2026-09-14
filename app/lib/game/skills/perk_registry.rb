@@ -26,6 +26,14 @@ module Game
           "Halves each equipped item's post-fight durability-loss chance."
         ],
         [
+          22,
+          :nature_child,
+          "Nature Child",
+          "Дитя природы",
+          :auxiliary,
+          "Waterbody drinking recovers four fatigue points instead of two."
+        ],
+        [
           34,
           :merchant,
           "Merchant",

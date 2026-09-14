@@ -63,7 +63,7 @@ An authenticated player begins at level `0`, gains configured combat experience 
 
 The `Character` record is authoritative for saved allocations and point balances. `allocated_stats`, `passive_skills`, and `perks` are JSONB maps; `stat_points_available`, `combat_skill_points`, `peace_skill_points`, and `perk_points` are separate non-negative counters. The browser never grants points or finalizes an allocation.
 
-Numeric skill identities and four-band progression rates come from the captured Neverlands registry. Effective Extra Action Points now contributes one-for-one to the shared fight AP profile. The selectable perk subset contains source ID `7`, `Больше силы`/`More Strength`, adding `floor(level / 2)` effective Strength; source ID `15`, `Аккуратный боец`/`Careful Fighter`, halving post-fight equipment-wear probability; source ID `34`, Merchant; and source ID `35`, Healer. Merchant and Healer satisfy explicit Shop license prerequisites; selecting either does not grant a license, quest completion, or medical treatment.
+Numeric skill identities and four-band progression rates come from the captured Neverlands registry. Effective Extra Action Points now contributes one-for-one to the shared fight AP profile. The selectable perk subset contains source ID `7`, `Больше силы`/`More Strength`, adding `floor(level / 2)` effective Strength; source ID `15`, `Аккуратный боец`/`Careful Fighter`, halving post-fight equipment-wear probability; source ID `22`, `Дитя природы`/`Nature Child`, raising waterbody drinking recovery from two to four fatigue points; source ID `34`, Merchant; and source ID `35`, Healer. Merchant and Healer satisfy explicit Shop license prerequisites; selecting either does not grant a license, quest completion, or medical treatment.
 
 The MVP currently contains:
 
@@ -71,7 +71,7 @@ The MVP currently contains:
 - a finite table of complete source rows `0..27` for thresholds, stat/skill/perk/NV grants, per-fight XP caps, and source NPC-group limits;
 - exact `Health × 5` base HP, `Knowledge × 7` base MP, and `Strength × 5 + Health × 10 + level × 10` mass formulas;
 - 29 source-backed numeric skills from `0` to `100` with combat and peace point pools;
-- four selectable binary perks with a separate point pool and captured exclusion infrastructure;
+- five selectable binary perks with a separate point pool and captured exclusion infrastructure;
 - an owner-only Your licenses surface showing current purchased permissions and their server-owned expiry;
 - solo configured-NPC XP award through idempotent fight finalization, capped by the current level row;
 - public HTML and JSON display of numeric skills and owned perks;
@@ -170,6 +170,7 @@ The feature is an authored catalog and state graph rather than spatial topology.
 | `peace_world` | Peace/world skills | Spend peace points | Source IDs `22`, `23`, `24`, `26`, `27`, `30`, `33`, `34` |
 | `more_strength` | More Strength | Spend one perk point; persist `Yes` | Boolean perk source ID `7`; adds `floor(level / 2)` effective Strength |
 | `careful_fighter` | Careful Fighter | Spend one perk point; persist `Yes` | Boolean perk source ID `15`; halves each post-fight equipment-wear chance |
+| `nature_child` | Nature Child | Spend one perk point; persist `Yes` | Boolean perk source ID `22`; waterbody drinking recovers four fatigue instead of two |
 | `merchant` | Merchant | Spend one perk point; persist `Yes` | Boolean perk source ID `34`; prerequisite for Trading licenses, alongside Merchant qualification |
 | `healer` | Healer | Spend one perk point; persist `Yes` | Boolean perk source ID `35`; prerequisite for Doctor licenses, with Traumatologist qualification additionally required for tiers II/III |
 
@@ -186,7 +187,7 @@ Numeric skills use captured four-value rate strings. The rate selected for a spe
 
 - **Primary-stat key** — normalized local identity such as `strength`, `dexterity`, `luck`, `vitality`, or `intelligence`; player labels map Health to `vitality` and Knowledge to `intelligence`.
 - **Numeric-skill source ID** — stable Neverlands `Умения` identity retained in `PassiveSkillRegistry`; local symbolic keys are used in persisted JSONB.
-- **Perk source ID** — stable Neverlands `Навыки` identity retained in `PerkRegistry`; source IDs `7`, `15`, `34`, and `35` have launch-selectable local keys.
+- **Perk source ID** — stable Neverlands `Навыки` identity retained in `PerkRegistry`; source IDs `7`, `15`, `22`, `34`, and `35` have launch-selectable local keys.
 - **Base value** — saved character allocation before equipment modifiers.
 - **Effective value** — base character value plus supported equipment modifiers, capped where the implementation defines a cap.
 
@@ -236,9 +237,9 @@ captured.
 
 ### 6.4 Boolean perks and deferred behavior boundary
 
-`more_strength`, `careful_fighter`, `merchant`, and `healer` are the rendered
-selectable perks. Saving any new selection consumes one `perk_points`, stores
-its key as `true`, and makes it
+`more_strength`, `careful_fighter`, `nature_child`, `merchant`, and `healer` are
+the rendered selectable perks. Saving any new selection consumes one
+`perk_points`, stores its key as `true`, and makes it
 non-removable through the normal UI. `PerkAllocation` rejects empty/duplicate
 ownership, unknown keys, insufficient points, and any captured mutually
 exclusive combination under a character row lock.
@@ -247,25 +248,28 @@ The complete observed `Навыки` labels and saved yes/no rows are evidence, 
 local capabilities. Source ID `7` adds one effective Strength per two levels,
 rounded down. Source ID `15` halves the independent per-item wear chance at
 fight finalization, including the `1%` arena-defeat chance as an exact `0.5%`
-roll. Source IDs `34` and `35` provide Merchant/Healer ownership to Shop
-license prerequisite checks. Selecting a profession perk grants neither quest
-completion nor a timed license. Shop implements the bounded Merchant
-qualification path; Doctor quests and medical treatment remain unimplemented.
-Reset behavior and other uncaptured prerequisite/effect rules remain deferred.
+roll. Source ID `22` (`nature_child`) is selectable and raises waterbody
+drinking recovery from two to four fatigue points via
+`PerformLocalAction` and `world_rules.yml`. Source IDs `34` and `35` provide
+Merchant/Healer ownership to Shop license prerequisite checks. Selecting a
+profession perk grants neither quest completion nor a timed license. Shop
+implements the bounded Merchant qualification path; Doctor quests and medical
+treatment remain unimplemented. Reset behavior and other uncaptured
+prerequisite/effect rules remain deferred.
 
 ### 6.5 World-related skill and perk gaps
 
-This is the progression owner for the remaining World skill/perk handoffs.
-The source catalog records Nature Child as auxiliary perk ID `22`; it is
-absent from the local selectable registry. The user's
+This is the progression owner for remaining World skill/perk handoffs beyond
+the shipped Nature Child drinking effect. The source catalog records Nature
+Child as auxiliary perk ID `22`. The user's
 [Nature Child wiki link](http://wiki.neverlands.ru/wiki/Дитя_природы) resolves
 to the auxiliary section of the Perk article, preserved in the September 9
 wiki observation.
 
 | Gap | Known boundary and remaining work |
 |---|---|
-| `[IMPL]` Nature Child acquisition and drinking effect | The published sip removes four fatigue points instead of two. `world_rules.yml` preserves that value, but `PerformLocalAction` currently requests ordinary two-point recovery and no supported owned-perk selection exists. Add the validated progression-to-World handoff and applicable allocation, persistence, atomic effect and retry coverage when this perk is scoped. A configured number alone does not enable the perk. |
-| `[EVIDENCE]` Nature Child variants | Capture its applicable prerequisites/selection and actual perk-dependent sip. The exact Wanderer enhancement, outdoor HP-recovery coefficient and zero-fatigue source behavior are not established by the article. Do not classify the already published four-point amount as unknown. |
+| Shipped Nature Child drinking | Owned `nature_child` recovers four fatigue per sip; without the perk, drinking recovers two. Allocation uses `PerkRegistry` source ID `22`. |
+| `[EVIDENCE]` Nature Child variants | Capture its applicable prerequisites/selection and actual perk-dependent sip variants. The exact Wanderer enhancement, outdoor HP-recovery coefficient and zero-fatigue source behavior are not established by the article. Do not classify the already published four-point amount as unknown. |
 | `[EVIDENCE]` Broader movement skill/effect combinations | Effective Wanderer is already supplied to World. Terrain, equipment and effect composition beyond the current authored duration/configurable fallback need isolated inputs; the formula owner is [Movement](../design/features/movement.md#travel-time), with runtime limits in [World](world.md#19-open-world-parity-audit-updated-2026-09-09). |
 | Deferred profession progression | Successful fishing grows its profession counter per the user's confirmation; there is no initial fishing skill gate. Successful fishing/gathering/mining counters and their activity lifecycle belong to [Professions](professions.md), not ordinary allocatable peace skills. |
 
@@ -541,9 +545,10 @@ Arbitrary saved browser fields, translated labels, or profile URLs do not grant 
 - The owner can spend the correct combat or peace pool across all 29 captured numeric skills.
 - Numeric skill spends use the captured four-band rate and never exceed `100`.
 - The owner can spend perk points on `more_strength`, `careful_fighter`,
-  `merchant`, or `healer`; another save cannot reacquire an owned perk. Strength
-  gains `floor(level / 2)`, shared fight wear chances are halved for Careful
-  Fighter, and profession perks feed explicit Shop license prerequisites.
+  `nature_child`, `merchant`, or `healer`; another save cannot reacquire an
+  owned perk. Strength gains `floor(level / 2)`, shared fight wear chances are
+  halved for Careful Fighter, Nature Child raises drinking recovery to four
+  fatigue points, and profession perks feed explicit Shop license prerequisites.
 - Your licenses displays only current owned permissions, preserves grant
   snapshots across catalog changes/login, and hides them exactly at expiry.
 - A level-0 starter receives exact catalog grants when configured solo-PvE XP crosses one or more complete thresholds.
@@ -743,7 +748,7 @@ Before extending Character Progression:
 | 2026-09-13 | Owner sheet shows private Veil Marks balance (`data-sheet-vm`) with Infirmary link when colocated; NV wallet also exposes `data-sheet-nv`; locker occupancy uses `data-sheet-locker`; vault NV uses `data-sheet-vault`. |
 | 2026-09-14 | Level-up service rejects non-integer/negative XP via `errors.experience_non_negative`. |
 | 2026-09-14 | Allocation/perk and profile chrome request specs assert via `game.flashes.alloc_*` / `perks_saved` / `game.profile.sections` (RU-safe). |
-| 2026-09-14 | Stats/skills allocation request specs assert titles and primary-stat labels via `game.profile.*_title` / `Character.stat_label` (RU-safe). |
+| 2026-09-14 | Nature Child (`nature_child`, source ID `22`) is selectable; owned perk raises waterbody drinking recovery to four fatigue points via World. |
 | 2026-09-13 | Skill/perk allocation UI prefers captured RU source labels for `:ru`, localizes skill categories and spend rejects. |
 | 2026-09-13 | Stat/skill/perk allocation Reset/Save and `(base: N)` chrome use `game.profile.allocation_*` / `stat_base` i18n. |
 | 2026-09-13 | Character/licenses page titles use `game.profile.*_title`; license kinds use `game.licenses.kinds.*`. |
