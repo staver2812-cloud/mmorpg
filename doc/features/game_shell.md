@@ -1265,6 +1265,7 @@ Before extending Game Shell:
 | 2026-09-14 | Outdoor empty bait chip is a City recovery link (`data-bait-recovery="city"`); smoke asserts it when qty=0. |
 | 2026-09-14 | Empty trauma/heal scroll chips recover via Infirmary or City (`data-trauma-recovery` / `data-heal-recovery`). |
 | 2026-09-14 | Alignment/fatigue/quest/obelisk shell chips expose `data-alignment-recovery` / `data-fatigue-recovery` / `data-quest-recovery` / `data-obelisk-recovery` when linking. |
+| 2026-09-14 | City empty bait chip recovers via Souvenir/Shop (`data-bait-recovery`); footer Q/A tools expose `data-shell-recovery`. |
 | 2026-09-14 | Compact shell chat empty state recovers to World (`data-chat-empty` + `data-chat-recovery="world"`). |
 | 2026-09-14 | Presence empty list recovers to World (`data-presence-empty` + `data-presence-recovery="world"`); smoke asserts when alone. |
 | 2026-09-14 | Broken wear chip opens Pitch Forge when in district; otherwise Inventory. |

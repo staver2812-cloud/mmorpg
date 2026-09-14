@@ -753,6 +753,7 @@ Before extending Character Progression:
 | 2026-09-14 | Allocation/perk and profile chrome request specs assert via `game.flashes.alloc_*` / `perks_saved` / `game.profile.sections` (RU-safe). |
 | 2026-09-14 | Nature Child (`nature_child`, source ID `22`) is selectable; owned perk raises waterbody drinking recovery to four fatigue points via World. |
 | 2026-09-14 | Owner profile idle allocation note links to World and Training hall when no free primary-stat points remain. |
+| 2026-09-14 | Profile section tabs expose `data-profile-tabs` / `data-profile-recovery` for Skills/Perks/Licenses navigation. |
 | 2026-09-14 | Visitor empty public-perks note recovers via World. |
 | 2026-09-14 | Owner sheet empty NV recovers via Junk/Shop Sell/City; vault/VM out-of-district recover via City. |
 | 2026-09-14 | Unset sheet alignment recovers via Law Abode or City. |
