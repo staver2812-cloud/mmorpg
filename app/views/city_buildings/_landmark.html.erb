@@ -257,7 +257,9 @@
          data-auction-wallet="<%= wallet.nv_balance.to_i %>"
          data-auction-vault="<%= vault %>"
          data-auction-vm="<%= wallet.veil_marks.to_i %>"
-         data-auction-lots="deferred">
+         data-auction-lots="deferred"
+         data-auction-can-list="0"
+         data-auction-can-bid="0">
         <%= t("game.buildings.auction_treasury",
               wallet: wallet.nv_balance.to_i,
               vault: vault,
