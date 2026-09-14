@@ -25,7 +25,11 @@
       <% end %>
     </p>
   <% else %>
-    <p class="nl-quests-board__meta" data-temple-injury="0"><%= t("game.buildings.temple_no_injuries") %></p>
+    <p class="nl-quests-board__meta" data-temple-injury="0">
+      <%= t("game.buildings.temple_no_injuries") %>
+      ·
+      <%= link_to t("arena.nav.city"), world_path, class: "nl-sheet-link", data: {temple_recovery: "world"} %>
+    </p>
   <% end %>
   <p>
     <% if can_rite %>
@@ -40,11 +44,19 @@
         <%= t("game.buildings.temple_need_nv", amount: Game::World::TempleBlessing::COST_NV) %>
         <% if Game::World::CityBuildingCatalog.accessible?(character: current_character, building_key: "bank") %>
           <%= link_to t("game.shop.open_bank"), city_building_path("bank"), class: "nl-sheet-link", data: {temple_recovery: "bank"} %>
+        <% elsif Game::World::CityBuildingCatalog.accessible?(character: current_character, building_key: "junk_dealer") %>
+          <%= link_to t("game.buildings.junk_dealer_link"), city_building_path("junk_dealer"), class: "nl-sheet-link", data: {temple_recovery: "junk"} %>
+        <% else %>
+          <%= link_to t("arena.nav.city"), world_path, class: "nl-sheet-link", data: {temple_recovery: "world"} %>
         <% end %>
       </span>
     <% else %>
       <button type="button" class="lbut" disabled title="<%= t("game.buildings.temple_no_light") %>"><%= t("game.buildings.temple_rite_cta", amount: Game::World::TempleBlessing::COST_NV) %></button>
-      <span class="nl-quests-board__meta"><%= t("game.buildings.temple_no_light") %></span>
+      <span class="nl-quests-board__meta" data-temple-no-light="1">
+        <%= t("game.buildings.temple_no_light") %>
+        ·
+        <%= link_to t("arena.nav.city"), world_path, class: "nl-sheet-link", data: {temple_recovery: "world"} %>
+      </span>
     <% end %>
   </p>
 </section>

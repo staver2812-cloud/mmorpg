@@ -1285,6 +1285,7 @@ en:
       quantity_for: "Quantity for %{name}"
       lobby_deferred: "Lobby only — underground mining and exchange operations need live Neverlands capture before they can open."
       lobby_next: "Soft-release loop stays on City / Shop / Ash Buyer — not underground."
+      action_deferred: "These lobby actions stay deferred until underground/exchange settlement is captured."
       descend_deferred: "Descent is closed until underground mine travel is captured."
       choose_deferred: "Resource query stays disabled until exchange listings are captured."
       buy_deferred: "Buy stays disabled until exchange settlement is captured."
