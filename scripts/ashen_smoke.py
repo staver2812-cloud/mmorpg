@@ -735,8 +735,8 @@ def main() -> int:
         f"url={r.url}",
     )
     report.add(
-        "inventory transfer price field",
-        "data-inventory-transfer-price=" in r.text,
+        "inventory player-sell deferred",
+        'data-inventory-player-sell="deferred"' in r.text,
         f"url={r.url}",
     )
     report.add(

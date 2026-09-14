@@ -21,7 +21,7 @@
       <% when "wood" %>
         <p class="nl-quests-board__meta" data-inventory-empty-hint="workshop">
           <%= t("game.inventory.empty_hint_workshop") %>
-          <%= link_to t("game.buildings.workshop_title_short", default: t("game.professions.tar_smith")), city_building_path("workshop"), class: "nl-sheet-link" %>
+          <%= link_to t("game.professions.tar_smith"), city_building_path("workshop"), class: "nl-sheet-link" %>
         </p>
       <% when "quests" %>
         <p class="nl-quests-board__meta" data-inventory-empty-hint="quests">
