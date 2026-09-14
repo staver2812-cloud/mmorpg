@@ -249,3 +249,23 @@
     min-width: 0;
   }
 }
+
+@media (pointer: coarse) {
+  .nl-shop-tab,
+  .nl-shop-license__buy,
+  .nl-shop-empty .nl-sheet-link,
+  .nl-shop .lbut,
+  .nl-shop .invbut {
+    min-height: 44px;
+    min-width: 44px;
+    padding: 8px 10px;
+    font-size: 12px;
+    line-height: 1.25;
+  }
+
+  .nl-shop-license__quantity {
+    min-height: 44px;
+    min-width: 44px;
+    font-size: 14px;
+  }
+}

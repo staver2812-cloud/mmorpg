@@ -1696,3 +1696,24 @@ select.nl-fight-select,
     width: 36px;
   }
 }
+
+@media (pointer: coarse) {
+  .nl-arena-tab,
+  .nl-arena-small-button,
+  .nl-arena-link,
+  .arena-turn-submit .nl-arena-small-button,
+  .nl-fight-controls .nl-arena-small-button,
+  .nl-assault-btn {
+    min-height: 44px;
+    min-width: 44px;
+    padding: 8px 10px;
+    font-size: 12px;
+    line-height: 1.25;
+  }
+
+  select.nl-fight-select,
+  .nl-fight-select {
+    min-height: 44px;
+    font-size: 14px;
+  }
+}
