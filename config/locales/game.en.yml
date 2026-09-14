@@ -1262,6 +1262,7 @@ en:
       workshop_notice: "Crafting is live. Recipes below consume materials and raise Tar Smith skill."
       repair_deferred: "Gear repair is not available yet. Check Inventory for wear and broken badges."
       workshop_none_ready: "No craft is ready — gather materials outdoors or check Inventory."
+      hospital_craft_none_ready: "No healer craft is ready — gather herbs outdoors or check Inventory."
       bag_capacity: "Bag: %{weight}/%{max} mass · %{slots}/%{slot_max} slots"
       workshop_only: "Crafting is only available at the Pitch Forge or Infirmary."
       wrong_building: "That recipe belongs to another building."

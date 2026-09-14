@@ -93,6 +93,15 @@
      data-hospital-craft-any-ready="<%= any_ready ? "1" : "0" %>">
     <%= t("game.professions.bag_capacity", weight: bag_weight, max: bag_max, slots: bag_slots, slot_max: bag_slot_cap) %>
   </p>
+  <% unless any_ready %>
+    <p class="nl-quests-board__meta" data-hospital-craft-none-ready="1">
+      <%= t("game.professions.hospital_craft_none_ready") %>
+      ·
+      <%= link_to t("game.inventory.title"), inventory_path, data: {turbo: false, hospital_recovery: "inventory"} %>
+      ·
+      <%= link_to t("arena.nav.city"), world_path, data: {turbo: false, hospital_recovery: "world"} %>
+    </p>
+  <% end %>
   <div class="nl-handbook__grid">
     <% recipes.each do |key, recipe| %>
       <% title = I18n.locale.to_s.start_with?("ru") ? recipe["title_ru"] : recipe["title_en"] %>
