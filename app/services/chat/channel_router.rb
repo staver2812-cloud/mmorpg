@@ -36,7 +36,7 @@ module Chat
 
     def local_channel(_context)
       local = LocalContext.new(character: user.character).synchronize!
-      raise Pundit::NotAuthorizedError, "Current location required" unless local
+      raise Pundit::NotAuthorizedError, I18n.t("game.chat.location_required") unless local
 
       slug = "local-#{local.key}"
       existing = ChatChannel.find_by(slug:)

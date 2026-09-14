@@ -6,7 +6,7 @@
     <div class="nl-manage-field"><%= form.label :name %><%= form.text_field :name, required: true %></div>
     <div class="nl-manage-field"><%= form.label :hotspot_type %><%= form.select :hotspot_type, CityHotspot::HOTSPOT_TYPES %></div>
     <div class="nl-manage-field"><%= form.label :action_type %><%= form.select :action_type, CityHotspot::ACTION_TYPES %></div>
-    <div class="nl-manage-field"><%= form.label :destination_zone_id %><%= form.collection_select :destination_zone_id, @destination_zones, :id, :display_name, include_blank: "No destination zone" %></div>
+    <div class="nl-manage-field"><%= form.label :destination_zone_id %><%= form.collection_select :destination_zone_id, @destination_zones, :id, :display_name, include_blank: t("manage.views.no_destination_zone") %></div>
     <div class="nl-manage-field"><%= form.label :position_x %><%= form.number_field :position_x, min: 0, required: true %></div>
     <div class="nl-manage-field"><%= form.label :position_y %><%= form.number_field :position_y, min: 0, required: true %></div>
     <div class="nl-manage-field"><%= form.label :width %><%= form.number_field :width, min: 1 %></div>

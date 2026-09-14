@@ -7,8 +7,8 @@
     <div class="nl-manage-field"><%= form.label :y %><%= form.number_field :y, min: 0, required: true %></div>
     <div class="nl-manage-field"><%= form.label :name %><%= form.text_field :name, required: true %></div>
     <div class="nl-manage-field"><%= form.label :building_type %><%= form.select :building_type, TileBuilding::BUILDING_TYPES %></div>
-    <div class="nl-manage-field"><%= form.label :location_kind, "Linked location kind" %><%= form.select :location_kind, TileBuilding::LOCATION_KINDS, include_blank: "City gate" %></div>
-    <div class="nl-manage-field"><%= form.label :destination_zone_id %><%= form.collection_select :destination_zone_id, @destination_zones, :id, :display_name, include_blank: "No zone (linked location)" %></div>
+    <div class="nl-manage-field"><%= form.label :location_kind, t("manage.views.linked_location_kind") %><%= form.select :location_kind, TileBuilding::LOCATION_KINDS, include_blank: t("manage.views.city_gate_blank") %></div>
+    <div class="nl-manage-field"><%= form.label :destination_zone_id %><%= form.collection_select :destination_zone_id, @destination_zones, :id, :display_name, include_blank: t("manage.views.no_zone_linked") %></div>
     <div class="nl-manage-field"><%= form.label :required_level %><%= form.number_field :required_level, min: 0 %></div>
     <div class="nl-manage-field"><%= form.label :destination_x %><%= form.number_field :destination_x, min: 0 %></div>
     <div class="nl-manage-field"><%= form.label :destination_y %><%= form.number_field :destination_y, min: 0 %></div>
