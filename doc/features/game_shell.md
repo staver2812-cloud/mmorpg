@@ -1263,6 +1263,7 @@ Before extending Game Shell:
 | 2026-09-14 | Auth/chat denial raises use `game.chat.*` / `game.flashes.character_required` / `email_verification_required`; HTML alerts prefer localized exception text over generic English policy denials. |
 | 2026-09-14 | Empty trauma/heal chips always render and recover via Infirmary premium desk or City; outdoor fatigue and unset-alignment chips recover via Tavern/City/Law when out of district; presence Assault blocked recovers to Infirmary. |
 | 2026-09-14 | Outdoor empty bait chip is a City recovery link (`data-bait-recovery="city"`); smoke asserts it when qty=0. |
+| 2026-09-14 | Compact shell chat empty state recovers to World (`data-chat-empty` + `data-chat-recovery="world"`). |
 | 2026-09-14 | Broken wear chip opens Pitch Forge when in district; otherwise Inventory. |
 | 2026-09-14 | Full chat channel empty state recovers to World. |
 | 2026-09-14 | Shell drops forced `min-width: 760px` so 390px viewports do not force page-level horizontal scroll. |
