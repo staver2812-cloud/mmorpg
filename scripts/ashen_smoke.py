@@ -985,6 +985,12 @@ def main() -> int:
             or 'data-auction-recovery="bank"' in r.text,
             f"url={r.url}",
         )
+    if r.status_code == 200 and 'data-building-key="auction"' in r.text:
+        report.add(
+            "auction building chrome recovery",
+            'data-building-recovery="world"' in r.text,
+            f"url={r.url}",
+        )
     r = s.get(f"{BASE}/city/buildings/dealer_house", timeout=TIMEOUT, allow_redirects=True)
     report.add(
         "GET /city/buildings/dealer_house buyback",
@@ -1005,6 +1011,11 @@ def main() -> int:
             or 'data-dealer-recovery="market"' in r.text,
             f"url={r.url}",
         )
+        report.add(
+            "dealer house building chrome recovery",
+            'data-building-recovery="world"' in r.text,
+            f"url={r.url}",
+        )
     r = s.get(f"{BASE}/city/buildings/obelisk", timeout=TIMEOUT, allow_redirects=True)
     report.add(
         "GET /city/buildings/obelisk",
@@ -1018,6 +1029,12 @@ def main() -> int:
         and ('data-landmark-inside="1"' in r.text),
         f"url={r.url}",
     )
+    if r.status_code == 200 and 'data-building-key="obelisk"' in r.text:
+        report.add(
+            "obelisk building chrome recovery",
+            'data-building-recovery="world"' in r.text,
+            f"url={r.url}",
+        )
     if r.status_code == 200 and 'data-obelisk-bind-first="1"' in r.text:
         report.add(
             "obelisk bind-first recovery",
