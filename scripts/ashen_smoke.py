@@ -202,6 +202,18 @@ def main() -> int:
             r.status_code == 200 and hit,
             f"{r.status_code} data_ok={data_ok} text_ok={text_ok} missing={missing[:4]}",
         )
+        if path == "/shop" and r.status_code == 200:
+            if (
+                'data-shop-short-nv="1"' in r.text
+                or 'data-shop-any-affordable="0"' in r.text
+            ):
+                report.add(
+                    "shop short-NV recovery",
+                    'data-shop-recovery="bank"' in r.text
+                    or 'data-shop-recovery="junk"' in r.text
+                    or 'data-shop-recovery="world"' in r.text,
+                    f"url={r.url}",
+                )
         if path == "/city/buildings/hospital" and r.status_code == 200 and 'data-building-key="hospital"' in r.text:
             report.add(
                 "hospital building chrome recovery",
@@ -1428,42 +1440,14 @@ def main() -> int:
             f"url={r.url}",
         )
 
-    # Drain wallet into the vault so the buy desk has nothing affordable.
-    r_bank = s.get(f"{BASE}/city/buildings/bank", timeout=TIMEOUT, allow_redirects=True)
-    if (
-        r_bank.status_code == 200
-        and 'data-bank-can-deposit="1"' in r_bank.text
-    ):
-        wallet_m = re.search(r'data-bank-wallet="(\d+)"', r_bank.text)
-        deposit_amount = wallet_m.group(1) if wallet_m else None
-        bank_token = csrf_from(r_bank.text)
-        if deposit_amount and int(deposit_amount) > 0 and bank_token:
-            s.post(
-                f"{BASE}/city/buildings/bank/bank",
-                data={
-                    "authenticity_token": bank_token,
-                    "bank_action": "deposit",
-                    "amount": deposit_amount,
-                },
-                timeout=TIMEOUT,
-                allow_redirects=True,
-            )
-
-    r = s.get(f"{BASE}/shop", timeout=TIMEOUT)
+    # Late buy-desk check (explicit mode); wallet may already fund a knife tab.
+    r = s.get(f"{BASE}/shop?mode=buy", timeout=TIMEOUT)
     banned_shop = ["You carry", "Shop funds", "Refresh to buy", "There are no items", "Valid for", "(quantity:"]
     found_shop = [w for w in banned_shop if w in r.text]
     report.add("shop no English chrome", not found_shop, f"found={found_shop}")
     if r.status_code == 200 and 'data-shop-short-nv="1"' in r.text:
         report.add(
-            "shop short-NV recovery",
-            'data-shop-recovery="bank"' in r.text
-            or 'data-shop-recovery="junk"' in r.text
-            or 'data-shop-recovery="world"' in r.text,
-            f"url={r.url}",
-        )
-    elif r.status_code == 200 and 'data-shop-any-affordable="0"' in r.text:
-        report.add(
-            "shop short-NV recovery",
+            "shop short-NV desk recovery",
             'data-shop-recovery="bank"' in r.text
             or 'data-shop-recovery="junk"' in r.text
             or 'data-shop-recovery="world"' in r.text,
