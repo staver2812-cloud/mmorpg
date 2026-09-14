@@ -331,7 +331,7 @@ RSpec.describe "World", type: :request do
 
         expect(response).to redirect_to(world_path)
         follow_redirect!
-        expect(response.body).to include("Move started.")
+        expect(response.body).to include(I18n.t("game.flashes.move_started"))
       end
 
       it "returns turbo stream movement state" do
@@ -1092,7 +1092,7 @@ RSpec.describe "World", type: :request do
 
         expect(response).to redirect_to(world_path)
         follow_redirect!
-        expect(response.body).to include("Action offer")
+        expect(response.body).to include(I18n.t("game.world.action_offer_unavailable"))
         expect(position.reload.zone).to eq(source_zone)
       end
 
@@ -1136,7 +1136,7 @@ RSpec.describe "World", type: :request do
 
         expect(response).to redirect_to(world_path)
         follow_redirect!
-        expect(response.body).to include("Entrance is currently unavailable.")
+        expect(response.body).to include(I18n.t("game.world.entrance_unavailable"))
         expect(position.reload).to have_attributes(zone: source_zone, x: 5, y: 5)
       end
     end
@@ -1150,7 +1150,7 @@ RSpec.describe "World", type: :request do
 
         expect(response).to redirect_to(world_path)
         follow_redirect!
-        expect(response.body).to include("Building not found.")
+        expect(response.body).to include(I18n.t("game.flashes.building_not_found"))
       end
 
       it "returns turbo stream error for non-existent building" do
@@ -1181,7 +1181,7 @@ RSpec.describe "World", type: :request do
 
         expect(response).to redirect_to(world_path)
         follow_redirect!
-        expect(response.body).to include("There is no city entrance on this cell.")
+        expect(response.body).to include(I18n.t("game.world.no_city_entrance"))
       end
 
       it "does not move character" do
@@ -1212,7 +1212,7 @@ RSpec.describe "World", type: :request do
 
         expect(response).to redirect_to(world_path)
         follow_redirect!
-        expect(response.body).to include("Entrance is currently unavailable.")
+        expect(response.body).to include(I18n.t("game.world.entrance_unavailable"))
       end
 
       it "does not move character" do
@@ -1250,7 +1250,7 @@ RSpec.describe "World", type: :request do
 
         expect(response).to redirect_to(world_path)
         follow_redirect!
-        expect(response.body).to include("Entrance is currently unavailable.")
+        expect(response.body).to include(I18n.t("game.world.entrance_unavailable"))
       end
 
       it "does not move character" do
@@ -1270,7 +1270,7 @@ RSpec.describe "World", type: :request do
 
         expect(response).to redirect_to(world_path)
         follow_redirect!
-        expect(response.body).to include("Building not found.")
+        expect(response.body).to include(I18n.t("game.flashes.building_not_found"))
       end
     end
 
@@ -1280,7 +1280,7 @@ RSpec.describe "World", type: :request do
 
         expect(response).to redirect_to(world_path)
         follow_redirect!
-        expect(response.body).to include("Building not found.")
+        expect(response.body).to include(I18n.t("game.flashes.building_not_found"))
       end
     end
 
@@ -1290,7 +1290,7 @@ RSpec.describe "World", type: :request do
 
         expect(response).to redirect_to(world_path)
         follow_redirect!
-        expect(response.body).to include("Building not found.")
+        expect(response.body).to include(I18n.t("game.flashes.building_not_found"))
       end
     end
 
@@ -1313,7 +1313,7 @@ RSpec.describe "World", type: :request do
 
         expect(response).to redirect_to(world_path)
         follow_redirect!
-        expect(response.body).to include("There is no city entrance on this cell.")
+        expect(response.body).to include(I18n.t("game.world.no_city_entrance"))
       end
     end
   end
@@ -1466,7 +1466,7 @@ RSpec.describe "World", type: :request do
       it "shows blocked reason instead of enter button" do
         get world_path
 
-        expect(response.body).to include("Entrance is currently unavailable.")
+        expect(response.body).to include(I18n.t("game.world.entrance_unavailable"))
         expect(response.body).to include("building-blocked")
       end
     end

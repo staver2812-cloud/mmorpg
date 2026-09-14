@@ -742,6 +742,7 @@ Before extending Character Progression:
 | 2026-08-23 | Documented that Arena supplies the actual persisted solo-NPC XP award for recipient fight-completion feedback while Character Progression remains the XP/level authority. |
 | 2026-09-13 | Owner sheet shows private Veil Marks balance (`data-sheet-vm`) with Infirmary link when colocated; NV wallet also exposes `data-sheet-nv`; locker occupancy uses `data-sheet-locker`; vault NV uses `data-sheet-vault`. |
 | 2026-09-14 | Level-up service rejects non-integer/negative XP via `errors.experience_non_negative`. |
+| 2026-09-14 | Allocation/perk and profile chrome request specs assert via `game.flashes.alloc_*` / `perks_saved` / `game.profile.sections` (RU-safe). |
 | 2026-09-13 | Skill/perk allocation UI prefers captured RU source labels for `:ru`, localizes skill categories and spend rejects. |
 | 2026-09-13 | Stat/skill/perk allocation Reset/Save and `(base: N)` chrome use `game.profile.allocation_*` / `stat_base` i18n. |
 | 2026-09-13 | Character/licenses page titles use `game.profile.*_title`; license kinds use `game.licenses.kinds.*`. |

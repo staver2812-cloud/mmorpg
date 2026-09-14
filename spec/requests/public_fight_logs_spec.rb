@@ -57,7 +57,7 @@ RSpec.describe "Public fight logs", type: :request do
     expect(response).to have_http_status(:ok)
     expect(response.body).to include("max_kerby")
     expect(response.body).to include("<td>6</td>")
-    expect(response.body).to include("Fight log")
+    expect(response.body).to include(I18n.t("game.fight.log"))
   end
 
   it "paginates the durable chronological stream at fifty entries" do
@@ -94,8 +94,8 @@ RSpec.describe "Public fight logs", type: :request do
     get public_fight_log_path(empty_match, p: 0)
 
     expect(response).to have_http_status(:ok)
-    expect(response.body).to include("No fight events recorded.")
-    expect(response.body).to include("Fight participants:")
+    expect(response.body).to include(I18n.t("game.fight.no_events"))
+    expect(response.body).to include(I18n.t("game.fight.participants"))
 
     get public_fight_log_path(empty_match, p: -4, format: :json)
     expect(response.parsed_body.fetch("current_page")).to eq(1)

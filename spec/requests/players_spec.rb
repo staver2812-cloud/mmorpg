@@ -48,7 +48,7 @@ RSpec.describe "Players", type: :request do
       expect(response).to have_http_status(:ok)
       expect(response.body).to include('<body class="nl-game-layout"')
       expect(response.body).to include('class="nl-profile-tabs"')
-      expect(response.body).to include("Character sections")
+      expect(response.body).to include(I18n.t("game.profile.sections"))
       expect(Nokogiri::HTML(response.body).css(".nl-profile-location").size).to eq(1)
       vault = Nokogiri::HTML(response.body).at_css(".nl-sheet-vault")
       expect(vault).to be_present

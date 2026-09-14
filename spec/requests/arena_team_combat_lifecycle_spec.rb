@@ -103,7 +103,7 @@ RSpec.describe "Physical 3x3 team combat lifecycle", type: :request do
 
         get arena_match_path(@match)
         expect(response).to have_http_status(:ok)
-        expect(response.body).to include("Waiting for opponent turn")
+        expect(response.body).to include(I18n.t("game.fight.wait_opponent_turn"))
         expect(response.body).to include("SyntheticB2")
 
         post action_arena_match_path(@match),
@@ -176,7 +176,7 @@ RSpec.describe "Physical 3x3 team combat lifecycle", type: :request do
 
     get public_fight_log_path(@match)
     expect(response).to have_http_status(:ok)
-    expect(response.body).to include("Fight participants:")
+    expect(response.body).to include(I18n.t("game.fight.participants"))
     players.each { |player| expect(response.body).to include(player.fetch(:character).name) }
 
     get public_fight_log_path(@match, stat: 1, format: :json)
