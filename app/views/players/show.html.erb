@@ -60,7 +60,15 @@
             <%= render "characters/stat_allocation" %>
           </turbo-frame>
         <% else %>
-          <p class="nl-empty-note" data-profile-allocation="idle"><%= t("game.profile.no_stat_points") %></p>
+          <p class="nl-empty-note" data-profile-allocation="idle">
+            <%= t("game.profile.no_stat_points") %>
+            ·
+            <%= link_to t("nav.world"), world_path, class: "nl-sheet-link", data: {profile_recovery: "world"} %>
+            <% if Game::World::CityBuildingCatalog.accessible?(character: @character, building_key: "general_school") %>
+              ·
+              <%= link_to t("game.buildings.school_board_title"), city_building_path("general_school"), class: "nl-sheet-link", data: {profile_recovery: "school"} %>
+            <% end %>
+          </p>
         <% end %>
       <% elsif @character.owned_perk_keys.any? %>
         <div class="nl-panel">
