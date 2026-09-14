@@ -1151,6 +1151,7 @@ Final rerun results are in the
 - 2026-09-14: Manage index titles/empty rows/pagination and NPC state labels use `manage.*` i18n.
 - 2026-09-14: Manage building/hotspot show+form destination labels and NPC template key fallback use `manage.views.*` i18n.
 - 2026-09-14: Narrow/coarse city building controls reflow below the scene (`nl-city-building-controls`, `UI-ADAPT-005`).
+- 2026-09-14: Coarse-pointer city desk buttons/tabs and handbook CTAs target ~44×44 CSS px.
 - 2026-09-14: Manage world-cell resource groups, local-action toggles, and NPC encounter roster form chrome use `manage.views.*` i18n.
 - 2026-09-14: Manage NPC template detail Attack/Dialogue/Metadata labels use `manage.views.*` i18n.
 - 2026-09-14: Manage world-cell/NPC/audit show detail rows use `manage.views.*` i18n.
