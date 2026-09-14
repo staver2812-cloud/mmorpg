@@ -186,8 +186,8 @@ def main() -> int:
         (f"/player/{nick}", ["nl-character-sheet", "Сейф", "nl-sheet-vault", "data-sheet-vault=", "Ячейка", "nl-sheet-locker", "data-sheet-locker=", "nl-sheet-vm", "data-sheet-vm=", "data-sheet-nv="]),
         # Arena lobby markers are asserted after city arena entry; early GET redirects to /world.
         ("/city/buildings/tavern", ["data-building-key=\"tavern\"", "Отдохнуть за столом", "data-tavern-rumors=", "data-tavern-vitals=", "data-tavern-hp=", "data-tavern-mp=", "data-tavern-ready="]),
-        ("/city/buildings/guard_tower", ["data-building-key=\"guard_tower\"", "interact_hotspot", "data-guard-square=", "data-guard-here=", "data-guard-routes="]),
-        ("/city/buildings/workshop", ["data-building-key=\"workshop\"", "Смолокур", "Скрафтить", "data-workshop-repair=\"deferred\"", "data-workshop-mass=", "data-workshop-any-ready=", "data-workshop-recipe=", "data-workshop-ready=", "data-workshop-landmark="]),
+        ("/city/buildings/guard_tower", ["data-building-key=\"guard_tower\"", "interact_hotspot", "data-guard-square=", "data-guard-here=", "data-guard-routes=", "data-landmark-inside=\"1\""]),
+        ("/city/buildings/workshop", ["data-building-key=\"workshop\"", "Смолокур", "Скрафтить", "data-workshop-repair=\"deferred\"", "data-workshop-mass=", "data-workshop-any-ready=", "data-workshop-recipe=", "data-workshop-ready=", "data-workshop-landmark=", "data-landmark-inside=\"1\""]),
         ("/city/buildings/hospital", ["data-building-key=\"hospital\"", "Лазарет", "Лекарь", "в сумке:", "data-hospital-assault=", "data-hospital-heal=", "data-hospital-vitals=", "data-hospital-vm=", "data-hospital-premium-affordable=", "data-hospital-premium-any-affordable=", "data-hospital-topup-ready=", "data-hospital-injuries=", "data-hospital-mass=", "data-hospital-combat=", "data-hospital-rest-ready=", "data-hospital-craft-any-ready=", "data-hospital-recipe=", "data-hospital-craft-ready="]),
     ]:
         r = s.get(urljoin(BASE + "/", path.lstrip("/")), timeout=TIMEOUT)
@@ -271,7 +271,8 @@ def main() -> int:
         and ("data-junk-can-sell=" in r.text)
         and ("data-market-stalls=" in r.text)
         and ("data-market-any-stall-affordable=" in r.text)
-        and ('data-market-notice="1"' in r.text),
+        and ('data-market-notice="1"' in r.text)
+        and ('data-landmark-inside="1"' in r.text),
         f"url={r.url}",
     )
     r = s.get(f"{BASE}/city/buildings/numismatics", timeout=TIMEOUT, allow_redirects=True)
@@ -330,7 +331,8 @@ def main() -> int:
         and "data-post-remaining=" in r.text
         and "data-post-empty=" in r.text
         and "data-post-max=" in r.text
-        and "data-post-can-clear=" in r.text,
+        and "data-post-can-clear=" in r.text
+        and 'data-landmark-inside="1"' in r.text,
         f"url={r.url}",
     )
     r = s.get(f"{BASE}/city/buildings/clan_hall", timeout=TIMEOUT, allow_redirects=True)
@@ -342,7 +344,8 @@ def main() -> int:
         and ('data-clan-hall-presence="1"' in r.text or "Кто рядом" in r.text or "Who is here" in r.text)
         and ("data-clan-hall-presence-count=" in r.text)
         and ("data-clan-hall-assault=" in r.text)
-        and ("data-clan-hall-heal=" in r.text),
+        and ("data-clan-hall-heal=" in r.text)
+        and ('data-landmark-inside="1"' in r.text),
         f"url={r.url}",
     )
     r = s.get(f"{BASE}/city/buildings/airship_station", timeout=TIMEOUT, allow_redirects=True)
@@ -358,7 +361,8 @@ def main() -> int:
             or 'data-airship-station="1"' in r.text
         )
         and ("data-airship-routes=" in r.text)
-        and ("data-airship-can-board=" in r.text),
+        and ("data-airship-can-board=" in r.text)
+        and ('data-landmark-inside="1"' in r.text),
         f"url={r.url}",
     )
 
@@ -459,7 +463,8 @@ def main() -> int:
         "GET /city/buildings/library handbook",
         r.status_code == 200
         and ('data-library-handbook="1"' in r.text)
-        and ("Справочник Пепельной Завесы" in r.text or "Ashen Veil handbook" in r.text),
+        and ("Справочник Пепельной Завесы" in r.text or "Ashen Veil handbook" in r.text)
+        and ('data-landmark-inside="1"' in r.text),
         f"url={r.url}",
     )
     if r.status_code == 200:
@@ -493,7 +498,8 @@ def main() -> int:
         and ("data-school-unspent=" in r.text)
         and ("data-school-can-allocate=" in r.text)
         and ("data-school-can-allocate-stats=" in r.text)
-        and ("data-school-can-allocate-skills=" in r.text),
+        and ("data-school-can-allocate-skills=" in r.text)
+        and ('data-landmark-inside="1"' in r.text),
         f"url={r.url}",
     )
     r = s.get(f"{BASE}/city/buildings/military_school", timeout=TIMEOUT, allow_redirects=True)
@@ -503,7 +509,8 @@ def main() -> int:
         and 'data-building-key="military_school"' in r.text
         and ("Рукопашный" in r.text or "Unarmed" in r.text or "nl-school-skill-board" in r.text)
         and ("data-school-board=" in r.text)
-        and ("data-school-can-allocate=" in r.text),
+        and ("data-school-can-allocate=" in r.text)
+        and ('data-landmark-inside="1"' in r.text),
         f"url={r.url}",
     )
     r = s.get(f"{BASE}/city/buildings/general_school", timeout=TIMEOUT, allow_redirects=True)
@@ -514,7 +521,8 @@ def main() -> int:
         and ("Смолокур" in r.text or "Tar Smith" in r.text or "Лекар" in r.text or "nl-school-skill-board" in r.text)
         and ("data-school-unspent=" in r.text)
         and ("data-school-can-allocate-stats=" in r.text)
-        and ("data-school-can-allocate-skills=" in r.text),
+        and ("data-school-can-allocate-skills=" in r.text)
+        and ('data-landmark-inside="1"' in r.text),
         f"url={r.url}",
     )
 
@@ -659,7 +667,8 @@ def main() -> int:
         and ("data-law-first-pledge=" in r.text)
         and ("data-law-pledge-mode=" in r.text)
         and ("data-law-can-afford=" in r.text)
-        and ("data-law-choice-ready=" in r.text),
+        and ("data-law-choice-ready=" in r.text)
+        and ('data-landmark-inside="1"' in r.text),
         f"url={r.url}",
     )
     r = s.get(f"{BASE}/world", timeout=TIMEOUT)
