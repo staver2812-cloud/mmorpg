@@ -3,23 +3,23 @@
   <%= hidden_field_tag "map_tile_template[content_fields]", "1" %>
   <div class="nl-manage-field-grid">
     <div class="nl-manage-field">
-      <%= form.label :zone %>
+      <%= form.label :zone, t("manage.views.col_zone") %>
       <%= form.collection_select :zone, @outdoor_zones, :name, :name, prompt: t("manage.views.select_outdoor_zone") %>
     </div>
     <div class="nl-manage-field">
-      <%= form.label :terrain_type %>
+      <%= form.label :terrain_type, t("manage.views.col_terrain") %>
       <%= form.select :terrain_type, MapTileTemplate::TERRAIN_TYPES %>
     </div>
     <div class="nl-manage-field">
-      <%= form.label :x %>
+      <%= form.label :x, t("manage.views.attr_x") %>
       <%= form.number_field :x, min: 0, required: true %>
     </div>
     <div class="nl-manage-field">
-      <%= form.label :y %>
+      <%= form.label :y, t("manage.views.attr_y") %>
       <%= form.number_field :y, min: 0, required: true %>
     </div>
     <div class="nl-manage-field">
-      <%= form.label :passable %>
+      <%= form.label :passable, t("manage.views.col_passable") %>
       <%= form.check_box :passable %>
     </div>
     <div class="nl-manage-field nl-manage-field--wide">

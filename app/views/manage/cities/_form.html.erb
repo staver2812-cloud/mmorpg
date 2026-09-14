@@ -3,8 +3,8 @@
   <div class="nl-manage-field-grid">
     <div class="nl-manage-field"><%= form.label :name, t("manage.views.zone_name") %><%= form.text_field :name, required: true %></div>
     <div class="nl-manage-field"><span><%= t("manage.views.location_type") %></span><strong>city</strong></div>
-    <div class="nl-manage-field"><%= form.label :width %><%= form.number_field :width, min: 1, required: true %></div>
-    <div class="nl-manage-field"><%= form.label :height %><%= form.number_field :height, min: 1, required: true %></div>
+    <div class="nl-manage-field"><%= form.label :width, t("manage.views.attr_width") %><%= form.number_field :width, min: 1, required: true %></div>
+    <div class="nl-manage-field"><%= form.label :height, t("manage.views.attr_height") %><%= form.number_field :height, min: 1, required: true %></div>
     <div class="nl-manage-field nl-manage-field--wide">
       <%= form.label :metadata, t("manage.views.city_data_json") %><%= form.text_area :metadata, value: pretty_json(city.metadata), spellcheck: false %>
       <small class="nl-manage-help"><%= t("manage.views.help_city_data_html").html_safe %></small>
