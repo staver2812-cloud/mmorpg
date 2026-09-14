@@ -132,4 +132,14 @@ RSpec.describe ShopHelper, type: :helper do
     wallet.nv_balance = 300
     expect(helper.shop_buy_block_reason(license)).to be_nil
   end
+
+  it "links capacity denials to Inventory recovery" do
+    character = create(:character)
+    allow(helper).to receive(:current_character).and_return(character)
+
+    html = helper.shop_block_recovery_link(I18n.t("game.shop.capacity"))
+
+    expect(html).to include(I18n.t("game.shop.open_inventory"))
+    expect(html).to include('data-shop-recovery="inventory"')
+  end
 end
