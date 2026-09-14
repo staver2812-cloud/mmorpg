@@ -1246,3 +1246,4 @@ Before extending Game Shell:
 | 2026-08-25 | Made account retention behavior explicit: the cancellation UI is removed, direct Devise destroy requests preserve the user/session with an unavailable alert, and the immutable `money_found` event-type migration is documented as forward-only instead of falsely reversible. |
 | 2026-09-13 | Chat post rejects (mute/system/location/private/privacy) use `game.chat.*` i18n. |
 | 2026-09-13 | EventPublisher fight/search timeline bodies use `game.events.*` i18n. |
+| 2026-09-13 | Chat channel create names (global/local/whisper/arena) use `game.chat.*` i18n. |

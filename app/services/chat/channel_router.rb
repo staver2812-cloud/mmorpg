@@ -28,7 +28,7 @@ module Chat
 
     def global_channel
       ChatChannel.find_or_create_by!(slug: "global") do |channel|
-        channel.name = "Global"
+        channel.name = I18n.t("game.chat.global")
         channel.channel_type = :global
         channel.system_owned = true
       end
@@ -43,7 +43,7 @@ module Chat
       return existing if existing
 
       ChatChannel.create_or_find_by!(slug:) do |channel|
-        channel.name = "Local"
+        channel.name = I18n.t("game.chat.local")
         channel.channel_type = :local
         channel.system_owned = true
         channel.metadata = {"location_key" => local.key}
@@ -62,7 +62,7 @@ module Chat
 
       slug = "whisper-#{participant_ids.join("-")}"
       ChatChannel.find_or_create_by!(slug:) do |channel|
-        channel.name = "Private Whisper"
+        channel.name = I18n.t("game.chat.whisper_channel")
         channel.channel_type = :whisper
         channel.system_owned = false
         channel.metadata = {"participant_ids" => participant_ids}
@@ -80,7 +80,7 @@ module Chat
       slug = "arena-#{match_id}"
 
       ChatChannel.find_or_create_by!(slug:) do |channel|
-        channel.name = "Arena Match ##{match_id}"
+        channel.name = I18n.t("game.chat.arena_channel", id: match_id)
         channel.channel_type = :arena
         channel.system_owned = true
         channel.metadata = {
