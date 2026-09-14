@@ -141,7 +141,7 @@ RSpec.describe "World", type: :request do
         get world_path
 
         expect(response).to have_http_status(:success)
-        expect(response.body).to include("Move, Look, and Enter are unavailable")
+        expect(response.body).to include(I18n.t("game.world.actions_unavailable_title"))
         expect(response.body).not_to include("nl-tile-clickable--available")
         expect(MovementCommand.offered.where(character:)).to be_empty
       end
@@ -1557,7 +1557,7 @@ RSpec.describe "World", type: :request do
             params: city_action_params(arena_hotspot),
             headers: {"Accept" => "text/vnd.turbo-stream.html"}
 
-          expect(flash[:notice]).to include("Entered")
+          expect(flash[:notice]).to eq(I18n.t("game.world.entered", name: arena_hotspot.name))
         end
       end
     end

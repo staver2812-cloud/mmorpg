@@ -33,13 +33,13 @@ RSpec.describe "Public fight logs", type: :request do
     get public_fight_log_path(match)
 
     expect(response).to have_http_status(:ok)
-    expect(response.body).to include("Fight Log ##{match.id}")
+    expect(response.body).to include(I18n.t("game.fight.log_page_title", id: match.id))
     expect(Nokogiri::HTML(response.body).text.squish).to include("max_kerby hits Training Dummy")
     expect(response.body).to include("nl-public-layout--fight-log")
     expect(response.body).not_to include("nl-game-layout")
     expect(response.body).not_to include("Neverlands administration")
     expect(response.body).not_to include("assets/neverlands")
-    expect(response.body).to include("Statistics")
+    expect(response.body).to include(I18n.t("game.fight.statistics"))
   end
 
   it "exports log entries as JSON" do

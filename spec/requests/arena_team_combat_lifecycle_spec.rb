@@ -151,9 +151,9 @@ RSpec.describe "Physical 3x3 team combat lifecycle", type: :request do
     with_signed_in(side_a.first.fetch(:user)) do
       get arena_match_path(@match)
       expect(response).to have_http_status(:ok)
-      expect(response.body).to include("Victory")
+      expect(response.body).to include(I18n.t("game.fight.result_victory"))
       players.each { |player| expect(response.body).to include(player.fetch(:character).name) }
-      expect(response.body).to include("Finish Fight")
+      expect(response.body).to include(I18n.t("game.fight.finish"))
     end
 
     players.each do |player|

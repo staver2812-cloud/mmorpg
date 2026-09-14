@@ -2,9 +2,9 @@
 <% content_for :body_class, "nl-public-layout--fight-log" %>
 
 <section class="combat-log-viewer nl-public-fight-log">
-  <h1 class="nl-visually-hidden">Fight Log #<%= @arena_match.id %></h1>
+  <h1 class="nl-visually-hidden"><%= t("game.fight.log_page_title", id: @arena_match.id) %></h1>
 
-  <nav class="fight-log-modes" aria-label="<%= t("game.fight.log") %> view">
+  <nav class="fight-log-modes" aria-label="<%= t("game.fight.log") %>">
     <% if @view_mode == :log %>
       <span aria-current="page"><%= t("game.fight.log") %></span>
     <% else %>

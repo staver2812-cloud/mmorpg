@@ -1138,6 +1138,7 @@ supplies only authoritative completion/loot facts and stable source keys.
 | 2026-09-14 | Arena NPC application spawn rejects use `game.fight.app_no_npc_for_room` / `app_npc_not_arena_bot` / `app_npc_already_open`. |
 | 2026-09-14 | Arena/fight closed-failure request specs assert via `game.fight.errors.*` / `game.flashes.fight_*` i18n (RU-safe). |
 | 2026-09-14 | Public fight-log and team-lifecycle request specs assert chrome via `game.fight.log` / `no_events` / `participants` / `wait_opponent_turn` (RU-safe). |
+| 2026-09-14 | Public fight-log page title uses `game.fight.log_page_title`; result/finish request specs assert via fight/arena i18n (RU-safe). |
 | 2026-09-13 | Arena lobby Stimulus client errors/confirm/countdown use `arena.client.*` via `data-arena-copy-value`. |
 | 2026-07-28 | Created the canonical bounded Arena Combat runtime handbook after implementing the full-width source fight hierarchy, shared player/NPC equipment rails, public shell-free fight log, eager-loaded equipment rendering, and responsive tablet/mobile adaptation. |
 | 2026-08-23 | Added the injected handoff of successful NPC loot and final participant results to the Game Shell-owned durable chat event timeline, with deterministic keys and retry coverage while preserving `CombatLogEntry` as the canonical fight log. |
