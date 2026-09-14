@@ -100,6 +100,8 @@
                         <%= link_to t("game.inventory.repair_deferred_cta"), city_building_path("workshop"), data: {turbo: false} %>
                       <% else %>
                         <%= t("game.inventory.repair_deferred_hint") %>
+                        ·
+                        <%= link_to t("arena.nav.city"), world_path, data: {turbo: false, inventory_recovery: "world"} %>
                       <% end %>
                     </div>
                   <% elsif durable && (label = inventory_item_durability(item)).present? %>

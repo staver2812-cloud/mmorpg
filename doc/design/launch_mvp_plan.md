@@ -91,7 +91,7 @@ contract while an adjacent uncaptured state remains Not Done.
 | `WORLD-LOCATION-001` | Observed Frontier Village linked location | Done | Gameplay fidelity and adaptive UI matrix |
 | `CITY-NAV-001` | Five-district navigation and hotspots | Done | Gameplay fidelity and adaptive UI matrix |
 | `CITY-GATE-001` | Verified City-to-World handoff | Done | Gameplay fidelity and adaptive UI matrix |
-| `CITY-SERVICES-001` | Complete building/service interiors | Partially Done — Ashen desks ship (Hospital/Infirmary, Bank, Tavern, Workshop, Temple, Obelisk, Post, Market junk, etc.); Market listings and unfinished landmarks stay view-only | Gameplay fidelity and adaptive UI matrix |
+| `CITY-SERVICES-001` | Complete building/service interiors | Partially Done — Ashen desks ship; schools/clan/post/library recovery CTAs; Auction/Market stalls/Numismatics explicitly deferred with live-loop CTAs; unfinished landmarks keep City/Shop/Hall fallback | Gameplay fidelity and adaptive UI matrix |
 | `ECONOMY-SHOP-001` | Current Shop shell and browse state | Done | Gameplay fidelity and adaptive UI matrix |
 | `ECONOMY-TRANSACTIONS-001` | Captured populated buy/sell/license variants; one-item purchase persistence complete | Partially Done — buy loop, typed licenses, Sell/Doctor onboarding, Novice denial/empty; full source failure parity open | Gameplay fidelity and adaptive UI matrix |
 | `COMBAT-ARENA-001` | Bounded Arena lifecycle and authoritative resolution | `DONE` for the declared runtime boundary | Pillar 3 Combat Completion Matrix |
