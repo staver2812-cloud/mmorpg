@@ -83,9 +83,15 @@
       <% if @mode == "licenses" %>
         <%= render "shop/licenses", items: @shop_items %>
       <% elsif @mode == "novice" && current_character.level >= 10 %>
-        <p class="nl-empty-note nl-shop-empty" data-shop-novice="denied"><%= t("game.shop.novice_only") %></p>
+        <p class="nl-empty-note nl-shop-empty" data-shop-novice="denied">
+          <%= t("game.shop.novice_only") %>
+          <%= link_to t("game.shop.modes.goods"), shop_path(mode: "goods"), class: "nl-sheet-link", data: {shop_recovery: "goods"} %>
+        </p>
       <% elsif @mode == "novice" %>
-        <p class="nl-empty-note nl-shop-empty" data-shop-novice="empty"><%= t("game.shop.novice_empty") %></p>
+        <p class="nl-empty-note nl-shop-empty" data-shop-novice="empty">
+          <%= t("game.shop.novice_empty") %>
+          <%= link_to t("game.shop.modes.goods"), shop_path(mode: "goods"), class: "nl-sheet-link", data: {shop_recovery: "goods"} %>
+        </p>
       <% elsif @mode == "sell" %>
         <% unless @shop_license_rules.active?(:trading) %>
           <%= render "shop/sell_onboarding" %>
