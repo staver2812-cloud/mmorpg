@@ -641,6 +641,12 @@ input.nl-chat-input-field,
 }
 
 .nl-chat-tool:hover { background: linear-gradient(180deg, #ffffff, #d6cba9); color: #003c6a; }
+.nl-chat-tool--disabled,
+.nl-chat-tool:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+  pointer-events: none;
+}
 .nl-chat-tool--send { width: 23px; font-size: 13px; }
 .nl-chat-tool--clear-input { width: 19px; font-size: 12px; }
 .nl-chat-tool--smiles-one { width: 11px; font-size: 7px; }

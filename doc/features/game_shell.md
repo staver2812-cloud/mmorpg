@@ -118,7 +118,7 @@ The MVP currently contains:
 - Recreating Neverlands framesets, CGI URLs, browser quirks, or Russian copy.
 - Copying Neverlands images, sprites, logos, decorative artwork, branding,
   signatures, administration text, or project/service prose into runtime UI.
-- Claiming the currently inert smile palettes, chat mode/speed cycles, transliteration, or player-action popup are complete before their live states are captured and implemented.
+- Claiming the currently inert smile palettes, chat mode/speed cycles, transliteration, or player-action popup are complete before their live states are captured and implemented. Soft release disables those tools (`aria-disabled` + `social.tool_deferred`) so they no longer look actionable.
 - Making presence into movement authority, a precise global-online system, or a remote-player locator.
 - Treating client-side HP/MP interpolation as authoritative regeneration.
 - Owning World, City, Inventory, Profile, Shop, Arena, or Combat domain mutations rendered in the main frame.
