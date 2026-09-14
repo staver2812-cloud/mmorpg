@@ -1281,47 +1281,47 @@ module Arena
     def validate_turn_actions(attacks, blocks, skills, actor: nil, target: nil)
       errors = []
 
-      errors << "Choose at least one attack, block, or skill" if attacks.empty? && blocks.empty? && skills.empty?
+      errors << I18n.t("game.fight.turn_need_action") if attacks.empty? && blocks.empty? && skills.empty?
       unless valid_neverlands_turn_shape?(attacks, blocks, skills)
-        errors << "Choose at least one valid attack, block, or magic/action slot"
+        errors << I18n.t("game.fight.turn_need_valid_shape")
       end
-      errors << "Only one block can be selected per turn" if blocks.size > 1
-      errors << "Only up to 4 attacks can be selected per turn" if attacks.size > 4
+      errors << I18n.t("game.fight.turn_one_block") if blocks.size > 1
+      errors << I18n.t("game.fight.turn_max_attacks") if attacks.size > 4
       attack_parts = attacks.map { |attack| attack[:body_part] }
       if attack_parts.include?("head") && attack_parts.include?("legs")
-        errors << "Cannot attack head and legs in the same turn"
+        errors << I18n.t("game.fight.turn_head_legs")
       end
       target_error = validate_turn_target(actor, target) if actor.present? && attacks.any?
       errors << target_error if target_error.present?
 
       attacks.each_with_index do |attack, index|
         unless BODY_PARTS.include?(attack[:body_part])
-          errors << "Invalid attack zone #{index + 1}: #{attack[:body_part]}"
+          errors << I18n.t("game.fight.turn_invalid_attack_zone", index: index + 1, zone: attack[:body_part])
         end
 
         if Game::Combat::ActionCatalog.attack_config(attack[:action_key]).blank?
-          errors << "Invalid attack type #{index + 1}: #{attack[:action_key]}"
+          errors << I18n.t("game.fight.turn_invalid_attack_type", index: index + 1, type: attack[:action_key])
         elsif actor.present? && !Game::Combat::ActionCatalog.attack_allowed_for_profile?(
           attack[:action_key],
           combat_profile_for(actor)
         )
-          errors << "Attack type #{index + 1} is unavailable for this combat profile"
+          errors << I18n.t("game.fight.turn_attack_unavailable", index: index + 1)
         end
       end
 
       blocks.each_with_index do |block, index|
         if block[:body_parts].blank?
-          errors << "Block #{index + 1} must cover at least one zone"
+          errors << I18n.t("game.fight.turn_block_empty", index: index + 1)
           next
         end
 
         block[:body_parts].each do |part|
-          errors << "Invalid block zone #{index + 1}: #{part}" unless BODY_PARTS.include?(part)
+          errors << I18n.t("game.fight.turn_invalid_block_zone", index: index + 1, zone: part) unless BODY_PARTS.include?(part)
         end
 
         config = Game::Combat::ActionCatalog.block_config(block[:action_key])
         if config.blank?
-          errors << "Invalid block type #{index + 1}: #{block[:action_key]}"
+          errors << I18n.t("game.fight.turn_invalid_block_type", index: index + 1, type: block[:action_key])
           next
         end
 
@@ -1329,24 +1329,24 @@ module Arena
           block[:action_key],
           combat_profile_for(actor)
         )
-          errors << "Block type #{index + 1} is unavailable for this combat profile"
+          errors << I18n.t("game.fight.turn_block_unavailable", index: index + 1)
         end
 
         configured_parts = config["body_parts"] || [config["body_part"]].compact
         if Game::Combat::ActionCatalog.canonical_parts(configured_parts) != block[:body_parts]
-          errors << "Block zones #{index + 1} do not match #{block[:action_key]}"
+          errors << I18n.t("game.fight.turn_block_zones_mismatch", index: index + 1, type: block[:action_key])
         end
       end
 
       skills.each_with_index do |skill, index|
         unless Game::Combat::ActionCatalog.magic_config(skill[:key]).present?
-          errors << "Invalid magic #{index + 1}: #{skill[:key]}"
+          errors << I18n.t("game.fight.turn_invalid_magic", index: index + 1, key: skill[:key])
         end
       end
 
       total_ap = calculate_turn_ap_cost(attacks, blocks, skills, actor:)
       ap_limit = actor.present? ? combat_ap_limit_for(actor) : AP_PER_TURN
-      errors << "AP limit exceeded (#{total_ap}/#{ap_limit})" if total_ap > ap_limit
+      errors << I18n.t("game.fight.turn_ap_exceeded", used: total_ap, limit: ap_limit) if total_ap > ap_limit
 
       errors
     end
@@ -1354,9 +1354,9 @@ module Arena
     def validate_turn_target(actor, target)
       actor_participation = participation_from(actor)
       target_participation = participation_from(target)
-      return "No valid target" unless target_participation&.arena_match_id == match.id
-      return "Cannot attack an ally" if target_participation.team == actor_participation&.team
-      return "Target is dead" unless participation_hp(target_participation).positive?
+      return I18n.t("game.fight.errors.no_valid_target") unless target_participation&.arena_match_id == match.id
+      return I18n.t("game.fight.errors.cannot_attack_ally") if target_participation.team == actor_participation&.team
+      return I18n.t("game.fight.errors.target_dead") unless participation_hp(target_participation).positive?
 
       nil
     end
@@ -1375,7 +1375,7 @@ module Arena
       errors = []
 
       if total_mana > character.current_mp.to_i
-        errors << "Not enough MP (need #{total_mana}, have #{character.current_mp.to_i})"
+        errors << I18n.t("game.fight.turn_not_enough_mp", need: total_mana, have: character.current_mp.to_i)
       end
 
       magic_limit = combat_profile_for(character).fetch("max_magic_mana", character.max_mp.to_i).to_i
@@ -1385,7 +1385,7 @@ module Arena
         *skills.filter_map { |skill| magic_action_mana_cost(skill[:key]) }
       ].select { |cost| cost.to_i > magic_limit }
       if expensive_actions.any?
-        errors << "Magic/action mana exceeds fight limit (#{expensive_actions.max}/#{magic_limit})"
+        errors << I18n.t("game.fight.turn_magic_mana_limit", used: expensive_actions.max, limit: magic_limit)
       end
 
       errors

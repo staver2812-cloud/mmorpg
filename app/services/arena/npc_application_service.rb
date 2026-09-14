@@ -89,7 +89,7 @@ module Arena
 
       # Check room capacity
       unless room.has_capacity?
-        return Result.new(success?: false, errors: ["Arena room is full"])
+        return Result.new(success?: false, errors: [I18n.t("game.fight.app_room_full")])
       end
 
       application = ArenaApplication.new(

@@ -848,7 +848,7 @@ RSpec.describe Arena::CombatProcessor do
         )
 
         expect(result).not_to be_success
-        expect(result.error).to include("Attack type 1 is unavailable for this combat profile")
+        expect(result.error).to include(I18n.t("game.fight.turn_attack_unavailable", index: 1))
         expect(character1.reload.current_mp).to eq(character1.max_mp)
       end
 
@@ -1064,7 +1064,7 @@ RSpec.describe Arena::CombatProcessor do
           actor: character1
         )
 
-        expect(errors).to include("Invalid magic 1: unknown_action")
+        expect(errors).to include(I18n.t("game.fight.turn_invalid_magic", index: 1, key: "unknown_action"))
       end
 
       it "rejects captured magic blocks above the fight mana ceiling" do
@@ -1155,7 +1155,7 @@ RSpec.describe Arena::CombatProcessor do
         )
 
         expect(result.success?).to be false
-        expect(result.error).to include("AP limit exceeded")
+        expect(result.error).to match(/AP limit exceeded|Превышен лимит ОД/)
         expect(result.error).to include("155/#{character1_ap_limit}")
       end
 
