@@ -390,9 +390,9 @@
 }
 
 @media (pointer: coarse) {
-  .nl-inventory .invbut,
-  .nl-inventory .lbut,
-  .nl-inventory .weaponch,
+  .nl-inventory-page .invbut,
+  .nl-inventory-page .lbut,
+  .nl-inventory-page .weaponch,
   .nl-equipment-sets .invbut,
   .nl-equipment-sets .lbut,
   .nl-family-inventory .weaponch {
@@ -403,10 +403,10 @@
     line-height: 1.25;
   }
 
-  .nl-inventory input.LogintextBox,
-  .nl-inventory input.LogintextBox2,
-  .nl-inventory input.LogintextBox4,
-  .nl-inventory select.LogintextBox {
+  .nl-inventory-page input.LogintextBox,
+  .nl-inventory-page input.LogintextBox2,
+  .nl-inventory-page input.LogintextBox4,
+  .nl-inventory-page select.LogintextBox {
     min-height: 44px;
     font-size: 14px;
   }
