@@ -80,6 +80,11 @@ ru:
         city: "город"
         outdoor: "улица"
         village: "деревня"
+      errors_prevented:
+        one: "%{count} ошибка не дала сохранить изменения:"
+        few: "%{count} ошибки не дали сохранить изменения:"
+        many: "%{count} ошибок не дали сохранить изменения:"
+        other: "%{count} ошибок не дали сохранить изменения:"
       enums:
         hotspot_type:
           building: "здание"
