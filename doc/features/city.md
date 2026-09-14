@@ -1215,6 +1215,7 @@ Final rerun results are in the
 - 2026-09-14: Library next / Clan Hall desk / Dealer House buyback / landmark fallback CTAs expose `data-library-recovery`, `data-clan-hall-recovery`, `data-dealer-recovery`, and `data-landmark-recovery`.
 - 2026-09-14: Owner sheet Vault/VM open CTAs expose `data-sheet-recovery`; Bank VM desk Infirmary link exposes `data-bank-recovery="hospital"`.
 - 2026-09-14: Smoke asserts Temple/Guard/Tavern-rumors/school-spent recovery markers already present on desks.
+- 2026-09-14: Smoke asserts Law current-choice / Prison / Gallows desk recoveries.
 - 2026-09-14: Law Abode current-alignment state recovers to City.
 - 2026-09-14: Gallows east-gate note recovers to City.
 - 2026-09-14: Prison/Gallows Law desk links fall back to City when Law Abode is out of district.
