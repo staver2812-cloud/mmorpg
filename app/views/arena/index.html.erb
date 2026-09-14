@@ -82,7 +82,11 @@
               <% if accessible %>
                 <%= link_to t("arena.enter"), arena_room_path(room), class: "nl-arena-small-button", data: {turbo_frame: "_top"} %>
               <% else %>
-                <span class="nl-arena-muted"><%= t("arena.unavailable") %></span>
+                <span class="nl-arena-muted" data-arena-room-locked="1">
+                  <%= t("arena.unavailable") %>
+                  ·
+                  <%= t("arena.room_locked_hint") %>
+                </span>
               <% end %>
             </td>
           <% end %>

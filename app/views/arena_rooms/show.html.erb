@@ -164,7 +164,13 @@
     <tbody>
       <% if visible_applications.empty? %>
         <tr>
-          <td colspan="5" class="nl-arena-empty"><%= t("arena.table.empty") %></td>
+          <td colspan="5" class="nl-arena-empty" data-arena-apps-empty="1">
+            <%= t("arena.table.empty") %>
+            ·
+            <%= t("arena.table.empty_hint") %>
+            ·
+            <%= link_to t("arena.nav.city"), world_path, class: "nl-sheet-link", data: {turbo: false, arena_recovery: "city"} %>
+          </td>
         </tr>
       <% else %>
         <% visible_applications.each do |app| %>

@@ -15,6 +15,7 @@ en:
     room_map: "Room Map"
     enter: "Enter"
     unavailable: "Unavailable"
+    room_locked_hint: "Level gate — pick an open room for your level."
     level_mismatch: "level mismatch"
     levels: "levels %{min}–%{max}"
     tabs:
@@ -72,6 +73,7 @@ en:
       side2: "Side 2"
       action: "Action"
       empty: "No open applications"
+      empty_hint: "Create an application in this room, or return to City."
       no_opponents: "no opponents"
       your_app: "Your application"
       cancel: "Cancel"
