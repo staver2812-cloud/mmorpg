@@ -49,7 +49,12 @@
                 form: {data: {turbo: false}} %>
         <% else %>
           <button type="button" class="lbut" disabled title="<%= t("game.buildings.law_need_nv", amount: Game::World::LawAlignmentPledge::CHANGE_COST) %>"><%= t("game.buildings.law_need_nv_short") %></button>
-          <p class="nl-quests-board__meta"><%= t("game.buildings.law_need_nv", amount: Game::World::LawAlignmentPledge::CHANGE_COST) %></p>
+          <p class="nl-quests-board__meta">
+            <%= t("game.buildings.law_need_nv", amount: Game::World::LawAlignmentPledge::CHANGE_COST) %>
+            <% if Game::World::CityBuildingCatalog.accessible?(character: current_character, building_key: "bank") %>
+              <%= link_to t("game.shop.open_bank"), city_building_path("bank"), class: "nl-sheet-link", data: {law_recovery: "bank"} %>
+            <% end %>
+          </p>
         <% end %>
       </article>
     <% end %>

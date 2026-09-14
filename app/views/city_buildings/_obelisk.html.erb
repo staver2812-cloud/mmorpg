@@ -36,7 +36,12 @@
             form: {data: {turbo: false}} %>
     <% elsif bound.present? %>
       <button type="button" class="lbut" disabled title="<%= t("game.buildings.obelisk_need_nv", amount: Game::World::ObeliskRecall::RECALL_COST) %>"><%= t("game.buildings.obelisk_need_nv_short") %></button>
-      <span class="nl-quests-board__meta"><%= t("game.buildings.obelisk_need_nv", amount: Game::World::ObeliskRecall::RECALL_COST) %></span>
+      <span class="nl-quests-board__meta">
+        <%= t("game.buildings.obelisk_need_nv", amount: Game::World::ObeliskRecall::RECALL_COST) %>
+        <% if Game::World::CityBuildingCatalog.accessible?(character: current_character, building_key: "bank") %>
+          <%= link_to t("game.shop.open_bank"), city_building_path("bank"), class: "nl-sheet-link", data: {obelisk_recovery: "bank"} %>
+        <% end %>
+      </span>
     <% else %>
       <button type="button" class="lbut" disabled title="<%= t("game.buildings.obelisk_unbound_meta") %>"><%= t("game.buildings.obelisk_recall_cta", amount: Game::World::ObeliskRecall::RECALL_COST) %></button>
     <% end %>

@@ -17,7 +17,11 @@
     <p class="nl-quests-board__meta" data-temple-injury="1">
       <%= injury_summary %>
       <% if injury_state.active.any? { |row| %w[heavy combat].include?(row["severity"].to_s) } %>
-        · <%= link_to t("game.buildings.hospital_title_short"), city_building_path("hospital"), class: "nl-sheet-link" %>
+        <% if Game::World::CityBuildingCatalog.accessible?(character: current_character, building_key: "hospital") %>
+          · <%= link_to t("game.buildings.hospital_title_short"), city_building_path("hospital"), class: "nl-sheet-link", data: {temple_recovery: "hospital"} %>
+        <% else %>
+          · <%= link_to t("game.shop.open_inventory"), inventory_path, class: "nl-sheet-link", data: {temple_recovery: "inventory"} %>
+        <% end %>
       <% end %>
     </p>
   <% else %>
@@ -32,7 +36,12 @@
             form: {data: {turbo: false}} %>
     <% elsif balance < cost %>
       <button type="button" class="lbut" disabled title="<%= t("game.buildings.temple_need_nv", amount: Game::World::TempleBlessing::COST_NV) %>"><%= t("game.buildings.temple_need_nv_short") %></button>
-      <span class="nl-quests-board__meta"><%= t("game.buildings.temple_need_nv", amount: Game::World::TempleBlessing::COST_NV) %></span>
+      <span class="nl-quests-board__meta">
+        <%= t("game.buildings.temple_need_nv", amount: Game::World::TempleBlessing::COST_NV) %>
+        <% if Game::World::CityBuildingCatalog.accessible?(character: current_character, building_key: "bank") %>
+          <%= link_to t("game.shop.open_bank"), city_building_path("bank"), class: "nl-sheet-link", data: {temple_recovery: "bank"} %>
+        <% end %>
+      </span>
     <% else %>
       <button type="button" class="lbut" disabled title="<%= t("game.buildings.temple_no_light") %>"><%= t("game.buildings.temple_rite_cta", amount: Game::World::TempleBlessing::COST_NV) %></button>
       <span class="nl-quests-board__meta"><%= t("game.buildings.temple_no_light") %></span>

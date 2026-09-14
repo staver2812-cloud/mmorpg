@@ -32,7 +32,9 @@
               <p class="nl-quests-board__meta">
                 <%= t("game.buildings.airship_need_nv", amount: route.fare_nv) %>
                 ·
-                <% if Game::World::CityBuildingCatalog.accessible?(character: current_character, building_key: "junk_dealer") %>
+                <% if Game::World::CityBuildingCatalog.accessible?(character: current_character, building_key: "bank") %>
+                  <%= link_to t("game.shop.open_bank"), city_building_path("bank"), data: {turbo: false, airship_recovery: "bank"} %>
+                <% elsif Game::World::CityBuildingCatalog.accessible?(character: current_character, building_key: "junk_dealer") %>
                   <%= link_to t("game.buildings.junk_dealer_link"), city_building_path("junk_dealer"), data: {turbo: false} %>
                 <% elsif Game::World::CityBuildingCatalog.accessible?(character: current_character, building_key: "shop") %>
                   <%= link_to t("game.buildings.airship_shop_link"), shop_path, data: {turbo: false} %>
