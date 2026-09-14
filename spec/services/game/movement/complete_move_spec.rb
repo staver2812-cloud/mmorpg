@@ -80,7 +80,7 @@ RSpec.describe Game::Movement::CompleteMove do
     described_class.new(character:).call
 
     expect(command.reload).to be_failed
-    expect(command.error_message).to eq("Movement target is not an adjacent step")
+    expect(command.error_message).to eq(I18n.t("game.world.movement_not_adjacent"))
     expect([position.reload.x, position.y]).to eq([5, 5])
     expect(character.reload.fatigue_percent).to eq(0)
   end

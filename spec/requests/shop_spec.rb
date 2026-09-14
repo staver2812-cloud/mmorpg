@@ -232,7 +232,7 @@ RSpec.describe "Shop", type: :request do
       }.not_to change { inventory.inventory_items.count }
 
       expect(response).to redirect_to(shop_path)
-      expect(flash[:alert]).to include("Not enough NV")
+      expect(flash[:alert]).to include(I18n.t("game.shop.not_enough_nv"))
     end
   end
 
@@ -291,7 +291,7 @@ RSpec.describe "Shop", type: :request do
 
       expect(inventory_item.reload.quantity).to eq(2)
       expect(response).to redirect_to(shop_path(mode: "sell"))
-      expect(flash[:alert]).to include("Broken items")
+      expect(flash[:alert]).to include(I18n.t("game.shop.broken_cannot_sell"))
     end
   end
 
@@ -304,14 +304,14 @@ RSpec.describe "Shop", type: :request do
         post sell_shop_path, params: {item_id: item.id, action_key:}
       }.not_to change { [wallet.reload.nv_balance, shop_account.reload.nv_balance, shop_stock.reload.current, item.reload.quantity] }
 
-      expect(flash[:alert]).to include("license")
+      expect(flash[:alert]).to include(I18n.t("game.inventory.trade_license_required"))
     end
 
     it "rejects missing capabilities without transferring value" do
       get shop_path
       post buy_shop_path, params: {item_template_id: item_template.id}
 
-      expect(flash[:alert]).to include("Shop action")
+      expect(flash[:alert]).to include(I18n.t("game.shop.shop_action_stale"))
       expect(wallet.reload.nv_balance).to eq(200)
       expect(inventory.inventory_items).to be_empty
     end
@@ -323,14 +323,14 @@ RSpec.describe "Shop", type: :request do
       expect(wallet.reload.nv_balance).to eq(160)
       expect(inventory.inventory_items.sum(:quantity)).to eq(1)
       expect(wallet.currency_transactions.count).to eq(1)
-      expect(flash[:alert]).to include("Shop action")
+      expect(flash[:alert]).to include(I18n.t("game.shop.shop_action_stale"))
     end
 
     it "rejects client quantity changes instead of silently clamping them" do
       action_key = buy_offer
       [0, 2, 99, -1, "1.5", "invalid"].each do |quantity|
         post buy_shop_path, params: {item_template_id: item_template.id, action_key:, quantity:}
-        expect(flash[:alert]).to include("one item")
+        expect(flash[:alert]).to include(I18n.t("game.shop.buy_one_at_a_time"))
       end
 
       expect(wallet.reload.nv_balance).to eq(200)
@@ -344,7 +344,7 @@ RSpec.describe "Shop", type: :request do
 
       post sell_shop_path, params: {item_id: foreign.id, action_key:}
 
-      expect(flash[:alert]).to eq("Item not found.")
+      expect(flash[:alert]).to eq(I18n.t("game.inventory.item_not_found"))
       expect(foreign.reload).to be_persisted
       expect(wallet.reload.nv_balance).to eq(200)
     end

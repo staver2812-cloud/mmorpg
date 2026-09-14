@@ -353,7 +353,7 @@ RSpec.describe "Inventories", type: :request do
       }
 
       expect(response).to redirect_to(inventory_path)
-      expect(flash[:alert]).to eq("Player sales are currently unavailable.")
+      expect(flash[:alert]).to eq(I18n.t("game.inventory.player_sales_unavailable"))
       expect(user.currency_wallet.reload.nv_balance).to eq(0)
       expect(recipient_user.currency_wallet.reload.nv_balance).to eq(12.75)
       expect(inventory_item.reload.quantity).to eq(2)
@@ -370,7 +370,7 @@ RSpec.describe "Inventories", type: :request do
 
       post sell_to_player_inventory_path, params: {item_id: inventory_item.id, recipient_name: "receiver", price: "1.00"}
 
-      expect(flash[:alert]).to eq("Trade license required.")
+      expect(flash[:alert]).to eq(I18n.t("game.inventory.trade_license_required"))
       expect(inventory_item.reload.quantity).to eq(2)
       expect(recipient.inventory.inventory_items).to be_empty
     end
@@ -382,7 +382,7 @@ RSpec.describe "Inventories", type: :request do
 
       post sell_to_player_inventory_path, params: {item_id: inventory_item.id, recipient_name: "receiver", price: "1.00"}
 
-      expect(flash[:alert]).to eq("Trade license required.")
+      expect(flash[:alert]).to eq(I18n.t("game.inventory.trade_license_required"))
       expect(inventory_item.reload.quantity).to eq(2)
       expect(recipient.inventory.inventory_items).to be_empty
     end
