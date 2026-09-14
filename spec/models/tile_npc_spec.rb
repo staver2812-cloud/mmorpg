@@ -137,14 +137,16 @@ RSpec.describe TileNpc, type: :model do
 
       expect(npc).not_to be_valid
       expect(npc.errors[:metadata]).to include(
-        "encounter roster member npc_key is required",
-        "level must be a non-negative integer",
-        "hp must be a positive integer",
-        "encounter roster member metadata must be an object",
-        "encounter_experience_reward must be a non-negative integer",
-        "trauma_percent must be between 0 and 100"
+        I18n.t("manage.encounter_roster_npc_key_required"),
+        I18n.t("manage.level_non_negative"),
+        I18n.t("manage.positive_integer_field", key: "hp"),
+        I18n.t("manage.encounter_roster_member_metadata_object"),
+        I18n.t("manage.non_negative_integer_field", key: "encounter_experience_reward"),
+        I18n.t("manage.percent_field", key: "trauma_percent")
       )
-      expect(npc.errors[:metadata]).to include(match(/passive delay window must have positive ordered bounds/))
+      expect(npc.errors[:metadata]).to include(
+        I18n.t("manage.passive_delay_window_bounds", max: TileNpc::MAX_PASSIVE_DELAY_SECONDS)
+      )
     end
   end
 
