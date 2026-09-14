@@ -58,13 +58,13 @@
         <%= t("game.buildings.library_next") %>
       </p>
       <p>
-        <%= link_to t("arena.nav.city"), world_path, class: "lbut", data: {turbo: false} %>
-        <%= link_to t("game.shop.title"), shop_path, class: "lbut" %>
+        <%= link_to t("arena.nav.city"), world_path, class: "lbut", data: {turbo: false, library_recovery: "world"} %>
+        <%= link_to t("game.shop.title"), shop_path, class: "lbut", data: {library_recovery: "shop"} %>
         <% if Game::World::CityBuildingCatalog.accessible?(character: current_character, building_key: "city_hall") %>
-          <%= link_to t("game.buildings.city_hall_short"), city_building_path("city_hall"), class: "lbut" %>
+          <%= link_to t("game.buildings.city_hall_short"), city_building_path("city_hall"), class: "lbut", data: {library_recovery: "city_hall"} %>
         <% end %>
         <% if Game::World::CityBuildingCatalog.accessible?(character: current_character, building_key: "hospital") %>
-          <%= link_to t("game.buildings.hospital_title_short"), city_building_path("hospital"), class: "lbut" %>
+          <%= link_to t("game.buildings.hospital_title_short"), city_building_path("hospital"), class: "lbut", data: {library_recovery: "hospital"} %>
         <% end %>
       </p>
     </section>
@@ -244,12 +244,12 @@
         <%= t("game.buildings.clan_hall_lead") %>
       </p>
       <p>
-        <%= link_to t("game.quests.board_open"), quests_path, class: "lbut" %>
+        <%= link_to t("game.quests.board_open"), quests_path, class: "lbut", data: {clan_hall_recovery: "quests"} %>
         <% if Game::World::CityBuildingCatalog.accessible?(character: current_character, building_key: "city_hall") %>
-          <%= link_to t("game.buildings.city_hall_short"), city_building_path("city_hall"), class: "lbut" %>
+          <%= link_to t("game.buildings.city_hall_short"), city_building_path("city_hall"), class: "lbut", data: {clan_hall_recovery: "city_hall"} %>
         <% end %>
         <% if Game::World::CityBuildingCatalog.accessible?(character: current_character, building_key: "hospital") %>
-          <%= link_to t("game.buildings.hospital_title_short"), city_building_path("hospital"), class: "lbut" %>
+          <%= link_to t("game.buildings.hospital_title_short"), city_building_path("hospital"), class: "lbut", data: {clan_hall_recovery: "hospital"} %>
         <% end %>
       </p>
       <% assault_owned = Game::World::StartPlayerAssault.trauma_scroll_quantity(current_character) %>
@@ -300,9 +300,9 @@
         <%= t("game.buildings.dealer_house_buyback", total: total, lines: offers.size) %>
       </p>
       <p>
-        <%= link_to t("game.buildings.junk_dealer_link"), city_building_path("junk_dealer"), class: "lbut" %>
+        <%= link_to t("game.buildings.junk_dealer_link"), city_building_path("junk_dealer"), class: "lbut", data: {dealer_recovery: "junk"} %>
         <% if Game::World::CityBuildingCatalog.accessible?(character: current_character, building_key: "market") %>
-          <%= link_to t("game.buildings.market_short"), city_building_path("market"), class: "lbut" %>
+          <%= link_to t("game.buildings.market_short"), city_building_path("market"), class: "lbut", data: {dealer_recovery: "market"} %>
         <% end %>
       </p>
     </section>
@@ -357,10 +357,10 @@
       <%= t("game.buildings.landmark_fallback_next") %>
     </p>
     <p>
-      <%= link_to t("arena.nav.city"), world_path, class: "lbut", data: {turbo: false} %>
-      <%= link_to t("game.shop.title"), shop_path, class: "lbut" %>
+      <%= link_to t("arena.nav.city"), world_path, class: "lbut", data: {turbo: false, landmark_recovery: "world"} %>
+      <%= link_to t("game.shop.title"), shop_path, class: "lbut", data: {landmark_recovery: "shop"} %>
       <% if Game::World::CityBuildingCatalog.accessible?(character: current_character, building_key: "city_hall") %>
-        <%= link_to t("game.buildings.city_hall_short"), city_building_path("city_hall"), class: "lbut" %>
+        <%= link_to t("game.buildings.city_hall_short"), city_building_path("city_hall"), class: "lbut", data: {landmark_recovery: "city_hall"} %>
       <% end %>
     </p>
   <% end %>

@@ -421,6 +421,15 @@ def main() -> int:
         and ('data-landmark-inside="1"' in r.text),
         f"url={r.url}",
     )
+    if r.status_code == 200:
+        report.add(
+            "clan hall desk recovery",
+            'data-clan-hall-recovery="quests"' in r.text
+            or 'data-clan-hall-recovery="city_hall"' in r.text
+            or 'data-clan-hall-recovery="hospital"' in r.text
+            or 'data-clan-hall-recovery="world"' in r.text,
+            f"url={r.url}",
+        )
     r = s.get(f"{BASE}/city/buildings/airship_station", timeout=TIMEOUT, allow_redirects=True)
     report.add(
         "GET /city/buildings/airship_station wallet",
@@ -560,6 +569,15 @@ def main() -> int:
         and ('data-library-next="1"' in r.text),
         f"url={r.url}",
     )
+    if r.status_code == 200 and 'data-library-next="1"' in r.text:
+        report.add(
+            "library next recovery",
+            'data-library-recovery="world"' in r.text
+            or 'data-library-recovery="shop"' in r.text
+            or 'data-library-recovery="city_hall"' in r.text
+            or 'data-library-recovery="hospital"' in r.text,
+            f"url={r.url}",
+        )
     if r.status_code == 200:
         report.add(
             "library covers Assault and quest chain",
@@ -744,6 +762,13 @@ def main() -> int:
         and ("Скупщик" in r.text or "Ash Buyer" in r.text or "junk_dealer" in r.text),
         f"url={r.url}",
     )
+    if r.status_code == 200:
+        report.add(
+            "dealer house buyback recovery",
+            'data-dealer-recovery="junk"' in r.text
+            or 'data-dealer-recovery="market"' in r.text,
+            f"url={r.url}",
+        )
     r = s.get(f"{BASE}/city/buildings/obelisk", timeout=TIMEOUT, allow_redirects=True)
     report.add(
         "GET /city/buildings/obelisk",
