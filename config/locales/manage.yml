@@ -362,6 +362,9 @@ ru:
     encounter_level_range_bounds: "диапазон уровней состава должен быть упорядочен от 0 до %{max}"
     encounter_level_or_range: "участник состава должен использовать либо level, либо диапазон уровней"
     encounter_level_range_requires_hp: "диапазон уровней состава требует явное hp"
+    city_polygon_invalid: "полигон city %{kind} должен содержать от 3 до 32 процентных точек и охватывать площадь"
+    airship_station_title_invalid: "airship_station_title должен быть непустой строкой не длиннее 120 символов"
+    zone_name_populated: "идентифицирует содержимое региона; меняйте отображаемый title вместо имени"
 en:
   manage:
     title: "World Management"
@@ -724,3 +727,6 @@ en:
     encounter_level_range_bounds: "encounter roster level range must have ordered bounds between 0 and %{max}"
     encounter_level_or_range: "encounter roster member must use either level or level range"
     encounter_level_range_requires_hp: "encounter roster level range requires explicit hp"
+    city_polygon_invalid: "city %{kind} polygon must contain 3 to 32 percentage points enclosing an area"
+    airship_station_title_invalid: "airship_station_title must be a nonblank string of at most 120 characters"
+    zone_name_populated: "identifies populated region content; change the display title instead"
