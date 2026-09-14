@@ -46,6 +46,18 @@ RSpec.describe "world/_actions.html.erb", type: :view do
     expect(rendered).to have_link(I18n.t("game.injuries.outdoor_lock_inventory"), href: inventory_path)
   end
 
+  it "mentions Obelisk recall when bound during the outdoor injury lock" do
+    character = create(:character)
+    allow(view).to receive(:current_character).and_return(character)
+    Game::World::ObeliskRecall.new(character:, action: "bind").call
+    assign(:movement_state, OpenStruct.new(locked_reason: :injured))
+
+    render partial: "world/actions", locals: {available_actions: [], position:}
+
+    expect(rendered).to have_css("[data-world-injury-obelisk='1']")
+    expect(rendered).to have_content(I18n.t("game.injuries.outdoor_lock_obelisk"))
+  end
+
   %w[drink fish].each do |action_type|
     it "keeps all authored local actions visible and disabled during #{action_type} without creating capabilities" do
       assign(:active_world_action, build(:world_action_offer, :accepted, action_type:, metadata: {"label" => action_type.capitalize}))
