@@ -145,16 +145,14 @@ RSpec.describe MapTileTemplate, type: :model do
       )
 
       expect(tile).not_to be_valid
-      expect(tile.errors[:metadata]).to include("cell_art requires source_map metadata")
+      expect(tile.errors[:metadata]).to include(I18n.t("manage.cell_art_requires_source_map"))
     end
 
     it "rejects an unknown art key" do
       tile = build(:map_tile_template, :with_invalid_cell_art)
 
       expect(tile).not_to be_valid
-      expect(tile.errors[:metadata]).to include(
-        "cell_art must use a configured 100x100 source-backed art slice"
-      )
+      expect(tile.errors[:metadata]).to include(I18n.t("manage.cell_art_slice_invalid"))
     end
 
     it "rejects malformed, null-coordinate, and out-of-bounds art references" do
@@ -175,7 +173,7 @@ RSpec.describe MapTileTemplate, type: :model do
       )
 
       expect(malformed).not_to be_valid
-      expect(malformed.errors[:metadata]).to include("cell_art must be an object")
+      expect(malformed.errors[:metadata]).to include(I18n.t("manage.cell_art_object"))
       expect(null_coordinate).not_to be_valid
       expect(out_of_bounds).not_to be_valid
     end
@@ -261,7 +259,9 @@ RSpec.describe MapTileTemplate, type: :model do
       )
 
       expect(tile).not_to be_valid
-      expect(tile.errors[:metadata].join).to include("unsupported local action")
+      expect(tile.errors[:metadata]).to include(
+        I18n.t("manage.local_action_unsupported", type: "generic_gather".inspect)
+      )
     end
 
     it "rejects a mismatched Neverlands source id" do
@@ -271,7 +271,9 @@ RSpec.describe MapTileTemplate, type: :model do
       )
 
       expect(tile).not_to be_valid
-      expect(tile.errors[:metadata].join).to include("must use source id look")
+      expect(tile.errors[:metadata]).to include(
+        I18n.t("manage.local_action_source_id", type: "resource_search", source_id: "look")
+      )
     end
 
     it "rejects duplicate action types on one cell" do
@@ -286,21 +288,23 @@ RSpec.describe MapTileTemplate, type: :model do
       )
 
       expect(tile).not_to be_valid
-      expect(tile.errors[:metadata].join).to include("duplicate local action types")
+      expect(tile.errors[:metadata]).to include(
+        I18n.t("manage.local_action_duplicate_types", types: "resource_search")
+      )
     end
 
     it "rejects null and non-object local action entries" do
       tile = build(:map_tile_template, metadata: {"local_actions" => [nil]})
 
       expect(tile).not_to be_valid
-      expect(tile.errors[:metadata]).to include("local action must be an object")
+      expect(tile.errors[:metadata]).to include(I18n.t("manage.local_action_object"))
     end
 
     it "rejects a non-array local action container" do
       tile = build(:map_tile_template, metadata: {"local_actions" => {"type" => "resource_search"}})
 
       expect(tile).not_to be_valid
-      expect(tile.errors[:metadata]).to include("local_actions must be an array")
+      expect(tile.errors[:metadata]).to include(I18n.t("manage.local_actions_array"))
     end
 
     it "allows the zero-coordinate region boundary" do
