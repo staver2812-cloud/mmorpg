@@ -33,6 +33,7 @@ ru:
     game_events_immutable: "игровые события неизменяемы"
     amount_cannot_be_zero: "сумма не может быть нулевой"
     insufficient_veil_marks: "Недостаточно VM."
+    experience_non_negative: "опыт должен быть неотрицательным целым"
   nav:
     your_character: "Персонаж"
     inventory: "Инвентарь"

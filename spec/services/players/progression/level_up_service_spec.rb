@@ -72,9 +72,9 @@ RSpec.describe Players::Progression::LevelUpService do
       service = described_class.new(character:)
 
       expect { service.apply_experience!(-1) }
-        .to raise_error(described_class::ProgressionError, /non-negative/)
+        .to raise_error(described_class::ProgressionError, I18n.t("errors.experience_non_negative"))
       expect { service.apply_experience!(nil) }
-        .to raise_error(described_class::ProgressionError, /non-negative/)
+        .to raise_error(described_class::ProgressionError, I18n.t("errors.experience_non_negative"))
     end
   end
 

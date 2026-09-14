@@ -62,6 +62,7 @@ en:
     game_events_immutable: "game events are immutable"
     amount_cannot_be_zero: "amount cannot be zero"
     insufficient_veil_marks: "Insufficient Veil Marks."
+    experience_non_negative: "Experience must be a non-negative integer"
   hello: "Hello world"
   nav:
     your_character: "Character"
