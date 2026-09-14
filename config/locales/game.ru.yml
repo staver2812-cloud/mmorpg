@@ -1361,6 +1361,7 @@ ru:
       giver: "Квестодатель: %{name}"
       accept: "Взять"
       turn_in: "Сдать"
+      continue_world: "Продолжить в Мире"
       done: "Выполнено"
       accepted: "Задание принято: %{title}"
       completed: "Задание сдано: %{title}"
