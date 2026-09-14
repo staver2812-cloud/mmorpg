@@ -22,7 +22,7 @@
        data-chat-current-user-value="<%= current_user.profile_name %>"
        data-chat-target="messages">
     <% if @chat_entries.empty? %>
-      <span class="nl-chat-empty"><%= t("game.chat.empty") %></span>
+      <span class="nl-chat-empty" data-chat-empty="1"><%= t("game.chat.empty") %></span>
     <% else %>
       <%= render "chat_channels/timeline_entries", entries: @chat_entries %>
     <% end %>
