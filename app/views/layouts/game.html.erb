@@ -124,9 +124,11 @@
                   title: t("game.world.fatigue_chip_hint"),
                   data: {fatigue_pct: fatigue_pct} %>
           <% else %>
-            <span class="nl-fatigue-chip<%= ' nl-fatigue-chip--locked' if fatigue_pct >= 86 %>" data-fatigue-pct="<%= fatigue_pct %>" title="<%= t("game.world.fatigue_chip_hint") %>">
-              <%= t("game.world.fatigue_chip", percent: fatigue_pct) %>
-            </span>
+            <%= link_to t("game.world.fatigue_chip", percent: fatigue_pct),
+                  world_path,
+                  class: "nl-fatigue-chip#{' nl-fatigue-chip--locked' if fatigue_pct >= 86}",
+                  title: t("game.world.fatigue_chip_hint"),
+                  data: {fatigue_pct: fatigue_pct, fatigue_recovery: "world"} %>
           <% end %>
         <% end %>
         <% journal = Game::Quests::Journal.new(character: current_character) %>
