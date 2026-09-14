@@ -85,12 +85,12 @@
       <% elsif @mode == "novice" && current_character.level >= 10 %>
         <p class="nl-empty-note nl-shop-empty" data-shop-novice="denied">
           <%= t("game.shop.novice_only") %>
-          <%= link_to t("game.shop.modes.goods"), shop_path(mode: "goods"), class: "nl-sheet-link", data: {shop_recovery: "goods"} %>
+          <%= link_to t("game.shop.modes.buy"), shop_path(mode: "buy"), class: "nl-sheet-link", data: {shop_recovery: "buy"} %>
         </p>
       <% elsif @mode == "novice" %>
         <p class="nl-empty-note nl-shop-empty" data-shop-novice="empty">
           <%= t("game.shop.novice_empty") %>
-          <%= link_to t("game.shop.modes.goods"), shop_path(mode: "goods"), class: "nl-sheet-link", data: {shop_recovery: "goods"} %>
+          <%= link_to t("game.shop.modes.buy"), shop_path(mode: "buy"), class: "nl-sheet-link", data: {shop_recovery: "buy"} %>
         </p>
       <% elsif @mode == "sell" %>
         <% unless @shop_license_rules.active?(:trading) %>
