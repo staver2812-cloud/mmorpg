@@ -38,7 +38,14 @@
             <button type="button" class="nl-assault-btn nl-assault-btn--blocked" disabled title="<%= t("game.world.assault_need_scroll") %>">
               <%= t("game.world.assault_cta") %>
             </button>
-            <p class="nl-quests-board__meta"><%= t("game.world.assault_need_scroll") %></p>
+            <p class="nl-quests-board__meta" data-assault-need-scroll="1">
+              <%= t("game.world.assault_need_scroll") %>
+              <% if Game::World::CityBuildingCatalog.accessible?(character: @viewer_character, building_key: "hospital") %>
+                <%= link_to t("game.buildings.hospital_title_short"), city_building_path("hospital"), class: "nl-sheet-link", data: {assault_recovery: "hospital"} %>
+              <% else %>
+                <%= link_to t("game.common.city"), world_path, class: "nl-sheet-link", data: {assault_recovery: "city"} %>
+              <% end %>
+            </p>
           <% end %>
         </div>
       <% end %>

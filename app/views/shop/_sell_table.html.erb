@@ -67,5 +67,8 @@
     </tbody>
   </table>
 <% else %>
-  <p class="nl-empty-note nl-shop-empty"><%= t("game.shop.empty_sell") %></p>
+  <p class="nl-empty-note nl-shop-empty" data-shop-sell-empty="1">
+    <%= t("game.shop.empty_sell") %>
+    <%= link_to t("game.shop.open_inventory"), inventory_path, class: "nl-sheet-link", data: {shop_recovery: "inventory"} %>
+  </p>
 <% end %>

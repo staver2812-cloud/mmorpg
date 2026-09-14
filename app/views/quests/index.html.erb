@@ -76,7 +76,10 @@
             <%= button_to t("game.quests.turn_in"), turn_in_quest_path(quest["key"]), method: :post, class: "lbut" %>
           <% elsif entry[:status] == "active" %>
             <button type="button" class="lbut" disabled title="<%= t("game.quests.objective_incomplete") %>"><%= t("game.quests.turn_in") %></button>
-            <span class="nl-quests__done"><%= t("game.quests.objective_incomplete") %></span>
+            <span class="nl-quests__done">
+              <%= t("game.quests.objective_incomplete") %>
+              <%= link_to t("game.quests.continue_world"), world_path, class: "nl-sheet-link", data: {quest_recovery: "world"} %>
+            </span>
           <% elsif entry[:status] == "locked" %>
             <span class="nl-quests__done"><%= t("game.quests.locked_hint") %></span>
           <% else %>
