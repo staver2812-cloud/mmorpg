@@ -142,4 +142,15 @@ RSpec.describe ShopHelper, type: :helper do
     expect(html).to include(I18n.t("game.shop.open_inventory"))
     expect(html).to include('data-shop-recovery="inventory"')
   end
+
+  it "falls short-NV recovery back to City when Bank and Ash Buyer are out of district" do
+    character = create(:character)
+    allow(helper).to receive(:current_character).and_return(character)
+    allow(Game::World::CityBuildingCatalog).to receive(:accessible?).and_return(false)
+
+    html = helper.shop_block_recovery_link(I18n.t("game.shop.not_enough_nv"))
+
+    expect(html).to include(I18n.t("arena.nav.city"))
+    expect(html).to include('data-shop-recovery="world"')
+  end
 end

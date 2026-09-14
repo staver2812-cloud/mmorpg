@@ -122,16 +122,24 @@ module ShopHelper
     when I18n.t("game.shop.not_enough_nv")
       if Game::World::CityBuildingCatalog.accessible?(character: current_character, building_key: "bank")
         link_to t("game.shop.open_bank"), city_building_path("bank"), class: "nl-sheet-link", data: {shop_recovery: "bank"}
+      elsif Game::World::CityBuildingCatalog.accessible?(character: current_character, building_key: "junk_dealer")
+        link_to t("game.buildings.junk_dealer_link"), city_building_path("junk_dealer"), class: "nl-sheet-link", data: {shop_recovery: "junk"}
+      else
+        link_to t("arena.nav.city"), world_path, class: "nl-sheet-link", data: {shop_recovery: "world"}
       end
     when I18n.t("game.shop.healer_perk_required"), I18n.t("game.shop.merchant_perk_required")
       link_to t("game.shop.open_perks"), perks_character_path(current_character), class: "nl-sheet-link", data: {shop_recovery: "perks"}
     when I18n.t("game.shop.traumatologist_quest_required")
       if Game::World::CityBuildingCatalog.accessible?(character: current_character, building_key: "hospital")
         link_to t("game.buildings.hospital_title_short"), city_building_path("hospital"), class: "nl-sheet-link", data: {shop_recovery: "hospital"}
+      else
+        link_to t("arena.nav.city"), world_path, class: "nl-sheet-link", data: {shop_recovery: "world"}
       end
     when I18n.t("game.shop.merchant_qualification_required")
       if Game::World::CityBuildingCatalog.accessible?(character: current_character, building_key: "market")
         link_to t("game.shop.sell_onboarding_market"), city_building_path("market"), class: "nl-sheet-link", data: {shop_recovery: "market"}
+      else
+        link_to t("arena.nav.city"), world_path, class: "nl-sheet-link", data: {shop_recovery: "world"}
       end
     when I18n.t("game.shop.trading_license_required")
       link_to t("game.shop.sell_onboarding_licenses"), shop_path(mode: "licenses"), class: "nl-sheet-link", data: {shop_recovery: "licenses"}

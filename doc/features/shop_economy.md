@@ -1225,6 +1225,8 @@ automated completion results are recorded in
 | 2026-09-14 | Empty Licenses section recovers to Buy; Market stalls/Numismatics/Auction lots are explicitly deferred with Shop/Ash Buyer/Bank CTAs. |
 | 2026-09-14 | Merchant qualification off-desk states recover via Market/Shop/Licenses/City links. |
 | 2026-09-14 | Smoke asserts Market merchant desk recovery when `data-merchant-desk` renders. |
+| 2026-09-14 | Smoke asserts Numismatics/Ash Buyer building chrome when those desks open. |
+| 2026-09-14 | Short-NV / district-gated Shop denials recover via Bank, Ash Buyer, or City (`data-shop-recovery`). |
 | 2026-09-14 | Doctor onboarding Licenses/City recovery; Infirmary premium short of VM recovers via topup/Bank/City. |
 | 2026-09-14 | Infirmary Traumatologist need-healer state recovers via Perks and City. |
 | 2026-09-14 | Narrow Shop: empty note drops forced 800px min-width; Licenses grid stacks to one column below 520px. |

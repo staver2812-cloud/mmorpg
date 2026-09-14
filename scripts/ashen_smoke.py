@@ -1432,6 +1432,18 @@ def main() -> int:
     banned_shop = ["You carry", "Shop funds", "Refresh to buy", "There are no items", "Valid for", "(quantity:"]
     found_shop = [w for w in banned_shop if w in r.text]
     report.add("shop no English chrome", not found_shop, f"found={found_shop}")
+    if (
+        r.status_code == 200
+        and 'data-shop-any-affordable="0"' in r.text
+        and ("data-shop-wallet=" in r.text)
+    ):
+        report.add(
+            "shop short-NV recovery",
+            'data-shop-recovery="bank"' in r.text
+            or 'data-shop-recovery="junk"' in r.text
+            or 'data-shop-recovery="world"' in r.text,
+            f"url={r.url}",
+        )
     r = s.get(f"{BASE}/shop?mode=novice", timeout=TIMEOUT)
     if r.status_code == 200 and "data-shop-novice=" in r.text:
         report.add(
