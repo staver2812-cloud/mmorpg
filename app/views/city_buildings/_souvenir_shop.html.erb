@@ -29,7 +29,12 @@
                 form: {data: {turbo: false}} %>
         <% else %>
           <button type="button" class="lbut" disabled title="<%= t("game.buildings.souvenir_need_nv", amount: price) %>"><%= t("game.buildings.souvenir_need_nv_short") %></button>
-          <p class="nl-quests-board__meta"><%= t("game.buildings.souvenir_need_nv", amount: price) %></p>
+          <p class="nl-quests-board__meta">
+            <%= t("game.buildings.souvenir_need_nv", amount: price) %>
+            <% if Game::World::CityBuildingCatalog.accessible?(character: current_character, building_key: "bank") %>
+              <%= link_to t("game.shop.open_bank"), city_building_path("bank"), class: "nl-sheet-link", data: {souvenir_recovery: "bank"} %>
+            <% end %>
+          </p>
         <% end %>
       </article>
     <% end %>
