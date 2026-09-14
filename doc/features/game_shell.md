@@ -1265,3 +1265,4 @@ Before extending Game Shell:
 | 2026-09-14 | Outdoor empty bait chip is a City recovery link (`data-bait-recovery="city"`); smoke asserts it when qty=0. |
 | 2026-09-14 | Broken wear chip opens Pitch Forge when in district; otherwise Inventory. |
 | 2026-09-14 | Shell drops forced `min-width: 760px` so 390px viewports do not force page-level horizontal scroll. |
+| 2026-09-14 | Root `html/body` use `overflow-x: clip` as a belt-and-suspenders against page-level horizontal scroll. |
