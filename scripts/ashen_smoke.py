@@ -879,6 +879,12 @@ def main() -> int:
             "data-temple-recovery=" in r.text,
             f"url={r.url}",
         )
+    if r.status_code == 200 and 'data-building-key="temple"' in r.text:
+        report.add(
+            "temple building chrome recovery",
+            'data-building-recovery="world"' in r.text,
+            f"url={r.url}",
+        )
 
     r = s.get(f"{BASE}/city/buildings/bank", timeout=TIMEOUT, allow_redirects=True)
     report.add(
@@ -942,6 +948,12 @@ def main() -> int:
         and ('data-landmark-inside="1"' in r.text),
         f"url={r.url}",
     )
+    if r.status_code == 200 and 'data-building-key="souvenir_shop"' in r.text:
+        report.add(
+            "souvenir building chrome recovery",
+            'data-building-recovery="world"' in r.text,
+            f"url={r.url}",
+        )
     if 'data-souvenir-any-affordable="0"' in r.text:
         report.add(
             "souvenir short-NV recovery",
