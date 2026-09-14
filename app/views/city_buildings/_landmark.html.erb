@@ -235,6 +235,7 @@
       </p>
       <p class="nl-quests-board__meta"
          data-dealer-buyback-total="<%= total %>"
+         data-dealer-offer-lines="<%= offers.size %>"
          data-dealer-can-sell="<%= offers.any? ? "1" : "0" %>">
         <%= t("game.buildings.dealer_house_buyback", total: total, lines: offers.size) %>
       </p>
