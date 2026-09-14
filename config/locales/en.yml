@@ -28,6 +28,15 @@
 #       enabled: "ON"
 
 en:
+  app:
+    title: "Ashen Veil"
+    title_short: "Veil"
+  locales:
+    ru: "RU"
+    en: "EN"
+    switch: "Language"
+  errors:
+    forbidden: "You do not have access to this action."
   hello: "Hello world"
   nav:
     your_character: "Character"
