@@ -63,32 +63,40 @@
           <% end %>
         <% end %>
         <% trauma_scrolls = Game::World::StartPlayerAssault.trauma_scroll_quantity(current_character) %>
-        <% if trauma_scrolls.positive? || Game::World::CityBuildingCatalog.accessible?(character: current_character, building_key: "hospital") %>
-          <% if Game::World::CityBuildingCatalog.accessible?(character: current_character, building_key: "hospital") %>
-            <%= link_to t("game.world.trauma_scroll_chip", count: trauma_scrolls),
-                  city_building_path("hospital"),
-                  class: "nl-trauma-chip#{' nl-trauma-chip--empty' if trauma_scrolls <= 0}",
-                  title: t("game.world.trauma_scroll_chip_hint"),
-                  data: {trauma_scrolls: trauma_scrolls} %>
-          <% elsif trauma_scrolls.positive? %>
-            <span class="nl-trauma-chip" data-trauma-scrolls="<%= trauma_scrolls %>" title="<%= t("game.world.trauma_scroll_chip_hint") %>">
-              <%= t("game.world.trauma_scroll_chip", count: trauma_scrolls) %>
-            </span>
-          <% end %>
+        <% if Game::World::CityBuildingCatalog.accessible?(character: current_character, building_key: "hospital") %>
+          <%= link_to t("game.world.trauma_scroll_chip", count: trauma_scrolls),
+                city_building_path("hospital", anchor: "hospital-premium-desk"),
+                class: "nl-trauma-chip#{' nl-trauma-chip--empty' if trauma_scrolls <= 0}",
+                title: t("game.world.trauma_scroll_chip_hint"),
+                data: {trauma_scrolls: trauma_scrolls} %>
+        <% elsif trauma_scrolls.positive? %>
+          <span class="nl-trauma-chip" data-trauma-scrolls="<%= trauma_scrolls %>" title="<%= t("game.world.trauma_scroll_chip_hint") %>">
+            <%= t("game.world.trauma_scroll_chip", count: trauma_scrolls) %>
+          </span>
+        <% else %>
+          <%= link_to t("game.world.trauma_scroll_chip", count: 0),
+                world_path,
+                class: "nl-trauma-chip nl-trauma-chip--empty",
+                title: t("game.world.trauma_scroll_chip_hint"),
+                data: {trauma_scrolls: 0, trauma_recovery: "world"} %>
         <% end %>
         <% heal_scrolls = Game::Shop::PremiumScrollPurchase.owned_quantity(current_character, "combat_heal_scroll") %>
-        <% if heal_scrolls.positive? || Game::World::CityBuildingCatalog.accessible?(character: current_character, building_key: "hospital") %>
-          <% if Game::World::CityBuildingCatalog.accessible?(character: current_character, building_key: "hospital") %>
-            <%= link_to t("game.world.heal_scroll_chip", count: heal_scrolls),
-                  city_building_path("hospital"),
-                  class: "nl-heal-chip#{' nl-heal-chip--empty' if heal_scrolls <= 0}",
-                  title: t("game.world.heal_scroll_chip_hint"),
-                  data: {heal_scrolls: heal_scrolls} %>
-          <% elsif heal_scrolls.positive? %>
-            <span class="nl-heal-chip" data-heal-scrolls="<%= heal_scrolls %>" title="<%= t("game.world.heal_scroll_chip_hint") %>">
-              <%= t("game.world.heal_scroll_chip", count: heal_scrolls) %>
-            </span>
-          <% end %>
+        <% if Game::World::CityBuildingCatalog.accessible?(character: current_character, building_key: "hospital") %>
+          <%= link_to t("game.world.heal_scroll_chip", count: heal_scrolls),
+                city_building_path("hospital", anchor: "hospital-premium-desk"),
+                class: "nl-heal-chip#{' nl-heal-chip--empty' if heal_scrolls <= 0}",
+                title: t("game.world.heal_scroll_chip_hint"),
+                data: {heal_scrolls: heal_scrolls} %>
+        <% elsif heal_scrolls.positive? %>
+          <span class="nl-heal-chip" data-heal-scrolls="<%= heal_scrolls %>" title="<%= t("game.world.heal_scroll_chip_hint") %>">
+            <%= t("game.world.heal_scroll_chip", count: heal_scrolls) %>
+          </span>
+        <% else %>
+          <%= link_to t("game.world.heal_scroll_chip", count: 0),
+                world_path,
+                class: "nl-heal-chip nl-heal-chip--empty",
+                title: t("game.world.heal_scroll_chip_hint"),
+                data: {heal_scrolls: 0, heal_recovery: "world"} %>
         <% end %>
         <% wear = Game::Inventory::EquippedWear.summary_for(current_character) %>
         <% if wear.worn.positive? %>
