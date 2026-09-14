@@ -448,6 +448,14 @@ def main() -> int:
             'data-merchant-status=' in r.text,
             f"url={r.url}",
         )
+        report.add(
+            "market merchant desk recovery",
+            "data-merchant-recovery=" in r.text
+            or 'data-merchant-status="not_started"' in r.text
+            or 'data-merchant-status="collect-shop-pay"' in r.text
+            or 'data-merchant-status="receipt-ready"' in r.text,
+            f"url={r.url}",
+        )
     if 'data-junk-total="0"' in r.text:
         report.add(
             "junk empty Inventory recovery",
@@ -1256,6 +1264,13 @@ def main() -> int:
     if r.status_code == 200 and 'data-inventory-empty-hint="world"' in r.text:
         report.add(
             "inventory empty fishing World recovery",
+            'data-inventory-recovery="world"' in r.text,
+            f"url={r.url}",
+        )
+    r = s.get(f"{BASE}/inventory?category=hunting", timeout=TIMEOUT)
+    if r.status_code == 200 and 'data-inventory-empty-hint="world"' in r.text:
+        report.add(
+            "inventory empty hunting World recovery",
             'data-inventory-recovery="world"' in r.text,
             f"url={r.url}",
         )
