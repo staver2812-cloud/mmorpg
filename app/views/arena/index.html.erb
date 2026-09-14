@@ -158,6 +158,15 @@
         </div>
       <% end %>
     </div>
+  <% else %>
+    <div class="nl-arena-recent" data-arena-recent-empty="1">
+      <b><%= t("arena.recent_fights") %></b>
+      <p class="nl-quests-board__meta">
+        <%= t("arena.recent_empty") %>
+        ·
+        <%= link_to t("arena.tabs.duels"), arena_index_path(ft: 1), class: "nl-sheet-link" %>
+      </p>
+    </div>
   <% end %>
 </div>
 
