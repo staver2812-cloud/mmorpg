@@ -281,7 +281,7 @@ module Arena
     def broadcast_timeout_claim_available
       broadcast({
         type: "timeout_claim_available",
-        message: "Timeout finish is available.",
+        message: I18n.t("game.fight.timeout_finish_available"),
         turn_number: match.current_turn_number,
         timestamp: Time.current.strftime("%H:%M:%S")
       })
@@ -316,13 +316,13 @@ module Arena
     def countdown_message(seconds)
       case seconds
       when 0
-        "Fight started"
+        I18n.t("game.fight.fight_started")
       when 1..3
         seconds.to_s
       when 4..10
-        "Fight starts in: #{seconds}"
+        I18n.t("game.fight.starts_in", seconds:)
       else
-        "Fight starts in #{seconds}s"
+        I18n.t("game.fight.starts_in_seconds", seconds:)
       end
     end
 

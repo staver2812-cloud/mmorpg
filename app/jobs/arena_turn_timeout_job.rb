@@ -74,9 +74,9 @@ class ArenaTurnTimeoutJob < ApplicationJob
 
   def broadcast_timeout(match, claim_available:)
     message = if claim_available
-      "Turn timer expired. Timeout finish is available."
+      I18n.t("game.fight.turn_timeout_claim")
     else
-      "Turn ended by timeout"
+      I18n.t("game.fight.turn_ended_by_timeout")
     end
 
     Arena::CombatBroadcaster.new(match).broadcast_event(
