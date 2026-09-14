@@ -389,6 +389,8 @@ ru:
       combat_points: "Боевые очки"
       peace_points: "Мирные очки"
       possible_perks: "Доступные способности"
+      no_stat_points: "Сейчас нет свободных очков основных характеристик."
+      no_public_perks: "Публичных способностей нет."
       no_perk_points: "Нет новых очков способностей."
       perk_yes: "Да"
       perk_no: "Нет"

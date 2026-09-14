@@ -389,6 +389,8 @@ en:
       combat_points: "Combat points"
       peace_points: "Peace points"
       possible_perks: "Possible new perks"
+      no_stat_points: "No free primary-stat points to allocate right now."
+      no_public_perks: "No public perks to show."
       no_perk_points: "No new perk points are available."
       perk_yes: "Yes"
       perk_no: "No"
