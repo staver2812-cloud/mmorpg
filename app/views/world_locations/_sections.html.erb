@@ -41,7 +41,11 @@
           <%= select_tag :resource_kind, options_for_select([t("game.locations.all_resources")]), aria: {label: t("game.common.resource")} %>
           <button type="button" class="lbut" disabled title="<%= t("game.locations.choose_deferred") %>"><%= t("game.common.choose") %></button>
         </div>
-        <p class="nl-quests-board__meta"><%= t("game.locations.choose_deferred") %></p>
+        <p class="nl-quests-board__meta" data-location-choose-deferred="1">
+          <%= t("game.locations.choose_deferred") %>
+          ·
+          <%= link_to t("arena.nav.city"), world_path, data: {turbo: false, location_recovery: "world"} %>
+        </p>
       <% end %>
       <% if @location_section["read_only_items"].present? %>
         <div class="nl-world-location-item-previews">
@@ -54,7 +58,11 @@
             </article>
           <% end %>
         </div>
-        <p class="nl-quests-board__meta"><%= t("game.locations.buy_deferred") %></p>
+        <p class="nl-quests-board__meta" data-location-buy-deferred="1">
+          <%= t("game.locations.buy_deferred") %>
+          ·
+          <%= link_to t("game.shop.title"), shop_path, data: {turbo: false, location_recovery: "shop"} %>
+        </p>
       <% end %>
     </section>
   <% end %>
