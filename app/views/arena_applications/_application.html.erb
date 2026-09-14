@@ -42,14 +42,16 @@
   <div class="arena-application-meta">
     <% if application.expires_at %>
         <span class="arena-application-timer <%= 'arena-application-timer--urgent' if application.time_until_expiration && application.time_until_expiration < 60 %>"
-            title="Expires <%= l(application.expires_at, format: :short) %>">
-        Remaining <%= distance_of_time_in_words_to_now(application.expires_at) %>
+            title="<%= t("game.fight.expires_title", when: l(application.expires_at, format: :short)) %>">
+        <%= t("game.fight.remaining", time: distance_of_time_in_words_to_now(application.expires_at)) %>
       </span>
     <% end %>
 
     <% if application.team_level_min || application.team_level_max %>
       <span class="arena-application-levels badge">
-        Lvl. <%= application.team_level_min || application.arena_room.level_min %>-<%= application.team_level_max || application.arena_room.level_max %>
+        <%= t("game.fight.level_range",
+              min: application.team_level_min || application.arena_room.level_min,
+              max: application.team_level_max || application.arena_room.level_max) %>
       </span>
     <% end %>
   </div>

@@ -505,4 +505,5 @@ shipped Inventory management routes.
 | 2026-09-13 | Inventory mass row exposes mass/slot capacity markers (`data-inventory-mass`, `data-inventory-slots`) plus slot copy. |
 | 2026-09-13 | HUD wear chip (`Game::Inventory::EquippedWear`) links to Inventory when equipped durable gear is worn or broken (`data-wear-worn` / `data-wear-broken`); inventory mass row repeats the wear count; workshop repair remains deferred. |
 | 2026-09-13 | Paper-doll empty-slot labels resolve through `EquipmentSlots.label_for` → `game.equipment.slots.*` i18n. |
+| 2026-09-13 | Family-section discard chrome uses `game.inventory.choose_action` / `discard_action` / `discard_resources_confirm` / `game.common.ok`. |
 | 2026-09-10 | Integrated seven original Shop-item illustrations into carried rows and shared equipment slots; extended the Shop browser flow through wear, persisted slot/stat confirmation, removal and resale. |

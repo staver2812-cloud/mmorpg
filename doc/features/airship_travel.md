@@ -211,6 +211,7 @@ or generic job/reconciler framework is introduced.
 | Date | Change |
 |---|---|
 | 2026-09-13 | Board/disembark/reconcile violations use `game.airship.*` i18n (ru/en); English copy preserves prior TravelViolationError vocabulary. |
+| 2026-09-13 | In-flight map aria, craft alt, and early-disembark confirm use `game.airship.map_aria` / `craft_label` / `disembark_confirm`. |
 | 2026-09-13 | Station exposes route count and board readiness (`data-airship-routes` / `data-airship-can-board`). |
 | 2026-09-13 | Short-NV boarding state links to Ash Buyer (or Shop) so players can earn fare without guessing. |
 | 2026-09-13 | Station greys out Board when wallet NV cannot cover fare; rows expose `data-airship-affordable`. |
