@@ -285,7 +285,9 @@ No cron or background job deletes expired grants. Permission checks reject them
 at the server deadline, and the next Your licenses request omits them while
 retaining their purchase records. An already-open page has no expiry polling;
 its displayed row can remain until navigation or reload without authorizing a
-sale. The exact read/display contract belongs to
+sale. The Sell tab surfaces the active trading-license expiry and, after
+expiry, a reload/buy hint so players are not left guessing. The exact
+read/display contract belongs to
 [Character Progression](character_progression.md#66-purchased-licenses-and-abilities).
 
 Merchant and Healer are selectable source perks #34/#35. The
@@ -1215,6 +1217,7 @@ automated completion results are recorded in
 | 2026-09-14 | Merchant qualification request specs assert accept/pay/complete buttons via `game.shop.merchant_*_btn` (RU-safe). |
 | 2026-09-14 | Shop Sell without an active trading license shows onboarding steps (`game.shop.sell_onboarding_*`). |
 | 2026-09-14 | Ashen Infirmary Traumatologist clearance unlocks Doctor II–III via `profession_unlocks.traumatologist`. |
+| 2026-09-14 | Sell tab shows active trading-license expiry and an expired reload/buy hint (no polling). |
 | 2026-09-13 | TradeOffers stale/refresh alerts and LicenseRules purchase blocks use the same `game.shop.*` i18n surface. |
 | 2026-09-13 | Shop Location access and MerchantQualification step/payment alerts use `game.shop.*` / `game.flashes.shop_location_required`. |
 | 2026-09-13 | Shop buy desk exposes wallet/weight and any-affordable markers (`data-shop-wallet`, `data-shop-any-affordable`) plus per-row `data-shop-affordable`; sell mode adds `data-shop-any-sellable` / `data-shop-sellable`. License cards localize duration copy and expose `data-shop-license-affordable`. Sell rows drop hardcoded English quantity/durability chrome. |

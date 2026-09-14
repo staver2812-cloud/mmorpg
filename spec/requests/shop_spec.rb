@@ -407,6 +407,19 @@ RSpec.describe "Shop", type: :request do
 
     expect(response).to have_http_status(:success)
     expect(response.body).not_to include('data-shop-sell-onboarding="1"')
+    expect(response.body).to include('data-shop-sell-license-status="active"')
+    expect(response.body).to include(I18n.t("game.shop.sell_license_no_polling"))
+  end
+
+  it "shows an expired trading-license hint on Sell" do
+    grant_trading_license(expires_at: 1.hour.ago)
+
+    get shop_path(mode: "sell")
+
+    expect(response).to have_http_status(:success)
+    expect(response.body).to include('data-shop-sell-onboarding="1"')
+    expect(response.body).to include('data-shop-sell-license-status="expired"')
+    expect(response.body).to include(I18n.t("game.shop.sell_onboarding_licenses"))
   end
 
   def buy_offer
@@ -419,12 +432,12 @@ RSpec.describe "Shop", type: :request do
     WorldActionOffer.offered.find_by!(character:, action_type: "shop_sell", target: item).action_key
   end
 
-  def grant_trading_license
+  def grant_trading_license(expires_at: 1.day.from_now)
     template = create(:item_template, key: "trading_license_i", name: "Trading License I", item_type: "misc", slot: "none",
       base_price: 300, weight: 1, durability_max: 1, stack_limit: 1, requirements: {}, stat_modifiers: {},
       enhancement_rules: {"license" => {"kind" => "trading", "tier" => 1, "duration_days" => 3}})
     offer = create(:world_action_offer, character:, zone: city_zone, x: 5, y: 5, action_type: "shop_buy", target: template, status: "completed")
     CharacterLicense.create!(character:, item_template: template, world_action_offer: offer, kind: "trading", tier: 1,
-      name: template.name, starts_at: 1.hour.ago, expires_at: 1.day.from_now)
+      name: template.name, starts_at: 2.days.ago, expires_at:)
   end
 end

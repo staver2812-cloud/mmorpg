@@ -88,6 +88,7 @@
         <% unless @shop_license_rules.active?(:trading) %>
           <%= render "shop/sell_onboarding" %>
         <% end %>
+        <%= render "shop/sell_license_status" %>
         <%= render "shop/sell_table", items: @sell_items %>
       <% else %>
         <%= render "shop/buy_table", items: @shop_items %>

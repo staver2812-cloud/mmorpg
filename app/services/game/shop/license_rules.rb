@@ -58,6 +58,21 @@ module Game
         CharacterLicense.active_at(at).exists?(character:, kind: kind.to_s)
       end
 
+      def active_license(kind, at: Time.current)
+        kind = kind.to_s
+        if active_licenses
+          return active_licenses
+            .select { |license| license.character_id == character.id && license.kind == kind && license.active?(at:) }
+            .min_by(&:expires_at)
+        end
+
+        CharacterLicense.active_at(at).where(character:, kind:).order(:expires_at, :id).first
+      end
+
+      def latest_expired_license(kind, at: Time.current)
+        CharacterLicense.where(character:, kind: kind.to_s).where(expires_at: ..at).order(expires_at: :desc, id: :desc).first
+      end
+
       # Called inside the purchase transaction instead of inventory acquisition.
       # The clock is supplied once by the trade to keep start and expiry exact.
       def activate!(template:, offer:, at: Time.current)
