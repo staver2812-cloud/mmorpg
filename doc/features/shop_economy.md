@@ -1221,6 +1221,7 @@ automated completion results are recorded in
 | 2026-09-14 | Licenses tab shows Doctor onboarding; blocked license buys surface the denial visibly; Novice below 10 shows sandbox-empty copy. |
 | 2026-09-14 | Empty Licenses section recovers to Buy; Market stalls/Numismatics/Auction lots are explicitly deferred with Shop/Ash Buyer/Bank CTAs. |
 | 2026-09-14 | Merchant qualification off-desk states recover via Market/Shop/Licenses/City links. |
+| 2026-09-14 | Doctor onboarding Licenses/City recovery; Infirmary premium short of VM recovers via topup/Bank/City. |
 | 2026-09-13 | TradeOffers stale/refresh alerts and LicenseRules purchase blocks use the same `game.shop.*` i18n surface. |
 | 2026-09-13 | Shop Location access and MerchantQualification step/payment alerts use `game.shop.*` / `game.flashes.shop_location_required`. |
 | 2026-09-13 | Shop buy desk exposes wallet/weight and any-affordable markers (`data-shop-wallet`, `data-shop-any-affordable`) plus per-row `data-shop-affordable`; sell mode adds `data-shop-any-sellable` / `data-shop-sellable`. License cards localize duration copy and expose `data-shop-license-affordable`. Sell rows drop hardcoded English quantity/durability chrome. |
