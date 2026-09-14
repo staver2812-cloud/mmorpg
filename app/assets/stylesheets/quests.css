@@ -222,3 +222,15 @@
   padding-left: 18px;
   color: #5a4a38;
 }
+
+@media (pointer: coarse) {
+  .nl-quests__card .lbut,
+  .nl-quests__card .nl-sheet-link,
+  .nl-quests__header .nl-sheet-link {
+    min-height: 44px;
+    min-width: 44px;
+    padding: 8px 10px;
+    font-size: 12px;
+    line-height: 1.25;
+  }
+}
