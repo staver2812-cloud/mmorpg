@@ -559,6 +559,11 @@ def main() -> int:
             ),
             f"url={r.url}",
         )
+        report.add(
+            "city_hall building chrome recovery",
+            'data-building-recovery="world"' in r.text,
+            f"url={r.url}",
+        )
     r = s.get(f"{BASE}/city/buildings/post", timeout=TIMEOUT, allow_redirects=True)
     report.add(
         "GET /city/buildings/post",
@@ -577,6 +582,11 @@ def main() -> int:
             "post desk recovery",
             'data-post-recovery="world"' in r.text
             or 'data-post-recovery="city_hall"' in r.text,
+            f"url={r.url}",
+        )
+        report.add(
+            "post building chrome recovery",
+            'data-building-recovery="world"' in r.text,
             f"url={r.url}",
         )
     if r.status_code == 200 and 'data-post-empty="1"' in r.text:
@@ -612,6 +622,11 @@ def main() -> int:
             or 'data-clan-hall-recovery="world"' in r.text,
             f"url={r.url}",
         )
+        report.add(
+            "clan hall building chrome recovery",
+            'data-building-recovery="world"' in r.text,
+            f"url={r.url}",
+        )
     r = s.get(f"{BASE}/city/buildings/airship_station", timeout=TIMEOUT, allow_redirects=True)
     report.add(
         "GET /city/buildings/airship_station wallet",
@@ -642,6 +657,13 @@ def main() -> int:
         report.add(
             "airship deferred/short recovery",
             "data-airship-recovery=" in r.text,
+            f"url={r.url}",
+        )
+    if r.status_code == 200 and 'data-building-key="airship_station"' in r.text:
+        report.add(
+            "airship building chrome recovery",
+            'data-building-recovery="world"' in r.text
+            or 'data-airship-recovery="world"' in r.text,
             f"url={r.url}",
         )
 
