@@ -1466,6 +1466,20 @@ def main() -> int:
             or 'data-shop-recovery="world"' in r.text,
             f"url={r.url}",
         )
+    elif r.status_code == 200 and 'data-shop-buy-blocked="1"' in r.text:
+        report.add(
+            "shop buy-blocked desk recovery",
+            'data-shop-recovery="inventory"' in r.text
+            and 'data-shop-recovery="world"' in r.text,
+            f"url={r.url}",
+        )
+    r = s.get(f"{BASE}/shop?mode=buy&category=misc", timeout=TIMEOUT)
+    if r.status_code == 200 and 'data-shop-buy-empty="1"' in r.text:
+        report.add(
+            "shop buy empty licenses recovery",
+            'data-shop-recovery="licenses"' in r.text,
+            f"url={r.url}",
+        )
     r = s.get(f"{BASE}/shop?mode=novice", timeout=TIMEOUT)
     if r.status_code == 200 and "data-shop-novice=" in r.text:
         report.add(
