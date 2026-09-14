@@ -121,7 +121,13 @@
       </tbody>
     </table>
 
-    <div class="nl-sheet-increases"><%= t("game.sheet.increases") %>: <%= character.stat_points_available.to_i %></div>
+    <div class="nl-sheet-increases" data-sheet-increases="<%= character.stat_points_available.to_i %>">
+      <%= t("game.sheet.increases") %>: <%= character.stat_points_available.to_i %>
+      <% if character == current_character && character.stat_points_available.to_i <= 0 %>
+        ·
+        <%= link_to t("nav.world"), world_path, class: "nl-sheet-link", data: {sheet_recovery: "world"} %>
+      <% end %>
+    </div>
 
     <table class="nl-sheet-table nl-sheet-table--chips">
       <caption class="nl-visually-hidden"><%= t("game.sheet.combat_params") %></caption>
