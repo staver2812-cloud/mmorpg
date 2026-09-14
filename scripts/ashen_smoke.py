@@ -1245,6 +1245,20 @@ def main() -> int:
             'data-inventory-recovery="quests"' in r.text,
             f"url={r.url}",
         )
+    r = s.get(f"{BASE}/inventory?category=alchemy", timeout=TIMEOUT)
+    if r.status_code == 200 and 'data-inventory-empty-hint="world"' in r.text:
+        report.add(
+            "inventory empty alchemy World recovery",
+            'data-inventory-recovery="world"' in r.text,
+            f"url={r.url}",
+        )
+    r = s.get(f"{BASE}/inventory?category=fishing", timeout=TIMEOUT)
+    if r.status_code == 200 and 'data-inventory-empty-hint="world"' in r.text:
+        report.add(
+            "inventory empty fishing World recovery",
+            'data-inventory-recovery="world"' in r.text,
+            f"url={r.url}",
+        )
 
     r = s.get(f"{BASE}/character/licenses", timeout=TIMEOUT, allow_redirects=True)
     report.add(

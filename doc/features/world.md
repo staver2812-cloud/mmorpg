@@ -3004,6 +3004,7 @@ Before extending the World feature:
 | 2026-09-14 | Mine/exchange lobbies show explicit deferred reasons on disabled Descend/Choose/Buy controls. |
 | 2026-09-14 | Exchange buy-deferred note recovers via Shop plus Bank/Junk when those desks are accessible (`data-location-recovery`). |
 | 2026-09-14 | Outdoor injury/fatigue/enter-blocked notes recover via Inventory/Hospital/Tavern/City (`data-world-recovery`). |
+| 2026-09-14 | Shell injury/wear chips expose `data-injury-recovery` / `data-wear-recovery` when those chips render. |
 | 2026-09-14 | Coarse-pointer mine/exchange lobby tabs and Descend/Choose/Buy controls target ~44×44 CSS px (`UI-ADAPT-005`). |
 | 2026-09-14 | Coarse-pointer outdoor Look/Drink/Fish action buttons also target ~44×44 CSS px. |
 | 2026-09-14 | Deferred mine Descend recovers to City beside the disabled control. |
