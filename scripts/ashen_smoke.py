@@ -312,6 +312,13 @@ def main() -> int:
         and ('data-landmark-inside="1"' in r.text),
         f"url={r.url}",
     )
+    if 'data-market-stalls-deferred="1"' in r.text:
+        report.add(
+            "market stalls deferred recovery",
+            'data-market-recovery="shop_sell"' in r.text
+            or 'data-market-recovery="junk"' in r.text,
+            f"url={r.url}",
+        )
     if 'data-junk-total="0"' in r.text:
         report.add(
             "junk empty Inventory recovery",
