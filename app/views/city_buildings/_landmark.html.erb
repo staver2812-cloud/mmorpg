@@ -105,6 +105,16 @@
           <p><%= t("game.buildings.tavern_rumor_airship_body") %></p>
         </article>
       </div>
+      <p class="nl-quests-board__meta" data-tavern-rumors-next="1">
+        <%= t("game.buildings.library_next") %>
+      </p>
+      <p>
+        <%= link_to t("arena.nav.city"), world_path, class: "lbut", data: {turbo: false, tavern_rumor_recovery: "world"} %>
+        <%= link_to t("game.shop.title"), shop_path, class: "lbut", data: {tavern_rumor_recovery: "shop"} %>
+        <% if Game::World::CityBuildingCatalog.accessible?(character: current_character, building_key: "city_hall") %>
+          <%= link_to t("game.buildings.city_hall_short"), city_building_path("city_hall"), class: "lbut", data: {tavern_rumor_recovery: "city_hall"} %>
+        <% end %>
+      </p>
     </section>
   <% when "guard_tower" %>
     <section class="nl-handbook" data-guard-square="1">
@@ -115,6 +125,16 @@
         <li><%= t("game.buildings.guard_square_note_market") %></li>
         <li><%= t("game.buildings.guard_square_note_gates") %></li>
       </ul>
+      <p class="nl-quests-board__meta" data-guard-square-next="1">
+        <%= t("game.buildings.library_next") %>
+      </p>
+      <p>
+        <%= link_to t("arena.nav.city"), world_path, class: "lbut", data: {turbo: false, guard_recovery: "world"} %>
+        <% if Game::World::CityBuildingCatalog.accessible?(character: current_character, building_key: "market") %>
+          <%= link_to t("game.buildings.market_short"), city_building_path("market"), class: "lbut", data: {guard_recovery: "market"} %>
+        <% end %>
+        <%= link_to t("game.shop.title"), shop_path, class: "lbut", data: {guard_recovery: "shop"} %>
+      </p>
     </section>
   <% when "workshop" %>
     <section class="nl-handbook" data-workshop-landmark="1">
@@ -130,6 +150,14 @@
           <p><%= t("game.buildings.workshop_landmark_repair_body") %></p>
         </article>
       </div>
+      <p class="nl-quests-board__meta" data-workshop-landmark-next="1">
+        <%= t("game.buildings.library_next") %>
+      </p>
+      <p>
+        <%= link_to t("game.inventory.title"), inventory_path, class: "lbut", data: {workshop_recovery: "inventory"} %>
+        <%= link_to t("arena.nav.city"), world_path, class: "lbut", data: {turbo: false, workshop_recovery: "world"} %>
+        <%= link_to t("game.shop.title"), shop_path, class: "lbut", data: {workshop_recovery: "shop"} %>
+      </p>
     </section>
   <% when "magic_school", "general_school", "military_school" %>
     <section class="nl-handbook" aria-label="<%= t("game.buildings.school_board_aria") %>">
