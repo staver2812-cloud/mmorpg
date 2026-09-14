@@ -1209,6 +1209,7 @@ automated completion results are recorded in
 |---|---|
 | 2026-09-13 | Purchase/Sale success and rejection alerts use `game.shop.*` i18n (ru/en); English copy preserves prior trade vocabulary for specs. |
 | 2026-09-13 | TradeOffers stale/refresh alerts and LicenseRules purchase blocks use the same `game.shop.*` i18n surface. |
+| 2026-09-13 | Shop Location access and MerchantQualification step/payment alerts use `game.shop.*` / `game.flashes.shop_location_required`. |
 | 2026-09-13 | Shop buy desk exposes wallet/weight and any-affordable markers (`data-shop-wallet`, `data-shop-any-affordable`) plus per-row `data-shop-affordable`; sell mode adds `data-shop-any-sellable` / `data-shop-sellable`. License cards localize duration copy and expose `data-shop-license-affordable`. Sell rows drop hardcoded English quantity/durability chrome. |
 | 2026-09-11 | Audited expiry, sale restrictions and transaction ownership against runtime; completed the final cleaned-layout manual purchase, equipment, removal and resale flow. |
 | 2026-09-10 | Corrected the decorative entrance's frame-relative sizing; shared the entrance component and image specifications; removed duplicate Shop chrome and persistent category labels; aligned filters, economy summary, goods detail panels and license cards to fresh source measurements. Original artwork and settlement rules are preserved. |
