@@ -80,6 +80,33 @@ ru:
         city: "город"
         outdoor: "улица"
         village: "деревня"
+      enums:
+        hotspot_type:
+          building: "здание"
+          district: "район"
+          exit: "выход"
+        action_type:
+          enter_zone: "вход в зону"
+          open_feature: "открыть объект"
+        building_type:
+          city: "город"
+          location: "локация"
+        location_kind:
+          village: "деревня"
+          mine: "шахта"
+          exchange: "биржа"
+        npc_role:
+          hostile: "враждебный"
+          arena_bot: "бот арены"
+        terrain_type:
+          outdoor: "улица"
+          city: "город"
+          plains: "равнины"
+          forest: "лес"
+          road: "дорога"
+          water: "вода"
+          mountain: "горы"
+          swamp: "болото"
       city_data: "Данные города"
       col_city_key: "Ключ города"
       col_node_key: "Ключ узла"
@@ -324,6 +351,33 @@ en:
         city: "city"
         outdoor: "outdoor"
         village: "village"
+      enums:
+        hotspot_type:
+          building: "building"
+          district: "district"
+          exit: "exit"
+        action_type:
+          enter_zone: "enter zone"
+          open_feature: "open feature"
+        building_type:
+          city: "city"
+          location: "location"
+        location_kind:
+          village: "village"
+          mine: "mine"
+          exchange: "exchange"
+        npc_role:
+          hostile: "hostile"
+          arena_bot: "arena bot"
+        terrain_type:
+          outdoor: "outdoor"
+          city: "city"
+          plains: "plains"
+          forest: "forest"
+          road: "road"
+          water: "water"
+          mountain: "mountain"
+          swamp: "swamp"
       city_data: "City data"
       col_city_key: "City key"
       col_node_key: "Node key"

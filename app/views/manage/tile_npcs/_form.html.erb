@@ -7,7 +7,7 @@
     <div class="nl-manage-field"><%= form.label :x, t("manage.views.attr_x") %><%= form.number_field :x, min: 0, required: true %></div>
     <div class="nl-manage-field"><%= form.label :y, t("manage.views.attr_y") %><%= form.number_field :y, min: 0, required: true %></div>
     <div class="nl-manage-field"><%= form.label :npc_key, t("manage.views.attr_npc_key") %><%= form.text_field :npc_key, required: true %></div>
-    <div class="nl-manage-field"><%= form.label :npc_role, t("manage.views.attr_npc_role") %><%= form.select :npc_role, TileNpc::NPC_ROLES %></div>
+    <div class="nl-manage-field"><%= form.label :npc_role, t("manage.views.attr_npc_role") %><%= form.select :npc_role, management_enum_options(:npc_role, TileNpc::NPC_ROLES) %></div>
     <div class="nl-manage-field"><%= form.label :level, t("manage.views.col_level") %><%= form.number_field :level, min: 0, required: true %></div>
     <div class="nl-manage-field"><%= form.label :active, t("manage.views.encounter_active") %><%= form.check_box :active %></div>
     <div class="nl-manage-field"><%= label_tag "tile_npc_encounter_count", t("manage.views.fixed_encounter_size") %><%= number_field_tag "tile_npc[encounter_count]", tile_npc.encounter_size, id: "tile_npc_encounter_count", min: 1, max: TileNpc::MAX_ENCOUNTER_SIZE %></div>

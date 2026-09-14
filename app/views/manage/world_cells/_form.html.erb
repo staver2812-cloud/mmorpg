@@ -8,7 +8,7 @@
     </div>
     <div class="nl-manage-field">
       <%= form.label :terrain_type, t("manage.views.col_terrain") %>
-      <%= form.select :terrain_type, MapTileTemplate::TERRAIN_TYPES %>
+      <%= form.select :terrain_type, management_enum_options(:terrain_type, MapTileTemplate::TERRAIN_TYPES) %>
     </div>
     <div class="nl-manage-field">
       <%= form.label :x, t("manage.views.attr_x") %>

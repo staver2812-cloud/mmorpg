@@ -2,7 +2,7 @@
 <%= render "manage/shared/page_header", title: t("manage.views.npc_catalog_title"), description: t("manage.views.npc_catalog_hint"), new_path: new_manage_npc_template_path, new_label: t("manage.views.create_npc_template") %>
 
 <%= form_with url: manage_npc_templates_path, method: :get, class: "nl-manage-filter", local: true do |form| %>
-  <%= form.label :role, t("manage.views.role") %><%= form.select :role, NpcTemplate::ROLES, include_blank: t("manage.views.all_roles"), selected: params[:role] %>
+  <%= form.label :role, t("manage.views.role") %><%= form.select :role, management_enum_options(:npc_role, NpcTemplate::ROLES), include_blank: t("manage.views.all_roles"), selected: params[:role] %>
   <%= form.submit t("manage.filter"), class: "lbut" %><%= link_to t("manage.clear"), manage_npc_templates_path, class: "lbut" %>
 <% end %>
 
@@ -10,7 +10,7 @@
   <thead><tr><th><%= t("manage.views.col_key") %></th><th><%= t("manage.views.col_name") %></th><th><%= t("manage.views.role") %></th><th><%= t("manage.views.col_level") %></th><th><%= t("manage.views.col_hp") %></th><th><%= t("manage.views.col_placements") %></th><th><%= t("manage.views.col_actions") %></th></tr></thead>
   <tbody>
     <% @npc_templates.each do |npc| %>
-      <tr><td><%= npc.npc_key.presence || "—" %></td><td><%= npc.name %></td><td><%= npc.role %></td><td><%= npc.level %></td><td><%= npc.max_hp %></td><td><%= npc.tile_npcs.size %></td>
+      <tr><td><%= npc.npc_key.presence || "—" %></td><td><%= npc.name %></td><td><%= management_enum_label(:npc_role, npc.role) %></td><td><%= npc.level %></td><td><%= npc.max_hp %></td><td><%= npc.tile_npcs.size %></td>
         <td class="nl-manage-table-actions"><%= link_to t("manage.view"), manage_npc_template_path(npc) %> <%= link_to t("manage.edit"), edit_manage_npc_template_path(npc) %></td></tr>
     <% end %>
     <% if @npc_templates.empty? %><tr><td colspan="7" class="nl-manage-empty"><%= t("manage.views.no_npc_templates") %></td></tr><% end %>

@@ -10,7 +10,7 @@
   <thead><tr><th><%= t("manage.views.city_node") %></th><th><%= t("manage.views.col_key") %></th><th><%= t("manage.views.col_name") %></th><th><%= t("manage.views.col_type") %></th><th><%= t("manage.views.col_action") %></th><th><%= t("manage.views.col_geometry") %></th><th><%= t("manage.views.col_active") %></th><th><%= t("manage.views.col_actions") %></th></tr></thead>
   <tbody>
     <% @city_hotspots.each do |hotspot| %>
-      <tr><td><%= hotspot.zone.display_name %></td><td><%= hotspot.key %></td><td><%= hotspot.name %></td><td><%= hotspot.hotspot_type %></td><td><%= hotspot.action_type %></td>
+      <tr><td><%= hotspot.zone.display_name %></td><td><%= hotspot.key %></td><td><%= hotspot.name %></td><td><%= management_enum_label(:hotspot_type, hotspot.hotspot_type) %></td><td><%= management_enum_label(:action_type, hotspot.action_type) %></td>
         <td><%= hotspot.position_x %>,<%= hotspot.position_y %> · <%= hotspot.width || "—" %>×<%= hotspot.height || "—" %></td><td><%= management_boolean(hotspot.active?) %></td>
         <td class="nl-manage-table-actions"><%= link_to t("manage.view"), manage_city_hotspot_path(hotspot) %> <%= link_to t("manage.edit"), edit_manage_city_hotspot_path(hotspot) %></td></tr>
     <% end %>

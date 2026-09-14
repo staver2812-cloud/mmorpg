@@ -19,7 +19,7 @@
       <tr>
         <td><%= building.building_key %></td><td><%= building.name %></td>
         <td><%= building.zone %> [<%= building.x %>, <%= building.y %>]</td>
-        <td><%= building.building_type %></td>
+        <td><%= management_enum_label(:building_type, building.building_type) %></td>
         <td><%= building.destination_zone&.display_name || building.location_short_label %></td>
         <td><%= management_boolean(building.active?) %></td>
         <td class="nl-manage-table-actions"><%= link_to t("manage.view"), manage_tile_building_path(building) %> <%= link_to t("manage.edit"), edit_manage_tile_building_path(building) %></td>
