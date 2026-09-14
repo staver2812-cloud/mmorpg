@@ -365,6 +365,9 @@ ru:
     city_polygon_invalid: "полигон city %{kind} должен содержать от 3 до 32 процентных точек и охватывать площадь"
     airship_station_title_invalid: "airship_station_title должен быть непустой строкой не длиннее 120 символов"
     zone_name_populated: "идентифицирует содержимое региона; меняйте отображаемый title вместо имени"
+    loot_entry_object: "запись лута должна быть объектом"
+    loot_chance_required: "нужен шанс лута"
+    loot_chance_range: "шанс лута должен быть от 0 до 100"
 en:
   manage:
     title: "World Management"
@@ -730,3 +733,6 @@ en:
     city_polygon_invalid: "city %{kind} polygon must contain 3 to 32 percentage points enclosing an area"
     airship_station_title_invalid: "airship_station_title must be a nonblank string of at most 120 characters"
     zone_name_populated: "identifies populated region content; change the display title instead"
+    loot_entry_object: "Loot entry must be an object"
+    loot_chance_required: "Loot chance is required"
+    loot_chance_range: "Loot chance must be between 0 and 100"

@@ -18,6 +18,8 @@ ru:
     license_expires_after_start: "должен быть позже активации"
     license_offer_mismatch: "должен быть покупкой лицензии этого персонажа"
     shop_location_required: "должен указывать авторскую Лавку"
+    fatigue_increase_positive: "прирост усталости должен быть положительным целым"
+    fatigue_recovery_positive: "восстановление усталости должно быть положительным целым"
   nav:
     your_character: "Персонаж"
     inventory: "Инвентарь"

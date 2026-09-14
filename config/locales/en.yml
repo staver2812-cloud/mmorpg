@@ -47,6 +47,8 @@ en:
     license_expires_after_start: "must be after activation"
     license_offer_mismatch: "must be this character's license purchase"
     shop_location_required: "must provide an authored Shop"
+    fatigue_increase_positive: "Fatigue increase must be a positive integer"
+    fatigue_recovery_positive: "Fatigue recovery must be a positive integer"
   hello: "Hello world"
   nav:
     your_character: "Character"

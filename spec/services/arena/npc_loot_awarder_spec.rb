@@ -263,7 +263,7 @@ RSpec.describe Arena::NpcLootAwarder do
       result = award_loot
 
       expect(result.awards).to be_empty
-      expect(result.failures.map(&:message)).to contain_exactly("Loot entry must be an object")
+      expect(result.failures.map(&:message)).to contain_exactly(I18n.t("manage.loot_entry_object"))
       expect(GameEvent.where(recipient: user)).to be_empty
       expect(npc_participation.reload.metadata.dig("loot_resolution", "failures")).to be_present
     end
@@ -278,7 +278,7 @@ RSpec.describe Arena::NpcLootAwarder do
       result = award_loot
 
       expect(result.awards).to be_empty
-      expect(result.failures.map(&:message)).to contain_exactly("Loot chance is required")
+      expect(result.failures.map(&:message)).to contain_exactly(I18n.t("manage.loot_chance_required"))
       expect(character.inventory.inventory_items).to be_empty
       expect(GameEvent.where(recipient: user)).to be_empty
     end
