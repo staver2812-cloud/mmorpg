@@ -946,6 +946,13 @@ def main() -> int:
         and ('data-landmark-inside="1"' in r.text),
         f"url={r.url}",
     )
+    if r.status_code == 200 and 'data-gallows="1"' in r.text:
+        report.add(
+            "gallows desk recovery",
+            'data-gallows-recovery="law"' in r.text
+            or 'data-gallows-recovery="world"' in r.text,
+            f"url={r.url}",
+        )
 
     ok_east, d_east = click_hotspot(s, "east_gate")
     report.add("travel east_gate", ok_east, d_east)
