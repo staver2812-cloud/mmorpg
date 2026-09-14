@@ -18,7 +18,17 @@
   <% injured_bound = Game::World::ObeliskRecall.bound_for(current_character) %>
   <div class="nl-world-action-unavailable" data-world-injury-lock="1" title="<%= t("game.injuries.outdoor_lock_title") %>">
     <span><%= t("game.injuries.outdoor_lock") %></span>
-    <%= link_to t("game.injuries.outdoor_lock_inventory"), inventory_path, class: "nl-sheet-link" %>
+    <%= link_to t("game.injuries.outdoor_lock_inventory"), inventory_path, class: "nl-sheet-link", data: {world_recovery: "inventory"} %>
+    <% if Game::World::CityBuildingCatalog.accessible?(character: current_character, building_key: "hospital") %>
+      ·
+      <%= link_to t("game.buildings.hospital_title_short"),
+            city_building_path("hospital", anchor: "hospital-premium-desk"),
+            class: "nl-sheet-link",
+            data: {world_recovery: "hospital"} %>
+    <% else %>
+      ·
+      <%= link_to t("arena.nav.city"), world_path, class: "nl-sheet-link", data: {world_recovery: "city"} %>
+    <% end %>
     <% if injured_bound.present? %>
       <span data-world-injury-obelisk="1"><%= t("game.injuries.outdoor_lock_obelisk") %></span>
     <% end %>
@@ -58,6 +68,8 @@
                 disabled><%= t("game.world.enter") %></button>
         <span class="building-blocked nl-quests-board__meta" data-world-enter-blocked="1">
           <%= building[:blocked_reason].presence || t("game.world.enter_blocked") %>
+          ·
+          <%= link_to t("arena.nav.city"), world_path, class: "nl-sheet-link", data: {world_recovery: "city"} %>
         </span>
       <% end %>
     <% end %>

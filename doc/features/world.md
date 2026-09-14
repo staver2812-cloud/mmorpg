@@ -3004,6 +3004,7 @@ Before extending the World feature:
 | 2026-09-14 | Mine/exchange lobbies show explicit deferred reasons on disabled Descend/Choose/Buy controls. |
 | 2026-09-14 | Deferred mine Descend recovers to City beside the disabled control. |
 | 2026-09-14 | Deferred mine Choose/Buy recover to City/Shop beside their disabled controls. |
+| 2026-09-14 | Outdoor injury lock recovers via Inventory plus Infirmary/City; blocked Enter recovers to City; empty world state retries World. |
 | 2026-09-14 | Outdoor heavy/combat injury clears map destinations (`locked_reason: :injured`), shows recovery copy + Inventory CTA, and routes the injury chip to Inventory when Infirmary is out of district. |
 | 2026-09-14 | Outdoor fatigue lock links to Tavern when colocated (else City); blocked Enter shows visible reason (`data-world-enter-blocked`). |
 
