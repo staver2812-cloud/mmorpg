@@ -50,7 +50,7 @@
               <td class="nl-sheet-vm" data-sheet-vm="<%= character.user&.currency_wallet&.veil_marks.to_i %>">
                 <%= number_with_delimiter(character.user&.currency_wallet&.veil_marks.to_i) %> VM
                 <% if Game::World::CityBuildingCatalog.accessible?(character:, building_key: "hospital") %>
-                  · <%= link_to t("game.sheet.veil_marks_open_cta"), city_building_path("hospital"), class: "nl-sheet-link" %>
+                  · <%= link_to t("game.sheet.veil_marks_open_cta"), city_building_path("hospital"), class: "nl-sheet-link", data: {sheet_recovery: "hospital"} %>
                 <% elsif character == current_character %>
                   · <%= link_to t("arena.nav.city"), world_path, class: "nl-sheet-link", data: {sheet_recovery: "world"} %>
                 <% end %>
@@ -62,7 +62,7 @@
               <td class="nl-sheet-vault" data-sheet-vault="<%= vault_nv %>">
                 <%= number_with_delimiter(vault_nv) %> NV
                 <% if Game::World::CityBuildingCatalog.accessible?(character:, building_key: "bank") %>
-                  · <%= link_to t("game.sheet.vault_open_cta"), city_building_path("bank"), class: "nl-sheet-link" %>
+                  · <%= link_to t("game.sheet.vault_open_cta"), city_building_path("bank"), class: "nl-sheet-link", data: {sheet_recovery: "bank"} %>
                 <% elsif character == current_character %>
                   · <%= link_to t("arena.nav.city"), world_path, class: "nl-sheet-link", data: {sheet_recovery: "world"} %>
                 <% end %>

@@ -19,7 +19,9 @@
   <p class="nl-quests-board__meta" data-bank-vm-line="1">
     <%= t("game.buildings.bank_vm", amount: local_assigns.fetch(:veil_marks, 0)) %>
     <% if Game::World::CityBuildingCatalog.accessible?(character: current_character, building_key: "hospital") %>
-      · <%= link_to t("game.sheet.veil_marks_open_cta"), city_building_path("hospital"), class: "nl-sheet-link" %>
+      · <%= link_to t("game.sheet.veil_marks_open_cta"), city_building_path("hospital"), class: "nl-sheet-link", data: {bank_recovery: "hospital"} %>
+    <% else %>
+      · <%= link_to t("arena.nav.city"), world_path, class: "nl-sheet-link", data: {bank_recovery: "world"} %>
     <% end %>
   </p>
   <div class="nl-handbook__grid">

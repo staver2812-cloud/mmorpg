@@ -221,6 +221,14 @@ def main() -> int:
         ),
         f"url={r.url}",
     )
+    if r.status_code == 200 and "nl-character-sheet" in r.text:
+        report.add(
+            "player sheet vault/VM recovery",
+            'data-sheet-recovery="bank"' in r.text
+            or 'data-sheet-recovery="hospital"' in r.text
+            or 'data-sheet-recovery="world"' in r.text,
+            f"url={r.url}",
+        )
 
     r = s.get(f"{BASE}/city/buildings/hospital", timeout=TIMEOUT, allow_redirects=True)
     report.add(
@@ -687,6 +695,13 @@ def main() -> int:
         and ('data-landmark-inside="1"' in r.text),
         f"url={r.url}",
     )
+    if r.status_code == 200 and 'data-bank-vm-line="1"' in r.text:
+        report.add(
+            "bank VM desk recovery",
+            'data-bank-recovery="hospital"' in r.text
+            or 'data-bank-recovery="world"' in r.text,
+            f"url={r.url}",
+        )
     if 'data-bank-wallet-empty="1"' in r.text:
         report.add(
             "bank empty wallet recovery",
