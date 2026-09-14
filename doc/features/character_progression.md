@@ -753,6 +753,7 @@ Before extending Character Progression:
 | 2026-09-14 | Nature Child (`nature_child`, source ID `22`) is selectable; owned perk raises waterbody drinking recovery to four fatigue points via World. |
 | 2026-09-14 | Owner profile idle allocation note links to World and Training hall when no free primary-stat points remain. |
 | 2026-09-14 | Visitor empty public-perks note recovers via World. |
+| 2026-09-14 | Owner sheet empty NV recovers via Junk/Shop Sell/City; vault/VM out-of-district recover via City. |
 | 2026-09-14 | Empty Your licenses note recovers via Shop Licenses. |
 | 2026-09-14 | Idle Stats/Skills/Perks allocation pages recover to World when no free points remain. |
 | 2026-09-13 | Skill/perk allocation UI prefers captured RU source labels for `:ru`, localizes skill categories and spend rejects. |
