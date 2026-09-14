@@ -1207,6 +1207,7 @@ Final rerun results are in the
 - 2026-09-14: Infirmary premium short of Veil Marks recovers via topup anchor, Bank, or City.
 - 2026-09-14: Market stall-rent deferred note and village shop-shell stock note recover via Shop/Junk/City.
 - 2026-09-14: Infirmary “no injuries” note recovers to City.
+- 2026-09-14: Infirmary Traumatologist need-healer state recovers via Perks and City.
 - 2026-09-14: Law Abode current-alignment state recovers to City.
 - 2026-09-14: Gallows east-gate note recovers to City.
 - 2026-09-14: Prison/Gallows Law desk links fall back to City when Law Abode is out of district.

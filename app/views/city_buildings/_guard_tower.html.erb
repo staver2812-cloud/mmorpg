@@ -14,7 +14,7 @@
   <% if routes.empty? %>
     <p class="nl-quests-board__meta" data-guard-empty="1">
       <%= t("game.buildings.guard_empty") %>
-      <%= link_to t("game.common.city"), world_path, class: "nl-sheet-link" %>
+      <%= link_to t("game.common.city"), world_path, class: "nl-sheet-link", data: {guard_recovery: "world"} %>
     </p>
   <% else %>
     <ul class="nl-city-landmark__notes">

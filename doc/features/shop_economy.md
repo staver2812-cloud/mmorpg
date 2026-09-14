@@ -1222,6 +1222,7 @@ automated completion results are recorded in
 | 2026-09-14 | Empty Licenses section recovers to Buy; Market stalls/Numismatics/Auction lots are explicitly deferred with Shop/Ash Buyer/Bank CTAs. |
 | 2026-09-14 | Merchant qualification off-desk states recover via Market/Shop/Licenses/City links. |
 | 2026-09-14 | Doctor onboarding Licenses/City recovery; Infirmary premium short of VM recovers via topup/Bank/City. |
+| 2026-09-14 | Infirmary Traumatologist need-healer state recovers via Perks and City. |
 | 2026-09-14 | Narrow Shop: empty note drops forced 800px min-width; Licenses grid stacks to one column below 520px. |
 | 2026-09-13 | TradeOffers stale/refresh alerts and LicenseRules purchase blocks use the same `game.shop.*` i18n surface. |
 | 2026-09-13 | Shop Location access and MerchantQualification step/payment alerts use `game.shop.*` / `game.flashes.shop_location_required`. |

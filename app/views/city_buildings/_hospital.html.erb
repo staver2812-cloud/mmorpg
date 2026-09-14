@@ -70,8 +70,10 @@
     </p>
   <% else %>
     <p class="nl-empty-note" data-hospital-traumatologist-status="need-perk"><%= t("game.shop.traumatologist_need_healer") %></p>
-    <p class="nl-quests-board__meta">
-      <%= link_to t("game.shop.traumatologist_open_perks"), perks_character_path(current_character), class: "nl-sheet-link" %>
+    <p class="nl-quests-board__meta" data-hospital-traumatologist-next="1">
+      <%= link_to t("game.shop.traumatologist_open_perks"), perks_character_path(current_character), class: "nl-sheet-link", data: {hospital_recovery: "perks"} %>
+      ·
+      <%= link_to t("arena.nav.city"), world_path, class: "nl-sheet-link", data: {hospital_recovery: "world"} %>
     </p>
   <% end %>
 </section>
