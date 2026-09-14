@@ -668,6 +668,12 @@ def main() -> int:
             "data-bank-recovery=" in r.text,
             f"url={r.url}",
         )
+    if 'data-bank-item-empty="1"' in r.text:
+        report.add(
+            "bank empty item-locker Inventory recovery",
+            'data-bank-recovery="inventory"' in r.text,
+            f"url={r.url}",
+        )
     r = s.get(f"{BASE}/city/buildings/souvenir_shop", timeout=TIMEOUT, allow_redirects=True)
     report.add(
         "GET /city/buildings/souvenir_shop",
