@@ -1650,3 +1650,31 @@ select.nl-fight-select,
     width: 42px;
   }
 }
+
+/* Short landscape: keep fight controls reachable in a short viewport. */
+@media (max-height: 430px) and (orientation: landscape) {
+  .arena-match-page {
+    min-width: 0;
+    padding: 2px;
+  }
+
+  .arena-fight-layout {
+    min-height: 0;
+    gap: 2px;
+  }
+
+  .fighter-paperdoll {
+    --nl-fight-doll-scale: 0.5;
+    width: 130px;
+    height: 169px;
+  }
+
+  .arena-combat-log {
+    max-height: 120px;
+  }
+
+  .nl-fight-magic-slot {
+    flex-basis: 36px;
+    width: 36px;
+  }
+}
