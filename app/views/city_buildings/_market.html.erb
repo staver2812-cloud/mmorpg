@@ -6,8 +6,8 @@
 </p>
 
 <p class="nl-city-building-notice">
-  <%= link_to t("game.shop.title"), shop_path, class: "lbut" %>
-  <%= link_to t("game.buildings.junk_dealer_link"), city_building_path("junk_dealer"), class: "lbut" %>
+  <%= link_to t("game.shop.title"), shop_path, class: "lbut", data: {market_recovery: "shop"} %>
+  <%= link_to t("game.buildings.junk_dealer_link"), city_building_path("junk_dealer"), class: "lbut", data: {market_recovery: "junk"} %>
 </p>
 
 <%= render "city_buildings/junk_buyback", offers: local_assigns.fetch(:offers, []) %>

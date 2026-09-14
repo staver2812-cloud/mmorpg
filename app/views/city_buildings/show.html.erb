@@ -5,7 +5,7 @@
         <h1><%= @building["title"] %></h1>
         <p><%= @building["summary"] %></p>
       </div>
-      <%= link_to t("arena.nav.city"), world_path, class: "lbut", data: {turbo: false} %>
+      <%= link_to t("arena.nav.city"), world_path, class: "lbut", data: {turbo: false, building_recovery: "world"} %>
     </header>
     <%= render "city_buildings/airship", routes: @airship_routes, building: @building %>
   </div>
@@ -17,7 +17,7 @@
           <h1><%= @building["title"] %></h1>
           <p><%= @building["summary"] %></p>
         </div>
-        <%= link_to t("arena.nav.city"), world_path, class: "lbut", data: {turbo: false} %>
+        <%= link_to t("arena.nav.city"), world_path, class: "lbut", data: {turbo: false, building_recovery: "world"} %>
       </header>
 
       <p class="nl-city-building-notice"<% if @building["kind"] == "market" %> data-market-notice="1"<% end %>>

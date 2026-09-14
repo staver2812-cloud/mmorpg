@@ -219,13 +219,13 @@
           </tbody>
         </table>
         <p>
-          <%= link_to t("nav.your_character"), player_path(name: current_character.name), class: "lbut" %>
+          <%= link_to t("nav.your_character"), player_path(name: current_character.name), class: "lbut", data: {school_recovery: "profile"} %>
           <% if unspent.positive? %>
             <% if stat_pts.positive? %>
-              <%= link_to t("game.buildings.school_allocate_stats"), stats_character_path(current_character), class: "lbut", data: {school_allocate: "stats"} %>
+              <%= link_to t("game.buildings.school_allocate_stats"), stats_character_path(current_character), class: "lbut", data: {school_allocate: "stats", school_recovery: "stats"} %>
             <% end %>
             <% if combat_pts.positive? || peace_pts.positive? %>
-              <%= link_to t("game.buildings.school_allocate_skills"), skills_character_path(current_character), class: "lbut", data: {school_allocate: "skills"} %>
+              <%= link_to t("game.buildings.school_allocate_skills"), skills_character_path(current_character), class: "lbut", data: {school_allocate: "skills", school_recovery: "skills"} %>
             <% end %>
           <% else %>
             <span class="nl-quests-board__meta" data-school-spent="1">

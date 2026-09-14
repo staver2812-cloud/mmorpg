@@ -250,6 +250,12 @@ def main() -> int:
         r.status_code == 200 and 'data-landmark-inside="1"' in r.text,
         f"url={r.url}",
     )
+    if r.status_code == 200:
+        report.add(
+            "building chrome City recovery",
+            'data-building-recovery="world"' in r.text,
+            f"url={r.url}",
+        )
     report.add(
         "hospital traumatologist desk",
         r.status_code == 200 and 'data-hospital-traumatologist="1"' in r.text,
