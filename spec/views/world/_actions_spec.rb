@@ -33,6 +33,7 @@ RSpec.describe "world/_actions.html.erb", type: :view do
 
     render partial: "world/actions", locals: {available_actions: [], position:}
 
+    expect(rendered).to have_css("[data-world-fatigue-lock='1']")
     expect(rendered).to have_content(I18n.t("game.world.actions_unavailable_title"))
   end
 
