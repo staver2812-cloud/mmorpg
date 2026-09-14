@@ -1690,7 +1690,8 @@ button.nl-city-hotspot,
   .nl-city-building-tab,
   .nl-world-location-tab,
   .nl-world-location-sections .lbut,
-  .nl-handbook .lbut {
+  .nl-handbook .lbut,
+  .nl-world-action-button {
     min-height: 44px;
     min-width: 44px;
     padding: 8px 10px;
