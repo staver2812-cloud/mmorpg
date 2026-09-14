@@ -135,8 +135,12 @@ Earlier `Done` rows remain evidence for their explicitly recorded surfaces,
 sizes and flows. They do not certify the expanded adaptive standard on every
 screen. `RESPONSIVE-001` retains the completed 390px/820px and recorded desktop
 checks; a full audit of the additional 320px, short-landscape, coarse-pointer
-and zoom requirements is **Not Done**. Document and close those acceptance
-gaps per affected feature before claiming full-standard launch readiness.
+and zoom requirements is **Not Done**. Soft-release CSS now covers ≤360px shell
+compression, short-landscape shell/Arena, and coarse-pointer ~44px controls on
+city/shell/Shop/Arena/Inventory/profile/quests desks, but the recorded
+acceptance sample for every viewport/input combination remains open. Document
+and close those acceptance gaps per affected feature before claiming
+full-standard launch readiness.
 
 | Reachable area/state | Live evidence required | Local acceptance surface | Status | Remaining work |
 | --- | --- | --- | --- | --- |
@@ -785,8 +789,9 @@ Required behavior:
 - Successful gathering, successful fishing/proficiency and digging remain
   separate deferred profession flows in `doc/features/professions.md`.
   Ordinary Drink and the no-bait Fish response are already implemented.
-  Nature Child's four-point sip is published; its unimplemented perk handoff
-  belongs to `doc/features/character_progression.md` section 6.5.
+  Nature Child's four-point sip ships when perk `nature_child` is owned;
+  Wanderer/outdoor HP variants remain evidence gaps in
+  `doc/features/character_progression.md` section 6.5.
 - Broader combat formula, magic/status, trauma, and reward work remains owned by
   Pillar 3; it must continue using the same participant/result pipeline.
 
@@ -851,7 +856,7 @@ the next implementation step is.
 | Airship transport | Yes: the completed Forpost-to-Oktal boarding, departure wait, flight, arrival, and station-reload capture. | `AIRSHIP-TRAVEL-001` is Done for configured capability: atomic fare/boarding, persisted region-qualified progress, bounded cells, flight audience isolation, explicit landing, and recovery. | Normal routes remain unbookable until destination/path/schedule content is authored. Keep one populated region; walking border mappings remain uncaptured. |
 | Wilderness movement | Yes: live movement captures, wiki fatigue rules, and movement feature doc. | Timed offers, acceptance, completion, reload, sparse boundaries, stale-offer cancellation, bounded Wanderer timing, `1..2` step fatigue, three-minute recovery, and `86%` Move/Look/Enter gate implemented. | Isolate terrain/effect/encumbrance timing and high-fatigue combat inputs before adding them. |
 | City movement | Yes: the current five live nodes, native-pixel hotspot/hover behavior, eight route arrows, Central and Law gate handoffs, building return, and level-16 Arena availability are captured. | Implemented for MVP: immediate five-node transitions, level-zero Arena, fresh owned offers, project city art with CSS highlight crops, original generated route-arrow decorations, tooltips, keyboard landmarks, shared pane-relative display sizing on a fixed native plane, a complete original Central Square image with reauthored targets, four distinct original quarter scenes, missing-art fallback controls, Central and Law gate pairings, and no city grid/timer or geometry authority. | Use the September 9 Main → Residential → Law recheck for the eastern starter handoff; capture each deferred service interior before extending its actions. |
-| Tile-local action offers | Yes: movement, outdoor NPC, city/building entry, and `look`/`fis`/`dri`/`dig` client observations. | Empty Look (28 seconds), immediate Drink recovery (two fatigue, 60-second lock), and no-bait Fish (30-second lock) are implemented with owned offers, persisted deadlines and one-time effects/results. Fishing and drinking have no skill gate; digging has no completed flow. | Keep successful fishing/proficiency, plant gathering and digging deferred. Preserve wiki inputs without inventing catch/growth formulas or underground mine mechanics. Nature Child's published four-point recovery awaits the supported perk handoff tracked by Character Progression. |
+| Tile-local action offers | Yes: movement, outdoor NPC, city/building entry, and `look`/`fis`/`dri`/`dig` client observations. | Empty Look (28 seconds), immediate Drink recovery (two fatigue, 60-second lock; four with owned `nature_child`), and no-bait Fish (30-second lock) are implemented with owned offers, persisted deadlines and one-time effects/results. Fishing and drinking have no skill gate; digging has no completed flow. | Keep successful fishing/proficiency, plant gathering and digging deferred. Preserve wiki inputs without inventing catch/growth formulas or underground mine mechanics. Nature Child four-point sip ships; Wanderer/outdoor HP variants remain evidence gaps. |
 | NPCs and drops | Yes: hostile behavior, arena mannequin drops, paired wild rat-tail drops, supplied `24 NV` result, participant-level defeat, XP caps, and source-backed return context. | Implemented for the declared encounter/typed-award pipeline: explicit paired rats, distinct targeting, all-NPC response, atomic retry-safe item/NV awards, exact `35` total paired-encounter XP, fixed-anchor final defeat, sampled-anchor post-victory eligibility, surrender-compatible sides, and allowlisted return. The active Training Dummy item chance is explicit; the authored Plague Rat item identity remains at a `0.0` evidence hold. | Capture the exact Plague Rat item probability, Observation/multi-drop, general multi-NPC/player-group XP, and NPC-specific NV probability before enabling/tuning those values or authoring money onto a production NPC; quest NPC behavior remains separate. |
 | NPC quest interactions | Needs dedicated Neverlands capture. | General NPC quest/story stack remains absent. Shop implements the published Merchant license-qualification steps, with original dialogue and garment reward incomplete. | Capture exact quest UI, NPC dialogue flow, task/journal state, reward/turn-in rules, and location gating before implementation. |
 | Combat | Yes: combat captures, public logs, wiki AP/critical/wear/XP constants, item/NV search outputs, magic, equipment effects, and result flow. | Bounded physical MVP: `DONE`. Full Neverlands Combat: `EVIDENCE_NEEDED`. | Use the canonical Combat Completion Matrix for each mechanic and exact next gate. |
