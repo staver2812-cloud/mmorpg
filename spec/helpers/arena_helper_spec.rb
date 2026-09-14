@@ -189,4 +189,19 @@ RSpec.describe ArenaHelper, type: :helper do
       end
     end
   end
+
+  describe "#format_duration" do
+    it "formats durations through fight i18n units" do
+      expect(helper.format_duration(nil)).to eq(I18n.t("game.fight.duration_zero"))
+      expect(helper.format_duration(45)).to eq(I18n.t("game.fight.duration_seconds", count: 45))
+      expect(helper.format_duration(180)).to eq(I18n.t("game.fight.duration_minutes", count: 3))
+      expect(helper.format_duration(195)).to eq(
+        I18n.t("game.fight.duration_minutes_seconds", minutes: 3, seconds: 15)
+      )
+      expect(helper.format_duration(3600)).to eq(I18n.t("game.fight.duration_hours", count: 1))
+      expect(helper.format_duration(3900)).to eq(
+        I18n.t("game.fight.duration_hours_minutes", hours: 1, minutes: 5)
+      )
+    end
+  end
 end

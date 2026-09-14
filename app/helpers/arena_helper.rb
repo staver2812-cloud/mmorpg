@@ -203,18 +203,26 @@ module ArenaHelper
   # @param seconds [Integer] duration in seconds
   # @return [String] formatted duration
   def format_duration(seconds)
-    return "0s" unless seconds&.positive?
+    return I18n.t("game.fight.duration_zero") unless seconds&.positive?
 
     if seconds < 60
-      "#{seconds}s"
+      I18n.t("game.fight.duration_seconds", count: seconds)
     elsif seconds < 3600
       minutes = seconds / 60
       secs = seconds % 60
-      secs.positive? ? "#{minutes}m #{secs}s" : "#{minutes}m"
+      if secs.positive?
+        I18n.t("game.fight.duration_minutes_seconds", minutes:, seconds: secs)
+      else
+        I18n.t("game.fight.duration_minutes", count: minutes)
+      end
     else
       hours = seconds / 3600
       minutes = (seconds % 3600) / 60
-      minutes.positive? ? "#{hours}h #{minutes}m" : "#{hours}h"
+      if minutes.positive?
+        I18n.t("game.fight.duration_hours_minutes", hours:, minutes:)
+      else
+        I18n.t("game.fight.duration_hours", count: hours)
+      end
     end
   end
 
