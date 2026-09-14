@@ -33,6 +33,9 @@
         <p><%= t("game.buildings.law_alignment_hint.#{key}") %></p>
         <% if current_choice %>
           <button type="button" class="lbut" disabled><%= t("game.buildings.law_current_cta") %></button>
+          <p class="nl-quests-board__meta" data-law-choice-current-next="1">
+            <%= link_to t("arena.nav.city"), world_path, class: "nl-sheet-link", data: {law_recovery: "world"} %>
+          </p>
         <% elsif first_pledge %>
           <%= button_to t("game.buildings.law_pledge_cta"),
                 city_building_law_path("law_abode"),

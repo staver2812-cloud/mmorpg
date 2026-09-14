@@ -1207,6 +1207,7 @@ Final rerun results are in the
 - 2026-09-14: Infirmary premium short of Veil Marks recovers via topup anchor, Bank, or City.
 - 2026-09-14: Market stall-rent deferred note and village shop-shell stock note recover via Shop/Junk/City.
 - 2026-09-14: Infirmary “no injuries” note recovers to City.
+- 2026-09-14: Law Abode current-alignment state recovers to City.
 - 2026-09-13: Infirmary, Pitch Bank, Law Abode, and Veil Obelisk desks also render the shared landmark chrome (inside lead + exit notes) for consistent exit affordances.
 - 2026-09-13: Infirmary premium desk shows live Assault/Heal scroll bag totals matching HUD chips; greys out VM buys when short (`data-hospital-premium-affordable`); also `data-hospital-premium-any-affordable` and sandbox top-up readiness (`data-hospital-topup-ready` / `data-hospital-topup-wait`); rest desk lists live injury summary (`data-hospital-injuries`); healer craft shows bag mass/slots (`data-hospital-mass`); rest readiness exposed as `data-hospital-rest-ready`.
 - 2026-09-13: Pitch Bank adds deposit-all / withdraw-all CTAs plus locker/wallet/vault data markers; shows VM with Infirmary link (`data-bank-vm`); deposit/withdraw readiness via `data-bank-can-deposit` / `data-bank-can-withdraw`; item locker readiness via `data-bank-can-store` / `data-bank-can-retrieve` / `data-bank-item-options`.
