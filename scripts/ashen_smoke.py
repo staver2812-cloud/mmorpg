@@ -407,6 +407,11 @@ def main() -> int:
             "city_hall landmark inside chrome",
             'data-landmark-inside="1"' in r.text,
         )
+        report.add(
+            "city_hall desk recovery",
+            "data-city-hall-recovery=" in r.text,
+            f"url={r.url}",
+        )
     r = s.get(f"{BASE}/city/buildings/post", timeout=TIMEOUT, allow_redirects=True)
     report.add(
         "GET /city/buildings/post",

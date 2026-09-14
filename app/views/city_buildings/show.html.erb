@@ -133,19 +133,19 @@
           </p>
           <p>
             <% if Game::World::CityBuildingCatalog.accessible?(character: current_character, building_key: "bank") %>
-              <%= link_to t("game.buildings.bank_title"), city_building_path("bank"), class: "lbut" %>
+              <%= link_to t("game.buildings.bank_title"), city_building_path("bank"), class: "lbut", data: {city_hall_recovery: "bank"} %>
             <% end %>
             <% if Game::World::CityBuildingCatalog.accessible?(character: current_character, building_key: "hospital") %>
-              <%= link_to t("game.buildings.hospital_title_short"), city_building_path("hospital"), class: "lbut" %>
+              <%= link_to t("game.buildings.hospital_title_short"), city_building_path("hospital"), class: "lbut", data: {city_hall_recovery: "hospital"} %>
             <% end %>
             <% if Game::World::CityBuildingCatalog.accessible?(character: current_character, building_key: "post") %>
-              <%= link_to t("game.buildings.post_title"), city_building_path("post"), class: "lbut" %>
+              <%= link_to t("game.buildings.post_title"), city_building_path("post"), class: "lbut", data: {city_hall_recovery: "post"} %>
             <% end %>
             <% if Game::World::CityBuildingCatalog.accessible?(character: current_character, building_key: "clan_hall") %>
-              <%= link_to t("game.buildings.clan_hall_short"), city_building_path("clan_hall"), class: "lbut" %>
+              <%= link_to t("game.buildings.clan_hall_short"), city_building_path("clan_hall"), class: "lbut", data: {city_hall_recovery: "clan_hall"} %>
             <% end %>
             <% if Game::World::CityBuildingCatalog.accessible?(character: current_character, building_key: "junk_dealer") %>
-              <%= link_to t("game.buildings.junk_dealer_link"), city_building_path("junk_dealer"), class: "lbut" %>
+              <%= link_to t("game.buildings.junk_dealer_link"), city_building_path("junk_dealer"), class: "lbut", data: {city_hall_recovery: "junk"} %>
             <% end %>
           </p>
         </section>
@@ -156,7 +156,7 @@
           <% if (chip = quest_journal.active_chip).present? %>
             <p class="nl-quests-board__active<%= " nl-quests-board__active--ready" if quest_journal.active_chip_ready? %>"
                data-city-hall-chip-ready="<%= quest_journal.active_chip_ready? ? "1" : "0" %>">
-              <%= link_to chip, quests_path %>
+              <%= link_to chip, quests_path, data: {city_hall_recovery: "quests"} %>
             </p>
           <% end %>
           <ul class="nl-quests__summary" aria-label="<%= t("game.quests.summary_aria") %>"
@@ -170,7 +170,7 @@
             <li><span><%= t("game.quests.status.locked") %></span> <b><%= quest_counts.fetch("locked", 0) %></b></li>
             <li><span><%= t("game.quests.status.completed") %></span> <b><%= quest_counts.fetch("completed", 0) %></b></li>
           </ul>
-          <%= link_to t("game.quests.board_open"), quests_path, class: "lbut" %>
+          <%= link_to t("game.quests.board_open"), quests_path, class: "lbut", data: {city_hall_recovery: "quests"} %>
           <p class="nl-quests-board__meta"><%= t("game.quests.board_meta") %></p>
         </section>
       <% end %>
