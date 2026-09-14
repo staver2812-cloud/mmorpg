@@ -743,4 +743,5 @@ Before extending Character Progression:
 | 2026-09-13 | Owner sheet shows private Veil Marks balance (`data-sheet-vm`) with Infirmary link when colocated; NV wallet also exposes `data-sheet-nv`; locker occupancy uses `data-sheet-locker`; vault NV uses `data-sheet-vault`. |
 | 2026-09-13 | Skill/perk allocation UI prefers captured RU source labels for `:ru`, localizes skill categories and spend rejects. |
 | 2026-09-13 | Stat/skill/perk allocation Reset/Save and `(base: N)` chrome use `game.profile.allocation_*` / `stat_base` i18n. |
+| 2026-09-13 | Character/licenses page titles use `game.profile.*_title`; license kinds use `game.licenses.kinds.*`. |
 | 2026-08-26 | Added the exact `80 + level thresholds + Extra Action Points` combat-profile effect and source perk `15` Careful Fighter with half-probability equipment wear. |

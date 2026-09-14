@@ -314,6 +314,8 @@ en:
       stats_title: "Stats — %{name}"
       skills_title: "Skills — %{name}"
       perks_title: "Perks — %{name}"
+      licenses_title: "Licenses — %{name}"
+      character_title: "%{name} — Character"
       free_points: "Free points"
       combat_points: "Combat points"
       peace_points: "Peace points"
@@ -556,6 +558,9 @@ en:
       empty: "You have no licenses."
       type: "Type"
       valid_until: "Valid until"
+      kinds:
+        trading: "Trading"
+        doctor: "Doctor"
     chat:
       empty: "No messages yet."
       private: "Private message"
@@ -563,6 +568,7 @@ en:
       global: "Global"
       whisper_channel: "Private Whisper"
       arena_channel: "Arena Match #%{id}"
+      page_title: "%{name} — Chat"
       placeholder: "Type a message..."
       message_blank: "message cannot be blank"
       location_required: "Current location required"
@@ -575,6 +581,8 @@ en:
       privacy_blocked: "%{name} does not accept private messages."
     fight:
       log: "Fight log"
+      page_title: "Fight #%{id}"
+      log_page_title: "Fight log #%{id}"
       statistics: "Statistics"
       no_events: "No fight events recorded."
       participants: "Fight participants"

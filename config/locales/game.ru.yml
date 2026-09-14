@@ -314,6 +314,8 @@ ru:
       stats_title: "Характеристики — %{name}"
       skills_title: "Навыки — %{name}"
       perks_title: "Способности — %{name}"
+      licenses_title: "Лицензии — %{name}"
+      character_title: "%{name} — Персонаж"
       free_points: "Свободные очки"
       combat_points: "Боевые очки"
       peace_points: "Мирные очки"
@@ -556,6 +558,9 @@ ru:
       empty: "У вас нет лицензий."
       type: "Тип"
       valid_until: "Действует до"
+      kinds:
+        trading: "Торговая"
+        doctor: "Врачебная"
     chat:
       empty: "Пока нет сообщений."
       private: "Личное сообщение"
@@ -563,6 +568,7 @@ ru:
       global: "Общий"
       whisper_channel: "Личный шёпот"
       arena_channel: "Бой арены #%{id}"
+      page_title: "%{name} — Чат"
       placeholder: "Введите сообщение..."
       message_blank: "Сообщение не может быть пустым"
       location_required: "Нужна текущая локация"
@@ -575,6 +581,8 @@ ru:
       privacy_blocked: "%{name} не принимает личные сообщения."
     fight:
       log: "Лог боя"
+      page_title: "Бой №%{id}"
+      log_page_title: "Лог боя №%{id}"
       statistics: "Статистика"
       no_events: "Событий боя нет."
       participants: "Участники боя"

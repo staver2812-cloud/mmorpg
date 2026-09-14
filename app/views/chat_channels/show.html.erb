@@ -1,4 +1,4 @@
-<% content_for :title, "#{@chat_channel.name} - Chat" %>
+<% content_for :title, t("game.chat.page_title", name: @chat_channel.name) %>
 <% content_for :hide_shell_chat_composer, true %>
 <% content_for :hide_shell_chat_history, true %>
 
