@@ -89,7 +89,7 @@ ru:
     unknown: "Неизвестно"
     bot_fallback: "Бот арены"
     no_character: "Нет персонажа"
-    recover_hp: "Восстановитесь перед боем: %{hp}% HP, нужно %{min}%"
+    recover_hp: "Восстановитесь перед боем: %{hp}% ОЗ, нужно %{min}%"
     warning: "Внимание"
     timeout_label: "Таймаут"
     rule: "правило %{value}"

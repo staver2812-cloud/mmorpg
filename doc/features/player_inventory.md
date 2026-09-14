@@ -507,4 +507,5 @@ shipped Inventory management routes.
 | 2026-09-13 | Paper-doll empty-slot labels resolve through `EquipmentSlots.label_for` → `game.equipment.slots.*` i18n. |
 | 2026-09-13 | Family-section discard chrome uses `game.inventory.choose_action` / `discard_action` / `discard_resources_confirm` / `game.common.ok`. |
 | 2026-09-14 | Equip/use requirement labels resolve through `game.details.*` / `game.skills.*` instead of English `titleize`. |
+| 2026-09-14 | Inventory item-type / unknown detail fallbacks use `game.inventory.item_types.*` and non-titleized keys. |
 | 2026-09-10 | Integrated seven original Shop-item illustrations into carried rows and shared equipment slots; extended the Shop browser flow through wear, persisted slot/stat confirmation, removal and resale. |

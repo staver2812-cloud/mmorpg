@@ -361,7 +361,11 @@ module InventoriesHelper
 
     lines << [I18n.t("game.details.description"), template.description] if template.description.present?
 
-    lines.presence || [[I18n.t("game.details.description"), template.item_type.to_s.titleize]]
+    lines.presence || [[I18n.t("game.details.description"), inventory_item_type_label(template.item_type)]]
+  end
+
+  def inventory_item_type_label(item_type)
+    I18n.t("game.inventory.item_types.#{item_type}", default: item_type.to_s.tr("_", " "))
   end
 
   def inventory_item_requirements(item)
@@ -471,7 +475,7 @@ module InventoriesHelper
     return inventory_skill_label(key) if ITEM_SKILL_I18N_KEYS.key?(key)
 
     i18n_key = ITEM_DETAIL_I18N_KEYS[key]
-    base = i18n_key ? I18n.t("game.details.#{i18n_key}") : key.titleize
+    base = i18n_key ? I18n.t("game.details.#{i18n_key}") : I18n.t("game.details.#{key}", default: key.tr("_", " "))
     parent_key = normalize_item_detail_key(parent)
     return base if parent.blank? || %w[stats skills requirements properties effects].include?(parent_key)
 
@@ -484,7 +488,7 @@ module InventoriesHelper
     return I18n.t("game.skills.#{i18n_key}") if i18n_key
 
     definition = Game::Skills::PassiveSkillRegistry.find(key)
-    definition&.fetch(:name) || key.titleize
+    definition&.fetch(:name) || I18n.t("game.skills.#{key}", default: key.tr("_", " "))
   end
 
   def formatted_item_value(value, signed: true)
