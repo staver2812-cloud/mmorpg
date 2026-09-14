@@ -16,7 +16,7 @@
     <div class="nl-manage-field"><%= form.label :active %><%= form.check_box :active %></div>
     <div class="nl-manage-field nl-manage-field--wide">
       <%= form.label :action_params %><%= form.text_area :action_params, value: pretty_json(city_hotspot.action_params), spellcheck: false %>
-      <small class="nl-manage-help"><code>enter_zone</code> uses destination_x/y and optional direction. <code>open_feature</code> uses an allowlisted feature key such as arena, shop, market, airship_station, or hospital.</small>
+      <small class="nl-manage-help"><%= t("manage.views.help_hotspot_params_html").html_safe %></small>
     </div>
   </div>
   <%= render "manage/shared/form_actions", form:, submit_label:, cancel_path: %>

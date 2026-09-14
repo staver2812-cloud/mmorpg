@@ -12,7 +12,7 @@
       <div class="nl-manage-field"><%= label_tag "#{field_id}_#{key}", label %><%= number_field_tag "#{prefix}[#{key}]", sample[key], id: "#{field_id}_#{key}", min: key == "weight" ? 1 : 0 %></div>
     <% end %>
   </div>
-  <p class="nl-manage-help">Fill 1–10 members; leave unused rows blank. Use an exact level or a minimum/maximum pair. A range requires explicit HP and does not scale combat stats. Blank weight means 1; weights describe the authored local policy.</p>
+  <p class="nl-manage-help"><%= t("manage.views.help_roster_members") %></p>
   <% TileNpc::MAX_ENCOUNTER_SIZE.times do |member_index| %>
     <% member = Array(sample["members"])[member_index].to_h %>
     <% member_prefix = "#{prefix}[members][#{member_index}]" %>

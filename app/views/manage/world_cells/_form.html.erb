@@ -25,7 +25,7 @@
     <div class="nl-manage-field nl-manage-field--wide">
       <%= form.label :metadata, t("manage.views.metadata_json") %>
       <%= form.text_area :metadata, value: pretty_json(world_cell.metadata.to_h.except("local_actions", "resource_groups")), spellcheck: false %>
-      <small class="nl-manage-help">Advanced cell properties and source references. Edit actions and resource groups below. Cell art also requires <code>source_map</code>.</small>
+      <small class="nl-manage-help"><%= t("manage.views.help_world_cell_metadata_html").html_safe %></small>
     </div>
   </div>
   <fieldset>
@@ -38,12 +38,12 @@
         <div class="nl-manage-field"><%= label_tag "local_action_#{type}_active", t("manage.views.action_enabled", label: default_label) %><%= hidden_field_tag "#{prefix}[active]", "0" %><%= check_box_tag "#{prefix}[active]", "1", action.present? && action["active"] != false, id: "local_action_#{type}_active" %></div>
         <div class="nl-manage-field"><%= label_tag "local_action_#{type}_label", t("manage.views.action_label", label: default_label) %><%= text_field_tag "#{prefix}[label]", action["label"].presence || default_label, id: "local_action_#{type}_label" %></div>
       </div>
-      <% unless definition.fetch("implemented") %><p class="nl-manage-help">This action can be authored; it stays unavailable to players until its observed gameplay flow is implemented.</p><% end %>
+      <% unless definition.fetch("implemented") %><p class="nl-manage-help"><%= t("manage.views.help_action_unimplemented") %></p><% end %>
     <% end %>
   </fieldset>
   <fieldset data-controller="manage-collection" data-manage-collection-next-index-value="<%= world_cell.resource_groups.length + 1 %>" data-manage-collection-limit-value="<%= MapTileTemplate::MAX_RESOURCE_GROUPS %>">
     <legend><%= t("manage.views.resource_groups_legend") %></legend>
-    <p class="nl-manage-help">Group identities describe this cell's authored content. They do not grant items or define quantities, skill requirements, or harvest outcomes.</p>
+    <p class="nl-manage-help"><%= t("manage.views.help_resource_groups") %></p>
     <div data-manage-collection-target="rows">
       <% (world_cell.resource_groups.presence || [{}]).each_with_index do |group, index| %>
         <%= render "resource_group", group:, index: %>
