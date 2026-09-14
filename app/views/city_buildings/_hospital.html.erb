@@ -57,8 +57,10 @@
   <p><%= t("game.shop.traumatologist_lead") %></p>
   <% if clearance.completed? %>
     <p class="nl-empty-note" data-hospital-traumatologist-status="done"><%= t("game.shop.traumatologist_done") %></p>
-    <p class="nl-quests-board__meta">
-      <%= link_to t("game.shop.sell_onboarding_licenses"), shop_path(mode: "licenses"), class: "nl-sheet-link" %>
+    <p class="nl-quests-board__meta" data-hospital-traumatologist-next="1">
+      <%= link_to t("game.shop.sell_onboarding_licenses"), shop_path(mode: "licenses"), class: "nl-sheet-link", data: {hospital_recovery: "licenses"} %>
+      ·
+      <%= link_to t("arena.nav.city"), world_path, class: "nl-sheet-link", data: {hospital_recovery: "world"} %>
     </p>
   <% elsif clearance.visible? %>
     <p>

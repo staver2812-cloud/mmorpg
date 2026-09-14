@@ -860,6 +860,12 @@ def main() -> int:
             'data-chat-recovery="world"' in r.text,
             f"url={r.url}",
         )
+    if 'data-presence-empty="1"' in r.text:
+        report.add(
+            "presence empty World recovery",
+            'data-presence-recovery="world"' in r.text,
+            f"url={r.url}",
+        )
 
     ok_back_f1, d_back_f1 = click_hotspot(s, "go_forpost1")
     report.add("return forpost1 after law", ok_back_f1, d_back_f1)

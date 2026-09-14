@@ -16,6 +16,10 @@
       <% end %>
     </ul>
   <% else %>
-    <p class="text-muted text-sm"><%= t("game.world.no_players") %></p>
+    <p class="text-muted text-sm" data-presence-empty="1">
+      <%= t("game.world.no_players") %>
+      ·
+      <%= link_to t("arena.nav.city"), world_path, class: "nl-sheet-link", data: {presence_recovery: "world"} %>
+    </p>
   <% end %>
 </div>
