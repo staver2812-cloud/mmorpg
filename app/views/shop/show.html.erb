@@ -77,7 +77,7 @@
                 <span class="nl-shop-junk-hint" title="<%= t("game.shop.junk_hint") %>"><%= t("game.shop.junk_hint_short") %></span>
               <% end %>
             </div>
-          <% elsif !shop_any_affordable %>
+          <% elsif @shop_items.present? && !shop_any_affordable %>
             <p class="nl-quests-board__meta" data-shop-short-nv="1">
               <%= t("game.shop.short_nv_next") %>
               ·
