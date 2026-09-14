@@ -46,6 +46,13 @@
       <% end %>
     </p>
   <% end %>
+  <% if params[:location_denied].to_s == "1" %>
+    <p class="nl-quests-board__meta" data-location-denied="1">
+      <%= t("game.locations.denied_next") %>
+      ·
+      <%= link_to t("arena.nav.city"), world_path, class: "nl-sheet-link", data: {location_recovery: "world"} %>
+    </p>
+  <% end %>
 
   <div class="nl-city-viewport<%= ' nl-city-viewport--pending' unless image_asset %>"
        data-controller="<%= 'nl-scene-size nl-city-map' if image_asset %>"

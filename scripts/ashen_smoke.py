@@ -1248,6 +1248,13 @@ def main() -> int:
             or 'data-building-recovery="world"' in r_denied.text,
             f"url={r_denied.url}",
         )
+    r_loc = s.get(f"{BASE}/world/locations/podgorny_mine", timeout=TIMEOUT, allow_redirects=True)
+    if 'data-location-denied="1"' in r_loc.text:
+        report.add(
+            "location denied recovery",
+            'data-location-recovery="world"' in r_loc.text,
+            f"url={r_loc.url}",
+        )
     r = s.get(f"{BASE}/city/buildings/law_abode", timeout=TIMEOUT, allow_redirects=True)
     report.add(
         "GET /city/buildings/law_abode",

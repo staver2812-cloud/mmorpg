@@ -395,7 +395,8 @@
   .nl-inventory-page .weaponch,
   .nl-equipment-sets .invbut,
   .nl-equipment-sets .lbut,
-  .nl-family-inventory .weaponch {
+  .nl-family-inventory .weaponch,
+  .nl-inventory-page .nl-sheet-link {
     min-height: 44px;
     min-width: 44px;
     padding: 8px 10px;
@@ -409,5 +410,19 @@
   .nl-inventory-page select.LogintextBox {
     min-height: 44px;
     font-size: 14px;
+  }
+}
+
+@media (max-width: 360px) {
+  .nl-inventory-page,
+  .nl-inventory-grid,
+  .nl-inventory-item,
+  .nl-family-inventory {
+    min-width: 0;
+    max-width: 100%;
+  }
+
+  .nl-inventory-item {
+    grid-template-columns: 48px minmax(0, 1fr);
   }
 }

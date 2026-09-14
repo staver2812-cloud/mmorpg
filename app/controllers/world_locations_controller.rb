@@ -71,7 +71,7 @@ class WorldLocationsController < ApplicationController
     key = params[:key].to_s
 
     unless building&.location? && building.location_key == key && building.can_enter?(current_character)
-      redirect_to world_path, alert: I18n.t("game.flashes.location_gone")
+      redirect_to world_path(location_denied: 1), alert: I18n.t("game.flashes.location_gone")
       return
     end
 

@@ -1301,6 +1301,7 @@ en:
       descend_deferred: "Descent is closed until underground mine travel is captured."
       choose_deferred: "Resource query stays disabled until exchange listings are captured."
       buy_deferred: "Buy stays disabled until exchange settlement is captured."
+      denied_next: "That location is not available here — return to its world entrance."
     events:
       attention: "Attention!"
       system: "System information."
