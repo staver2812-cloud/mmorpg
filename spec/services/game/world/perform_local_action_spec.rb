@@ -278,7 +278,10 @@ RSpec.describe Game::World::PerformLocalAction do
       action_offer
       allow(MapTileTemplate).to receive(:default_local_action_message).with("drinking").and_return(nil)
 
-      expect { result }.to raise_error(ActiveRecord::RecordInvalid, /local action result/)
+      expect { result }.to raise_error(
+        ActiveRecord::RecordInvalid,
+        /#{Regexp.escape(I18n.t("errors.local_action_result_required"))}/
+      )
       expect(character.reload.fatigue_percent).to eq(7)
       expect(action_offer.reload.local_action_ends_at).to be_nil
     end

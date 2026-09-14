@@ -71,7 +71,10 @@ class WorldActionOffer < ApplicationRecord
         local_action_ends_at && local_action_result.present?
       next if metadata.to_h.key?("local_action_result_delivered_at")
 
-      result = local_action_result
+      result = MapTileTemplate.player_local_action_message(
+        MapTileTemplate.local_action_type_for_world_action(action_type),
+        local_action_result
+      )
       update!(metadata: metadata.to_h.merge("local_action_result_delivered_at" => at.iso8601(6)))
       result
     end

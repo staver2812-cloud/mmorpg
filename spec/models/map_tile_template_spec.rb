@@ -243,6 +243,9 @@ RSpec.describe MapTileTemplate, type: :model do
         .to eq("Custom bait note")
       expect(MapTileTemplate.player_local_action_message("resource_search", "Nothing found."))
         .to eq(I18n.t("game.world.local_action.resource_search.nothing_found"))
+      expect(MapTileTemplate.player_local_action_message("resource_search", "Nothing useful here."))
+        .to eq(I18n.t("game.world.local_action.resource_search.message"))
+      expect(MapTileTemplate.local_action_type_for_world_action("search_resources")).to eq("resource_search")
     end
 
     it "does not expose an inactive local action" do

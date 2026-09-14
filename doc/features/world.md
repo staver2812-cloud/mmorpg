@@ -2985,6 +2985,7 @@ Before extending the World feature:
 | 2026-09-14 | Players-here Info link title uses `nav.your_character`. |
 | 2026-09-14 | Movement/airship isolation closed-failure specs assert via `game.world.*` / `game.flashes.*` i18n (RU-safe). |
 | 2026-09-14 | Accept-action closed-failure specs assert via `game.world.action_*` / `finish_active_fight` i18n (RU-safe). |
+| 2026-09-14 | Consumed Look/Drink/Fish result dialogs translate known English defaults via `MapTileTemplate.player_local_action_message`. |
 
 
 ## 19. Open-world parity audit (updated 2026-09-09)

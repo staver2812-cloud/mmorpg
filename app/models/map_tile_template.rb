@@ -129,6 +129,14 @@ class MapTileTemplate < ApplicationRecord
     local_action_definition(action_type)&.fetch("world_action_type", nil)
   end
 
+  def self.local_action_type_for_world_action(world_action_type)
+    key = world_action_type.to_s
+    LOCAL_ACTION_DEFINITIONS.each do |action_type, definition|
+      return action_type if definition["world_action_type"] == key
+    end
+    nil
+  end
+
   def self.default_local_action_label(action_type)
     definition = local_action_definition(action_type)
     return unless definition
@@ -181,7 +189,12 @@ class MapTileTemplate < ApplicationRecord
 
   KNOWN_RESULT_MESSAGES = {
     "Nothing found." => "game.world.local_action.resource_search.nothing_found",
-    "Nothing was found." => "game.world.local_action.resource_search.nothing_found"
+    "Nothing was found." => "game.world.local_action.resource_search.nothing_found",
+    "Nothing useful here." => "game.world.local_action.resource_search.message",
+    "No vegetation." => "game.world.local_action.resource_search.message",
+    "There is no useful vegetation in this area." => "game.world.local_action.resource_search.message",
+    "No bait available." => "game.world.local_action.fishing.message",
+    "Everything went well." => "game.world.local_action.drinking.message"
   }.freeze
 
   def self.translate_known_result_message(message)
