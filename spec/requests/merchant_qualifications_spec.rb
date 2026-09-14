@@ -28,14 +28,14 @@ RSpec.describe "Merchant qualification", type: :request do
 
   it "renders and persists the three ordered qualification steps without an inventory receipt" do
     get city_building_path("market")
-    expect(response.body).to include("Accept Merchant qualification")
+    expect(response.body).to include(I18n.t("game.shop.merchant_accept_btn"))
     post accept_merchant_qualification_path
     expect(response).to redirect_to(city_building_path("market"))
     expect(character.reload.metadata.dig("merchant_qualification", "status")).to eq("accepted")
 
     position.update!(zone: shop_zone)
     get shop_path(mode: "licenses")
-    expect(response.body).to include("Pay 1,000 NV and collect receipt")
+    expect(response.body).to include(I18n.t("game.shop.merchant_pay_btn"))
     post pay_merchant_qualification_path
     expect(response).to redirect_to(shop_path(mode: "licenses"))
     expect(character.reload.metadata.dig("merchant_qualification", "status")).to eq("paid")
@@ -44,7 +44,7 @@ RSpec.describe "Merchant qualification", type: :request do
 
     position.update!(zone: market_zone)
     get city_building_path("market")
-    expect(response.body).to include("Complete Merchant qualification")
+    expect(response.body).to include(I18n.t("game.shop.merchant_complete_btn"))
     post complete_merchant_qualification_path
     expect(response).to redirect_to(city_building_path("market"))
     expect(character.reload.metadata.dig("profession_unlocks", "merchant")).to be true
@@ -70,7 +70,7 @@ RSpec.describe "Merchant qualification", type: :request do
     expect(character.reload.metadata).not_to have_key("merchant_qualification")
     character.update!(perks: {})
     get city_building_path("market")
-    expect(response.body).not_to include("Accept Merchant qualification")
+    expect(response.body).not_to include(I18n.t("game.shop.merchant_accept_btn"))
     post accept_merchant_qualification_path
     expect(character.reload.metadata).not_to have_key("merchant_qualification")
   end

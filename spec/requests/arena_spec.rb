@@ -128,13 +128,13 @@ RSpec.describe "Arena", type: :request do
       it "displays current application status" do
         get arena_index_path
 
-        expect(response.body).to include("Your application")
+        expect(response.body).to include(I18n.t("arena.your_application"))
       end
 
       it "shows cancel button for active application" do
         get arena_index_path
 
-        expect(response.body).to include("Cancel Application")
+        expect(response.body).to include(I18n.t("arena.cancel_application"))
       end
     end
 
