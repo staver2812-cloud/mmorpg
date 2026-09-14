@@ -390,6 +390,25 @@ RSpec.describe "Shop", type: :request do
       expect(character.reload.gameplay_context).to eq("name" => "world", "params" => {})
     end
   end
+
+  it "guides sell-mode players without a trading license" do
+    get shop_path(mode: "sell")
+
+    expect(response).to have_http_status(:success)
+    expect(response.body).to include('data-shop-sell-onboarding="1"')
+    expect(response.body).to include(I18n.t("game.shop.sell_onboarding_title"))
+    expect(response.body).to include(I18n.t("game.shop.sell_onboarding_licenses"))
+  end
+
+  it "hides sell onboarding once a trading license is active" do
+    grant_trading_license
+
+    get shop_path(mode: "sell")
+
+    expect(response).to have_http_status(:success)
+    expect(response.body).not_to include('data-shop-sell-onboarding="1"')
+  end
+
   def buy_offer
     get shop_path(category: "knives")
     WorldActionOffer.offered.find_by!(character:, action_type: "shop_buy", target: item_template).action_key

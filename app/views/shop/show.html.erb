@@ -85,6 +85,9 @@
       <% elsif @mode == "novice" && current_character.level >= 10 %>
         <p class="nl-empty-note nl-shop-empty"><%= t("game.shop.novice_only") %></p>
       <% elsif @mode == "sell" %>
+        <% unless @shop_license_rules.active?(:trading) %>
+          <%= render "shop/sell_onboarding" %>
+        <% end %>
         <%= render "shop/sell_table", items: @sell_items %>
       <% else %>
         <%= render "shop/buy_table", items: @shop_items %>
