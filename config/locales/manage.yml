@@ -10,6 +10,8 @@ ru:
     clear: "Сбросить"
     view: "Открыть"
     confirm_delete: "Удалить эту запись?"
+    yes: "Да"
+    no: "Нет"
     pagination_aria: "Постраничная навигация"
     previous_page: "< Назад"
     next_page: "Вперёд >"

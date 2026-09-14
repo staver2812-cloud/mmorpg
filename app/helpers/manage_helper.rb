@@ -10,6 +10,6 @@ module ManageHelper
   end
 
   def management_boolean(value)
-    value ? "Yes" : "No"
+    value ? I18n.t("manage.yes") : I18n.t("manage.no")
   end
 end
