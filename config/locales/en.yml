@@ -95,6 +95,7 @@ en:
     all_messages: "All"
     refresh_10s: "Refresh every 10 s"
     text_mode: "Text"
+    tool_deferred: "Not available in this release yet."
   auth:
     sign_in: "Sign in"
     sign_up: "Create character"

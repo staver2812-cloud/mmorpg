@@ -65,6 +65,7 @@ ru:
     all_messages: "Все"
     refresh_10s: "Обновлять каждые 10 с"
     text_mode: "Текст"
+    tool_deferred: "Пока недоступно в этом релизе."
   auth:
     sign_in: "Вход"
     sign_up: "Создать персонажа"

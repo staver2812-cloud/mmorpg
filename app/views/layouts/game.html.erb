@@ -324,13 +324,13 @@
     <div class="nl-chat-toolstrip" aria-label="<%= t("social.chat_players") %>">
       <button type="button" class="nl-chat-tool nl-chat-tool--send" aria-label="<%= t("social.send") %>" title="<%= t("social.send") %>" data-action="click->game-layout#sendChat">&gt;</button>
       <button type="button" class="nl-chat-tool nl-chat-tool--clear-input" aria-label="<%= t("social.clear_input") %>" title="<%= t("social.clear_input") %>" data-action="click->game-layout#clearChatInput">X</button>
-      <button type="button" class="nl-chat-tool nl-chat-tool--smiles-one" aria-label="<%= t("social.emoticons") %>" title="<%= t("social.emoticons") %>">:)</button>
-      <button type="button" class="nl-chat-tool nl-chat-tool--smiles-two" aria-label="<%= t("social.more_emoticons") %>" title="<%= t("social.more_emoticons") %>">:D</button>
+      <button type="button" class="nl-chat-tool nl-chat-tool--smiles-one nl-chat-tool--disabled" aria-disabled="true" disabled title="<%= t("social.tool_deferred") %>" aria-label="<%= t("social.emoticons") %>">:)</button>
+      <button type="button" class="nl-chat-tool nl-chat-tool--smiles-two nl-chat-tool--disabled" aria-disabled="true" disabled title="<%= t("social.tool_deferred") %>" aria-label="<%= t("social.more_emoticons") %>">:D</button>
       <button type="button" class="nl-chat-tool nl-chat-tool--refresh" aria-label="<%= t("social.refresh_chat") %>" title="<%= t("social.refresh_chat") %>" data-action="click->game-layout#refreshChat">R</button>
       <button type="button" class="nl-chat-tool nl-chat-tool--clear-chat" aria-label="<%= t("social.clear_chat") %>" title="<%= t("social.clear_chat") %>" data-action="click->game-layout#clearChat">X</button>
-      <button type="button" class="nl-chat-tool nl-chat-tool--messages" aria-label="<%= t("social.all_messages") %>" title="<%= t("social.all_messages") %>"><%= t("social.all_messages") %></button>
-      <button type="button" class="nl-chat-tool nl-chat-tool--speed" aria-label="<%= t("social.refresh_10s") %>" title="<%= t("social.refresh_10s") %>">10s</button>
-      <button type="button" class="nl-chat-tool nl-chat-tool--language" aria-label="<%= t("social.text_mode") %>" title="<%= t("social.text_mode") %>">Aa</button>
+      <button type="button" class="nl-chat-tool nl-chat-tool--messages nl-chat-tool--disabled" aria-disabled="true" disabled title="<%= t("social.tool_deferred") %>" aria-label="<%= t("social.all_messages") %>"><%= t("social.all_messages") %></button>
+      <button type="button" class="nl-chat-tool nl-chat-tool--speed nl-chat-tool--disabled" aria-disabled="true" disabled title="<%= t("social.tool_deferred") %>" aria-label="<%= t("social.refresh_10s") %>">10s</button>
+      <button type="button" class="nl-chat-tool nl-chat-tool--language nl-chat-tool--disabled" aria-disabled="true" disabled title="<%= t("social.tool_deferred") %>" aria-label="<%= t("social.text_mode") %>">Aa</button>
     </div>
 
     <div class="nl-status-icons">
