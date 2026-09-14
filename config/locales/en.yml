@@ -55,6 +55,11 @@ en:
     unknown_chat_scope: "Unknown chat scope: %{scope}"
     unknown_injury_severity: "unknown severity"
     unsupported_money_currency: "unsupported money currency"
+    item_name_required: "item name is required"
+    money_amount_positive: "money amount must be a positive integer"
+    game_event_key_conflict: "game event key already belongs to another event"
+    private_channel_two_participants: "private channels require exactly two participants"
+    game_events_immutable: "game events are immutable"
   hello: "Hello world"
   nav:
     your_character: "Character"

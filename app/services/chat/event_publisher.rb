@@ -30,7 +30,7 @@ module Chat
     # Records one successfully awarded item from an authoritative search/loot transition.
     def item_found!(recipient:, item_name:, quantity:, event_key:, payload: {})
       normalized_name = item_name.to_s.strip
-      raise ArgumentError, "item name is required" if normalized_name.blank?
+      raise ArgumentError, I18n.t("errors.item_name_required") if normalized_name.blank?
 
       normalized_quantity = [Integer(quantity, exception: false) || 1, 1].max
 
@@ -46,7 +46,7 @@ module Chat
     # Records one successfully deposited NPC-loot currency award.
     def money_found!(recipient:, amount:, currency: "NV", event_key:, payload: {})
       normalized_amount = Integer(amount, exception: false)
-      raise ArgumentError, "money amount must be a positive integer" unless normalized_amount&.positive?
+      raise ArgumentError, I18n.t("errors.money_amount_positive") unless normalized_amount&.positive?
 
       normalized_currency = currency.to_s.upcase
       raise ArgumentError, I18n.t("errors.unsupported_money_currency") unless normalized_currency == "NV"
@@ -93,7 +93,7 @@ module Chat
     attr_reader :clock
 
     def normalized_attributes(recipient:, event_type:, body:, payload:)
-      raise ArgumentError, "payload must be an object" unless payload.is_a?(Hash)
+      raise ArgumentError, I18n.t("errors.payload_must_be_object") unless payload.is_a?(Hash)
 
       {
         recipient:,
@@ -112,7 +112,7 @@ module Chat
       }
       return if actual == expected
 
-      raise EventKeyConflict, "game event key already belongs to another event"
+      raise EventKeyConflict, I18n.t("errors.game_event_key_conflict")
     end
   end
 end

@@ -90,13 +90,13 @@ RSpec.describe Chat::EventPublisher do
   it "rejects an item event without an item name" do
     expect do
       publisher.item_found!(recipient:, item_name: " ", quantity: 1, event_key: "missing-item")
-    end.to raise_error(ArgumentError, "item name is required")
+    end.to raise_error(ArgumentError, I18n.t("errors.item_name_required"))
   end
 
   it "rejects non-positive or unsupported money awards" do
     expect do
       publisher.money_found!(recipient:, amount: 0, event_key: "missing-money")
-    end.to raise_error(ArgumentError, "money amount must be a positive integer")
+    end.to raise_error(ArgumentError, I18n.t("errors.money_amount_positive"))
 
     expect do
       publisher.money_found!(recipient:, amount: 24, currency: "DNV", event_key: "wrong-currency")

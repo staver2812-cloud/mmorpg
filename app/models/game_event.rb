@@ -33,7 +33,7 @@ class GameEvent < ApplicationRecord
   end
 
   def destroy
-    raise ActiveRecord::ReadOnlyRecord, "game events are immutable"
+    raise ActiveRecord::ReadOnlyRecord, I18n.t("errors.game_events_immutable")
   end
 
   private

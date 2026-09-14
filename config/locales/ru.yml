@@ -26,6 +26,11 @@ ru:
     unknown_chat_scope: "неизвестный scope чата: %{scope}"
     unknown_injury_severity: "неизвестная тяжесть травмы"
     unsupported_money_currency: "неподдерживаемая валюта денег"
+    item_name_required: "нужно имя предмета"
+    money_amount_positive: "сумма денег должна быть положительным целым"
+    game_event_key_conflict: "ключ игрового события уже принадлежит другому событию"
+    private_channel_two_participants: "личные каналы требуют ровно двух участников"
+    game_events_immutable: "игровые события неизменяемы"
   nav:
     your_character: "Персонаж"
     inventory: "Инвентарь"

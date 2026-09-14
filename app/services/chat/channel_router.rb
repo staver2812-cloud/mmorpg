@@ -57,7 +57,7 @@ module Chat
     def whisper_channel(context)
       participant_ids = Array(context[:participant_ids]).map(&:to_i).sort
       unless participant_ids.size == 2 && participant_ids.include?(user.id)
-        raise ArgumentError, "private channels require exactly two participants"
+        raise ArgumentError, I18n.t("errors.private_channel_two_participants")
       end
 
       slug = "whisper-#{participant_ids.join("-")}"
