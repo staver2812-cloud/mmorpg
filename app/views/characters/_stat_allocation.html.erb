@@ -14,6 +14,13 @@
       <%= @character.stat_points_available %>
     </span>
   </div>
+  <% if @character.stat_points_available.to_i <= 0 %>
+    <p class="nl-empty-note" data-stat-allocation="idle">
+      <%= t("game.profile.no_stat_points") %>
+      ·
+      <%= link_to t("nav.world"), world_path, class: "nl-sheet-link", data: {profile_recovery: "world"} %>
+    </p>
+  <% end %>
 
   <%= form_with url: stats_character_path(@character), method: :patch, class: "nl-allocation-form", data: { turbo_frame: "stat-allocation" } do |f| %>
     <div class="nl-stats-grid">

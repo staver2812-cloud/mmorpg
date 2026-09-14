@@ -73,7 +73,11 @@
         </button>
       </div>
     <% else %>
-      <p class="nl-perk-empty-points"><%= t("game.profile.no_perk_points") %></p>
+      <p class="nl-perk-empty-points" data-perk-allocation="idle">
+        <%= t("game.profile.no_perk_points") %>
+        ·
+        <%= link_to t("nav.world"), world_path, class: "nl-sheet-link", data: {profile_recovery: "world"} %>
+      </p>
     <% end %>
   <% end %>
 </div>

@@ -39,6 +39,13 @@
       </span>
     </div>
   </div>
+  <% if @combat_skill_points.to_i <= 0 && @peace_skill_points.to_i <= 0 %>
+    <p class="nl-empty-note" data-skill-allocation="idle">
+      <%= t("game.profile.no_skill_points") %>
+      ·
+      <%= link_to t("nav.world"), world_path, class: "nl-sheet-link", data: {profile_recovery: "world"} %>
+    </p>
+  <% end %>
 
   <%= form_with url: skills_character_path(@character), method: :patch, class: "nl-allocation-form", data: { turbo_frame: "skill-allocation" } do |f| %>
     <% Game::Skills::PassiveSkillRegistry.categories.each do |category_key, category_info| %>
