@@ -1240,6 +1240,14 @@ def main() -> int:
     report.add("travel go_forpost1 for law", ok_f1_law, d_f1_law)
     ok_f4, d_f4 = click_hotspot(s, "go_forpost4")
     report.add("travel go_forpost4", ok_f4, d_f4)
+    r_denied = s.get(f"{BASE}/city/buildings/hospital", timeout=TIMEOUT, allow_redirects=True)
+    if 'data-building-denied="1"' in r_denied.text:
+        report.add(
+            "building denied district recovery",
+            'data-building-recovery="main"' in r_denied.text
+            or 'data-building-recovery="world"' in r_denied.text,
+            f"url={r_denied.url}",
+        )
     r = s.get(f"{BASE}/city/buildings/law_abode", timeout=TIMEOUT, allow_redirects=True)
     report.add(
         "GET /city/buildings/law_abode",

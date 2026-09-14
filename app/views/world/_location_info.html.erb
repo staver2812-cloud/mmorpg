@@ -11,4 +11,11 @@
       <%= link_to t("arena.nav.city"), world_path, class: "nl-sheet-link", data: {shop_recovery: "world"} %>
     </p>
   <% end %>
+  <% if params[:building_denied].to_s == "1" %>
+    <p class="nl-quests-board__meta" data-building-denied="1">
+      <%= t("game.buildings.denied_next") %>
+      ·
+      <%= link_to t("arena.nav.city"), world_path, class: "nl-sheet-link", data: {building_recovery: "world"} %>
+    </p>
+  <% end %>
 </div>

@@ -956,6 +956,8 @@ en:
         route_increasing: "must span the flight in strictly increasing order"
         route_outdoor: "must stay within authored outdoor regions"
     buildings:
+      denied_next: "That building is not available here — return to the right district."
+      denied_use_main: "Take the Central Square route, then open the building."
       hospital_title: "Infirmary"
       hospital_hint: "Recovery and pharmacy"
       hospital_rest_aria: "Hospital rest"

@@ -305,6 +305,6 @@ class CityBuildingsController < ApplicationController
       building_key: @building_key
     )
 
-    redirect_to world_path, alert: I18n.t("game.flashes.building_district_required")
+    redirect_to world_path(building_denied: 1), alert: I18n.t("game.flashes.building_district_required")
   end
 end
