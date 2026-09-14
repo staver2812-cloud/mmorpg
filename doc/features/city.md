@@ -1165,7 +1165,7 @@ Final rerun results are in the
 - 2026-09-13: Coal Tide Tavern shows live HP/MP/fatigue and disables rest when already full; vitals expose `data-tavern-hp`/`mp` markers.
 - 2026-09-13: Veil Obelisk shows wallet NV and greys out recall when unbound or short on fare; `data-obelisk-can-recall` mirrors the gate.
 - 2026-09-13: Relic stall shows wallet NV and greys out unaffordable buys (`data-souvenir-affordable`); also `data-souvenir-any-affordable`.
-- 2026-09-13: Shared landmark chrome exposes `data-landmark-inside`; Captured shop-shell desks also render landmark exit notes; smoke checks hospital and Relic stall (`souvenir_shop`) for the marker.
+- 2026-09-13: Shared landmark chrome exposes `data-landmark-inside`; Captured shop-shell desks also render landmark exit notes; smoke checks hospital and Coal Tide Tavern for the marker.
 - 2026-09-13: Market, Ash Buyer, Airship Station, and Numismatics desks also render shared landmark chrome; Market keeps a single landmark after stalls (embedded junk desk does not duplicate it).
 - 2026-09-13: City building access/not-found flashes are localized (`game.flashes.building_not_found` / `building_district_required`).
 - 2026-09-13: Infirmary, Pitch Bank, Law Abode, and Veil Obelisk desks also render the shared landmark chrome (inside lead + exit notes) for consistent exit affordances.
