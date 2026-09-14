@@ -1165,6 +1165,9 @@ ru:
       available_caves: "Доступные пещеры"
       resource_veins: "Жилы ресурсов"
       descend: "Спуститься в шахту"
+      resource_type: "Тип ресурса"
+      all_resources: "Все ресурсы"
+      quantity_for: "Количество для %{name}"
     events:
       attention: "Внимание!"
       system: "Системное сообщение."

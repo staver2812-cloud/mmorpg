@@ -1165,6 +1165,9 @@ en:
       available_caves: "Available caves"
       resource_veins: "Resource veins"
       descend: "Descend into mine"
+      resource_type: "Resource type"
+      all_resources: "All resources"
+      quantity_for: "Quantity for %{name}"
     events:
       attention: "Attention!"
       system: "System information."
