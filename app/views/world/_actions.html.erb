@@ -27,6 +27,11 @@
   <div class="nl-world-action-unavailable" data-world-fatigue-lock="1" title="<%= t("game.world.actions_unavailable_title") %>">
     <span><%= t("game.world.actions_unavailable") %></span>
     <span class="nl-quests-board__meta"><%= t("game.world.actions_unavailable_title") %></span>
+    <% if Game::World::CityBuildingCatalog.accessible?(character: current_character, building_key: "tavern") %>
+      <%= link_to t("game.buildings.tavern_rest_cta"), city_building_path("tavern"), class: "nl-sheet-link", data: {world_recovery: "tavern"} %>
+    <% else %>
+      <%= link_to t("arena.nav.city"), world_path, class: "nl-sheet-link", data: {world_recovery: "city"} %>
+    <% end %>
   </div>
 <% end %>
 
@@ -51,7 +56,9 @@
                 class="nl-nav-link nl-world-action-button"
                 title="<%= building[:blocked_reason] %>"
                 disabled><%= t("game.world.enter") %></button>
-        <span class="building-blocked nl-visually-hidden"><%= building[:name] %> <%= building[:blocked_reason] %></span>
+        <span class="building-blocked nl-quests-board__meta" data-world-enter-blocked="1">
+          <%= building[:blocked_reason].presence || t("game.world.enter_blocked") %>
+        </span>
       <% end %>
     <% end %>
 

@@ -457,6 +457,7 @@ en:
       actions_unavailable: "Actions unavailable"
       actions_unavailable_title: "Fatigue is 86% or higher. Move, Look, and Enter are unavailable until it recovers."
       enter: "Enter"
+      enter_blocked: "Entry is blocked from this cell."
       look: "Look"
       move: "Move"
       city_buildings: "City buildings"
