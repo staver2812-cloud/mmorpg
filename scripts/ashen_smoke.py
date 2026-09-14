@@ -833,6 +833,7 @@ def main() -> int:
         "chat tools deferred markers",
         r.status_code == 200
         and 'nl-chat-tool--disabled' in r.text
+        and 'data-chat-tools-deferred="1"' in r.text
         and (
             "Пока недоступно в этом релизе." in r.text
             or "Not available in this release yet." in r.text
