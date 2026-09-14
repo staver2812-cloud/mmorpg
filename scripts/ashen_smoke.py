@@ -243,6 +243,13 @@ def main() -> int:
             or 'data-sheet-recovery="world"' in r.text,
             f"url={r.url}",
         )
+    if r.status_code == 200 and 'data-profile-allocation="idle"' in r.text:
+        report.add(
+            "player allocation idle recovery",
+            'data-profile-recovery="world"' in r.text
+            or 'data-profile-recovery="school"' in r.text,
+            f"url={r.url}",
+        )
 
     r = s.get(f"{BASE}/city/buildings/hospital", timeout=TIMEOUT, allow_redirects=True)
     report.add(
@@ -344,6 +351,13 @@ def main() -> int:
         and ("data-trauma-scrolls=" in r.text),
         f"url={r.url}",
     )
+    if r.status_code == 200 and 'data-trauma-scrolls="0"' in r.text:
+        report.add(
+            "trauma empty chip recovery",
+            'data-trauma-recovery="hospital"' in r.text
+            or 'data-trauma-recovery="world"' in r.text,
+            f"url={r.url}",
+        )
     report.add(
         "heal scroll chip on square",
         r.status_code == 200
@@ -351,6 +365,13 @@ def main() -> int:
         and ("data-heal-scrolls=" in r.text),
         f"url={r.url}",
     )
+    if r.status_code == 200 and 'data-heal-scrolls="0"' in r.text:
+        report.add(
+            "heal empty chip recovery",
+            'data-heal-recovery="hospital"' in r.text
+            or 'data-heal-recovery="world"' in r.text,
+            f"url={r.url}",
+        )
 
     ok, detail = click_hotspot(s, "go_forpost1")
     report.add("travel go_forpost1", ok, detail)
@@ -384,6 +405,12 @@ def main() -> int:
             "market desk Shop/Junk recovery",
             'data-market-recovery="shop"' in r.text
             or 'data-market-recovery="junk"' in r.text,
+            f"url={r.url}",
+        )
+    if r.status_code == 200 and 'data-merchant-desk="1"' in r.text:
+        report.add(
+            "market merchant desk marker",
+            'data-merchant-status=' in r.text,
             f"url={r.url}",
         )
     if 'data-junk-total="0"' in r.text:
@@ -1114,6 +1141,13 @@ def main() -> int:
     banned_shop = ["You carry", "Shop funds", "Refresh to buy", "There are no items", "Valid for", "(quantity:"]
     found_shop = [w for w in banned_shop if w in r.text]
     report.add("shop no English chrome", not found_shop, f"found={found_shop}")
+    r = s.get(f"{BASE}/shop?mode=novice", timeout=TIMEOUT)
+    if r.status_code == 200 and "data-shop-novice=" in r.text:
+        report.add(
+            "shop novice recovery",
+            'data-shop-recovery="buy"' in r.text,
+            f"url={r.url}",
+        )
     r = s.get(f"{BASE}/shop?mode=sell", timeout=TIMEOUT)
     found_sell = [w for w in ["(quantity:", "Durability "] if w in r.text]
     report.add("shop sell no English chrome", not found_sell, f"found={found_sell}")

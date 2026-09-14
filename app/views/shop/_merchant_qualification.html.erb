@@ -1,6 +1,6 @@
 <% qualification = Game::Shop::MerchantQualification.new(character: current_character) %>
 <% if qualification.visible_at?(location) %>
-  <section class="nl-panel" aria-label="<%= t("game.shop.merchant_title") %>">
+  <section class="nl-panel" aria-label="<%= t("game.shop.merchant_title") %>" data-merchant-desk="1">
     <h2><%= t("game.shop.merchant_title") %></h2>
     <% case qualification.status %>
     <% when "completed" %>
@@ -11,7 +11,7 @@
       </p>
     <% when "not_started" %>
       <% if location == :market %>
-        <p class="nl-empty-note"><%= t("game.shop.merchant_accept") %></p>
+        <p class="nl-empty-note" data-merchant-status="not_started"><%= t("game.shop.merchant_accept") %></p>
         <%= button_to t("game.shop.merchant_accept_btn"), accept_merchant_qualification_path, class: "lbut" %>
       <% else %>
         <p class="nl-empty-note" data-merchant-status="market-first">
@@ -27,7 +27,7 @@
       <% end %>
     <% when "accepted" %>
       <% if location == :shop %>
-        <p class="nl-empty-note"><%= t("game.shop.merchant_collect_market") %></p>
+        <p class="nl-empty-note" data-merchant-status="collect-shop-pay"><%= t("game.shop.merchant_collect_market") %></p>
         <%= button_to t("game.shop.merchant_pay_btn"), pay_merchant_qualification_path, class: "lbut" %>
       <% else %>
         <p class="nl-empty-note" data-merchant-status="collect-shop">
@@ -38,7 +38,7 @@
       <% end %>
     <% when "paid" %>
       <% if location == :market %>
-        <p class="nl-empty-note"><%= t("game.shop.merchant_receipt_ready") %></p>
+        <p class="nl-empty-note" data-merchant-status="receipt-ready"><%= t("game.shop.merchant_receipt_ready") %></p>
         <%= button_to t("game.shop.merchant_complete_btn"), complete_merchant_qualification_path, class: "lbut" %>
       <% else %>
         <p class="nl-empty-note" data-merchant-status="receipt-market">

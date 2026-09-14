@@ -87,9 +87,9 @@
           <p class="fight-log-empty" role="status" data-fight-log-empty="1">
             <%= t("game.fight.no_events") %>
             ·
-            <%= link_to t("arena.nav.arena"), arena_index_path, class: "nl-sheet-link" %>
+            <%= link_to t("arena.nav.arena"), arena_index_path, class: "nl-sheet-link", data: {fight_log_recovery: "arena"} %>
             ·
-            <%= link_to t("arena.nav.city"), world_path, class: "nl-sheet-link" %>
+            <%= link_to t("arena.nav.city"), world_path, class: "nl-sheet-link", data: {fight_log_recovery: "city"} %>
           </p>
         <% end %>
       </div>
