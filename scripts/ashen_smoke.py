@@ -650,6 +650,12 @@ def main() -> int:
             and (("data-quest-chip=" in r_hud.text) or ("nl-quest-chip" in r_hud.text)),
             f"url={r_hud.url}",
         )
+        if r_hud.status_code == 200 and 'data-quest-chip="1"' in r_hud.text:
+            report.add(
+                "quest HUD chip recovery",
+                'data-quest-recovery="journal"' in r_hud.text,
+                f"url={r_hud.url}",
+            )
 
     ok_main, d1 = click_hotspot(s, "go_main")
     report.add("travel go_main", ok_main, d1)
@@ -1009,6 +1015,13 @@ def main() -> int:
         and ("data-alignment-chip=" in r.text),
         f"url={r.url}",
     )
+    if r.status_code == 200 and 'data-alignment-chip="1"' in r.text:
+        report.add(
+            "alignment chip recovery",
+            'data-alignment-recovery="law"' in r.text
+            or 'data-alignment-recovery="world"' in r.text,
+            f"url={r.url}",
+        )
     r = s.get(f"{BASE}/city/buildings/prison", timeout=TIMEOUT, allow_redirects=True)
     report.add(
         "GET /city/buildings/prison",

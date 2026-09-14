@@ -119,7 +119,7 @@
                   city_building_path("law_abode"),
                   class: "nl-alignment-chip",
                   title: t("game.world.alignment_chip_hint"),
-                  data: {alignment_chip: "1"} %>
+                  data: {alignment_chip: "1", alignment_recovery: "law"} %>
           <% else %>
             <%= link_to t("game.world.alignment_chip"),
                   world_path,
@@ -135,7 +135,7 @@
                   city_building_path("tavern"),
                   class: "nl-fatigue-chip#{' nl-fatigue-chip--locked' if fatigue_pct >= 86}",
                   title: t("game.world.fatigue_chip_hint"),
-                  data: {fatigue_pct: fatigue_pct} %>
+                  data: {fatigue_pct: fatigue_pct, fatigue_recovery: "tavern"} %>
           <% else %>
             <%= link_to t("game.world.fatigue_chip", percent: fatigue_pct),
                   world_path,
@@ -151,7 +151,8 @@
                 title: t("game.quests.title"),
                 data: {
                   quest_chip: "1",
-                  quest_chip_ready: (journal.active_chip_ready? ? "1" : "0")
+                  quest_chip_ready: (journal.active_chip_ready? ? "1" : "0"),
+                  quest_recovery: "journal"
                 } %>
         <% end %>
         <% obelisk_bound = Game::World::ObeliskRecall.bound_for(current_character) %>
@@ -179,7 +180,8 @@
             <%= link_to t("game.world.obelisk_bound_chip", place: obelisk_bound["zone_name"]),
                   city_building_path("obelisk"),
                   class: "nl-obelisk-chip",
-                  title: t("game.world.obelisk_bound_chip_hint") %>
+                  title: t("game.world.obelisk_bound_chip_hint"),
+                  data: {obelisk_recovery: "obelisk"} %>
           <% else %>
             <%= link_to t("game.world.obelisk_bound_chip", place: obelisk_bound["zone_name"]),
                   world_path,
