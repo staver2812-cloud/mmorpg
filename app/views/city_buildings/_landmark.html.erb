@@ -338,10 +338,10 @@
         <%= t("game.buildings.auction_lots_deferred") %>
       </p>
       <p>
-        <%= link_to t("game.shop.title"), shop_path, class: "lbut" %>
-        <%= link_to t("game.buildings.junk_dealer_link"), city_building_path("junk_dealer"), class: "lbut" %>
+        <%= link_to t("game.shop.title"), shop_path, class: "lbut", data: {auction_recovery: "shop"} %>
+        <%= link_to t("game.buildings.junk_dealer_link"), city_building_path("junk_dealer"), class: "lbut", data: {auction_recovery: "junk"} %>
         <% if Game::World::CityBuildingCatalog.accessible?(character: current_character, building_key: "bank") %>
-          <%= link_to t("game.sheet.vault_open_cta"), city_building_path("bank"), class: "lbut" %>
+          <%= link_to t("game.sheet.vault_open_cta"), city_building_path("bank"), class: "lbut", data: {auction_recovery: "bank"} %>
         <% end %>
       </p>
     </section>

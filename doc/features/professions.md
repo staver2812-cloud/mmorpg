@@ -74,6 +74,7 @@ modifiers, and profession quests remain unimplemented.
 
 | Date | Change |
 |---|---|
+| 2026-09-14 | Pitch Forge deferred-repair Inventory link exposes `data-workshop-recovery="inventory"` for smoke. |
 | 2026-09-13 | Workshop/Infirmary craft desks expose recipe readiness data markers for smoke. |
 | 2026-09-13 | Pitch Forge states gear repair is deferred and links to Inventory wear/broken clarity. |
 | 2026-09-13 | Sandbox Veil Marks hourly top-up at Infirmary desk for trauma/heal scroll testing. |

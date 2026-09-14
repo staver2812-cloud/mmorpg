@@ -202,6 +202,12 @@ def main() -> int:
             r.status_code == 200 and hit,
             f"{r.status_code} data_ok={data_ok} text_ok={text_ok} missing={missing[:4]}",
         )
+        if path == "/city/buildings/workshop" and 'data-workshop-repair="deferred"' in r.text:
+            report.add(
+                "workshop repair deferred recovery",
+                'data-workshop-recovery="inventory"' in r.text,
+                f"url={r.url}",
+            )
         time.sleep(0.1)
 
     r = s.get(f"{BASE}/player/{nick}", timeout=TIMEOUT)
@@ -717,6 +723,14 @@ def main() -> int:
         and ('data-landmark-inside="1"' in r.text),
         f"url={r.url}",
     )
+    if 'data-auction-lots-deferred="1"' in r.text:
+        report.add(
+            "auction lots deferred recovery",
+            'data-auction-recovery="shop"' in r.text
+            or 'data-auction-recovery="junk"' in r.text
+            or 'data-auction-recovery="bank"' in r.text,
+            f"url={r.url}",
+        )
     r = s.get(f"{BASE}/city/buildings/dealer_house", timeout=TIMEOUT, allow_redirects=True)
     report.add(
         "GET /city/buildings/dealer_house buyback",

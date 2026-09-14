@@ -1211,6 +1211,7 @@ Final rerun results are in the
 - 2026-09-14: Infirmary Traumatologist need-healer state recovers via Perks and City.
 - 2026-09-14: Infirmary Traumatologist completed state recovers via Licenses and City.
 - 2026-09-14: Bank empty item-locker note recovers to Inventory (`data-bank-recovery="inventory"`).
+- 2026-09-14: Salt Auction deferred lots recover via Shop/Junk/Bank with `data-auction-recovery`; Pitch Forge deferred repair Inventory link exposes `data-workshop-recovery="inventory"`.
 - 2026-09-14: Law Abode current-alignment state recovers to City.
 - 2026-09-14: Gallows east-gate note recovers to City.
 - 2026-09-14: Prison/Gallows Law desk links fall back to City when Law Abode is out of district.

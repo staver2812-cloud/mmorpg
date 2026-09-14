@@ -36,11 +36,11 @@
       <%= link_to(
             wear.broken.positive? ? t("game.world.wear_chip_broken", count: wear.broken) : t("game.world.wear_chip", count: wear.worn),
             inventory_path,
-            data: {turbo: false}
+            data: {turbo: false, workshop_recovery: "inventory"}
           ) %>
     <% else %>
       ·
-      <%= link_to t("game.inventory.title"), inventory_path, data: {turbo: false} %>
+      <%= link_to t("game.inventory.title"), inventory_path, data: {turbo: false, workshop_recovery: "inventory"} %>
     <% end %>
   </p>
 
