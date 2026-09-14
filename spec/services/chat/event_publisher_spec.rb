@@ -18,7 +18,7 @@ RSpec.describe Chat::EventPublisher do
     expect(event).to have_attributes(
       recipient:,
       event_type: "fight_finished",
-      body: "Fight finished.",
+      body: I18n.t("game.events.fight_finished"),
       occurred_at: timestamp
     )
     expect(event.payload).to include("arena_match_id" => 12, "experience" => 749)

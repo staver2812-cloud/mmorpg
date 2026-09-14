@@ -100,7 +100,7 @@ RSpec.describe "Incremental World map updates", type: :request do
     expect(position.reload).to have_attributes(x: 0, y: 8)
     expect(invalid_offer.reload).to be_cancelled
     expect(MovementCommand.moving.where(character:)).to be_empty
-    expect(response.body).to include("Tile is not passable")
+    expect(response.body).to include(I18n.t("game.world.tile_not_passable"))
   end
 
   it "returns zero terrain cells on acceptance and only seven entering cells after an east step completes" do

@@ -1245,3 +1245,4 @@ Before extending Game Shell:
 | 2026-08-23 | Added the maintainer workflow for introducing a producer versus a genuinely new event type, including transaction ordering, deterministic keys, migration/rendering/coverage requirements, and the explicit no-generic-endpoint/PubSub boundary. |
 | 2026-08-25 | Made account retention behavior explicit: the cancellation UI is removed, direct Devise destroy requests preserve the user/session with an unavailable alert, and the immutable `money_found` event-type migration is documented as forward-only instead of falsely reversible. |
 | 2026-09-13 | Chat post rejects (mute/system/location/private/privacy) use `game.chat.*` i18n. |
+| 2026-09-13 | EventPublisher fight/search timeline bodies use `game.events.*` i18n. |

@@ -2978,6 +2978,7 @@ Before extending the World feature:
 | 2026-09-13 | Outdoor Obelisk recall chip (`POST /world/obelisk`); Tavern table also clears fatigue. |
 | 2026-09-13 | HUD heal-scroll chip (`combat_heal_scroll` count) beside Assault trauma-scroll chip; Infirmary link when colocated. |
 | 2026-09-13 | Law Abode alignment pledge/change via `Game::World::LawAlignmentPledge`. |
+| 2026-09-13 | Movement complete/queue fail reasons and local-action cell/deadline fails use `game.world.*` i18n. |
 
 
 ## 19. Open-world parity audit (updated 2026-09-09)

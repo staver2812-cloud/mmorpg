@@ -22,7 +22,7 @@ module Chat
         recipient:,
         event_type: :fight_finished,
         event_key:,
-        body: "Fight finished.",
+        body: I18n.t("game.events.fight_finished"),
         payload: payload.merge(experience: amount)
       )
     end
@@ -38,7 +38,7 @@ module Chat
         recipient:,
         event_type: :item_found,
         event_key:,
-        body: "Search result:",
+        body: I18n.t("game.events.search_result"),
         payload: payload.merge(item_name: normalized_name, quantity: normalized_quantity)
       )
     end
@@ -55,7 +55,7 @@ module Chat
         recipient:,
         event_type: :money_found,
         event_key:,
-        body: "Search result:",
+        body: I18n.t("game.events.search_result"),
         payload: payload.merge(amount: normalized_amount, currency: normalized_currency)
       )
     end
