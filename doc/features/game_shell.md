@@ -1255,3 +1255,4 @@ Before extending Game Shell:
 | 2026-09-13 | Presence player-list unknown location data attribute uses `game.profile.unknown_location`. |
 | 2026-09-14 | Auth password reset/change labels and English `auth.*` mirror use `config/locales/en.yml` / `ru.yml`. |
 | 2026-09-14 | English `social.*` shell chrome mirrors RU (`config/locales/en.yml`). |
+| 2026-09-14 | English `app.*` / `locales.*` / `errors.forbidden` mirrors complete `:en` shell chrome. |
