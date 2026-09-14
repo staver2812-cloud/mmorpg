@@ -384,6 +384,11 @@ def main() -> int:
         )
         and ("data-airship-routes=" in r.text)
         and ("data-airship-can-board=" in r.text)
+        and (
+            'data-airship-route-deferred="1"' in r.text
+            or 'data-airship-can-board="1"' in r.text
+            or 'data-airship-any-affordable="0"' in r.text
+        )
         and ('data-landmark-inside="1"' in r.text),
         f"url={r.url}",
     )

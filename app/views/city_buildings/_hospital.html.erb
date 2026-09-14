@@ -160,7 +160,11 @@
     <% else %>
       <% wait_hint = t("game.buildings.premium_topup_wait", minutes: (topup_wait / 60.0).ceil) %>
       <button type="button" class="lbut" disabled title="<%= wait_hint %>"><%= t("game.buildings.premium_topup_cta", amount: Game::Shop::VeilMarksTopUp::AMOUNT) %></button>
-      <span class="nl-quests-board__meta"><%= wait_hint %></span>
+      <span class="nl-quests-board__meta" data-hospital-topup-wait="1">
+        <%= wait_hint %>
+        ·
+        <%= link_to t("arena.nav.city"), world_path, data: {turbo: false, hospital_recovery: "world"} %>
+      </span>
     <% end %>
   </p>
   <div class="nl-handbook__grid">

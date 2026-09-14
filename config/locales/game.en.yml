@@ -1101,6 +1101,7 @@ en:
       obelisk_need_nv_short: "Need NV"
       obelisk_bound_meta: "Mark: %{place} [%{x}, %{y}]"
       obelisk_unbound_meta: "No mark set yet."
+      obelisk_bind_first: "Bind this place first, then recall spends 15 NV from wallet or Bank."
       obelisk_bound: "Bound to %{place}."
       obelisk_recalled: "Returned to %{place} (−%{amount} NV)."
       obelisk_unbound: "Bind coordinates first."
