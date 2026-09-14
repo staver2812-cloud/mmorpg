@@ -312,6 +312,12 @@ def main() -> int:
         and ('data-landmark-inside="1"' in r.text),
         f"url={r.url}",
     )
+    if 'data-junk-total="0"' in r.text:
+        report.add(
+            "junk empty Inventory recovery",
+            'data-junk-recovery="inventory"' in r.text,
+            f"url={r.url}",
+        )
     r = s.get(f"{BASE}/city/buildings/numismatics", timeout=TIMEOUT, allow_redirects=True)
     numismatics_open = (
         r.status_code == 200
