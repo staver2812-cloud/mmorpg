@@ -287,6 +287,19 @@ def main() -> int:
         and ("data-shop-any-sellable=" in r.text),
         f"url={r.url}",
     )
+    if r.status_code == 200 and ("junk_dealer" in r.text or "Скупщик" in r.text or "Ash Buyer" in r.text):
+        report.add(
+            "shop sell Junk recovery",
+            'data-shop-recovery="junk"' in r.text
+            or "nl-shop-junk-hint" in r.text,
+            f"url={r.url}",
+        )
+    if 'data-shop-sell-empty="1"' in r.text:
+        report.add(
+            "shop sell empty Inventory recovery",
+            'data-shop-recovery="inventory"' in r.text,
+            f"url={r.url}",
+        )
     r = s.get(f"{BASE}/shop?mode=licenses", timeout=TIMEOUT)
     report.add(
         "shop licenses localized",
@@ -303,6 +316,12 @@ def main() -> int:
         r.status_code == 200 and 'data-shop-doctor-onboarding="1"' in r.text,
         f"url={r.url}",
     )
+    if r.status_code == 200 and 'data-shop-doctor-onboarding="1"' in r.text:
+        report.add(
+            "shop doctor onboarding recovery",
+            "data-doctor-recovery=" in r.text,
+            f"url={r.url}",
+        )
     if 'data-shop-licenses-empty="1"' in r.text:
         report.add(
             "shop licenses empty Buy recovery",

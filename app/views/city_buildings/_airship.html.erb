@@ -39,9 +39,9 @@
                 <% if Game::World::CityBuildingCatalog.accessible?(character: current_character, building_key: "bank") %>
                   <%= link_to t("game.shop.open_bank"), city_building_path("bank"), data: {turbo: false, airship_recovery: "bank"} %>
                 <% elsif Game::World::CityBuildingCatalog.accessible?(character: current_character, building_key: "junk_dealer") %>
-                  <%= link_to t("game.buildings.junk_dealer_link"), city_building_path("junk_dealer"), data: {turbo: false} %>
+                  <%= link_to t("game.buildings.junk_dealer_link"), city_building_path("junk_dealer"), data: {turbo: false, airship_recovery: "junk"} %>
                 <% elsif Game::World::CityBuildingCatalog.accessible?(character: current_character, building_key: "shop") %>
-                  <%= link_to t("game.buildings.airship_shop_link"), shop_path, data: {turbo: false} %>
+                  <%= link_to t("game.buildings.airship_shop_link"), shop_path, data: {turbo: false, airship_recovery: "shop"} %>
                 <% else %>
                   <%= t("game.buildings.airship_earn_hint") %>
                 <% end %>

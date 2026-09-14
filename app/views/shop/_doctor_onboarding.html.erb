@@ -9,7 +9,7 @@
           <%= t("game.shop.doctor_onboarding_perk_done") %>
         <% else %>
           <%= t("game.shop.doctor_onboarding_perk") %>
-          <%= link_to t("game.shop.traumatologist_open_perks"), perks_character_path(current_character), class: "nl-sheet-link" %>
+          <%= link_to t("game.shop.traumatologist_open_perks"), perks_character_path(current_character), class: "nl-sheet-link", data: {doctor_recovery: "perks"} %>
         <% end %>
       </li>
       <li>

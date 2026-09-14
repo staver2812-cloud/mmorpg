@@ -210,6 +210,7 @@ or generic job/reconciler framework is introduced.
 
 | Date | Change |
 |---|---|
+| 2026-09-14 | Short-NV Board recovery Junk/Shop links expose `data-airship-recovery`. |
 | 2026-09-14 | ≤360px airship station/routes reflow to full width; coarse-pointer Board/recovery controls target ~44×44 CSS px (`UI-ADAPT-005`). |
 | 2026-09-13 | Board/disembark/reconcile violations use `game.airship.*` i18n (ru/en); English copy preserves prior TravelViolationError vocabulary. |
 | 2026-09-13 | In-flight map aria, craft alt, and early-disembark confirm use `game.airship.map_aria` / `craft_label` / `disembark_confirm`. |

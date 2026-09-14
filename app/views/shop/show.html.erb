@@ -72,7 +72,7 @@
           <% if @mode == "sell" %>
             <div>
               <% if Game::World::CityBuildingCatalog.accessible?(character: current_character, building_key: "junk_dealer") %>
-                <%= link_to t("game.buildings.junk_dealer_link"), city_building_path("junk_dealer"), class: "nl-shop-junk-link" %>
+                <%= link_to t("game.buildings.junk_dealer_link"), city_building_path("junk_dealer"), class: "nl-shop-junk-link", data: {shop_recovery: "junk"} %>
               <% else %>
                 <span class="nl-shop-junk-hint" title="<%= t("game.shop.junk_hint") %>"><%= t("game.shop.junk_hint_short") %></span>
               <% end %>

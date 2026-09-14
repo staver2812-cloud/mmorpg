@@ -1218,6 +1218,7 @@ Final rerun results are in the
 - 2026-09-14: Smoke asserts Law current-choice / Prison / Gallows desk recoveries.
 - 2026-09-14: Coal Hall treasury/quest desk links expose `data-city-hall-recovery`.
 - 2026-09-14: Building chrome City exit exposes `data-building-recovery="world"`; Market top Shop/Junk and school profile/allocate links expose recovery markers.
+- 2026-09-14: Shop sell Junk link and doctor/perk onboarding expose `data-shop-recovery` / `data-doctor-recovery`; Airship short-NV Junk/Shop links expose `data-airship-recovery`.
 - 2026-09-14: Law Abode current-alignment state recovers to City.
 - 2026-09-14: Gallows east-gate note recovers to City.
 - 2026-09-14: Prison/Gallows Law desk links fall back to City when Law Abode is out of district.
