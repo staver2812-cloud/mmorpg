@@ -62,7 +62,7 @@ module Manage
       statuses = WorldActionOffer.statuses.values_at("offered", "accepted")
       WorldActionOffer.where(target: record, status: statuses).update_all(
         status: WorldActionOffer.statuses.fetch("cancelled"),
-        error_message: "Managed world content changed.",
+        error_message: I18n.t("game.world.managed_content_changed"),
         updated_at: Time.current
       )
     end

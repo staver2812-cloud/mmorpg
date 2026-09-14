@@ -85,6 +85,19 @@ ru:
         few: "%{count} ошибки не дали сохранить изменения:"
         many: "%{count} ошибок не дали сохранить изменения:"
         other: "%{count} ошибок не дали сохранить изменения:"
+      audit_actions:
+        create: "создание"
+        update: "изменение"
+        destroy: "удаление"
+      audit_record_types:
+        Zone: "Зона"
+        CityHotspot: "Действие города"
+        MapTileTemplate: "Клетка мира"
+        TileBuilding: "Здание клетки"
+        TileNpc: "NPC клетки"
+        NpcTemplate: "Шаблон NPC"
+      audit_sources:
+        manage_namespace: "Раздел управления"
       enums:
         hotspot_type:
           building: "здание"
@@ -359,6 +372,19 @@ en:
       errors_prevented:
         one: "%{count} error prevented this change:"
         other: "%{count} errors prevented this change:"
+      audit_actions:
+        create: "create"
+        update: "update"
+        destroy: "destroy"
+      audit_record_types:
+        Zone: "Zone"
+        CityHotspot: "City action"
+        MapTileTemplate: "World cell"
+        TileBuilding: "Cell building"
+        TileNpc: "Cell NPC"
+        NpcTemplate: "NPC template"
+      audit_sources:
+        manage_namespace: "Management area"
       enums:
         hotspot_type:
           building: "building"

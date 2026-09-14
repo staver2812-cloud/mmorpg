@@ -413,6 +413,7 @@ ru:
       fortitude: "Стойкость"
       armor_pierce: "Пробитие брони"
     world:
+      managed_content_changed: "Содержимое мира изменилось в управлении."
       action_in_progress: "Действие выполняется"
       actions_unavailable: "Действия недоступны"
       actions_unavailable_title: "Усталость 86% или выше. Ходьба, Осмотр и Вход недоступны, пока не восстановитесь."
