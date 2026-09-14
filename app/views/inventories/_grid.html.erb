@@ -143,7 +143,24 @@
   <% end %>
 
   <% if items.empty? %>
-    <p class="nl-empty-note"><%= inventory_empty_message(category) %></p>
+    <p class="nl-empty-note" data-inventory-grid-empty="1"><%= inventory_empty_message(category) %></p>
+    <% case category.to_s
+       when "all", "things", "elixirs" %>
+      <p class="nl-quests-board__meta" data-inventory-empty-hint="shop">
+        <%= t("game.inventory.empty_hint_shop") %>
+        <%= link_to t("game.shop.modes.buy"), shop_path(mode: "buy"), class: "nl-sheet-link", data: {inventory_recovery: "shop"} %>
+      </p>
+    <% when "quests" %>
+      <p class="nl-quests-board__meta" data-inventory-empty-hint="quests">
+        <%= t("game.inventory.empty_hint_quests") %>
+        <%= link_to t("nav.quests"), quests_path, class: "nl-sheet-link", data: {inventory_recovery: "quests"} %>
+      </p>
+    <% else %>
+      <p class="nl-quests-board__meta" data-inventory-empty-hint="world">
+        <%= t("game.inventory.empty_hint_world") %>
+        <%= link_to t("nav.world"), world_path, class: "nl-sheet-link", data: {inventory_recovery: "world"} %>
+      </p>
+    <% end %>
   <% end %>
 
 </div>

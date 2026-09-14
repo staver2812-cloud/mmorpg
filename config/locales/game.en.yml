@@ -129,6 +129,7 @@ en:
       empty_hint_world: "Gather and craft materials come from the outdoor world and city desks."
       empty_hint_workshop: "Wood crafts start at Pitch Forge when you have mats."
       empty_hint_quests: "Quest journal contracts live on the Quests board."
+      empty_hint_shop: "Starter gear and consumables are sold in the Shop Buy tab."
       amount_must_be_positive: "Amount must be positive."
       nv_transferred: "NV transferred to %{name}."
       not_enough_nv: "Not enough NV."

@@ -27,7 +27,11 @@
           <tbody><tr><td><%= @location_section.fetch("summary_label") %></td><td>—</td><td>—</td><td>—</td></tr></tbody>
         </table>
         <button type="button" class="lbut" disabled title="<%= t("game.locations.descend_deferred") %>"><%= t("game.locations.descend") %></button>
-        <p class="nl-quests-board__meta"><%= t("game.locations.descend_deferred") %></p>
+        <p class="nl-quests-board__meta" data-location-descend-deferred="1">
+          <%= t("game.locations.descend_deferred") %>
+          ·
+          <%= link_to t("arena.nav.city"), world_path, data: {turbo: false, location_recovery: "world"} %>
+        </p>
       <% end %>
       <% if @building.location_resource_categories.any? %>
         <%# The captured query controls remain unavailable until their actual

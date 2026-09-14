@@ -497,6 +497,7 @@ shipped Inventory management routes.
 | 2026-09-13 | Direct transfer/gift/NV and deferred player-sale alerts use `game.inventory.*` i18n. |
 | 2026-09-14 | Inventory Sell control explains deferred P2P sales and links to Shop Sell instead of a live form. |
 | 2026-09-14 | Empty equipment sets note links to Shop Buy; deferred repair when Forge is out of district recovers via City. |
+| 2026-09-14 | Empty inventory grid tabs recover via Shop Buy (gear/elixirs), Quests, or World. |
 | 2026-09-13 | Inventory capacity/underflow raises and craft capacity/material rejects use `game.inventory.no_free_slots` / `inventory_overloaded` / `stack_limit_exceeded` / `not_enough_items` / `craft_*`. |
 | 2026-09-13 | Use/discard inventory alerts use `game.inventory.cannot_use` / `cannot_discard` / `item_discarded`. |
 | 2026-09-13 | Equipment-set save field uses localized placeholder (`game.common.set_name`) with `data-equipment-set-name`. |
