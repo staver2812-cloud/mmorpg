@@ -361,7 +361,7 @@
       <% end %>
     </div>
 
-    <div class="nl-chat-toolstrip" aria-label="<%= t("social.chat_players") %>">
+    <div class="nl-chat-toolstrip" aria-label="<%= t("social.chat_players") %>" data-chat-tools-deferred="1">
       <button type="button" class="nl-chat-tool nl-chat-tool--send" aria-label="<%= t("social.send") %>" title="<%= t("social.send") %>" data-action="click->game-layout#sendChat">&gt;</button>
       <button type="button" class="nl-chat-tool nl-chat-tool--clear-input" aria-label="<%= t("social.clear_input") %>" title="<%= t("social.clear_input") %>" data-action="click->game-layout#clearChatInput">X</button>
       <button type="button" class="nl-chat-tool nl-chat-tool--smiles-one nl-chat-tool--disabled" aria-disabled="true" disabled title="<%= t("social.tool_deferred") %>" aria-label="<%= t("social.emoticons") %>">:)</button>
