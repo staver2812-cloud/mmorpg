@@ -730,6 +730,18 @@ def main() -> int:
             'ft=1' in r.text or "/arena" in r.text,
             f"url={r.url}",
         )
+    if 'data-arena-room-locked="1"' in r.text:
+        report.add(
+            "arena locked room City recovery",
+            'data-arena-recovery="city"' in r.text,
+            f"url={r.url}",
+        )
+    if 'data-arena-apps-empty="1"' in r.text:
+        report.add(
+            "arena apps empty City recovery",
+            'data-arena-recovery="city"' in r.text or "/world" in r.text,
+            f"url={r.url}",
+        )
     r = s.get(f"{BASE}/city/buildings/tavern", timeout=TIMEOUT, allow_redirects=True)
     report.add(
         "GET /city/buildings/tavern fatigue copy",
