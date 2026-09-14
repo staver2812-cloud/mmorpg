@@ -1214,6 +1214,12 @@ def main() -> int:
             'data-law-recovery="world"' in r.text,
             f"url={r.url}",
         )
+    if r.status_code == 200 and 'data-building-key="law_abode"' in r.text:
+        report.add(
+            "law abode building chrome recovery",
+            'data-building-recovery="world"' in r.text,
+            f"url={r.url}",
+        )
     r = s.get(f"{BASE}/world", timeout=TIMEOUT)
     report.add(
         "alignment chip on Law Quarter",
