@@ -217,6 +217,8 @@ en:
     clear: "Clear"
     view: "View"
     confirm_delete: "Delete this managed record?"
+    yes: "Yes"
+    no: "No"
     pagination_aria: "Pagination"
     previous_page: "< Previous"
     next_page: "Next >"
