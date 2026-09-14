@@ -145,3 +145,12 @@ en:
       victory: "Victory"
       defeat: "Defeat"
       draw: "Draw"
+    validations:
+      room_access_denied: "cannot access this arena room"
+      group_team_count_required: "is required for group fights"
+      group_enemy_count_required: "is required for group fights"
+      applicant_or_npc_required: "must have either an applicant or an NPC template"
+      applicant_and_npc_both: "cannot have both an applicant and an NPC template"
+      npc_room_denied: "cannot appear in this arena room"
+      character_or_npc_required: "must have either a character or an NPC template"
+      character_and_npc_both: "cannot have both a character and an NPC template"

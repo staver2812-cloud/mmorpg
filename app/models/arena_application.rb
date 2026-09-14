@@ -220,25 +220,25 @@ class ArenaApplication < ApplicationRecord
     return if arena_room.nil? || applicant.nil?
 
     unless arena_room.accessible_by?(applicant)
-      errors.add(:applicant, "cannot access this arena room")
+      errors.add(:applicant, I18n.t("arena.validations.room_access_denied"))
     end
   end
 
   def group_params_valid
     if team_count.nil? || team_count < 1
-      errors.add(:team_count, "is required for group fights")
+      errors.add(:team_count, I18n.t("arena.validations.group_team_count_required"))
     end
     if enemy_count.nil? || enemy_count < 1
-      errors.add(:enemy_count, "is required for group fights")
+      errors.add(:enemy_count, I18n.t("arena.validations.group_enemy_count_required"))
     end
   end
 
   def has_applicant_or_npc
     if applicant_id.blank? && npc_template_id.blank?
-      errors.add(:base, "must have either an applicant or an NPC template")
+      errors.add(:base, I18n.t("arena.validations.applicant_or_npc_required"))
     end
     if applicant_id.present? && npc_template_id.present?
-      errors.add(:base, "cannot have both an applicant and an NPC template")
+      errors.add(:base, I18n.t("arena.validations.applicant_and_npc_both"))
     end
   end
 
@@ -249,7 +249,7 @@ class ArenaApplication < ApplicationRecord
     return if npc_rooms.empty? # Empty means NPC can appear anywhere
 
     unless npc_rooms.include?(arena_room.slug)
-      errors.add(:npc_template, "cannot appear in this arena room")
+      errors.add(:npc_template, I18n.t("arena.validations.npc_room_denied"))
     end
   end
 end

@@ -145,3 +145,12 @@ ru:
       victory: "Победа"
       defeat: "Поражение"
       draw: "Ничья"
+    validations:
+      room_access_denied: "заявитель не может войти в этот зал арены"
+      group_team_count_required: "нужен размер команды для групповых боёв"
+      group_enemy_count_required: "нужен размер стороны противника для групповых боёв"
+      applicant_or_npc_required: "нужен заявитель или шаблон NPC"
+      applicant_and_npc_both: "нельзя указывать и заявителя, и шаблон NPC"
+      npc_room_denied: "этот NPC не может появляться в этом зале арены"
+      character_or_npc_required: "нужен персонаж или шаблон NPC"
+      character_and_npc_both: "нельзя указывать и персонажа, и шаблон NPC"
