@@ -81,21 +81,21 @@ class ArenaRoom < ApplicationRecord
   # @param character [Character] the character to check
   # @return [String] explanation of access requirement
   def access_requirement_text(character)
-    return "Room is unavailable" unless active?
+    return I18n.t("game.fight.room_unavailable") unless active?
 
     unless character.level.between?(level_min, level_max)
-      return "Requires level #{level_min}-#{level_max}; your level #{character.level}"
+      return I18n.t("game.fight.room_level_required", min: level_min, max: level_max, level: character.level)
     end
 
     if alignment_restriction.present? && character.alignment != alignment_restriction
-      return "Alignment does not match"
+      return I18n.t("game.fight.app_alignment_mismatch")
     end
 
     if zone_id.present? && character.position&.reload&.zone_id != zone_id
-      return "Room is in another city"
+      return I18n.t("game.fight.room_other_city")
     end
 
-    "Available"
+    I18n.t("game.fight.room_available")
   end
 
   private
