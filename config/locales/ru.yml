@@ -31,6 +31,8 @@ ru:
     game_event_key_conflict: "ключ игрового события уже принадлежит другому событию"
     private_channel_two_participants: "личные каналы требуют ровно двух участников"
     game_events_immutable: "игровые события неизменяемы"
+    amount_cannot_be_zero: "сумма не может быть нулевой"
+    insufficient_veil_marks: "Недостаточно VM."
   nav:
     your_character: "Персонаж"
     inventory: "Инвентарь"

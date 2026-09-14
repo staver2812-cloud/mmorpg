@@ -243,7 +243,7 @@ module Game
           end
           remaining -= take
         end
-        raise ArgumentError, "missing delivery items" if remaining.positive?
+        raise ArgumentError, I18n.t("game.quests.missing_delivery_items") if remaining.positive?
       end
 
       def grant_rewards!(quest)

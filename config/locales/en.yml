@@ -60,6 +60,8 @@ en:
     game_event_key_conflict: "game event key already belongs to another event"
     private_channel_two_participants: "private channels require exactly two participants"
     game_events_immutable: "game events are immutable"
+    amount_cannot_be_zero: "amount cannot be zero"
+    insufficient_veil_marks: "Insufficient Veil Marks."
   hello: "Hello world"
   nav:
     your_character: "Character"

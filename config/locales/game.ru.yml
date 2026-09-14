@@ -1301,6 +1301,7 @@ ru:
       locked_hint: "Закрыто цепью"
       not_active: "Сначала возьмите задание."
       objective_incomplete: "Цель ещё не выполнена."
+      missing_delivery_items: "Не хватает предметов для сдачи."
       unlocked: "Открыто следом: %{list}."
       where: "Где: %{place}"
       status:
