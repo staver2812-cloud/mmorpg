@@ -49,6 +49,10 @@ en:
     shop_location_required: "must provide an authored Shop"
     fatigue_increase_positive: "Fatigue increase must be a positive integer"
     fatigue_recovery_positive: "Fatigue recovery must be a positive integer"
+    unsupported_gameplay_context: "Unsupported gameplay context"
+    gameplay_context_params_object: "Gameplay context params must be an object"
+    unsupported_fight_return_context: "Unsupported fight return context."
+    unknown_chat_scope: "Unknown chat scope: %{scope}"
   hello: "Hello world"
   nav:
     your_character: "Character"

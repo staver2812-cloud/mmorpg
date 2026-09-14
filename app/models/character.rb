@@ -126,8 +126,8 @@ class Character < ApplicationRecord
   # entry together. Reloading an unchanged surface preserves its entry time.
   def remember_gameplay_context!(name:, params: {})
     normalized_name = name.to_s
-    raise ArgumentError, "Unsupported gameplay context" unless GAMEPLAY_CONTEXTS.include?(normalized_name)
-    raise ArgumentError, "Gameplay context params must be an object" unless params.is_a?(Hash)
+    raise ArgumentError, I18n.t("errors.unsupported_gameplay_context") unless GAMEPLAY_CONTEXTS.include?(normalized_name)
+    raise ArgumentError, I18n.t("errors.gameplay_context_params_object") unless params.is_a?(Hash)
 
     payload = {
       "name" => normalized_name,

@@ -18,7 +18,7 @@ module Chat
       when :private, :whisper
         whisper_channel(context)
       else
-        raise ArgumentError, "Unknown chat scope: #{scope}"
+        raise ArgumentError, I18n.t("errors.unknown_chat_scope", scope: scope)
       end
     end
 
