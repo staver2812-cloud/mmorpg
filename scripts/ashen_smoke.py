@@ -1251,6 +1251,12 @@ def main() -> int:
             or 'data-prison-recovery="world"' in r.text,
             f"url={r.url}",
         )
+    if r.status_code == 200 and 'data-building-key="prison"' in r.text:
+        report.add(
+            "prison building chrome recovery",
+            'data-building-recovery="world"' in r.text,
+            f"url={r.url}",
+        )
     r = s.get(f"{BASE}/city/buildings/gallows", timeout=TIMEOUT, allow_redirects=True)
     report.add(
         "GET /city/buildings/gallows east hint",
@@ -1267,6 +1273,12 @@ def main() -> int:
             "gallows desk recovery",
             'data-gallows-recovery="law"' in r.text
             or 'data-gallows-recovery="world"' in r.text,
+            f"url={r.url}",
+        )
+    if r.status_code == 200 and 'data-building-key="gallows"' in r.text:
+        report.add(
+            "gallows building chrome recovery",
+            'data-building-recovery="world"' in r.text,
             f"url={r.url}",
         )
 
