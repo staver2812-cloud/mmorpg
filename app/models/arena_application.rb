@@ -53,8 +53,8 @@ class ArenaApplication < ApplicationRecord
   belongs_to :matched_with, class_name: "ArenaApplication", optional: true
   belongs_to :arena_match, optional: true
 
-  validates :timeout_seconds, inclusion: {in: VALID_TIMEOUTS, message: ->(*) { I18n.t("game.fight.app_timeout_invalid") }}
-  validates :trauma_percent, inclusion: {in: VALID_TRAUMA_PERCENTS, message: ->(*) { I18n.t("game.fight.app_trauma_invalid") }}
+  validate :timeout_seconds_allowed
+  validate :trauma_percent_allowed
   validate :applicant_can_access_room, on: :create, unless: :npc_application?
   validate :npc_can_appear_in_room, on: :create, if: :npc_application?
   validate :group_params_valid, if: :team_battle?
@@ -214,6 +214,18 @@ class ArenaApplication < ApplicationRecord
   def set_expiration
     wait = wait_minutes || 10
     self.expires_at ||= Time.current + wait.minutes
+  end
+
+  def timeout_seconds_allowed
+    return if VALID_TIMEOUTS.include?(timeout_seconds)
+
+    errors.add(:base, I18n.t("game.fight.app_timeout_invalid"))
+  end
+
+  def trauma_percent_allowed
+    return if VALID_TRAUMA_PERCENTS.include?(trauma_percent)
+
+    errors.add(:base, I18n.t("game.fight.app_trauma_invalid"))
   end
 
   def applicant_can_access_room

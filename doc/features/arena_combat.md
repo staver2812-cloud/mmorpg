@@ -1143,6 +1143,7 @@ supplies only authoritative completion/loot facts and stable source keys.
 | 2026-09-14 | Arena lobby application chrome request specs assert via `arena.your_application` / `cancel_application` (RU-safe). |
 | 2026-09-14 | Arena application timeout/trauma inclusion rejects use `game.fight.app_timeout_invalid` / `app_trauma_invalid`. |
 | 2026-09-14 | Arena lobby room-map and fight-type tab request specs assert via `arena.room_map` / `arena.tabs.*` (RU-safe). |
+| 2026-09-14 | Arena application timeout/trauma allowlist rejects add base i18n errors without English attribute prefixes. |
 | 2026-09-13 | Arena lobby Stimulus client errors/confirm/countdown use `arena.client.*` via `data-arena-copy-value`. |
 | 2026-07-28 | Created the canonical bounded Arena Combat runtime handbook after implementing the full-width source fight hierarchy, shared player/NPC equipment rails, public shell-free fight log, eager-loaded equipment rendering, and responsive tablet/mobile adaptation. |
 | 2026-08-23 | Added the injected handoff of successful NPC loot and final participant results to the Game Shell-owned durable chat event timeline, with deterministic keys and retry coverage while preserving `CombatLogEntry` as the canonical fight log. |
