@@ -204,7 +204,7 @@ RSpec.describe Arena::NpcLootAwarder do
       result = award_loot
 
       expect(result.awards).to be_empty
-      expect(result.failures.map(&:message)).to include("Inventory is overloaded")
+      expect(result.failures.map(&:message)).to include(I18n.t("game.inventory.inventory_overloaded"))
       expect(character.inventory.inventory_items.where(item_template:)).to be_empty
       expect(GameEvent.where(event_type: :item_found, recipient: user)).to be_empty
       expect(npc_participation.reload.metadata.dig("loot_resolution", "failures")).to be_present
@@ -248,7 +248,7 @@ RSpec.describe Arena::NpcLootAwarder do
       result = award_loot
 
       expect(result.awards).to be_empty
-      expect(result.failures.map(&:message)).to contain_exactly("No free inventory slots")
+      expect(result.failures.map(&:message)).to contain_exactly(I18n.t("game.inventory.no_free_slots"))
       expect(existing_stack.reload.quantity).to eq(8)
       expect(character.inventory.reload.current_weight).to eq(8)
       expect(GameEvent.where(event_type: :item_found, recipient: user)).to be_empty

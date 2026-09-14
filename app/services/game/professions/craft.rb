@@ -61,9 +61,9 @@ module Game
         raise unless error.class.name.end_with?("InventoryUnderflowError", "CapacityExceededError")
 
         if error.class.name.end_with?("CapacityExceededError")
-          failure("Инвентарь переполнен.")
+          failure(I18n.t("game.inventory.craft_inventory_full"))
         else
-          failure("Не хватает материалов для крафта.")
+          failure(I18n.t("game.inventory.craft_missing_materials"))
         end
       end
 

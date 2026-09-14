@@ -134,7 +134,7 @@ RSpec.describe Game::Inventory::Manager do
       it "rolls back the filled portion and its weight when the next stack cannot be created" do
         expect {
           manager.add_item!(item_template: small_stack_item, quantity: 5)
-        }.to raise_error(Game::Inventory::Manager::CapacityExceededError, "No free inventory slots")
+        }.to raise_error(Game::Inventory::Manager::CapacityExceededError, I18n.t("game.inventory.no_free_slots"))
 
         expect(partial_stack.reload.quantity).to eq(8)
         expect(inventory.reload.current_weight).to eq(8)
@@ -152,7 +152,7 @@ RSpec.describe Game::Inventory::Manager do
       it "raises CapacityExceededError" do
         expect {
           manager.add_item!(item_template: heavy_item, quantity: 1)
-        }.to raise_error(Game::Inventory::Manager::CapacityExceededError, "Inventory is overloaded")
+        }.to raise_error(Game::Inventory::Manager::CapacityExceededError, I18n.t("game.inventory.inventory_overloaded"))
       end
     end
   end

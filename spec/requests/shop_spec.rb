@@ -203,7 +203,7 @@ RSpec.describe "Shop", type: :request do
       post buy_shop_path, params: {item_template_id: item_template.id, action_key:}
 
       expect(response).to redirect_to(shop_path)
-      expect(flash[:alert]).to eq("No free inventory slots")
+      expect(flash[:alert]).to eq(I18n.t("game.inventory.no_free_slots"))
       expect(wallet.reload.nv_balance).to eq(200)
       expect(wallet.currency_transactions).to be_empty
       expect(inventory.reload.current_weight).to eq(0)
