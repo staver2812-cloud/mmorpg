@@ -23,7 +23,11 @@
   <% if injury_summary.present? %>
     <p class="nl-quests-board__meta" data-hospital-injuries="<%= injuries.active.size %>"><%= injury_summary %></p>
   <% else %>
-    <p class="nl-quests-board__meta" data-hospital-injuries="0"><%= t("game.buildings.hospital_no_injuries") %></p>
+    <p class="nl-quests-board__meta" data-hospital-injuries="0">
+      <%= t("game.buildings.hospital_no_injuries") %>
+      ·
+      <%= link_to t("arena.nav.city"), world_path, class: "nl-sheet-link", data: {hospital_recovery: "world"} %>
+    </p>
   <% end %>
   <p>
     <% if needs_rest %>
