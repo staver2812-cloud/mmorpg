@@ -368,6 +368,7 @@ ru:
     loot_entry_object: "запись лута должна быть объектом"
     loot_chance_required: "нужен шанс лута"
     loot_chance_range: "шанс лута должен быть от 0 до 100"
+    unsupported_operation: "неподдерживаемая операция управления"
 en:
   manage:
     title: "World Management"
@@ -736,3 +737,4 @@ en:
     loot_entry_object: "Loot entry must be an object"
     loot_chance_required: "Loot chance is required"
     loot_chance_range: "Loot chance must be between 0 and 100"
+    unsupported_operation: "unsupported management operation"

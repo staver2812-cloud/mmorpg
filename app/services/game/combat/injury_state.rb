@@ -33,7 +33,7 @@ module Game
       end
 
       def apply!(severity:, duration:, source_match_id: nil)
-        raise ArgumentError, "unknown severity" unless SEVERITIES.include?(severity.to_s)
+        raise ArgumentError, I18n.t("errors.unknown_injury_severity") unless SEVERITIES.include?(severity.to_s)
 
         character.with_lock do
           character.reload

@@ -49,7 +49,7 @@ module Chat
       raise ArgumentError, "money amount must be a positive integer" unless normalized_amount&.positive?
 
       normalized_currency = currency.to_s.upcase
-      raise ArgumentError, "unsupported money currency" unless normalized_currency == "NV"
+      raise ArgumentError, I18n.t("errors.unsupported_money_currency") unless normalized_currency == "NV"
 
       publish!(
         recipient:,

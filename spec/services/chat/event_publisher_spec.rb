@@ -100,6 +100,6 @@ RSpec.describe Chat::EventPublisher do
 
     expect do
       publisher.money_found!(recipient:, amount: 24, currency: "DNV", event_key: "wrong-currency")
-    end.to raise_error(ArgumentError, "unsupported money currency")
+    end.to raise_error(ArgumentError, I18n.t("errors.unsupported_money_currency"))
   end
 end

@@ -24,6 +24,8 @@ ru:
     gameplay_context_params_object: "параметры игрового контекста должны быть объектом"
     unsupported_fight_return_context: "неподдерживаемый контекст возврата из боя"
     unknown_chat_scope: "неизвестный scope чата: %{scope}"
+    unknown_injury_severity: "неизвестная тяжесть травмы"
+    unsupported_money_currency: "неподдерживаемая валюта денег"
   nav:
     your_character: "Персонаж"
     inventory: "Инвентарь"

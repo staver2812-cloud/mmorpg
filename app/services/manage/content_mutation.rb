@@ -19,7 +19,7 @@ module Manage
     end
 
     def call
-      raise ArgumentError, "unsupported management operation" unless OPERATIONS.include?(operation)
+      raise ArgumentError, I18n.t("manage.unsupported_operation") unless OPERATIONS.include?(operation)
 
       ApplicationRecord.transaction do
         case operation

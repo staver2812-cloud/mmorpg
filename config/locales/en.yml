@@ -53,6 +53,8 @@ en:
     gameplay_context_params_object: "Gameplay context params must be an object"
     unsupported_fight_return_context: "Unsupported fight return context."
     unknown_chat_scope: "Unknown chat scope: %{scope}"
+    unknown_injury_severity: "unknown severity"
+    unsupported_money_currency: "unsupported money currency"
   hello: "Hello world"
   nav:
     your_character: "Character"
