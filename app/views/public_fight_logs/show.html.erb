@@ -84,7 +84,13 @@
             </div>
           <% end %>
         <% else %>
-          <p class="fight-log-empty" role="status"><%= t("game.fight.no_events") %></p>
+          <p class="fight-log-empty" role="status" data-fight-log-empty="1">
+            <%= t("game.fight.no_events") %>
+            ·
+            <%= link_to t("arena.nav.arena"), arena_index_path, class: "nl-sheet-link" %>
+            ·
+            <%= link_to t("arena.nav.city"), world_path, class: "nl-sheet-link" %>
+          </p>
         <% end %>
       </div>
 
