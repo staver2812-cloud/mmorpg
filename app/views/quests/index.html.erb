@@ -8,6 +8,10 @@
       <p class="nl-quests-board__meta" data-quest-hall-link="1">
         <%= link_to t("game.quests.board_open_hall"), city_building_path("city_hall"), class: "nl-sheet-link" %>
       </p>
+    <% else %>
+      <p class="nl-quests-board__meta" data-quest-hall-link="world">
+        <%= link_to t("game.quests.board_open_hall"), world_path, class: "nl-sheet-link", data: {quest_recovery: "world"} %>
+      </p>
     <% end %>
     <% counts = @entries.group_by { |e| e[:status] }.transform_values(&:size) %>
     <ul class="nl-quests__summary"
