@@ -204,6 +204,18 @@ def main() -> int:
         )
         time.sleep(0.1)
 
+    r = s.get(f"{BASE}/player/{nick}", timeout=TIMEOUT)
+    report.add(
+        "player allocation idle or form",
+        r.status_code == 200
+        and (
+            'data-profile-allocation="idle"' in r.text
+            or 'id="stat-allocation"' in r.text
+            or "nl-allocation-frame" in r.text
+        ),
+        f"url={r.url}",
+    )
+
     r = s.get(f"{BASE}/city/buildings/hospital", timeout=TIMEOUT, allow_redirects=True)
     report.add(
         "hospital landmark inside chrome",
