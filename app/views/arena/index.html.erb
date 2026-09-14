@@ -50,6 +50,15 @@
       <%= link_to t("arena.nav.city"), world_path, class: "nl-sheet-link", data: {turbo: false, arena_recovery: "city"} %>
     </p>
   <% end %>
+  <% if params[:arena_denied].to_s == "1" %>
+    <p class="nl-quests-board__meta" data-arena-denied="1">
+      <%= t("arena.denied_next") %>
+      ·
+      <%= link_to t("arena.nav.city"), world_path, class: "nl-sheet-link", data: {turbo: false, arena_recovery: "city"} %>
+      ·
+      <%= link_to t("arena.tabs.duels"), arena_index_path(ft: 1), class: "nl-sheet-link", data: {arena_recovery: "duels"} %>
+    </p>
+  <% end %>
 
   <div class="nl-arena-tabs">
     <%= link_to t("arena.tabs.duels"), arena_index_path(ft: 1), class: "nl-arena-tab #{'nl-arena-tab--active' if active_tab == '1'}" %>

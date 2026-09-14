@@ -327,3 +327,17 @@
     line-height: 1.25;
   }
 }
+
+@media (max-width: 360px) {
+  .nl-character-page,
+  .nl-allocation-page,
+  .nl-skill-row,
+  .nl-profile-license-list {
+    min-width: 0;
+    max-width: 100%;
+  }
+
+  .nl-skill-row {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}

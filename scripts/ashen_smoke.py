@@ -1207,6 +1207,20 @@ def main() -> int:
                 and 'data-arena-recovery="lobby"' in r_room.text,
                 f"url={r_room.url}",
             )
+    locked_m = re.search(
+        r'data-arena-room="(\d+)"[^>]*data-arena-room-accessible="0"|data-arena-room-accessible="0"[^>]*data-arena-room="(\d+)"',
+        r.text,
+    )
+    if locked_m:
+        locked_id = locked_m.group(1) or locked_m.group(2)
+        r_locked = s.get(f"{BASE}/arena_rooms/{locked_id}", timeout=TIMEOUT, allow_redirects=True)
+        if 'data-arena-denied="1"' in r_locked.text:
+            report.add(
+                "arena room denied recovery",
+                'data-arena-recovery="city"' in r_locked.text
+                or 'data-arena-recovery="duels"' in r_locked.text,
+                f"url={r_locked.url}",
+            )
     r = s.get(f"{BASE}/city/buildings/tavern", timeout=TIMEOUT, allow_redirects=True)
     report.add(
         "GET /city/buildings/tavern fatigue copy",

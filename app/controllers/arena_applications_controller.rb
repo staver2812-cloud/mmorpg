@@ -103,7 +103,7 @@ class ArenaApplicationsController < ApplicationController
     return if @room.accessible_by?(current_character)
 
     respond_to do |format|
-      format.html { redirect_to arena_index_path, alert: I18n.t("game.flashes.arena_room_unavailable") }
+      format.html { redirect_to arena_index_path(arena_denied: 1), alert: I18n.t("game.flashes.arena_room_unavailable") }
       format.json do
         render json: {success: false, errors: [I18n.t("game.flashes.arena_room_unavailable")]}, status: :forbidden
       end
