@@ -314,3 +314,16 @@
     grid-column: 2;
   }
 }
+
+@media (pointer: coarse) {
+  .nl-assault-btn,
+  .nl-character-page .lbut,
+  .nl-allocation-page .lbut,
+  .nl-profile-license-list .nl-sheet-link {
+    min-height: 44px;
+    min-width: 44px;
+    padding: 8px 10px;
+    font-size: 12px;
+    line-height: 1.25;
+  }
+}
