@@ -131,7 +131,7 @@ export default class extends Controller {
     this.timerTarget.classList.add("visible")
 
     if (seconds <= 0) {
-      this.timerTarget.textContent = "Fight started"
+      this.timerTarget.textContent = this.copyValue.fight_started || "Fight started"
       this.timerTarget.classList.add("arena-countdown-timer--final")
       setTimeout(() => this.timerTarget.classList.remove("visible"), 2000)
     } else if (seconds <= 3) {
@@ -181,7 +181,7 @@ export default class extends Controller {
   handleTurnTimeout(data) {
     this.appendSystemMessage({
       timestamp: data.timestamp,
-      message: data.message || "Turn ended by timeout",
+      message: data.message || this.copyValue.turn_ended_by_timeout || "Turn ended by timeout",
       severity: data.claim_available ? "warning" : "info"
     })
 
@@ -193,7 +193,7 @@ export default class extends Controller {
   handleTimeoutClaimAvailable(data) {
     this.appendSystemMessage({
       timestamp: data.timestamp,
-      message: data.message || "Timeout controls are available.",
+      message: data.message || this.copyValue.timeout_finish_available || "Timeout controls are available.",
       severity: "warning"
     })
     this.refreshAuthoritativePage()
@@ -678,10 +678,10 @@ export default class extends Controller {
 
   resultTitle(resultClass) {
     switch (resultClass) {
-      case "victory": return "Victory"
-      case "defeat": return "Defeat"
-      case "draw": return "Draw"
-      default: return "Fight finished"
+      case "victory": return this.copyValue.victory || "Victory"
+      case "defeat": return this.copyValue.defeat || "Defeat"
+      case "draw": return this.copyValue.draw || "Draw"
+      default: return this.copyValue.fight_finished || "Fight finished"
     }
   }
 
@@ -690,9 +690,10 @@ export default class extends Controller {
   }
 
   renderRewards(rewards) {
+    const rewardsTitle = this.copyValue.rewards || "Rewards"
     return `
       <div class="arena-result-rewards">
-        <h3>Rewards</h3>
+        <h3>${rewardsTitle}</h3>
         <div class="rewards-list">
           ${rewards.xp ? `<span class="reward-item">+${rewards.xp} XP</span>` : ""}
           ${rewards.nv ? `<span class="reward-item reward-nv">+${rewards.nv} NV</span>` : ""}
