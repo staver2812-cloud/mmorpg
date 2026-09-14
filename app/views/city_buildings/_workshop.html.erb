@@ -60,7 +60,10 @@
                 form: {data: {turbo: false}} %>
         <% else %>
           <button type="button" class="lbut" disabled title="<%= gate[:reason] %>"><%= t("game.professions.craft_cta") %></button>
-          <p class="nl-quests-board__meta"><%= gate[:reason] %></p>
+          <p class="nl-quests-board__meta">
+            <%= gate[:reason] %>
+            <%= craft_block_recovery_link(gate) %>
+          </p>
         <% end %>
       </article>
     <% end %>

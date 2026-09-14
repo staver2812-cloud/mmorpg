@@ -1253,7 +1253,11 @@ en:
       crafted: "Crafted: %{name}. %{profession} skill: %{skill}."
       min_skill: "min skill %{amount}"
       need_skill: "Need skill %{amount}+ (now %{current})"
+      need_skill_named: "Need %{profession} skill %{amount}+ (now %{current})."
       need_mats: "Missing: %{list}"
+      recipe_missing: "That recipe is not available."
+      gather_world: "Gather outdoors"
+      open_inventory: "Open Inventory"
       inputs: "needs"
     locations:
       you_have: "You have"

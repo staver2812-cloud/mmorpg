@@ -13,12 +13,16 @@ module ProfessionsHelper
     end.join(", ")
   end
 
-  # Returns {ready:, reason:} for workshop/hospital craft buttons.
+  # Returns {ready:, reason:, code:} for workshop/hospital craft buttons.
   def craft_readiness(recipe, character:, skill:)
     Game::Professions::Templates.ensure_craft_items!
     min_skill = recipe.fetch("min_skill", 0).to_i
     if skill.to_i < min_skill
-      return {ready: false, reason: I18n.t("game.professions.need_skill", amount: min_skill, current: skill.to_i)}
+      return {
+        ready: false,
+        code: :need_skill,
+        reason: I18n.t("game.professions.need_skill", amount: min_skill, current: skill.to_i)
+      }
     end
 
     inventory = character.inventory
@@ -30,10 +34,23 @@ module ProfessionsHelper
       template&.display_name || item_key.to_s
     end
     if missing.any?
-      return {ready: false, reason: I18n.t("game.professions.need_mats", list: missing.join(", "))}
+      return {
+        ready: false,
+        code: :need_mats,
+        reason: I18n.t("game.professions.need_mats", list: missing.join(", "))
+      }
     end
 
-    {ready: true, reason: nil}
+    {ready: true, code: nil, reason: nil}
+  end
+
+  def craft_block_recovery_link(gate)
+    case gate[:code]
+    when :need_mats
+      link_to t("game.professions.gather_world"), world_path, class: "nl-sheet-link", data: {craft_recovery: "world"}
+    when :need_skill
+      link_to t("game.professions.open_inventory"), inventory_path, class: "nl-sheet-link", data: {craft_recovery: "inventory"}
+    end
   end
 
   private

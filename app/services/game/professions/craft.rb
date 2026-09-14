@@ -15,7 +15,7 @@ module Game
 
       def call
         recipe = Catalog.recipe(recipe_key)
-        return failure("Такого рецепта нет.") unless recipe
+        return failure(I18n.t("game.professions.recipe_missing")) unless recipe
 
         profession = Catalog.professions.fetch(recipe.fetch("profession"))
         skill_key = profession.fetch("skill_key")
@@ -26,12 +26,19 @@ module Game
           skill = profession_skill(skill_key)
           min_skill = recipe.fetch("min_skill", 0).to_i
           if skill < min_skill
-            return failure("Нужен навык «#{profession_title(profession)}» #{min_skill}+ (сейчас #{skill}).")
+            return failure(
+              I18n.t(
+                "game.professions.need_skill_named",
+                profession: profession_title(profession),
+                amount: min_skill,
+                current: skill
+              )
+            )
           end
 
           ensure_output_templates!(recipe)
           unless inputs_available?(inventory, recipe.fetch("inputs"))
-            return failure("Не хватает материалов для крафта.")
+            return failure(I18n.t("game.inventory.craft_missing_materials"))
           end
 
           manager = Game::Inventory::Manager.new(inventory:)
