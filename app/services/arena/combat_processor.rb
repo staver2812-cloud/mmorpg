@@ -95,7 +95,7 @@ module Arena
     # @return [Result] the validated action result
     def process_player_intent(character, action_type, **params)
       normalized_action_type = action_type.to_s.to_sym
-      return failure("Unsupported player combat intent") unless PLAYER_INTENT_ACTIONS.include?(normalized_action_type)
+      return failure(I18n.t("game.fight.errors.unsupported_intent")) unless PLAYER_INTENT_ACTIONS.include?(normalized_action_type)
 
       process_action(character, normalized_action_type, **params)
     end
@@ -113,9 +113,9 @@ module Arena
     #   - block_parts: Array of body parts to block
     # @return [Result] the result of the action
     def process_action(character, action_type, **params)
-      return failure("Fight is not active") unless match.live?
-      return failure("Character is not participating in this fight") unless participant?(character)
-      return failure("Character is defeated") if character.current_hp <= 0
+      return failure(I18n.t("game.fight.errors.not_active")) unless match.live?
+      return failure(I18n.t("game.fight.errors.not_participating")) unless participant?(character)
+      return failure(I18n.t("game.fight.errors.character_defeated")) if character.current_hp <= 0
 
       combat_profile_for(character)
 
@@ -148,7 +148,7 @@ module Arena
       current_ap = get_character_ap(character)
 
       if current_ap < ap_cost
-        return failure("Not enough AP (need #{ap_cost}, have #{current_ap})")
+        return failure(I18n.t("game.fight.errors.not_enough_ap", need: ap_cost, have: current_ap))
       end
 
       result = case action_type.to_sym
@@ -168,7 +168,7 @@ module Arena
           body_part: params[:body_part] || "torso"
         )
       when :defend then process_defend(character, block_parts: params[:block_parts])
-      else failure("Unknown action type: #{action_type}")
+      else failure(I18n.t("game.fight.errors.unknown_action", action: action_type))
       end
 
       # After player action, deduct AP and process NPC turn if applicable
@@ -329,12 +329,12 @@ module Arena
     # Resolve a Neverlands-style waiting timeout. The claimant must have
     # already submitted the current turn and be waiting for the opponent.
     def claim_timeout(character, mode: nil)
-      return failure("Fight is not active") unless match.live?
-      return failure("Character is not participating in this fight") unless participant?(character)
-      return failure("Turn timer has not expired yet") unless match.turn_timed_out?
+      return failure(I18n.t("game.fight.errors.not_active")) unless match.live?
+      return failure(I18n.t("game.fight.errors.not_participating")) unless participant?(character)
+      return failure(I18n.t("game.fight.errors.turn_timer_active")) unless match.turn_timed_out?
 
       participation = match.arena_participations.find_by(character:)
-      return failure("Submit your turn first") unless pending_turn_data(participation).present?
+      return failure(I18n.t("game.fight.errors.submit_turn_first")) unless pending_turn_data(participation).present?
 
       normalized_mode = mode.to_s == "draw" ? "draw" : "victory"
       winning_team = (normalized_mode == "draw") ? nil : participation.team
@@ -462,7 +462,7 @@ module Arena
       expected_turn_number: nil
     )
       participation = match.arena_participations.find_by(character:)
-      return failure("Character is not participating in this fight") unless participation
+      return failure(I18n.t("game.fight.errors.not_participating")) unless participation
 
       normalized_attacks = normalize_turn_attacks(attacks)
       normalized_blocks = normalize_turn_blocks(blocks)
@@ -490,12 +490,12 @@ module Arena
         round_number = match.current_turn_number || 1
         expected_round = Integer(expected_turn_number, exception: false)
 
-        return failure("Fight is not active") unless match.live?
-        return failure("Character is defeated") unless character.current_hp.positive?
+        return failure(I18n.t("game.fight.errors.not_active")) unless match.live?
+        return failure(I18n.t("game.fight.errors.character_defeated")) unless character.current_hp.positive?
         if expected_round && expected_round != round_number
-          return failure("Fight state changed; refresh and submit the current turn")
+          return failure(I18n.t("game.fight.errors.state_changed"))
         end
-        return failure("Turn already submitted; waiting for opponent") if pending_turn_current?(participation)
+        return failure(I18n.t("game.fight.errors.turn_already_submitted")) if pending_turn_current?(participation)
 
         pending_turn = {
           "turn_number" => round_number,
@@ -549,19 +549,19 @@ module Arena
         expected_round = Integer(expected_turn_number, exception: false)
 
         if !match.live?
-          result = failure("Fight is not active")
+          result = failure(I18n.t("game.fight.errors.not_active"))
         elsif participation.nil?
-          result = failure("Character is not participating in this fight")
+          result = failure(I18n.t("game.fight.errors.not_participating"))
         elsif expected_round && expected_round != round_number
-          result = failure("Fight state changed; refresh and submit the current turn")
+          result = failure(I18n.t("game.fight.errors.state_changed"))
         elsif participation.metadata.to_h["last_resolved_turn_number"].to_i >= round_number
-          result = failure("This turn was already resolved")
+          result = failure(I18n.t("game.fight.errors.turn_already_resolved"))
         else
           ap_cost = calculate_ap_cost(:turn, {attacks:, blocks:, skills:}, actor: character)
           current_ap = get_character_ap(character)
 
           if current_ap < ap_cost
-            result = failure("Not enough AP (need #{ap_cost}, have #{current_ap})")
+            result = failure(I18n.t("game.fight.errors.not_enough_ap", need: ap_cost, have: current_ap))
           else
             turn_result = process_turn(character, target:, attacks:, blocks:, skills:)
             if turn_result.success?
@@ -667,12 +667,12 @@ module Arena
     end
 
     def process_attack(attacker, target, attack_type: :simple, body_part: "torso")
-      return failure("Invalid attack type: #{attack_type}") if Game::Combat::ActionCatalog.attack_config(attack_type).blank?
-      return failure("Invalid attack zone: #{body_part}") unless BODY_PARTS.include?(body_part.to_s)
+      return failure(I18n.t("game.fight.errors.invalid_attack_type", type: attack_type)) if Game::Combat::ActionCatalog.attack_config(attack_type).blank?
+      return failure(I18n.t("game.fight.errors.invalid_attack_zone", zone: body_part)) unless BODY_PARTS.include?(body_part.to_s)
 
       # Find target - could be Character or NPC participation
       target_participation = find_target_participation(attacker, target)
-      return failure("No valid target") unless target_participation
+      return failure(I18n.t("game.fight.errors.no_valid_target")) unless target_participation
 
       # Check if target is NPC or player
       if target_participation.npc?
@@ -683,8 +683,8 @@ module Arena
     end
 
     def process_attack_on_player(attacker, target, attack_type: :simple, body_part: "torso")
-      return failure("Cannot attack an ally") if same_team?(attacker, target)
-      return failure("Target is dead") if target.current_hp <= 0
+      return failure(I18n.t("game.fight.errors.cannot_attack_ally")) if same_team?(attacker, target)
+      return failure(I18n.t("game.fight.errors.target_dead")) if target.current_hp <= 0
 
       attacker_participation = match.arena_participations.find_by(character: attacker)
       target_participation = match.arena_participations.find_by(character: target)
@@ -751,8 +751,8 @@ module Arena
     def process_attack_on_npc(attacker, npc_participation, attack_type: :simple, body_part: "torso")
       npc = npc_participation.npc_template
       attacker_participation = match.arena_participations.find_by(character: attacker)
-      return failure("Cannot attack an ally") if attacker_participation&.team == npc_participation.team
-      return failure("Target is dead") if npc_participation.current_hp <= 0
+      return failure(I18n.t("game.fight.errors.cannot_attack_ally")) if attacker_participation&.team == npc_participation.team
+      return failure(I18n.t("game.fight.errors.target_dead")) if npc_participation.current_hp <= 0
 
       resolution = resolve_physical_attack(
         attacker_participation:,
@@ -925,9 +925,9 @@ module Arena
     def process_turn_skill(_character, skill, _target)
       key = skill[:key].to_s
       config = Game::Combat::ActionCatalog.magic_config(key)
-      return failure("Magic/action not found: #{key}") if config.blank?
+      return failure(I18n.t("game.fight.errors.magic_not_found", key: key)) if config.blank?
 
-      failure("Magic/action slot requires source-captured resolver: #{config['name'] || key}")
+      failure(I18n.t("game.fight.errors.magic_resolver_required", name: config["name"] || key))
     end
 
     def find_target(target_id)
@@ -948,11 +948,11 @@ module Arena
         participation = match.arena_participations.find_by(character:)
 
         result = if !match.live?
-          failure("Fight is not active")
+          failure(I18n.t("game.fight.errors.not_active"))
         elsif participation.nil?
-          failure("Character is not participating in this fight")
+          failure(I18n.t("game.fight.errors.not_participating"))
         elsif participation.result == "defeat" || character.reload.current_hp <= 0
-          failure("Character is defeated")
+          failure(I18n.t("game.fight.errors.character_defeated"))
         else
           character.update!(current_hp: 0, last_combat_at: Time.current)
           participation.update!(
@@ -1643,8 +1643,8 @@ module Arena
       npc = npc_participation.npc_template
       target ||= find_player_target
 
-      return failure("No valid target") unless target
-      return failure("Target is dead") if target.current_hp <= 0
+      return failure(I18n.t("game.fight.errors.no_valid_target")) unless target
+      return failure(I18n.t("game.fight.errors.target_dead")) if target.current_hp <= 0
 
       body_part = params[:body_part] || "torso"
       attack_type = params[:attack_type] || "simple"

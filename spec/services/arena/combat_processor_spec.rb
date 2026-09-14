@@ -108,9 +108,9 @@ RSpec.describe Arena::CombatProcessor do
       defeated = processor.process_player_intent(character1, :turn, target: character2, **turn)
 
       expect([missing.error, allied.error, foreign.error, defeated.error]).to eq([
-        "No valid target",
-        "Cannot attack an ally",
-        "No valid target",
+        I18n.t("game.fight.errors.no_valid_target"),
+        I18n.t("game.fight.errors.cannot_attack_ally"),
+        I18n.t("game.fight.errors.no_valid_target"),
         "Target is dead"
       ])
       expect(participation1.reload.metadata["pending_turn"]).to be_blank
@@ -240,7 +240,7 @@ RSpec.describe Arena::CombatProcessor do
         )
 
         expect(result.success?).to be false
-        expect(result.error).to eq("Fight is not active")
+        expect(result.error).to eq(I18n.t("game.fight.errors.not_active"))
       end
     end
 
@@ -276,7 +276,7 @@ RSpec.describe Arena::CombatProcessor do
         )
 
         expect(result.success?).to be false
-        expect(result.error).to eq("Character is defeated")
+        expect(result.error).to eq(I18n.t("game.fight.errors.character_defeated"))
       end
     end
   end
@@ -718,7 +718,7 @@ RSpec.describe Arena::CombatProcessor do
       result = processor.process_action(character1, :surrender)
 
       expect(result).not_to be_success
-      expect(result.error).to eq("Fight is not active")
+      expect(result.error).to eq(I18n.t("game.fight.errors.not_active"))
       expect(character1.reload.current_hp).to eq(100)
     end
   end
@@ -782,7 +782,7 @@ RSpec.describe Arena::CombatProcessor do
         )
 
         expect(result.success?).to be false
-        expect(result.error).to include("Not enough AP")
+        expect(result.error).to match(/Not enough AP|Недостаточно ОД/)
       end
 
       it "processes a Neverlands-style turn package with attack and block" do

@@ -75,7 +75,7 @@ RSpec.describe "Physical 3x3 team combat lifecycle", type: :request do
         as: :json
 
       expect(response).to have_http_status(:unprocessable_content)
-      expect(response.parsed_body.fetch("error")).to eq("Cannot attack an ally")
+      expect(response.parsed_body.fetch("error")).to eq(I18n.t("game.fight.errors.cannot_attack_ally"))
       expect(@participations.fetch("a").first.reload.metadata["pending_turn"]).to be_blank
     end
 
@@ -110,7 +110,7 @@ RSpec.describe "Physical 3x3 team combat lifecycle", type: :request do
           params: physical_turn(target: side_b[1].fetch(:character), turn_number: 1),
           as: :json
         expect(response).to have_http_status(:unprocessable_content)
-        expect(response.parsed_body.fetch("error")).to eq("Turn already submitted; waiting for opponent")
+        expect(response.parsed_body.fetch("error")).to eq(I18n.t("game.fight.errors.turn_already_submitted"))
       end
     end
 

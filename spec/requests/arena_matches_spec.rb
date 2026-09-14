@@ -268,7 +268,7 @@ RSpec.describe "ArenaMatches", type: :request do
           as: :json
 
         expect(response).to have_http_status(:unprocessable_entity)
-        expect(response.parsed_body["error"]).to eq("Cannot attack an ally")
+        expect(response.parsed_body["error"]).to eq(I18n.t("game.fight.errors.cannot_attack_ally"))
         expect(live_match.arena_participations.find_by(user: user).reload.metadata["pending_turn"]).to be_blank
         expect(live_match.combat_log_entries.count).to eq(initial_log_count)
       end
