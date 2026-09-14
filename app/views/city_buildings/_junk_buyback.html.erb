@@ -12,7 +12,10 @@
   <% rows = local_assigns.fetch(:offers, []) %>
   <% total = rows.sum { |row| row[:quantity].to_i * row[:price].to_i } %>
   <% if rows.empty? %>
-    <p class="nl-empty-note" data-junk-total="0"><%= t("game.buildings.junk_empty") %></p>
+    <p class="nl-empty-note" data-junk-total="0">
+      <%= t("game.buildings.junk_empty") %>
+      <%= link_to t("game.shop.open_inventory"), inventory_path, class: "nl-sheet-link", data: {junk_recovery: "inventory"} %>
+    </p>
   <% else %>
     <p class="nl-quests-board__meta" data-junk-total="<%= total %>">
       <%= t("game.buildings.junk_estimate", total: total, lines: rows.size) %>

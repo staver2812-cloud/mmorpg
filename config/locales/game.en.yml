@@ -997,6 +997,7 @@ en:
       bank_title: "Character vault"
       bank_lead: "Wallet %{wallet} NV · vault %{vault} NV. One item locker slot below."
       bank_vm: "Veil Marks: %{amount} VM (scrolls at Infirmary)"
+      bank_wallet_empty: "Wallet is empty — earn NV first."
       bank_deposit: "Deposit"
       bank_withdraw: "Withdraw"
       bank_deposit_cta: "Deposit"

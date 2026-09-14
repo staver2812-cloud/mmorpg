@@ -35,7 +35,12 @@
     <% else %>
       <% blocked = combat_left ? t("game.buildings.hospital_combat_only") : t("game.buildings.hospital_already_full") %>
       <button type="button" class="lbut" disabled title="<%= blocked %>"><%= t("game.buildings.hospital_rest_cta") %></button>
-      <span class="nl-quests-board__meta"><%= blocked %></span>
+      <span class="nl-quests-board__meta">
+        <%= blocked %>
+        <% if combat_left %>
+          <%= link_to t("game.buildings.premium_desk"), "#hospital-premium-desk", class: "nl-sheet-link", data: {hospital_recovery: "premium"} %>
+        <% end %>
+      </span>
     <% end %>
   </p>
 </section>
@@ -121,7 +126,7 @@
   </div>
 </section>
 
-<section class="nl-handbook" aria-label="<%= t("game.buildings.premium_desk") %>">
+<section class="nl-handbook" id="hospital-premium-desk" aria-label="<%= t("game.buildings.premium_desk") %>">
   <h2><%= t("game.buildings.premium_desk") %></h2>
   <% marks = local_assigns.fetch(:veil_marks, 0).to_i %>
   <% premium_offers = local_assigns.fetch(:premium_offers, {}) %>
