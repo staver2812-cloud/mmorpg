@@ -10,7 +10,11 @@
     <%= t("game.buildings.airship_wallet", amount: balance.to_i) %>
   </p>
   <% if routes.blank? %>
-    <p class="nl-quests-board__meta" data-airship-affordable="n/a"><%= t("game.common.unavailable") %></p>
+    <p class="nl-quests-board__meta" data-airship-affordable="n/a" data-airship-routes-empty="1">
+      <%= t("game.common.unavailable") %>
+      ·
+      <%= link_to t("arena.nav.city"), world_path, data: {turbo: false, airship_recovery: "world"} %>
+    </p>
   <% end %>
   <table class="nl-airship-routes">
     <thead><tr><th><%= t("game.common.route") %></th><th><%= t("game.common.price") %></th><th><%= t("game.common.next_departure") %></th><th></th></tr></thead>

@@ -40,6 +40,7 @@ RSpec.describe "Character licenses", type: :request do
     expect(html.at_css('.nl-profile-tabs [aria-current="page"]').text).to eq(I18n.t("game.common.licenses"))
     expect(html.at_css("#character-licenses-heading").text).to eq(I18n.t("game.profile.licenses"))
     expect(response.body).to include(I18n.t("game.licenses.empty"))
+    expect(html.at_css(%([data-licenses-empty="1"] a[data-licenses-recovery="shop"]))["href"]).to eq(shop_path(mode: "licenses"))
     expect(html.at_css('meta[name="turbo-cache-control"]')["content"]).to eq("no-cache")
   end
 

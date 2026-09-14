@@ -60,6 +60,7 @@ novice → adept → master bags.
 | Date | Change |
 |---|---|
 | 2026-09-14 | Quests journal always links to Coal Hall board (`data-quest-hall-link`); when Hall is out of district the link opens City. Locked contracts recover to World. |
+| 2026-09-14 | Completed quest cards also recover to World (`data-quest-done`). |
 | 2026-09-13 | City Hall quest summary exposes status counts (`data-city-hall-quest-active` / `available` / `locked` / `completed`) beside ready. |
 | 2026-09-13 | Journal summary also exposes ready-to-turn-in count (`data-quest-ready-count`). |
 | 2026-09-13 | Journal summary exposes available/active/locked/completed counts (`data-quest-summary` / `data-quest-available` / `active` / `locked` / `completed`); HUD chip exposes `data-quest-chip`. |

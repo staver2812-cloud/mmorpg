@@ -91,7 +91,11 @@
               <%= link_to t("game.quests.continue_world"), world_path, class: "nl-sheet-link", data: {quest_recovery: "world"} %>
             </span>
           <% else %>
-            <span class="nl-quests__done"><%= t("game.quests.done") %></span>
+            <span class="nl-quests__done" data-quest-done="1">
+              <%= t("game.quests.done") %>
+              ·
+              <%= link_to t("game.quests.continue_world"), world_path, class: "nl-sheet-link", data: {quest_recovery: "world"} %>
+            </span>
           <% end %>
         </div>
       </article>

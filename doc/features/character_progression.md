@@ -284,7 +284,8 @@ open `GET /character/licenses`. The controller resolves only the signed-in
 current character, authorizes ownership, and reads active `CharacterLicense`
 rows at one server timestamp. It shows at most 100 current grants, ordered by
 expiry and id, with snapshot name, kind, tier, and expiry. An empty collection
-shows `You have no licenses.` Query-supplied character or license ids cannot
+shows `You have no licenses.` plus a Shop Licenses recovery link so Abilities is
+not a dead end. Query-supplied character or license ids cannot
 select another owner.
 
 Shop owns atomic purchase, funds, stock, prerequisites, and grant creation. The
@@ -752,6 +753,7 @@ Before extending Character Progression:
 | 2026-09-14 | Nature Child (`nature_child`, source ID `22`) is selectable; owned perk raises waterbody drinking recovery to four fatigue points via World. |
 | 2026-09-14 | Owner profile idle allocation note links to World and Training hall when no free primary-stat points remain. |
 | 2026-09-14 | Visitor empty public-perks note recovers via World. |
+| 2026-09-14 | Empty Your licenses note recovers via Shop Licenses. |
 | 2026-09-13 | Skill/perk allocation UI prefers captured RU source labels for `:ru`, localizes skill categories and spend rejects. |
 | 2026-09-13 | Stat/skill/perk allocation Reset/Save and `(base: N)` chrome use `game.profile.allocation_*` / `stat_base` i18n. |
 | 2026-09-13 | Character/licenses page titles use `game.profile.*_title`; license kinds use `game.licenses.kinds.*`. |
