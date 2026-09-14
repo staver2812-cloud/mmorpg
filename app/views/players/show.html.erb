@@ -80,7 +80,11 @@
           </ul>
         </div>
       <% else %>
-        <p class="nl-empty-note" data-profile-perks="empty"><%= t("game.profile.no_public_perks") %></p>
+        <p class="nl-empty-note" data-profile-perks="empty">
+          <%= t("game.profile.no_public_perks") %>
+          ·
+          <%= link_to t("nav.world"), world_path, class: "nl-sheet-link", data: {profile_recovery: "world"} %>
+        </p>
       <% end %>
     </main>
   </div>

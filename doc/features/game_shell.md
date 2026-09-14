@@ -67,9 +67,11 @@ source-backed same-cell hostile encounter can replace those shell navigations
 with combat when Ashen Bait is present, then return to the requested destination
 afterward. Without bait those navigations proceed. Offered wilderness movement
 away from the cell is not interrupted (escape). Passive outdoor ambushes still
-fire about once every five minutes without bait. While an Arena match page is
-open, Character/Inventory/Q/A chrome stays locked until the player finishes the
-fight.
+fire about once every five minutes without bait. The outdoor HUD bait chip shows
+quantity; when empty it links back to City (`data-bait-recovery="city"`) so
+“buy in town” is not dead text. In-district empty bait still opens Relics/Shop.
+While an Arena match page is open, Character/Inventory/Q/A chrome stays locked
+until the player finishes the fight.
 
 The server owns identity, character state, location presence, social verification, channel visibility, message and game-event persistence, event audience, ignore filtering, and authorization. The browser owns only main-frame navigation, presence sort/refresh preferences, and chat focus/scroll/reset presentation.
 
@@ -1260,3 +1262,4 @@ Before extending Game Shell:
 | 2026-09-14 | English ActiveRecord user attribute/error and date/time format mirrors for signup/account forms. |
 | 2026-09-14 | Auth/chat denial raises use `game.chat.*` / `game.flashes.character_required` / `email_verification_required`; HTML alerts prefer localized exception text over generic English policy denials. |
 | 2026-09-14 | Empty trauma/heal chips always render and recover via Infirmary premium desk or City; outdoor fatigue and unset-alignment chips recover via Tavern/City/Law when out of district; presence Assault blocked recovers to Infirmary. |
+| 2026-09-14 | Outdoor empty bait chip is a City recovery link (`data-bait-recovery="city"`); smoke asserts it when qty=0. |

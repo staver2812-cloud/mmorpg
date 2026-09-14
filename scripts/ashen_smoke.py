@@ -854,11 +854,15 @@ def main() -> int:
         r = s.get(f"{BASE}/world", timeout=TIMEOUT)
         outdoorish = ("Пепельный Берег" in r.text) or ("nl-world-map" in r.text) or ("available-actions" in r.text)
         report.add("outdoor after west_gate", r.status_code == 200 and outdoorish, f"{r.status_code}")
-        report.add(
-            "outdoor bait chip",
-            (("Приманка:" in r.text) or ("nl-bait-chip" in r.text))
-            and ("data-bait-qty=" in r.text),
+        bait_chip_ok = (("Приманка:" in r.text) or ("nl-bait-chip" in r.text)) and (
+            "data-bait-qty=" in r.text
         )
+        report.add("outdoor bait chip", bait_chip_ok)
+        if 'data-bait-qty="0"' in r.text or "data-bait-qty='0'" in r.text:
+            report.add(
+                "outdoor empty bait recovery",
+                'data-bait-recovery="city"' in r.text or "data-bait-recovery='city'" in r.text,
+            )
         if "nl-obelisk-chip" in r.text or "data-obelisk-chip-affordable=" in r.text:
             report.add(
                 "outdoor obelisk chip affordability",

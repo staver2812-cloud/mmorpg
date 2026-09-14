@@ -114,7 +114,7 @@ request. Visitor profiles and the read-only public JSON profile remain
 available. World owns the captured lock and timer behavior recorded in
 `doc/design/reference/world/observations/2026-09-07_forpost_grid_and_action_audit.md`.
 
-The profile is not an account dashboard. It shows the gameplay character, equipment summary, vitals, progress, record, numeric skill summary, and owned perks. Only the owner sees primary-stat detail and progression mutation links.
+The profile is not an account dashboard. It shows the gameplay character, equipment summary, vitals, progress, record, numeric skill summary, and owned perks. Only the owner sees primary-stat detail and progression mutation links. A visitor profile with no public perks shows an empty note plus World recovery so the page is not a dead end.
 
 Both owner and public profiles place the current location below the equipment
 paper doll. The first line is the zone's display name; a distinct authored
@@ -751,6 +751,7 @@ Before extending Character Progression:
 | 2026-09-14 | Allocation/perk and profile chrome request specs assert via `game.flashes.alloc_*` / `perks_saved` / `game.profile.sections` (RU-safe). |
 | 2026-09-14 | Nature Child (`nature_child`, source ID `22`) is selectable; owned perk raises waterbody drinking recovery to four fatigue points via World. |
 | 2026-09-14 | Owner profile idle allocation note links to World and Training hall when no free primary-stat points remain. |
+| 2026-09-14 | Visitor empty public-perks note recovers via World. |
 | 2026-09-13 | Skill/perk allocation UI prefers captured RU source labels for `:ru`, localizes skill categories and spend rejects. |
 | 2026-09-13 | Stat/skill/perk allocation Reset/Save and `(base: N)` chrome use `game.profile.allocation_*` / `stat_base` i18n. |
 | 2026-09-13 | Character/licenses page titles use `game.profile.*_title`; license kinds use `game.licenses.kinds.*`. |
