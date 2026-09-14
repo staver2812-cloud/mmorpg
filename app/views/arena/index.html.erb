@@ -96,9 +96,16 @@
   </div>
 
   <% if active_tab == "4" %>
-    <div class="nl-arena-search">
+    <div class="nl-arena-search" data-arena-stats-tab="1">
       <b><%= t("arena.statistics_title") %></b>
       <span class="nl-arena-muted"><%= t("arena.statistics_hint") %></span>
+      <p class="nl-quests-board__meta">
+        <%= t("arena.statistics_next") %>
+        ·
+        <%= link_to t("arena.tabs.duels"), arena_index_path(ft: 1), class: "nl-sheet-link" %>
+        ·
+        <%= link_to t("arena.nav.city"), world_path, class: "nl-sheet-link", data: {turbo: false} %>
+      </p>
     </div>
   <% else %>
     <table class="nl-arena-table nl-arena-summary-table">
