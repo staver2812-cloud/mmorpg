@@ -1247,3 +1247,4 @@ Before extending Game Shell:
 | 2026-09-13 | Chat post rejects (mute/system/location/private/privacy) use `game.chat.*` i18n. |
 | 2026-09-13 | EventPublisher fight/search timeline bodies use `game.events.*` i18n. |
 | 2026-09-13 | Chat channel create names (global/local/whisper/arena) use `game.chat.*` i18n. |
+| 2026-09-13 | Fight/chat browser titles use `game.fight.*_title` / `game.chat.page_title`. |
