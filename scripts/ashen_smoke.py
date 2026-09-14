@@ -512,6 +512,18 @@ def main() -> int:
             'data-numismatics-recovery="shop"' in r.text,
             f"url={r.url}",
         )
+        report.add(
+            "numismatics building chrome recovery",
+            'data-building-recovery="world"' in r.text,
+            f"url={r.url}",
+        )
+    r = s.get(f"{BASE}/city/buildings/junk_dealer", timeout=TIMEOUT, allow_redirects=True)
+    if r.status_code == 200 and 'data-building-key="junk_dealer"' in r.text:
+        report.add(
+            "junk dealer building chrome recovery",
+            'data-building-recovery="world"' in r.text,
+            f"url={r.url}",
+        )
     r = s.get(f"{BASE}/city/buildings/city_hall", timeout=TIMEOUT, allow_redirects=True)
     report.add(
         "GET /city/buildings/city_hall",
