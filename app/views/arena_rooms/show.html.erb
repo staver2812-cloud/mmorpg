@@ -39,7 +39,7 @@
     <b><%= @room.name %></b>
     <span><%= t("arena.levels", min: @room.level_min, max: @room.level_max) %></span>
     <% if @room.alignment_restriction.present? %>
-      <span><%= @room.alignment_restriction.humanize %></span>
+      <span><%= t("game.buildings.law_alignment.#{@room.alignment_restriction}", default: @room.alignment_restriction.to_s.humanize) %></span>
     <% end %>
   </div>
 

@@ -598,6 +598,12 @@ en:
       whisper_channel: "Private Whisper"
       arena_channel: "Arena Match #%{id}"
       page_title: "%{name} — Chat"
+      types:
+        local: "Local"
+        global: "Global"
+        whisper: "Whisper"
+        system: "System"
+        arena: "Arena"
       placeholder: "Type a message..."
       message_blank: "message cannot be blank"
       location_required: "Current location required"

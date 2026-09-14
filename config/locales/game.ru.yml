@@ -598,6 +598,12 @@ ru:
       whisper_channel: "Личный шёпот"
       arena_channel: "Бой арены #%{id}"
       page_title: "%{name} — Чат"
+      types:
+        local: "Локальный"
+        global: "Глобальный"
+        whisper: "Шёпот"
+        system: "Системный"
+        arena: "Арена"
       placeholder: "Введите сообщение..."
       message_blank: "Сообщение не может быть пустым"
       location_required: "Нужна текущая локация"

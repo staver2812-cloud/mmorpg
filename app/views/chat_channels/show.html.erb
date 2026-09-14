@@ -23,7 +23,7 @@
   <div class="chat-header">
     <div class="chat-header-info">
       <h1><%= @chat_channel.name %></h1>
-      <span class="badge badge--<%= @chat_channel.channel_type %>"><%= @chat_channel.channel_type.humanize %></span>
+      <span class="badge badge--<%= @chat_channel.channel_type %>"><%= t("game.chat.types.#{@chat_channel.channel_type}", default: @chat_channel.channel_type.to_s.humanize) %></span>
     </div>
   </div>
 

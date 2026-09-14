@@ -70,4 +70,8 @@ en:
     change_password_title: "Change password"
     resend_confirmation_title: "Resend confirmation"
     resend_unlock_title: "Resend unlock"
+    edit_account_title: "Edit account"
+    password_leave_blank: "leave blank if you don't want to change it"
+    current_password: "Current password"
+    current_password_hint: "we need your current password to confirm your changes"
     waiting_confirmation: "Confirmation pending for:"

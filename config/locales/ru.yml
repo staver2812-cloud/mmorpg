@@ -67,6 +67,10 @@ ru:
     change_password_title: "Смена пароля"
     resend_confirmation_title: "Повторная отправка подтверждения"
     resend_unlock_title: "Повторная отправка разблокировки"
+    edit_account_title: "Редактировать аккаунт"
+    password_leave_blank: "оставьте пустым, если не хотите менять"
+    current_password: "Текущий пароль"
+    current_password_hint: "нужен текущий пароль для подтверждения изменений"
     waiting_confirmation: "Ожидается подтверждение для:"
 
   activerecord:

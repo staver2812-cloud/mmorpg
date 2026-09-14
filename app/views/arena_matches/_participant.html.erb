@@ -45,7 +45,7 @@
 
   <% if participation.result.present? && participation.result != "pending" %>
     <span class="arena-result-badge arena-result-badge--<%= participation.result %>">
-      <%= participation.result.humanize %>
+      <%= t("arena.results.#{participation.result}", default: participation.result.to_s.humanize) %>
     </span>
   <% end %>
 </div>
