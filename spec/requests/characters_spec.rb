@@ -157,7 +157,7 @@ RSpec.describe CharactersController, type: :request do
         }
 
         follow_redirect!
-        expect(response.body).to include("Stats saved")
+        expect(response.body).to include(I18n.t("game.flashes.stats_saved"))
       end
     end
 
@@ -191,7 +191,7 @@ RSpec.describe CharactersController, type: :request do
 
         expect(response).to redirect_to(root_path)
         follow_redirect!
-        expect(response.body).to include("No stats selected")
+        expect(response.body).to include(I18n.t("game.flashes.alloc_no_stats"))
       end
 
       it "rejects all-zero allocation" do
@@ -201,7 +201,7 @@ RSpec.describe CharactersController, type: :request do
 
         expect(response).to redirect_to(root_path)
         follow_redirect!
-        expect(response.body).to include("No stats selected")
+        expect(response.body).to include(I18n.t("game.flashes.alloc_no_stats"))
       end
     end
 
@@ -213,7 +213,7 @@ RSpec.describe CharactersController, type: :request do
 
         expect(response).to redirect_to(root_path)
         follow_redirect!
-        expect(response.body).to include("No stats selected")
+        expect(response.body).to include(I18n.t("game.flashes.alloc_no_stats"))
         character.reload
         expect(character.stat_points_available).to eq(10) # unchanged
       end
@@ -257,7 +257,7 @@ RSpec.describe CharactersController, type: :request do
 
         expect(response).to redirect_to(root_path)
         follow_redirect!
-        expect(response.body).to include("No stats selected")
+        expect(response.body).to include(I18n.t("game.flashes.alloc_no_stats"))
       end
 
       it "handles empty allocated_stats hash" do
@@ -267,7 +267,7 @@ RSpec.describe CharactersController, type: :request do
 
         expect(response).to redirect_to(root_path)
         follow_redirect!
-        expect(response.body).to include("No stats selected")
+        expect(response.body).to include(I18n.t("game.flashes.alloc_no_stats"))
       end
 
       it "handles missing allocated_stats param" do
@@ -275,7 +275,7 @@ RSpec.describe CharactersController, type: :request do
 
         expect(response).to redirect_to(root_path)
         follow_redirect!
-        expect(response.body).to include("No stats selected")
+        expect(response.body).to include(I18n.t("game.flashes.alloc_no_stats"))
       end
     end
 
@@ -365,8 +365,8 @@ RSpec.describe CharactersController, type: :request do
 
         expect(response).to have_http_status(:success)
         expect(response.body).to include("Skills")
-        expect(response.body).to include("Combat points:")
-        expect(response.body).to include("Peace points:")
+        expect(response.body).to include(I18n.t("game.profile.combat_points"))
+        expect(response.body).to include(I18n.t("game.profile.peace_points"))
       end
 
       it "shows source-backed skills" do
@@ -474,7 +474,7 @@ RSpec.describe CharactersController, type: :request do
         }
 
         follow_redirect!
-        expect(response.body).to include("Skills saved")
+        expect(response.body).to include(I18n.t("game.flashes.skills_saved"))
       end
 
       it "clears passive skill calculator cache" do

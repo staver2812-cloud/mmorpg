@@ -129,7 +129,7 @@ RSpec.describe "Physical 3x3 team combat lifecycle", type: :request do
         as: :json
 
       expect(response).to have_http_status(:unprocessable_content)
-      expect(response.parsed_body.fetch("error")).to eq("Fight state changed; refresh and submit the current turn")
+      expect(response.parsed_body.fetch("error")).to eq(I18n.t("game.fight.errors.state_changed"))
       expect(@match.reload.current_turn_number).to eq(2)
       expect(@participations.fetch("a").first.reload.metadata["pending_turn"]).to be_blank
     end

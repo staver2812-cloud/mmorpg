@@ -107,7 +107,7 @@ RSpec.describe "Public fight logs", type: :request do
 
     get public_fight_log_path(missing_id)
     expect(response).to have_http_status(:not_found)
-    expect(response.body).to eq("Fight log not found")
+    expect(response.body).to eq(I18n.t("game.flashes.fight_log_missing"))
 
     get public_fight_log_path(missing_id, format: :json)
     expect(response).to have_http_status(:not_found)

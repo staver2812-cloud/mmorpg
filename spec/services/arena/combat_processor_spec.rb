@@ -81,9 +81,9 @@ RSpec.describe Arena::CombatProcessor do
       )
       flee_result = processor.process_player_intent(character1, :flee)
 
-      expect(attack_result.error).to eq("Unsupported player combat intent")
-      expect(defend_result.error).to eq("Unsupported player combat intent")
-      expect(flee_result.error).to eq("Unsupported player combat intent")
+      expect(attack_result.error).to eq(I18n.t("game.fight.errors.unsupported_intent"))
+      expect(defend_result.error).to eq(I18n.t("game.fight.errors.unsupported_intent"))
+      expect(flee_result.error).to eq(I18n.t("game.fight.errors.unsupported_intent"))
       expect([character1.reload.current_hp, character2.reload.current_hp]).to eq(initial_hp)
       expect(participation1.reload.metadata).to eq(initial_metadata)
       expect(arena_match.combat_log_entries.count).to eq(initial_log_count)
@@ -948,7 +948,7 @@ RSpec.describe Arena::CombatProcessor do
         )
 
         expect(result).not_to be_success
-        expect(result.error).to eq("Fight state changed; refresh and submit the current turn")
+        expect(result.error).to eq(I18n.t("game.fight.errors.state_changed"))
         expect(participation1.reload.metadata["pending_turn"]).to be_blank
         expect(arena_match.reload.current_turn_number).to eq(2)
       end

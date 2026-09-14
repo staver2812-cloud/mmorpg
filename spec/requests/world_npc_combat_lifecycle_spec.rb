@@ -146,7 +146,7 @@ RSpec.describe "Physical wilderness NPC combat lifecycle", type: :request do
       as: :json
 
     expect(response).to have_http_status(:unprocessable_content)
-    expect(response.parsed_body["error"]).to eq("Fight state changed; refresh and submit the current turn")
+    expect(response.parsed_body["error"]).to eq(I18n.t("game.fight.errors.state_changed"))
     expect(match.combat_log_entries.count).to eq(first_turn_log_count)
     expect(npcs.second.reload.current_hp).to eq(5)
 
