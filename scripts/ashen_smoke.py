@@ -317,6 +317,10 @@ def main() -> int:
             ("записк" in r.text.lower() or "/city/buildings/post" in r.text)
             and ("Зал Клана" in r.text or "/city/buildings/clan_hall" in r.text),
         )
+        report.add(
+            "city_hall landmark inside chrome",
+            'data-landmark-inside="1"' in r.text,
+        )
     r = s.get(f"{BASE}/city/buildings/post", timeout=TIMEOUT, allow_redirects=True)
     report.add(
         "GET /city/buildings/post",
