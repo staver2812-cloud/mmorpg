@@ -62,6 +62,13 @@
           <%= t("game.locations.buy_deferred") %>
           ·
           <%= link_to t("game.shop.title"), shop_path, data: {turbo: false, location_recovery: "shop"} %>
+          <% if Game::World::CityBuildingCatalog.accessible?(character: current_character, building_key: "bank") %>
+            ·
+            <%= link_to t("game.shop.open_bank"), city_building_path("bank"), data: {turbo: false, location_recovery: "bank"} %>
+          <% elsif Game::World::CityBuildingCatalog.accessible?(character: current_character, building_key: "junk_dealer") %>
+            ·
+            <%= link_to t("game.buildings.junk_dealer_link"), city_building_path("junk_dealer"), data: {turbo: false, location_recovery: "junk"} %>
+          <% end %>
         </p>
       <% end %>
     </section>

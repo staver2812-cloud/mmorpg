@@ -1651,6 +1651,24 @@ select.nl-fight-select,
   }
 }
 
+@media (max-width: 360px) {
+  .fighter-paperdoll {
+    --nl-fight-doll-scale: 0.5;
+    width: 130px;
+    height: 169px;
+  }
+
+  .nl-fight-selector-table {
+    width: 100%;
+    font-size: 8px;
+  }
+
+  .nl-fight-result-table th:first-child,
+  .nl-fight-result-table td:first-child {
+    min-width: 96px;
+  }
+}
+
 /* Short landscape: keep fight controls reachable in a short viewport. */
 @media (max-height: 430px) and (orientation: landscape) {
   .arena-match-page {

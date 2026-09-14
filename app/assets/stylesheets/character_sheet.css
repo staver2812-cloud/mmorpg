@@ -360,3 +360,15 @@ button.nl-doll-slot--filled:hover {
     max-width: var(--nl-parameters-width);
   }
 }
+
+@media (max-width: 360px) {
+  .nl-character-page,
+  .nl-inventory-page,
+  .nl-allocation-page {
+    padding: 0 2px;
+  }
+
+  .nl-character-parameters {
+    font-size: 10px;
+  }
+}

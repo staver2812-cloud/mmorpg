@@ -846,6 +846,35 @@ input.nl-chat-input-field,
   .nl-refresh-image { min-width: 52px; }
 }
 
+/* Minimum-width phones (UI-ADAPT-001 320 CSS px): keep nav/tools scrollable. */
+@media (max-width: 360px) {
+  .nl-game-layout {
+    --nl-top-bar-height: 58px;
+    --nl-social-height: 176px;
+    --nl-chat-controls-height: 58px;
+    min-height: 460px;
+  }
+
+  .nl-top-bar {
+    grid-template-rows: 26px 26px;
+    padding: 1px 2px 4px;
+  }
+
+  .nl-vitals-bars,
+  .nl-hp-bar-inline,
+  .nl-mp-bar-inline { width: 108px; }
+
+  .nl-players-float {
+    grid-template-columns: minmax(108px, 40%) minmax(0, 1fr);
+  }
+
+  .nl-bottom-bar {
+    grid-template-columns: 92px minmax(0, 1fr) 44px;
+  }
+
+  .nl-action-area { padding-left: 1px; }
+}
+
 /* Short landscape phones: keep chat tools reachable without burying the main pane. */
 @media (max-height: 430px) and (orientation: landscape) {
   .nl-game-layout {

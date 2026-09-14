@@ -5,8 +5,8 @@
 </table>
 <p class="nl-quests-board__meta" data-numismatics-deferred="1">
   <%= t("game.buildings.numismatics_deferred") %>
-  <%= link_to t("game.shop.title"), shop_path, class: "nl-sheet-link" %>
+  <%= link_to t("game.shop.title"), shop_path, class: "nl-sheet-link", data: {numismatics_recovery: "shop"} %>
   <% if Game::World::CityBuildingCatalog.accessible?(character: current_character, building_key: "junk_dealer") %>
-    · <%= link_to t("game.buildings.junk_dealer_link"), city_building_path("junk_dealer"), class: "nl-sheet-link" %>
+    · <%= link_to t("game.buildings.junk_dealer_link"), city_building_path("junk_dealer"), class: "nl-sheet-link", data: {numismatics_recovery: "junk"} %>
   <% end %>
 </p>

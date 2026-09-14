@@ -321,6 +321,12 @@ def main() -> int:
         numismatics_open or numismatics_gated,
         f"url={r.url} open={numismatics_open}",
     )
+    if numismatics_open:
+        report.add(
+            "numismatics deferred recovery",
+            'data-numismatics-recovery="shop"' in r.text,
+            f"url={r.url}",
+        )
     r = s.get(f"{BASE}/city/buildings/city_hall", timeout=TIMEOUT, allow_redirects=True)
     report.add(
         "GET /city/buildings/city_hall",

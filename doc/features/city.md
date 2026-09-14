@@ -1213,6 +1213,7 @@ Final rerun results are in the
 - 2026-09-14: Prison/Gallows Law desk links fall back to City when Law Abode is out of district.
 - 2026-09-14: Post landmark chrome recovers via City/Hall.
 - 2026-09-14: Guard Tower, Pitch Forge landmark, and Tavern rumors recover via City/Market/Shop/Inventory/Hall CTAs.
+- 2026-09-14: Numismatics deferred desk recovers via Shop/Junk with `data-numismatics-recovery`; exchange buy-deferred lobby also offers Bank/Junk when accessible.
 - 2026-09-13: Infirmary, Pitch Bank, Law Abode, and Veil Obelisk desks also render the shared landmark chrome (inside lead + exit notes) for consistent exit affordances.
 - 2026-09-13: Infirmary premium desk shows live Assault/Heal scroll bag totals matching HUD chips; greys out VM buys when short (`data-hospital-premium-affordable`); also `data-hospital-premium-any-affordable` and sandbox top-up readiness (`data-hospital-topup-ready` / `data-hospital-topup-wait`); rest desk lists live injury summary (`data-hospital-injuries`); healer craft shows bag mass/slots (`data-hospital-mass`); rest readiness exposed as `data-hospital-rest-ready`.
 - 2026-09-13: Pitch Bank adds deposit-all / withdraw-all CTAs plus locker/wallet/vault data markers; shows VM with Infirmary link (`data-bank-vm`); deposit/withdraw readiness via `data-bank-can-deposit` / `data-bank-can-withdraw`; item locker readiness via `data-bank-can-store` / `data-bank-can-retrieve` / `data-bank-item-options`.

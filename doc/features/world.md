@@ -3002,6 +3002,7 @@ Before extending the World feature:
 | 2026-09-14 | Movement-offer and empty players-here specs assert via `game.flashes.movement_offer_unavailable` / `game.world.no_players` (RU-safe). |
 | 2026-09-14 | Owned Nature Child perk recovers four fatigue on Drink; without it, recovery remains two points. |
 | 2026-09-14 | Mine/exchange lobbies show explicit deferred reasons on disabled Descend/Choose/Buy controls. |
+| 2026-09-14 | Exchange buy-deferred note recovers via Shop plus Bank/Junk when those desks are accessible (`data-location-recovery`). |
 | 2026-09-14 | Deferred mine Descend recovers to City beside the disabled control. |
 | 2026-09-14 | Deferred mine Choose/Buy recover to City/Shop beside their disabled controls. |
 | 2026-09-14 | Outdoor injury lock recovers via Inventory plus Infirmary/City; blocked Enter recovers to City; empty world state retries World. |
