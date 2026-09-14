@@ -20,7 +20,7 @@ module ArenaHelper
   end
 
   def room_type_badge(room_type)
-    label = I18n.t("arena.rooms.#{room_type}.label", default: room_type.to_s.humanize)
+    label = I18n.t("arena.rooms.#{room_type}.label", default: room_type.to_s.tr("_", " "))
     description = I18n.t("arena.rooms.#{room_type}.description", default: "")
     content_tag(:span, label, class: "room-type-badge room-type-#{room_type}", title: description)
   end

@@ -283,11 +283,11 @@ module InventoriesHelper
   end
 
   def inventory_category_label(category)
-    I18n.t("game.inventory.categories.#{category}", default: category.to_s.humanize)
+    I18n.t("game.inventory.categories.#{category}", default: category.to_s.tr("_", " "))
   end
 
   def inventory_things_subcategory_options
-    THINGS_SUBCATEGORIES.map { |key, _| [key, I18n.t("game.inventory.subcategories.#{key}", default: key.to_s.humanize)] }
+    THINGS_SUBCATEGORIES.map { |key, _| [key, I18n.t("game.inventory.subcategories.#{key}", default: key.to_s.tr("_", " "))] }
   end
 
   def inventory_equipment_family?(category)

@@ -287,6 +287,8 @@ ru:
       world_cell_updated: "Клетка мира обновлена."
       world_cell_deleted: "Клетка мира удалена."
     json_object: "должен быть JSON-объектом"
+    json_invalid: "некорректный JSON: %{detail}"
+    cannot_destroy: "Нельзя удалить запись: %{detail}"
 en:
   manage:
     title: "World Management"
@@ -574,3 +576,5 @@ en:
       world_cell_updated: "World cell updated."
       world_cell_deleted: "World cell deleted."
     json_object: "must be a JSON object"
+    json_invalid: "is not valid JSON: %{detail}"
+    cannot_destroy: "Cannot delete this record: %{detail}"

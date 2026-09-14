@@ -52,7 +52,7 @@ module Manage
 
         attributes[attribute_name.to_s] = parsed
       rescue JSON::ParserError => e
-        record.errors.add(attribute_name, "is not valid JSON: #{e.message}")
+        record.errors.add(attribute_name, I18n.t("manage.json_invalid", detail: e.message))
         return
       end
 
@@ -73,7 +73,7 @@ module Manage
     rescue ActiveRecord::RecordNotDestroyed,
       ActiveRecord::DeleteRestrictionError,
       ActiveRecord::InvalidForeignKey => e
-      record.errors.add(:base, e.message)
+      record.errors.add(:base, I18n.t("manage.cannot_destroy", detail: e.message))
       false
     end
 
