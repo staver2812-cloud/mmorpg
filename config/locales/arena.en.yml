@@ -43,6 +43,7 @@ en:
     statistics_hint: "Search for current and finished fights stays in this frame."
     statistics_next: "Open Duels for live rooms, or return to City."
     recent_fights: "Recent fights"
+    recent_empty: "No recent fights yet — enter a room and create or accept an application."
     log: "log"
     ago: "%{time} ago"
     columns:
