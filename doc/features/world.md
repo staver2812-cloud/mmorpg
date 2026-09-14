@@ -2980,6 +2980,7 @@ Before extending the World feature:
 | 2026-09-13 | Law Abode alignment pledge/change via `Game::World::LawAlignmentPledge`. |
 | 2026-09-13 | Movement complete/queue fail reasons and local-action cell/deadline fails use `game.world.*` i18n. |
 | 2026-09-13 | Default Look/Fish/Drink labels and empty-result messages use `game.world.local_action.*` i18n (seeded English defaults still resolve). |
+| 2026-09-13 | Seeded Look Around `Nothing found.` result copy resolves through `game.world.local_action.resource_search.nothing_found`. |
 
 
 ## 19. Open-world parity audit (updated 2026-09-09)

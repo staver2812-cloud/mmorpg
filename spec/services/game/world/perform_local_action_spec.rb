@@ -46,7 +46,7 @@ RSpec.describe Game::World::PerformLocalAction do
       )
     )
 
-    expect(result.message).to eq("Nothing was found.")
+    expect(result.message).to eq(I18n.t("game.world.local_action.resource_search.nothing_found"))
   end
 
   it "rejects an inactive local action" do

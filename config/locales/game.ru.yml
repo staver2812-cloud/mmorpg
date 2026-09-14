@@ -435,6 +435,7 @@ ru:
         resource_search:
           label: "Осмотреться"
           message: "В этой местности нет полезной растительности."
+          nothing_found: "Ничего не найдено."
         fishing:
           label: "Рыбачить"
           message: "Нет приманки."

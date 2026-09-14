@@ -435,6 +435,7 @@ en:
         resource_search:
           label: "Look Around"
           message: "There is no useful vegetation in this area."
+          nothing_found: "Nothing found."
         fishing:
           label: "Fish"
           message: "No bait available."

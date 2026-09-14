@@ -169,13 +169,30 @@ class MapTileTemplate < ApplicationRecord
 
   def self.player_local_action_message(action_type, stored_message = nil)
     definition = local_action_definition(action_type)
-    return stored_message.presence unless definition
+    return translate_known_result_message(stored_message) if definition.nil?
 
     english_default = definition["default_message"]
-    return stored_message if stored_message.present? && stored_message != english_default
+    if stored_message.present? && stored_message != english_default
+      return translate_known_result_message(stored_message)
+    end
 
-    default_local_action_message(action_type).presence || stored_message.presence
+    default_local_action_message(action_type).presence || translate_known_result_message(stored_message)
   end
+
+  KNOWN_RESULT_MESSAGES = {
+    "Nothing found." => "game.world.local_action.resource_search.nothing_found",
+    "Nothing was found." => "game.world.local_action.resource_search.nothing_found"
+  }.freeze
+
+  def self.translate_known_result_message(message)
+    return message if message.blank?
+
+    key = KNOWN_RESULT_MESSAGES[message]
+    return message unless key
+
+    I18n.t(key, default: message)
+  end
+  private_class_method :translate_known_result_message
 
   def self.source_action_id_for(action_type)
     local_action_definition(action_type)&.fetch("source_id", nil)
