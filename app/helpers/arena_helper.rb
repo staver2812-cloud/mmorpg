@@ -50,7 +50,7 @@ module ArenaHelper
   end
 
   def fight_type_label(fight_type)
-    I18n.t("arena.fight_types.#{fight_type}", default: fight_type.to_s.humanize)
+    I18n.t("arena.fight_types.#{fight_type}", default: fight_type.to_s.tr("_", " "))
   end
 
   def fight_type_with_icon(fight_type)
@@ -58,7 +58,7 @@ module ArenaHelper
   end
 
   def fight_kind_label(fight_kind)
-    I18n.t("arena.fight_kinds.#{fight_kind}", default: fight_kind.to_s.humanize)
+    I18n.t("arena.fight_kinds.#{fight_kind}", default: fight_kind.to_s.tr("_", " "))
   end
 
   def fight_kind_with_icon(fight_kind)
