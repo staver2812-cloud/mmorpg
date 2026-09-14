@@ -21,11 +21,11 @@
     </div>
   </div>
   <fieldset data-controller="manage-collection" data-manage-collection-next-index-value="<%= tile_npc.encounter_roster_samples.length %>" data-manage-collection-limit-value="<%= TileNpc::MAX_ROSTER_SAMPLES %>">
-    <legend>Complete encounter rosters</legend>
+    <legend><%= t("manage.views.complete_rosters_legend") %></legend>
     <p class="nl-manage-help">Without rosters, the fixed template, level and size above apply. With rosters, one complete group is selected. Deactivation preserves all authored data.</p>
     <div data-manage-collection-target="rows"><% tile_npc.encounter_roster_samples.each_with_index do |sample, index| %><%= render "roster", sample:, index: %><% end %></div>
     <template data-manage-collection-target="template"><%= render "roster", sample: {}, index: "NEW_ROW" %></template>
-    <button type="button" class="lbut" data-action="manage-collection#add">Add encounter roster</button>
+    <button type="button" class="lbut" data-action="manage-collection#add"><%= t("manage.views.add_encounter_roster") %></button>
   </fieldset>
   <%= render "manage/shared/form_actions", form:, submit_label:, cancel_path: %>
 <% end %>
