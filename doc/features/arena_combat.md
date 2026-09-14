@@ -1131,6 +1131,7 @@ supplies only authoritative completion/loot facts and stable source keys.
 | 2026-09-13 | Arena lobby exposes live HP/MP vitals and open-application markers (`data-arena-hp`/`mp`/`apps`/`has-application`) for smoke and HUD clarity. Application cards localize unavailable copy and mark accept readiness (`data-arena-app-acceptable`). Room grid and summary rows expose accessibility (`data-arena-room-accessible`). |
 | 2026-09-13 | Application card expiry/remaining/level-range chrome uses `game.fight.expires_title` / `remaining` / `level_range`. |
 | 2026-09-14 | Arena room alignment restriction and match participant result badges use `game.buildings.law_alignment.*` / `arena.results.*`. |
+| 2026-09-14 | Application create failures surface validation messages without English attribute prefixes. |
 | 2026-09-14 | Fight result table XP column uses `game.sheet.experience`; alignment icon helper uses `game.buildings.law_alignment.*`. |
 | 2026-09-14 | Fight topline trauma uses `trauma_percent` via `game.fight.trauma_value`; VS badge and mana block costs use arena/fight i18n. |
 | 2026-09-14 | Arena Bot/Unknown participant fallbacks and fight action name fallbacks use `arena.bot_fallback` / `arena.unknown` / `game.combat.*`. |
