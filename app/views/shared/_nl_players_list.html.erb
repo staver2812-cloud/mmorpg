@@ -27,11 +27,25 @@
                   title="<%= t("game.world.assault_need_scroll") %>">
             <%= t("game.world.assault_cta") %>
           </button>
+          <span class="nl-quests-board__meta" data-assault-need-scroll="1">
+            <% if Game::World::CityBuildingCatalog.accessible?(character: viewer, building_key: "hospital") %>
+              <%= link_to t("game.buildings.hospital_title_short"),
+                    city_building_path("hospital", anchor: "hospital-premium-desk"),
+                    class: "nl-sheet-link",
+                    data: {assault_recovery: "hospital"} %>
+            <% else %>
+              <%= link_to t("arena.nav.city"), world_path, class: "nl-sheet-link", data: {assault_recovery: "world"} %>
+            <% end %>
+          </span>
         <% end %>
       <% end %>
     </div>
   <% end %>
   <% if players.empty? %>
-    <div class="nl-no-players"><%= t("game.world.no_players") %></div>
+    <div class="nl-no-players" data-presence-empty="1">
+      <%= t("game.world.no_players") %>
+      ·
+      <%= link_to t("arena.nav.city"), world_path, class: "nl-sheet-link", data: {presence_recovery: "world"} %>
+    </div>
   <% end %>
 </div>

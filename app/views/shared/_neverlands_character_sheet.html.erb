@@ -62,6 +62,9 @@
                   <%= t("game.sheet.locker_occupied", name: stored["name"], qty: stored["quantity"]) %>
                 <% else %>
                   <%= t("game.sheet.locker_empty") %>
+                  <% if Game::World::CityBuildingCatalog.accessible?(character:, building_key: "bank") %>
+                    · <%= link_to t("game.sheet.vault_open_cta"), city_building_path("bank"), class: "nl-sheet-link", data: {sheet_recovery: "bank"} %>
+                  <% end %>
                 <% end %>
               </td>
             </tr>
