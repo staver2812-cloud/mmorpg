@@ -1125,6 +1125,7 @@ supplies only authoritative completion/loot facts and stable source keys.
 | 2026-09-13 | Arena countdown/timeout broadcast copy uses `game.fight.starts_in*` / `timeout_finish_available` / `turn_timeout_claim` / `turn_ended_by_timeout`. |
 | 2026-09-13 | Combat-log narrative (server broadcaster + Stimulus NPC fallback) uses `game.fight.log.*`. |
 | 2026-09-13 | Arena timer/result overlay Stimulus fallbacks use `game.fight.result_*` / `rewards_title` via `data-arena-match-copy`. |
+| 2026-09-13 | Arena application create/accept/cancel rejects use `game.fight.app_*` (room access, capacity, HP, alignment, ownership). |
 | 2026-09-13 | Arena lobby exposes live HP/MP vitals and open-application markers (`data-arena-hp`/`mp`/`apps`/`has-application`) for smoke and HUD clarity. Application cards localize unavailable copy and mark accept readiness (`data-arena-app-acceptable`). Room grid and summary rows expose accessibility (`data-arena-room-accessible`). |
 | 2026-07-28 | Created the canonical bounded Arena Combat runtime handbook after implementing the full-width source fight hierarchy, shared player/NPC equipment rails, public shell-free fight log, eager-loaded equipment rendering, and responsive tablet/mobile adaptation. |
 | 2026-08-23 | Added the injected handoff of successful NPC loot and final participant results to the Game Shell-owned durable chat event timeline, with deterministic keys and retry coverage while preserving `CombatLogEntry` as the canonical fight log. |

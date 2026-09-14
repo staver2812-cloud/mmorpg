@@ -147,16 +147,16 @@ module Arena
         acceptor.lock!
 
         unless application.arena_room.accessible_by?(acceptor)
-          next Result.new(success?: false, errors: ["This arena room is unavailable"])
+          next Result.new(success?: false, errors: [I18n.t("game.fight.app_room_unavailable")])
         end
 
         unless application.acceptable_by?(acceptor)
-          next Result.new(success?: false, errors: [application.rejection_reason_for(acceptor) || "You cannot accept this application"])
+          next Result.new(success?: false, errors: [application.rejection_reason_for(acceptor) || I18n.t("game.fight.app_cannot_accept")])
         end
 
         # Check if player already in combat
         if acceptor.in_combat?
-          next Result.new(success?: false, errors: ["You are already in combat"])
+          next Result.new(success?: false, errors: [I18n.t("game.fight.app_already_in_combat")])
         end
 
         # Create the match
@@ -193,9 +193,9 @@ module Arena
         application.lock!
 
         if application.applicant_id != character.id
-          Result.new(success?: false, errors: ["You can only cancel your own applications"])
+          Result.new(success?: false, errors: [I18n.t("game.fight.app_cancel_own_only")])
         elsif !application.open?
-          Result.new(success?: false, errors: ["This application cannot be cancelled"])
+          Result.new(success?: false, errors: [I18n.t("game.fight.app_cannot_cancel")])
         else
           application.update!(status: :cancelled)
           ActiveRecord.after_all_transactions_commit do
@@ -212,21 +212,21 @@ module Arena
     attr_reader :publisher, :logger
 
     def application_creation_error(character, room)
-      return "This arena room is unavailable" unless room.accessible_by?(character)
-      return "You are already in an active fight" if character_has_active_match?(character)
-      return "You already have an active fight application" if character_has_active_application?(character)
-      return "Arena room is full" unless room.has_capacity?
+      return I18n.t("game.fight.app_room_unavailable") unless room.accessible_by?(character)
+      return I18n.t("game.fight.app_already_in_fight") if character_has_active_match?(character)
+      return I18n.t("game.fight.app_already_has_application") if character_has_active_application?(character)
+      return I18n.t("game.fight.app_room_full") unless room.has_capacity?
 
       nil
     end
 
     def application_acceptance_error(application, acceptor, room)
-      return "You cannot accept this application" unless application.acceptable_by?(acceptor)
-      return "Applicant can no longer access this arena room" unless room.accessible_by?(application.applicant)
-      return "You are already in an active fight" if character_has_active_match?(acceptor)
-      return "You already have an active fight application" if character_has_active_application?(acceptor)
-      return "Applicant is already in an active fight" if character_has_active_match?(application.applicant)
-      return "Arena room is full" unless room.has_capacity?
+      return I18n.t("game.fight.app_cannot_accept") unless application.acceptable_by?(acceptor)
+      return I18n.t("game.fight.app_applicant_cannot_access") unless room.accessible_by?(application.applicant)
+      return I18n.t("game.fight.app_already_in_fight") if character_has_active_match?(acceptor)
+      return I18n.t("game.fight.app_already_has_application") if character_has_active_application?(acceptor)
+      return I18n.t("game.fight.app_applicant_in_fight") if character_has_active_match?(application.applicant)
+      return I18n.t("game.fight.app_room_full") unless room.has_capacity?
 
       nil
     end

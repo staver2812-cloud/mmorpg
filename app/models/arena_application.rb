@@ -132,12 +132,12 @@ class ArenaApplication < ApplicationRecord
   # @param character [Character] the character to check
   # @return [String, nil] reason why character cannot accept, or nil if they can
   def rejection_reason_for(character)
-    return "Application is closed" unless open?
-    return "You cannot accept your own application" if applicant == character
-    return "Arena room is unavailable" unless arena_room.accessible_by?(character)
-    return "Alignment does not match" if alignment_restricted? && !alignment_matches?(character)
-    return "Recover before fighting: minimum #{MIN_HP_PERCENT_FOR_ARENA}% HP" unless character_hp_sufficient?(character)
-    return "Level does not match" unless level_matches?(character)
+    return I18n.t("game.fight.app_closed") unless open?
+    return I18n.t("game.fight.app_own_application") if applicant == character
+    return I18n.t("game.fight.app_room_unavailable_short") unless arena_room.accessible_by?(character)
+    return I18n.t("game.fight.app_alignment_mismatch") if alignment_restricted? && !alignment_matches?(character)
+    return I18n.t("game.fight.app_recover_hp", percent: MIN_HP_PERCENT_FOR_ARENA) unless character_hp_sufficient?(character)
+    return I18n.t("game.fight.app_level_mismatch") unless level_matches?(character)
 
     nil
   end

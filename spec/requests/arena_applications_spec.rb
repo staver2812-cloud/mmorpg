@@ -125,7 +125,7 @@ RSpec.describe "ArenaApplications", type: :request do
       end.not_to change(ArenaApplication, :count)
 
       expect(response).to have_http_status(:unprocessable_content)
-      expect(response.parsed_body.fetch("errors")).to include("You already have an active fight application")
+      expect(response.parsed_body.fetch("errors")).to include(I18n.t("game.fight.app_already_has_application"))
     end
 
     it "rejects a timeout outside the captured allowlist" do
