@@ -156,8 +156,12 @@
           <th><%= t("game.sheet.alignment") %>:</th>
           <td class="nl-sheet-chip">
             <%= t("game.buildings.law_alignment.#{character.alignment}") %>
-            <% if character == current_character && Game::World::CityBuildingCatalog.accessible?(character:, building_key: "law_abode") %>
-              · <%= link_to t("game.buildings.law_open_cta"), city_building_path("law_abode"), class: "nl-sheet-link" %>
+            <% if character == current_character %>
+              <% if Game::World::CityBuildingCatalog.accessible?(character:, building_key: "law_abode") %>
+                · <%= link_to t("game.buildings.law_open_cta"), city_building_path("law_abode"), class: "nl-sheet-link", data: {sheet_recovery: "law"} %>
+              <% elsif character.alignment.to_s == "none" %>
+                · <%= link_to t("arena.nav.city"), world_path, class: "nl-sheet-link", data: {sheet_recovery: "world"} %>
+              <% end %>
             <% end %>
           </td>
         </tr>
