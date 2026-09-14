@@ -188,13 +188,13 @@
               <% if key && config %>
                 <button type="button"
                         class="nl-fight-magic-slot"
-                        title="<%= config['name'] || key.titleize %>"
+                        title="<%= fight_action_display_name(key, config) %>"
                         data-action="click->arena-match#toggleMagicSlot"
                         data-arena-match-target="magicSlot"
                         data-skill-key="<%= key %>"
                         data-ap-cost="<%= config['action_cost'] %>"
                         data-mana-cost="<%= config['mana_cost'].to_i %>">
-                  <span><%= config["name"] || key.titleize %></span>
+                  <span><%= fight_action_display_name(key, config) %></span>
                   <small><%= config["action_cost"] %>/<%= config["mana_cost"].to_i %> MP</small>
                 </button>
               <% else %>
@@ -227,7 +227,7 @@
                         <option value="<%= key %>"
                                 data-ap-cost="<%= config['action_cost'] %>"
                                 data-mana-cost="<%= config['mana_cost'].to_i %>">
-                          <%= t("game.fight.attack_option", part: attack_label, name: (config["name"] || key.titleize), cost: config["action_cost"]) %>
+                          <%= t("game.fight.attack_option", part: attack_label, name: fight_action_display_name(key, config), cost: config["action_cost"]) %>
                         </option>
                       <% end %>
                     </select>
@@ -246,7 +246,7 @@
                                 data-ap-cost="<%= config['action_cost'] %>"
                                 data-mana-cost="<%= config['mana_cost'].to_i %>"
                                 data-body-parts="<%= covered_parts.join(',') %>">
-                          <%= t("game.fight.block_option", part: block_label, name: (config["name"] || key.titleize), cost: fight_option_cost(config["action_cost"], config["mana_cost"])) %>
+                          <%= t("game.fight.block_option", part: block_label, name: fight_action_display_name(key, config), cost: fight_option_cost(config["action_cost"], config["mana_cost"])) %>
                         </option>
                       <% end %>
                     </select>

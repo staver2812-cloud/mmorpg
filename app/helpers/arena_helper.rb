@@ -156,6 +156,16 @@ module ArenaHelper
     I18n.t("game.fight.option_cost_with_mana", ap: action_cost, mana:)
   end
 
+  def fight_action_display_name(key, config = {})
+    explicit = config.is_a?(Hash) ? config["name"].presence || config[:name].presence : nil
+    return explicit if explicit.present?
+
+    I18n.t(
+      "game.combat.attack_types.#{key}",
+      default: I18n.t("game.combat.block_types.#{key}", default: key.to_s.tr("_", " "))
+    )
+  end
+
   # ===========================================================================
   # Participant Data Helpers
   # ===========================================================================

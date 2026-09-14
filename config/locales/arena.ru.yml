@@ -87,6 +87,7 @@ ru:
     waiting_opponent: "Ожидание соперника..."
     draw: "Ничья"
     unknown: "Неизвестно"
+    bot_fallback: "Бот арены"
     no_character: "Нет персонажа"
     recover_hp: "Восстановитесь перед боем: %{hp}% HP, нужно %{min}%"
     warning: "Внимание"

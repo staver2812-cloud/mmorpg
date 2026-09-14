@@ -183,9 +183,9 @@ class ArenaApplication < ApplicationRecord
   # @return [String] the applicant's name
   def applicant_name
     if npc_application?
-      npc_template&.name || "Arena Bot"
+      npc_template&.name.presence || I18n.t("arena.bot_fallback")
     else
-      applicant&.name || "Unknown"
+      applicant&.name.presence || I18n.t("arena.unknown")
     end
   end
 

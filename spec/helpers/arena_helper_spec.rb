@@ -179,4 +179,14 @@ RSpec.describe ArenaHelper, type: :helper do
       expect(helper.fight_option_cost(2, 0)).to eq("2")
     end
   end
+
+  describe "#fight_action_display_name" do
+    it "falls back to combat attack i18n when name is blank" do
+      I18n.with_locale(:ru) do
+        expect(helper.fight_action_display_name("simple", {})).to eq(
+          I18n.t("game.combat.attack_types.simple")
+        )
+      end
+    end
+  end
 end

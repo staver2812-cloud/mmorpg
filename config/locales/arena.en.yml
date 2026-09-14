@@ -87,6 +87,7 @@ en:
     waiting_opponent: "Waiting for opponent..."
     draw: "Draw"
     unknown: "Unknown"
+    bot_fallback: "Arena Bot"
     no_character: "No character"
     recover_hp: "Recover before fighting: %{hp}% HP, need %{min}%"
     warning: "Warning"
