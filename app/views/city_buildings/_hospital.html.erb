@@ -149,7 +149,7 @@
     ·
     <%= t("game.world.heal_scroll_chip", count: heal_owned) %>
   </p>
-  <p>
+  <p id="hospital-premium-topup">
     <% if topup_ready %>
       <%= button_to t("game.buildings.premium_topup_cta", amount: Game::Shop::VeilMarksTopUp::AMOUNT),
             city_building_topup_vm_path("hospital"),
@@ -191,7 +191,15 @@
         <% else %>
           <% short = t("game.buildings.premium_short", amount: price_i) %>
           <button type="button" class="lbut" disabled title="<%= short %>"><%= t("game.buildings.premium_buy_cta", amount: price_i) %></button>
-          <p class="nl-quests-board__meta"><%= short %></p>
+          <p class="nl-quests-board__meta">
+            <%= short %>
+            <% if topup_ready %>
+              <%= link_to t("game.buildings.premium_topup_cta", amount: Game::Shop::VeilMarksTopUp::AMOUNT),
+                    "#hospital-premium-topup",
+                    class: "nl-sheet-link",
+                    data: {hospital_recovery: "topup"} %>
+            <% end %>
+          </p>
         <% end %>
       </article>
     <% end %>
