@@ -1209,6 +1209,7 @@ automated completion results are recorded in
 |---|---|
 | 2026-09-13 | Purchase/Sale success and rejection alerts use `game.shop.*` i18n (ru/en); English copy preserves prior trade vocabulary for specs. |
 | 2026-09-14 | Shop request chrome assertions (title/funds/empty section) use RU-default `game.shop.*` / `game.common.*` i18n. |
+| 2026-09-14 | Merchant qualification request specs assert accept/pay/complete buttons via `game.shop.merchant_*_btn` (RU-safe). |
 | 2026-09-13 | TradeOffers stale/refresh alerts and LicenseRules purchase blocks use the same `game.shop.*` i18n surface. |
 | 2026-09-13 | Shop Location access and MerchantQualification step/payment alerts use `game.shop.*` / `game.flashes.shop_location_required`. |
 | 2026-09-13 | Shop buy desk exposes wallet/weight and any-affordable markers (`data-shop-wallet`, `data-shop-any-affordable`) plus per-row `data-shop-affordable`; sell mode adds `data-shop-any-sellable` / `data-shop-sellable`. License cards localize duration copy and expose `data-shop-license-affordable`. Sell rows drop hardcoded English quantity/durability chrome. |
