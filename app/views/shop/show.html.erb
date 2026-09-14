@@ -83,7 +83,9 @@
       <% if @mode == "licenses" %>
         <%= render "shop/licenses", items: @shop_items %>
       <% elsif @mode == "novice" && current_character.level >= 10 %>
-        <p class="nl-empty-note nl-shop-empty"><%= t("game.shop.novice_only") %></p>
+        <p class="nl-empty-note nl-shop-empty" data-shop-novice="denied"><%= t("game.shop.novice_only") %></p>
+      <% elsif @mode == "novice" %>
+        <p class="nl-empty-note nl-shop-empty" data-shop-novice="empty"><%= t("game.shop.novice_empty") %></p>
       <% elsif @mode == "sell" %>
         <% unless @shop_license_rules.active?(:trading) %>
           <%= render "shop/sell_onboarding" %>
@@ -95,13 +97,7 @@
       <% end %>
     </div>
     <% if @mode == "licenses" %>
-      <% traumatologist = Game::Shop::TraumatologistClearance.new(character: current_character) %>
-      <% if current_character.owns_perk?(:healer) && !traumatologist.completed? %>
-        <p class="nl-empty-note" data-shop-traumatologist-hint="1">
-          <%= t("game.shop.traumatologist_licenses_hint") %>
-          <%= link_to t("game.buildings.hospital_title_short"), city_building_path("hospital"), class: "nl-sheet-link" %>
-        </p>
-      <% end %>
+      <%= render "shop/doctor_onboarding" %>
     <% end %>
     <% if @mode == "licenses" && Game::Shop::MerchantQualification.new(character: current_character).status.in?(%w[accepted paid]) %>
       <div class="nl-shop-qualification">

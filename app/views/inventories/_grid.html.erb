@@ -67,18 +67,13 @@
                 <%= f.submit t("game.common.gift"), class: "lbut" %>
               <% end %>
             </details>
-            <details class="nl-inline-action">
+            <details class="nl-inline-action" data-inventory-player-sell="deferred">
               <summary class="invbut"><%= t("game.common.sell") %></summary>
-              <%= form_with url: sell_to_player_inventory_path, method: :post, class: "nl-inline-action-form" do |f| %>
-                <%= f.hidden_field :item_id, value: item.id %>
-                <%= f.hidden_field :category, value: category %>
-                <%= f.hidden_field :subcategory, value: subcategory %>
-                <%= f.hidden_field :info, value: info_mode %>
-                <%= f.text_field :recipient_name, placeholder: t("game.common.recipient"), maxlength: 25, class: "LogintextBox" %>
-                <%= f.number_field :price, placeholder: t("game.common.nv_short"), min: 0.01, step: 0.01, class: "LogintextBox2", data: {inventory_transfer_price: "1"} %>
-                <%= f.number_field :quantity, value: 1, min: 1, max: item.quantity, class: "LogintextBox2" %>
-                <%= f.submit t("game.common.sell"), class: "lbut" %>
-              <% end %>
+              <p class="nl-empty-note"><%= t("game.inventory.player_sales_unavailable") %></p>
+              <p class="nl-quests-board__meta"><%= t("game.inventory.player_sales_shop_hint") %></p>
+              <p class="nl-quests-board__meta">
+                <%= link_to t("game.inventory.player_sales_shop_cta"), shop_path(mode: "sell"), class: "nl-sheet-link" %>
+              </p>
             </details>
           <% end %>
           <% unless item.protected_from_discard? %>

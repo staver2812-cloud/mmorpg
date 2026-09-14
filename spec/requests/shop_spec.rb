@@ -148,13 +148,13 @@ RSpec.describe "Shop", type: :request do
     it "shows the captured novice denial starting at level ten" do
       character.update!(level: 9)
       get shop_path(mode: "novice")
-      expect(response.body).not_to include("only to players below level 10")
+      expect(response.body).to include(I18n.t("game.shop.novice_empty"))
       expect(Nokogiri::HTML(response.body).css("form[action='#{buy_shop_path}']")).to be_empty
 
       [10, 11].each do |level|
         character.update!(level:)
         get shop_path(mode: "novice")
-        expect(response.body).to include("only to players below level 10")
+        expect(response.body).to include(I18n.t("game.shop.novice_only"))
         expect(Nokogiri::HTML(response.body).css("form[action='#{buy_shop_path}']")).to be_empty
       end
     end
@@ -409,6 +409,24 @@ RSpec.describe "Shop", type: :request do
     expect(response.body).not_to include('data-shop-sell-onboarding="1"')
     expect(response.body).to include('data-shop-sell-license-status="active"')
     expect(response.body).to include(I18n.t("game.shop.sell_license_no_polling"))
+  end
+
+  it "shows Doctor license onboarding on the licenses tab" do
+    get shop_path(mode: "licenses")
+
+    expect(response).to have_http_status(:success)
+    expect(response.body).to include('data-shop-doctor-onboarding="1"')
+    expect(response.body).to include(I18n.t("game.shop.doctor_onboarding_title"))
+  end
+
+  it "shows a sandbox-empty novice note below level ten" do
+    character.update!(level: 5)
+
+    get shop_path(mode: "novice")
+
+    expect(response).to have_http_status(:success)
+    expect(response.body).to include('data-shop-novice="empty"')
+    expect(response.body).to include(I18n.t("game.shop.novice_empty"))
   end
 
   it "shows an expired trading-license hint on Sell" do

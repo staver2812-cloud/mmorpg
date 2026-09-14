@@ -22,6 +22,19 @@ RSpec.describe "Inventories", type: :request do
       expect(response.body).to include('<body class="nl-game-layout"')
     end
 
+    it "guides deferred player sales toward Shop Sell instead of a live form" do
+      item_template = create(:item_template, name: "Pocket Knife", item_type: "equipment", slot: "main_hand")
+      create(:inventory_item, inventory:, item_template:)
+
+      get inventory_path
+
+      expect(response).to have_http_status(:success)
+      expect(response.body).to include('data-inventory-player-sell="deferred"')
+      expect(response.body).to include(I18n.t("game.inventory.player_sales_unavailable"))
+      expect(response.body).to include(I18n.t("game.inventory.player_sales_shop_cta"))
+      expect(response.body).not_to include(sell_to_player_inventory_path)
+    end
+
     it "displays inventory slots and weight" do
       get inventory_path
 
