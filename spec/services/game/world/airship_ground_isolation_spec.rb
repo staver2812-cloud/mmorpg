@@ -12,7 +12,7 @@ RSpec.describe "Airship ground-action isolation" do
     command = create(:movement_command, character:, zone: region, from_x: 5, from_y: 5, target_x: 6, target_y: 5, direction: "east")
 
     expect { Game::Movement::AcceptMove.new(character:, action_key: command.action_key).call }
-      .to raise_error(Game::Movement::MovementViolationError, /Disembark/)
+      .to raise_error(Game::Movement::MovementViolationError, I18n.t("game.world.movement_disembark"))
     expect(command.reload).to be_offered
     expect(position.reload).to have_attributes(x: 5, y: 5)
   end
@@ -21,7 +21,7 @@ RSpec.describe "Airship ground-action isolation" do
     offer = create(:world_action_offer, character:, zone: region, x: 5, y: 5)
 
     expect { Game::World::AcceptAction.new(character:, action_key: offer.action_key).call }
-      .to raise_error(Game::World::AcceptAction::ActionViolationError, /Disembark/)
+      .to raise_error(Game::World::AcceptAction::ActionViolationError, I18n.t("game.flashes.disembark_first"))
     expect(offer.reload).to be_offered
   end
 
