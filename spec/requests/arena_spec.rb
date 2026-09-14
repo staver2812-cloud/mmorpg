@@ -70,15 +70,15 @@ RSpec.describe "Arena", type: :request do
       it "shows arena rooms section" do
         get arena_index_path
 
-        expect(response.body).to include("Room Map")
+        expect(response.body).to include(I18n.t("arena.room_map"))
       end
 
       it "shows fight type tabs" do
         get arena_index_path
 
-        expect(response.body).to include("Duels")
-        expect(response.body).to include("Team Battles")
-        expect(response.body).to include("Sacrifice")
+        expect(response.body).to include(I18n.t("arena.tabs.duels"))
+        expect(response.body).to include(I18n.t("arena.tabs.team_battles"))
+        expect(response.body).to include(I18n.t("arena.tabs.sacrifice"))
       end
     end
 
