@@ -1101,6 +1101,7 @@ ru:
       obelisk_need_nv_short: "Нет NV"
       obelisk_bound_meta: "Метка: %{place} [%{x}, %{y}]"
       obelisk_unbound_meta: "Метка ещё не задана."
+      obelisk_bind_first: "Сначала поставьте метку здесь, затем возврат спишет 15 NV с кармана или Банка."
       obelisk_bound: "Привязка сохранена: %{place}."
       obelisk_recalled: "Вы у метки %{place} (−%{amount} NV)."
       obelisk_unbound: "Сначала привяжите координаты."
