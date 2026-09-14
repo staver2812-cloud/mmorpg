@@ -1001,6 +1001,23 @@ def main() -> int:
             'data-arena-recovery="city"' in r.text,
             f"url={r.url}",
         )
+    room_m = re.search(r'href="(/arena_rooms/\d+(?:\?[^"]*)?)"', r.text)
+    if room_m:
+        r_room = s.get(urljoin(BASE + "/", room_m.group(1).lstrip("/")), timeout=TIMEOUT, allow_redirects=True)
+        report.add(
+            "GET arena room chrome",
+            r_room.status_code == 200 and "nl-arena-frame" in r_room.text,
+            f"url={r_room.url}",
+        )
+        if r_room.status_code == 200 and "nl-arena-frame" in r_room.text:
+            report.add(
+                "arena room chrome recovery",
+                'data-arena-recovery="city"' in r_room.text
+                and 'data-arena-recovery="character"' in r_room.text
+                and 'data-arena-recovery="inventory"' in r_room.text
+                and 'data-arena-recovery="lobby"' in r_room.text,
+                f"url={r_room.url}",
+            )
     r = s.get(f"{BASE}/city/buildings/tavern", timeout=TIMEOUT, allow_redirects=True)
     report.add(
         "GET /city/buildings/tavern fatigue copy",

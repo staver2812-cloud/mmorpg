@@ -28,10 +28,10 @@
       <span class="nl-arena-vitals"><%= current_character.current_hp %>/<%= current_character.max_hp %> | <%= current_character.current_mp %>/<%= current_character.max_mp %></span>
     </div>
     <div class="nl-arena-controls">
-      <%= link_to t("arena.nav.character"), player_path(name: current_character.name), class: "nl-arena-link" %>
-      <%= link_to t("arena.nav.inventory"), inventory_path, class: "nl-arena-link" %>
-      <%= link_to t("arena.nav.arena"), arena_index_path, class: "nl-arena-link" %>
-      <%= link_to t("arena.nav.city"), world_path, class: "nl-arena-link", data: {turbo: false} %>
+      <%= link_to t("arena.nav.character"), player_path(name: current_character.name), class: "nl-arena-link", data: {arena_recovery: "character"} %>
+      <%= link_to t("arena.nav.inventory"), inventory_path, class: "nl-arena-link", data: {arena_recovery: "inventory"} %>
+      <%= link_to t("arena.nav.arena"), arena_index_path, class: "nl-arena-link", data: {arena_recovery: "lobby"} %>
+      <%= link_to t("arena.nav.city"), world_path, class: "nl-arena-link", data: {turbo: false, arena_recovery: "city"} %>
     </div>
   </div>
 
