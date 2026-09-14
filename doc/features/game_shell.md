@@ -1259,3 +1259,4 @@ Before extending Game Shell:
 | 2026-09-14 | English `app.*` / `locales.*` / `errors.forbidden` mirrors complete `:en` shell chrome. |
 | 2026-09-14 | English ActiveRecord user attribute/error and date/time format mirrors for signup/account forms. |
 | 2026-09-14 | Auth/chat denial raises use `game.chat.*` / `game.flashes.character_required` / `email_verification_required`; HTML alerts prefer localized exception text over generic English policy denials. |
+| 2026-09-14 | Empty trauma/heal chips always render and recover via Infirmary premium desk or City; outdoor fatigue and unset-alignment chips recover via Tavern/City/Law when out of district; presence Assault blocked recovers to Infirmary. |
