@@ -79,7 +79,7 @@ RSpec.describe Game::World::EncounterRosterSelector do
       ]})
 
       expect { described_class.new(tile_npc:).call }
-        .to raise_error(described_class::InvalidRosterError, /combat parameters/)
+        .to raise_error(described_class::InvalidRosterError, I18n.t("manage.roster_combat_params_not_documented"))
     end
   end
 

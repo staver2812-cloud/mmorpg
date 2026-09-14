@@ -44,7 +44,7 @@ module Arena
       end
 
       if npc_config.nil?
-        return Result.new(success?: false, errors: ["No NPC available for this room"])
+        return Result.new(success?: false, errors: [I18n.t("game.fight.app_no_npc_for_room")])
       end
 
       npc_template = find_or_create_npc_template(npc_config)
@@ -58,7 +58,7 @@ module Arena
     # @return [Result] result with application or errors
     def create_with_template(room:, npc_template:)
       unless npc_template.arena_bot?
-        return Result.new(success?: false, errors: ["NPC template is not an arena bot"])
+        return Result.new(success?: false, errors: [I18n.t("game.fight.app_npc_not_arena_bot")])
       end
 
       create_application(room: room, npc_template: npc_template)
@@ -84,7 +84,7 @@ module Arena
     def create_application(room:, npc_template:)
       # Check if this NPC already has an open application in this room
       if ArenaApplication.open.exists?(arena_room: room, npc_template: npc_template)
-        return Result.new(success?: false, errors: ["This NPC already has an open application"])
+        return Result.new(success?: false, errors: [I18n.t("game.fight.app_npc_already_open")])
       end
 
       # Check room capacity

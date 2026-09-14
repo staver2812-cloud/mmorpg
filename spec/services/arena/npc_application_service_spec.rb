@@ -74,7 +74,7 @@ RSpec.describe Arena::NpcApplicationService do
         result = service.create_for_room(room: empty_room)
 
         expect(result.success?).to be false
-        expect(result.errors).to include("No NPC available for this room")
+        expect(result.errors).to include(I18n.t("game.fight.app_no_npc_for_room"))
       end
     end
 
@@ -89,7 +89,7 @@ RSpec.describe Arena::NpcApplicationService do
         result2 = service.create_with_template(room: arena_room, npc_template: npc)
 
         expect(result2.success?).to be false
-        expect(result2.errors).to include("This NPC already has an open application")
+        expect(result2.errors).to include(I18n.t("game.fight.app_npc_already_open"))
       end
     end
   end
@@ -115,7 +115,7 @@ RSpec.describe Arena::NpcApplicationService do
       result = service.create_with_template(room: arena_room, npc_template: hostile_npc)
 
       expect(result.success?).to be false
-      expect(result.errors).to include("NPC template is not an arena bot")
+      expect(result.errors).to include(I18n.t("game.fight.app_npc_not_arena_bot"))
     end
   end
 
