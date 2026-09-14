@@ -47,7 +47,7 @@ RSpec.describe Game::World::StartNpcFight do
 
     expect {
       expect { described_class.new(character:, tile_npc: stale_npc).call }
-        .to raise_error(described_class::FightViolationError, "NPC is unavailable.")
+        .to raise_error(described_class::FightViolationError, I18n.t("game.quests.npc_unavailable"))
     }.not_to change(ArenaMatch, :count)
     expect(position.reload).to have_attributes(x: 5, y: 5)
   end
@@ -227,7 +227,7 @@ RSpec.describe Game::World::StartNpcFight do
 
     expect {
       described_class.new(character:, tile_npc:).call
-    }.to raise_error(described_class::FightViolationError, /Movement already in progress/)
+    }.to raise_error(described_class::FightViolationError, I18n.t("game.flashes.movement_in_progress"))
 
     expect(ArenaMatch.count).to eq(0)
     expect(ArenaParticipation.count).to eq(0)
@@ -263,7 +263,7 @@ RSpec.describe Game::World::StartNpcFight do
 
     expect {
       described_class.new(character:, tile_npc:).call
-    }.to raise_error(described_class::FightViolationError, /current cell/)
+    }.to raise_error(described_class::FightViolationError, I18n.t("game.quests.npc_wrong_cell"))
   end
 
   it "rejects a defeated NPC" do
@@ -271,13 +271,13 @@ RSpec.describe Game::World::StartNpcFight do
 
     expect {
       described_class.new(character:, tile_npc:).call
-    }.to raise_error(described_class::FightViolationError, /unavailable/)
+    }.to raise_error(described_class::FightViolationError, I18n.t("game.quests.npc_unavailable"))
   end
 
   it "rejects a null NPC" do
     expect {
       described_class.new(character:, tile_npc: nil).call
-    }.to raise_error(described_class::FightViolationError, /unavailable/)
+    }.to raise_error(described_class::FightViolationError, I18n.t("game.quests.npc_unavailable"))
   end
 
   it "rejects a non-hostile NPC" do
@@ -285,7 +285,7 @@ RSpec.describe Game::World::StartNpcFight do
 
     expect {
       described_class.new(character:, tile_npc:).call
-    }.to raise_error(described_class::FightViolationError, /not hostile/)
+    }.to raise_error(described_class::FightViolationError, I18n.t("game.quests.npc_not_hostile"))
   end
 
   it "rejects missing combat health" do
@@ -294,7 +294,7 @@ RSpec.describe Game::World::StartNpcFight do
 
     expect {
       described_class.new(character:, tile_npc:).call
-    }.to raise_error(described_class::FightViolationError, /not documented/)
+    }.to raise_error(described_class::FightViolationError, I18n.t("manage.roster_combat_params_not_documented"))
   end
 
   it "rejects eleven persisted opponents without creating a partial fight" do
@@ -302,7 +302,7 @@ RSpec.describe Game::World::StartNpcFight do
 
     expect {
       described_class.new(character:, tile_npc:).call
-    }.to raise_error(described_class::FightViolationError, /size is not supported/)
+    }.to raise_error(described_class::FightViolationError, I18n.t("manage.roster_size_unsupported"))
     expect(ArenaMatch.count).to eq(0)
     expect(ArenaParticipation.count).to eq(0)
   end
@@ -316,7 +316,10 @@ RSpec.describe Game::World::StartNpcFight do
 
     expect {
       described_class.new(character:, tile_npc:).call
-    }.to raise_error(described_class::FightViolationError, /removed-npc.*unavailable/)
+    }.to raise_error(
+      described_class::FightViolationError,
+      I18n.t("manage.roster_template_unavailable", key: '"removed-npc"')
+    )
     expect(ArenaMatch.count).to eq(0)
   end
 end

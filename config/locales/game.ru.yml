@@ -145,6 +145,7 @@ ru:
       inventory_overloaded: "Инвентарь перегружен"
       craft_inventory_full: "Инвентарь переполнен."
       craft_missing_materials: "Не хватает материалов для крафта."
+      missing_material: "Не хватает: %{name}"
       recipient_required: "Укажите получателя."
       recipient_not_found: "Получатель не найден."
       cannot_target_self: "Нельзя выбрать себя."

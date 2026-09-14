@@ -100,7 +100,7 @@ RSpec.describe Game::World::AcceptAction do
 
     expect {
       described_class.new(character:, action_key: offer.action_key).call
-    }.to raise_error(described_class::ActionViolationError, /Movement already in progress/)
+    }.to raise_error(described_class::ActionViolationError, I18n.t("game.flashes.movement_in_progress"))
 
     expect(offer.reload).to be_offered
     expect(movement.reload).to be_moving
@@ -171,7 +171,7 @@ RSpec.describe Game::World::AcceptAction do
 
     expect {
       described_class.new(character:, action_key: offer.action_key).call
-    }.to raise_error(described_class::ActionViolationError, /local action is already in progress/)
+    }.to raise_error(described_class::ActionViolationError, I18n.t("game.world.local_action_in_progress"))
 
     expect(work.reload).to be_accepted
     expect(offer.reload).to be_offered

@@ -33,7 +33,7 @@ RSpec.describe "Airship ground-action isolation" do
     expect(Game::World::PassiveEncounterCheck.new(character:).call).not_to be_interrupted
     expect(character.reload.metadata).not_to have_key(Game::World::PassiveEncounterCheck::SCHEDULE_METADATA_KEY)
     expect { Game::World::StartNpcFight.new(character:, tile_npc: npc).call }
-      .to raise_error(Game::World::StartNpcFight::FightViolationError, /Disembark/)
+      .to raise_error(Game::World::StartNpcFight::FightViolationError, I18n.t("game.flashes.disembark_first"))
     expect(ArenaMatch.count).to eq(0)
   end
 

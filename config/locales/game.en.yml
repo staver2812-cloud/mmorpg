@@ -145,6 +145,7 @@ en:
       inventory_overloaded: "Inventory is overloaded"
       craft_inventory_full: "Inventory is full."
       craft_missing_materials: "Not enough materials to craft."
+      missing_material: "Missing %{name}"
       recipient_required: "Recipient is required."
       recipient_not_found: "Recipient not found."
       cannot_target_self: "Cannot target yourself."

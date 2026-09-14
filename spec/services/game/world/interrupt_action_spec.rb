@@ -60,7 +60,7 @@ RSpec.describe Game::World::InterruptAction do
     create(:tile_npc, zone: zone.name, x: 5, y: 5)
     movement = create(:movement_command, :moving, character:, zone:)
 
-    expect { result }.to raise_error(Game::World::StartNpcFight::FightViolationError, /Movement already in progress/)
+    expect { result }.to raise_error(Game::World::StartNpcFight::FightViolationError, I18n.t("game.flashes.movement_in_progress"))
 
     expect(ArenaMatch.count).to eq(0)
     expect(movement.reload).to be_moving
@@ -84,7 +84,7 @@ RSpec.describe Game::World::InterruptAction do
       metadata: {"local_action_ends_at" => 28.seconds.from_now.iso8601(6), "local_action_result" => "Nothing useful here."})
     create(:tile_npc, zone: zone.name, x: 5, y: 5)
 
-    expect { result }.to raise_error(Game::World::StartNpcFight::FightViolationError, /local action is already in progress/)
+    expect { result }.to raise_error(Game::World::StartNpcFight::FightViolationError, I18n.t("game.world.local_action_in_progress"))
 
     expect(work.reload).to be_accepted
     expect(ArenaMatch.count).to eq(0)
