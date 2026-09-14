@@ -149,7 +149,7 @@ same breakpoints.
 
 On Stats, the player distributes pending additions among Strength, Dexterity, Luck, Health, and Knowledge. On Skills, each click spends a preview point from the correct combat or peace pool and applies the captured rate for the current 25-level band. On Perks, the player can preview an unowned captured perk if a new-perk point exists.
 
-Save submits only pending additions. HTML success redirects back with `Stats saved`, `Skills saved`, or `Perks saved`. Turbo success replaces the affected allocation frame and updates the shared flash. Invalid, empty, over-budget, unknown, conflicting, or duplicate perk selections show an error and preserve valid persisted state.
+Save submits only pending additions. HTML success redirects back with localized `Stats saved` / `Skills saved` / `Perks saved` flashes. Turbo success replaces the affected allocation frame and updates the shared flash. Invalid, empty, over-budget, unknown, conflicting, or duplicate perk selections show localized `game.flashes.alloc_*` errors and preserve valid persisted state.
 
 ### 4.4 Exit and integration behavior
 

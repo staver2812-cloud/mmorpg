@@ -684,7 +684,8 @@ def main() -> int:
         r.status_code == 200
         and 'data-building-key="prison"' in r.text
         and ("Обитель Закона" in r.text or "Law Abode" in r.text or "law_abode" in r.text)
-        and ('data-prison="1"' in r.text),
+        and ('data-prison="1"' in r.text)
+        and ('data-landmark-inside="1"' in r.text),
         f"url={r.url}",
     )
     r = s.get(f"{BASE}/city/buildings/gallows", timeout=TIMEOUT, allow_redirects=True)
@@ -694,7 +695,8 @@ def main() -> int:
         and 'data-building-key="gallows"' in r.text
         and ("восточн" in r.text.lower() or "east gate" in r.text.lower())
         and ('data-gallows="1"' in r.text)
-        and ('data-gallows-east="1"' in r.text),
+        and ('data-gallows-east="1"' in r.text)
+        and ('data-landmark-inside="1"' in r.text),
         f"url={r.url}",
     )
 
