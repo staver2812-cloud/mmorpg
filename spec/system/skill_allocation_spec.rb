@@ -57,8 +57,8 @@ RSpec.describe "Skill Allocation", type: :system, js: true do
     end
 
     it "displays allocation controls" do
-      expect(page).to have_button("Save", disabled: true)
-      expect(page).to have_button("Reset")
+      expect(page).to have_button(I18n.t("game.profile.allocation_save"), disabled: true)
+      expect(page).to have_button(I18n.t("game.profile.allocation_reset"))
     end
   end
 
@@ -73,7 +73,7 @@ RSpec.describe "Skill Allocation", type: :system, js: true do
       end
 
       within(".nl-allocation-pool--combat") { expect(page).to have_content("9") }
-      expect(page).to have_button("Save", disabled: false)
+      expect(page).to have_button(I18n.t("game.profile.allocation_save"), disabled: false)
     end
 
     it "increments peace skill level from the peace pool" do
@@ -133,7 +133,7 @@ RSpec.describe "Skill Allocation", type: :system, js: true do
       within_skill_row(:unarmed_combat) { click_button "-" }
 
       within(".nl-allocation-pool--combat") { expect(page).to have_content("10") }
-      expect(page).to have_button("Save", disabled: true)
+      expect(page).to have_button(I18n.t("game.profile.allocation_save"), disabled: true)
     end
 
     it "cannot remove below base level" do
@@ -153,7 +153,7 @@ RSpec.describe "Skill Allocation", type: :system, js: true do
     end
 
     it "resets all pending changes" do
-      click_button "Reset"
+      click_button I18n.t("game.profile.allocation_reset")
 
       within_skill_row(:unarmed_combat) do
         expect(page).to have_content("[000/100]")
@@ -174,7 +174,7 @@ RSpec.describe "Skill Allocation", type: :system, js: true do
     end
 
     it "saves skill allocation to database" do
-      click_button "Save"
+      click_button I18n.t("game.profile.allocation_save")
 
       expect(page).to have_content("Skills saved")
       character.reload
@@ -185,7 +185,7 @@ RSpec.describe "Skill Allocation", type: :system, js: true do
     it "saves multiple pool allocations atomically" do
       within_skill_row(:self_healing) { click_button "+" }
 
-      click_button "Save"
+      click_button I18n.t("game.profile.allocation_save")
       expect(page).to have_content("Skills saved", wait: 5)
 
       character.reload
@@ -334,7 +334,7 @@ RSpec.describe "Skill Allocation", type: :system, js: true do
 
     it "form submits via Turbo" do
       within_skill_row(:unarmed_combat) { click_button "+" }
-      click_button "Save"
+      click_button I18n.t("game.profile.allocation_save")
 
       expect(page).to have_css("#skill-allocation")
       expect(page).to have_content("Skills saved")

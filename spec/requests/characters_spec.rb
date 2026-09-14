@@ -32,7 +32,7 @@ RSpec.describe CharactersController, type: :request do
         expect(response.body).to include('<body class="nl-game-layout"')
         expect(response.body).to include('class="nl-character-page-grid"')
         expect(response.body).to include("Stats")
-        expect(response.body).to include("Free points")
+        expect(response.body).to include(I18n.t("game.profile.free_points"))
       end
 
       it "shows all allocatable stats" do
@@ -52,7 +52,7 @@ RSpec.describe CharactersController, type: :request do
       it "shows Neverlands starter base stats" do
         get stats_character_path(character)
 
-        expect(response.body).to include("(base: 1)")
+        expect(response.body).to include(I18n.t("game.profile.stat_base", value: 1))
       end
     end
 
