@@ -169,7 +169,7 @@ RSpec.describe CharactersController, type: :request do
 
         expect(response).to redirect_to(root_path)
         follow_redirect!
-        expect(response.body).to include("Not enough free stat points")
+        expect(response.body).to include(I18n.t("game.flashes.alloc_not_enough_stat_points"))
         character.reload
         expect(character.stat_points_available).to eq(10) # unchanged
       end
@@ -181,7 +181,7 @@ RSpec.describe CharactersController, type: :request do
 
         expect(response).to redirect_to(root_path)
         follow_redirect!
-        expect(response.body).to include("Not enough free stat points")
+        expect(response.body).to include(I18n.t("game.flashes.alloc_not_enough_stat_points"))
       end
 
       it "rejects zero allocation" do
@@ -225,7 +225,7 @@ RSpec.describe CharactersController, type: :request do
 
         expect(response).to redirect_to(root_path)
         follow_redirect!
-        expect(response.body).to include("Not enough free stat points")
+        expect(response.body).to include(I18n.t("game.flashes.alloc_not_enough_stat_points"))
       end
 
       it "handles string values by converting to integer" do
@@ -304,7 +304,7 @@ RSpec.describe CharactersController, type: :request do
 
         expect(response).to redirect_to(root_path)
         follow_redirect!
-        expect(response.body).to include("Not enough free stat points")
+        expect(response.body).to include(I18n.t("game.flashes.alloc_not_enough_stat_points"))
       end
     end
 
