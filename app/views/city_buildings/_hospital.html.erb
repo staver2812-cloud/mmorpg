@@ -213,6 +213,10 @@
                     "#hospital-premium-topup",
                     class: "nl-sheet-link",
                     data: {hospital_recovery: "topup"} %>
+            <% elsif Game::World::CityBuildingCatalog.accessible?(character: current_character, building_key: "bank") %>
+              <%= link_to t("game.shop.open_bank"), city_building_path("bank"), class: "nl-sheet-link", data: {hospital_recovery: "bank"} %>
+            <% else %>
+              <%= link_to t("arena.nav.city"), world_path, class: "nl-sheet-link", data: {hospital_recovery: "world"} %>
             <% end %>
           </p>
         <% end %>

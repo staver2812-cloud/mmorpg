@@ -14,13 +14,19 @@
       </li>
       <li>
         <%= t("game.shop.doctor_onboarding_tier1") %>
+          ·
+          <%= link_to t("game.shop.modes.licenses"), shop_path(mode: "licenses"), class: "nl-sheet-link", data: {doctor_recovery: "licenses"} %>
       </li>
       <li>
         <% if clearance.completed? %>
           <%= t("game.shop.doctor_onboarding_clearance_done") %>
         <% else %>
           <%= t("game.shop.doctor_onboarding_clearance") %>
-          <%= link_to t("game.buildings.hospital_title_short"), city_building_path("hospital"), class: "nl-sheet-link" %>
+          <% if Game::World::CityBuildingCatalog.accessible?(character: current_character, building_key: "hospital") %>
+            <%= link_to t("game.buildings.hospital_title_short"), city_building_path("hospital"), class: "nl-sheet-link", data: {doctor_recovery: "hospital"} %>
+          <% else %>
+            <%= link_to t("arena.nav.city"), world_path, class: "nl-sheet-link", data: {doctor_recovery: "world"} %>
+          <% end %>
         <% end %>
       </li>
     </ol>

@@ -100,12 +100,17 @@
         <% end %>
         <% wear = Game::Inventory::EquippedWear.summary_for(current_character) %>
         <% if wear.worn.positive? %>
+          <% wear_to_workshop = wear.broken.positive? && Game::World::CityBuildingCatalog.accessible?(character: current_character, building_key: "workshop") %>
           <%= link_to(
                 wear.broken.positive? ? t("game.world.wear_chip_broken", count: wear.broken) : t("game.world.wear_chip", count: wear.worn),
-                inventory_path,
+                (wear_to_workshop ? city_building_path("workshop") : inventory_path),
                 class: "nl-wear-chip#{' nl-wear-chip--broken' if wear.broken.positive?}",
                 title: t("game.world.wear_chip_hint"),
-                data: {wear_worn: wear.worn, wear_broken: wear.broken}
+                data: {
+                  wear_worn: wear.worn,
+                  wear_broken: wear.broken,
+                  wear_recovery: (wear_to_workshop ? "workshop" : "inventory")
+                }
               ) %>
         <% end %>
         <% if current_character.alignment.to_s == "none" %>
