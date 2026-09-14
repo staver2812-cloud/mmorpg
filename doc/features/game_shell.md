@@ -1272,4 +1272,5 @@ Before extending Game Shell:
 | 2026-09-14 | Short-landscape shell compresses social/chat rows so controls stay reachable (`max-height: 430px`). |
 | 2026-09-14 | ≤360px shell compresses vitals/nav/presence/chat action columns for the UI-ADAPT-001 minimum-width path. |
 | 2026-09-14 | Coarse-pointer shell nav and primary chat controls target ~44×44 CSS px (`UI-ADAPT-005`). |
+| 2026-09-14 | Coarse-pointer presence sort/player-menu and chat send/new-message controls also target ~44×44 CSS px. |
 | 2026-09-14 | Outdoor short-NV Obelisk recall chip and out-of-district bound chip recover to City (`data-obelisk-recovery="city"`). |
