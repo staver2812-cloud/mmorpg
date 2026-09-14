@@ -24,8 +24,10 @@
     <% end %>
   </div>
 <% elsif @movement_state&.locked_reason == :fatigued %>
-  <span class="nl-world-action-unavailable" title="<%= t("game.world.actions_unavailable_title") %>"><%= t("game.world.actions_unavailable") %></span>
-  <span class="nl-visually-hidden"><%= t("game.world.actions_unavailable_title") %></span>
+  <div class="nl-world-action-unavailable" data-world-fatigue-lock="1" title="<%= t("game.world.actions_unavailable_title") %>">
+    <span><%= t("game.world.actions_unavailable") %></span>
+    <span class="nl-quests-board__meta"><%= t("game.world.actions_unavailable_title") %></span>
+  </div>
 <% end %>
 
 <% if local_actions_present %>
