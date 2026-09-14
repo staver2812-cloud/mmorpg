@@ -24,7 +24,10 @@
             <div class="nl-shop-item-trade">
               <span><%= t("game.common.price") %>: <b><%= number_with_precision(template.base_price, precision: 2) %> NV</b></span>
               <% if block_reason || !offer %>
-                <span class="nl-shop-unavailable"><%= block_reason || t("game.shop.refresh_buy") %></span>
+                <span class="nl-shop-unavailable">
+                  <%= block_reason || t("game.shop.refresh_buy") %>
+                  <%= shop_block_recovery_link(block_reason) %>
+                </span>
               <% else %>
                 <%= form_with url: buy_shop_path, method: :post, class: "nl-shop-action-form", data: {turbo_confirm: t("game.shop.buy_confirm", name: template.display_name)} do |f| %>
                   <%= f.hidden_field :mode, value: @mode %>

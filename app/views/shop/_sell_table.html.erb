@@ -24,7 +24,10 @@
             </div>
             <div class="nl-shop-item-trade">
               <% if block_reason || !offer %>
-                <span class="nl-shop-unavailable"><%= block_reason || t("game.shop.refresh_sell") %></span>
+                <span class="nl-shop-unavailable">
+                  <%= block_reason || t("game.shop.refresh_sell") %>
+                  <%= shop_block_recovery_link(block_reason) %>
+                </span>
               <% else %>
                 <%= form_with url: sell_shop_path, method: :post, class: "nl-shop-action-form", data: {turbo_confirm: t("game.shop.sell_confirm", name: item.item_template.display_name)} do |f| %>
                   <%= f.hidden_field :mode, value: "sell" %>

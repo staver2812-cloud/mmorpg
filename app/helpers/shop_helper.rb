@@ -112,6 +112,32 @@ module ShopHelper
     nil
   end
 
+  # Recovery CTA next to a shop denial so blocked buys/licenses are not dead ends.
+  def shop_block_recovery_link(block_reason)
+    return if block_reason.blank?
+
+    case block_reason
+    when I18n.t("game.shop.capacity"), I18n.t("game.shop.no_room")
+      link_to t("game.shop.open_inventory"), inventory_path, class: "nl-sheet-link", data: {shop_recovery: "inventory"}
+    when I18n.t("game.shop.not_enough_nv")
+      if Game::World::CityBuildingCatalog.accessible?(character: current_character, building_key: "bank")
+        link_to t("game.shop.open_bank"), city_building_path("bank"), class: "nl-sheet-link", data: {shop_recovery: "bank"}
+      end
+    when I18n.t("game.shop.healer_perk_required"), I18n.t("game.shop.merchant_perk_required")
+      link_to t("game.shop.open_perks"), perks_character_path(current_character), class: "nl-sheet-link", data: {shop_recovery: "perks"}
+    when I18n.t("game.shop.traumatologist_quest_required")
+      if Game::World::CityBuildingCatalog.accessible?(character: current_character, building_key: "hospital")
+        link_to t("game.buildings.hospital_title_short"), city_building_path("hospital"), class: "nl-sheet-link", data: {shop_recovery: "hospital"}
+      end
+    when I18n.t("game.shop.merchant_qualification_required")
+      if Game::World::CityBuildingCatalog.accessible?(character: current_character, building_key: "market")
+        link_to t("game.shop.sell_onboarding_market"), city_building_path("market"), class: "nl-sheet-link", data: {shop_recovery: "market"}
+      end
+    when I18n.t("game.shop.trading_license_required")
+      link_to t("game.shop.sell_onboarding_licenses"), shop_path(mode: "licenses"), class: "nl-sheet-link", data: {shop_recovery: "licenses"}
+    end
+  end
+
   def shop_stock_label(template)
     stock = @shop_stocks&.[](template.id)
     return "—" unless stock

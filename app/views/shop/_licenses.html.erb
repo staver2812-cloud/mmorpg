@@ -35,7 +35,10 @@
             <button type="button" class="nl-shop-license__buy" disabled
                     title="<%= unavailable_reason %>" aria-describedby="<%= reason_id %>"><%= t("game.common.buy") %></button>
           </div>
-          <span id="<%= reason_id %>" class="nl-shop-unavailable" data-shop-license-block="1"><%= unavailable_reason %></span>
+          <span id="<%= reason_id %>" class="nl-shop-unavailable" data-shop-license-block="1">
+            <%= unavailable_reason %>
+            <%= shop_block_recovery_link(block_reason) %>
+          </span>
         <% else %>
           <%= form_with url: buy_shop_path, method: :post, class: "nl-shop-action-form nl-shop-license__purchase", data: {turbo_confirm: t("game.shop.buy_confirm", name: template.display_name)} do |f| %>
             <%= f.hidden_field :mode, value: "licenses" %>
