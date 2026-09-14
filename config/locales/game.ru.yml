@@ -1243,6 +1243,7 @@ ru:
       stall_rent_deferred: "Аренда лотков и витрины отложены, пока не будет снят протокол settlement. Для soft-release: Продажа в Лавке и Скупщик Пепла."
       commodity_book: "Книга товаров"
       no_listings: "Нет предложений"
+      numismatics_deferred: "Книга валютных лотов отложена. Для soft-release торгуйте в Лавке и у Скупщика."
       captured_modes: "Режимы"
       stock_note: "Склад этого здания пока не заполнен."
     professions:

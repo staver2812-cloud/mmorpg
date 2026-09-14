@@ -1243,6 +1243,7 @@ en:
       stall_rent_deferred: "Stall rent and listings stay deferred until marketplace settlement is captured. Use Shop Sell and Ash Buyer for the soft-release trade loop."
       commodity_book: "Commodity book"
       no_listings: "No MVP listings"
+      numismatics_deferred: "Currency book listings stay deferred. Soft-release trade uses Shop and Ash Buyer."
       captured_modes: "Captured modes"
       stock_note: "Stock was not captured and is intentionally not copied from the General Shop."
     professions:
