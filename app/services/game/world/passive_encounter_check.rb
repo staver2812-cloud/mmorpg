@@ -49,7 +49,7 @@ module Game
         Result.new(
           interrupted: true,
           match:,
-          message: "#{npc.display_name} attacks while you wait."
+          message: I18n.t("game.world.passive_ambush", name: npc.display_name)
         )
       rescue StartNpcFight::FightViolationError
         clear_schedule!

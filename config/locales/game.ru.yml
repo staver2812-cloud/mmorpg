@@ -424,6 +424,7 @@ ru:
       location_feature_unavailable: "Функция локации недоступна."
       location_feature_mismatch: "Функция локации не совпадает с предложением."
       finish_active_fight: "Сначала завершите активный бой."
+      passive_ambush: "%{name} нападает, пока вы ждёте."
       movement_disembark: "Сначала сойдите с дирижабля, чтобы идти пешком."
       wilderness_unavailable: "Перемещение по диким землям здесь недоступно."
       movement_offer_unavailable: "Предложение хода больше недоступно."
