@@ -499,6 +499,15 @@ def main() -> int:
             "data-city-hall-recovery=" in r.text,
             f"url={r.url}",
         )
+        report.add(
+            "city_hall landmark recovery",
+            'data-city-hall-landmark="1"' in r.text
+            and (
+                'data-city-hall-recovery="quests"' in r.text
+                or 'data-city-hall-recovery="world"' in r.text
+            ),
+            f"url={r.url}",
+        )
     r = s.get(f"{BASE}/city/buildings/post", timeout=TIMEOUT, allow_redirects=True)
     report.add(
         "GET /city/buildings/post",

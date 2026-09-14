@@ -237,6 +237,14 @@
         </p>
       <% end %>
     </section>
+  <% when "city_hall" %>
+    <p class="nl-quests-board__meta" data-city-hall-landmark="1">
+      <%= t("game.buildings.city_hall_landmark_meta") %>
+      ·
+      <%= link_to t("game.quests.board_open"), quests_path, class: "nl-sheet-link", data: {city_hall_recovery: "quests"} %>
+      ·
+      <%= link_to t("arena.nav.city"), world_path, class: "nl-sheet-link", data: {turbo: false, city_hall_recovery: "world"} %>
+    </p>
   <% when "clan_hall" %>
     <section class="nl-handbook" aria-label="<%= t("game.buildings.clan_hall_short") %>">
       <h2><%= t("game.buildings.clan_hall_title") %></h2>
