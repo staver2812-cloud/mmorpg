@@ -234,3 +234,16 @@
     line-height: 1.25;
   }
 }
+
+@media (max-width: 360px) {
+  .nl-quests,
+  .nl-quests__summary,
+  .nl-quests__card {
+    min-width: 0;
+    max-width: 100%;
+  }
+
+  .nl-handbook__card {
+    min-width: 0;
+  }
+}

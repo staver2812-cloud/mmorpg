@@ -222,3 +222,37 @@
 .nl-public-layout .login-container a {
   color: #9bb6d4;
 }
+
+@media (max-width: 360px) {
+  .nl-public-layout .login-container {
+    width: calc(100% - 16px);
+    max-width: 100%;
+    margin: 12px auto;
+    padding: 14px 12px;
+  }
+
+  .nl-top-nav {
+    flex-wrap: wrap;
+    gap: 6px;
+  }
+}
+
+@media (pointer: coarse) {
+  .nl-public-layout .login-container input[type="submit"],
+  .nl-public-layout .login-container button,
+  .nl-public-layout .login-container .btn,
+  .nl-locale-link {
+    min-height: 44px;
+    min-width: 44px;
+    padding: 8px 12px;
+    font-size: 14px;
+    line-height: 1.25;
+  }
+
+  .nl-public-layout .login-container input[type="email"],
+  .nl-public-layout .login-container input[type="password"],
+  .nl-public-layout .login-container input[type="text"] {
+    min-height: 44px;
+    font-size: 16px;
+  }
+}
