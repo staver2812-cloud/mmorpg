@@ -269,6 +269,12 @@ def main() -> int:
         r.status_code == 200 and 'data-shop-doctor-onboarding="1"' in r.text,
         f"url={r.url}",
     )
+    if 'data-shop-licenses-empty="1"' in r.text:
+        report.add(
+            "shop licenses empty Buy recovery",
+            'data-shop-licenses-recovery="buy"' in r.text,
+            f"url={r.url}",
+        )
 
     r = s.get(f"{BASE}/world", timeout=TIMEOUT)
     report.add(
@@ -718,6 +724,12 @@ def main() -> int:
         and ("A character is required" not in r.text),
         f"url={r.url}",
     )
+    if 'data-arena-recent-empty="1"' in r.text:
+        report.add(
+            "arena recent empty Duels recovery",
+            'ft=1' in r.text or "/arena" in r.text,
+            f"url={r.url}",
+        )
     r = s.get(f"{BASE}/city/buildings/tavern", timeout=TIMEOUT, allow_redirects=True)
     report.add(
         "GET /city/buildings/tavern fatigue copy",
