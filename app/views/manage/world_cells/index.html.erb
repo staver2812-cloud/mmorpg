@@ -20,7 +20,7 @@
         <tr>
           <td><%= cell.zone %></td>
           <td>[<%= cell.x %>, <%= cell.y %>]</td>
-          <td><%= cell.terrain_type %></td>
+          <td><%= management_enum_label(:terrain_type, cell.terrain_type) %></td>
           <td><%= management_boolean(cell.passable?) %></td>
           <td><%= cell.local_actions.map { |action| action["label"].presence || action["type"] }.join(", ").presence || "—" %></td>
           <td><%= l(cell.updated_at, format: :short) %></td>
