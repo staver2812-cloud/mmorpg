@@ -134,7 +134,7 @@ RSpec.describe "shared/_nl_players_list.html.erb", type: :view do
       render partial: "shared/nl_players_list"
 
       expect(rendered).to have_css(".nl-no-players")
-      expect(rendered).to include("No players nearby")
+      expect(rendered).to include(I18n.t("game.world.no_players_nearby"))
     end
 
     it "does not render player entries" do

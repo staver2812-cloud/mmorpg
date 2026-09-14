@@ -279,7 +279,7 @@ RSpec.describe "World Interactions", type: :system, js: true do
 
       find(".nl-tile-clickable--available[data-action-key='#{stale_offer.action_key}']").click
 
-      expect(page).to have_content("Movement offer is no longer available")
+      expect(page).to have_content(I18n.t("game.flashes.movement_offer_unavailable"))
       expect(page).to have_button("Your character", disabled: false)
       expect(page).to have_button("Inventory", disabled: false)
       expect(position.reload).to have_attributes(x: 5, y: 5)

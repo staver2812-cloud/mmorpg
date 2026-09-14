@@ -53,7 +53,7 @@ RSpec.describe "ArenaMatches Auto-End on View", type: :request do
 
       it "displays live status" do
         get arena_match_path(match)
-        expect(response.body).to include("Live")
+        expect(response.body).to include(I18n.t("arena.match_status.live"))
       end
     end
 

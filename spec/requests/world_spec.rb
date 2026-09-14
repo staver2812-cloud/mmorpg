@@ -1855,7 +1855,7 @@ RSpec.describe "World", type: :request do
 
       expect(response).to have_http_status(:success)
       expect(response.body).to include("PresenceOwner", 'data-player-list-count="1"')
-      expect(response.body).not_to include("No players nearby", "AlphaNearby", "ZuluNearby")
+      expect(response.body).not_to include(I18n.t("game.world.no_players_nearby"), "AlphaNearby", "ZuluNearby")
     end
 
     it "requires authentication" do

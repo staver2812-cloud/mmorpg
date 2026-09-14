@@ -294,7 +294,7 @@ RSpec.describe "Incremental walking map", type: :system, js: true do
 
     click_button "Move east"
 
-    expect(page).to have_css("#flash", text: "Movement offer is no longer available")
+    expect(page).to have_css("#flash", text: I18n.t("game.flashes.movement_offer_unavailable"))
     expect_position(20, 20)
     expect(page).to have_button("Move east", disabled: false)
     expect(page).to have_button("Inventory", disabled: false)
