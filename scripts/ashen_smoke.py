@@ -466,6 +466,11 @@ def main() -> int:
             or 'data-market-recovery="junk"' in r.text,
             f"url={r.url}",
         )
+        report.add(
+            "market building chrome recovery",
+            'data-building-recovery="world"' in r.text,
+            f"url={r.url}",
+        )
     if r.status_code == 200 and 'data-merchant-desk="1"' in r.text:
         report.add(
             "market merchant desk marker",
