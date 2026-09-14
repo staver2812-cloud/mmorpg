@@ -17,4 +17,7 @@
   </p>
 <% else %>
   <span class="nl-nav-link nl-nav-link--disabled" aria-current="page"><%= @building.location_short_label %></span>
+  <p class="nl-quests-board__meta" data-location-here-next="1">
+    <%= link_to t("arena.nav.city"), world_path, data: {turbo: false, location_recovery: "world"} %>
+  </p>
 <% end %>
