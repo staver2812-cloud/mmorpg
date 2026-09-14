@@ -388,3 +388,26 @@
     grid-template-columns: minmax(0, 1fr);
   }
 }
+
+@media (pointer: coarse) {
+  .nl-inventory .invbut,
+  .nl-inventory .lbut,
+  .nl-inventory .weaponch,
+  .nl-equipment-sets .invbut,
+  .nl-equipment-sets .lbut,
+  .nl-family-inventory .weaponch {
+    min-height: 44px;
+    min-width: 44px;
+    padding: 8px 10px;
+    font-size: 12px;
+    line-height: 1.25;
+  }
+
+  .nl-inventory input.LogintextBox,
+  .nl-inventory input.LogintextBox2,
+  .nl-inventory input.LogintextBox4,
+  .nl-inventory select.LogintextBox {
+    min-height: 44px;
+    font-size: 14px;
+  }
+}

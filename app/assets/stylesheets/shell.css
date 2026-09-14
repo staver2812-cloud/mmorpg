@@ -908,3 +908,25 @@ input.nl-chat-input-field,
     width: min(340px, calc(100vw - 12px));
   }
 }
+
+@media (pointer: coarse) {
+  button.nl-nav-link,
+  .nl-nav-link,
+  .nl-top-right button,
+  .nl-chat-tool--send,
+  .nl-chat-tool--refresh,
+  .nl-chat-tool--clear-chat,
+  .nl-chat-tool--abilities,
+  .nl-chat-tool--messages {
+    min-height: 44px;
+    min-width: 44px;
+    padding: 8px 10px;
+    font-size: 12px;
+    line-height: 1.25;
+  }
+
+  .nl-chat-input-field {
+    min-height: 44px;
+    font-size: 14px;
+  }
+}
