@@ -220,6 +220,12 @@ def main() -> int:
                 'data-building-recovery="world"' in r.text,
                 f"url={r.url}",
             )
+        if path == "/city/buildings/guard_tower" and r.status_code == 200 and 'data-building-key="guard_tower"' in r.text:
+            report.add(
+                "guard tower building chrome recovery",
+                'data-building-recovery="world"' in r.text,
+                f"url={r.url}",
+            )
         if path == "/city/buildings/workshop" and 'data-workshop-repair="deferred"' in r.text:
             report.add(
                 "workshop repair deferred recovery",
