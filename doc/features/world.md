@@ -1878,6 +1878,7 @@ A wilderness fight does not move `CharacterPosition`. Its match metadata stores 
 | Deferred local action definition | Do not create an offer. |
 | Local-action / location-feature boundary failures | Player-facing alerts use `game.world.*` / `game.flashes.*` i18n keys (ru/en); English copy preserves the prior rejection vocabulary for specs. |
 | AcceptMove boundary failures | Movement violations use the same i18n keys; English substrings stay stable for existing service specs. |
+| Passive ambush flash | Successful passive encounter redirect message uses `game.world.passive_ambush`. |
 | City hotspot / gate entry messages | `CityHotspotService`, `TileBuildingService`, and `TileBuilding#entry_blocked_reason` use `game.world.*` / `game.flashes.location_not_found`; English copy matches prior strings for request/system specs. |
 | AcceptAction / hotspot level gates | Remaining AcceptAction offer violations and `CityHotspot#interaction_blocked_reason` use the same i18n surface. |
 | `Look Around` with no hostile interruption | Return authored message; grant no invented reward. |
