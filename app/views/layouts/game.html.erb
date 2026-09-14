@@ -39,14 +39,28 @@
         <%= render "shared/nl_vitals_bar", character: current_character %>
         <% injury_state = Game::Combat::InjuryState.new(character: current_character) %>
         <% if (injury_summary = injury_state.summary).present? %>
-          <%= link_to injury_summary,
-                city_building_path("hospital"),
-                class: "nl-injury-chip#{' nl-injury-chip--heavy' if injury_state.blocks_movement?}",
-                title: t("game.injuries.hospital_hint"),
-                data: {
-                  injury_chip: "1",
-                  injury_blocks: (injury_state.blocks_movement? ? "1" : "0")
-                } %>
+          <% hospital_open = Game::World::CityBuildingCatalog.accessible?(character: current_character, building_key: "hospital") %>
+          <% if hospital_open %>
+            <%= link_to injury_summary,
+                  city_building_path("hospital"),
+                  class: "nl-injury-chip#{' nl-injury-chip--heavy' if injury_state.blocks_movement?}",
+                  title: t("game.injuries.hospital_hint"),
+                  data: {
+                    injury_chip: "1",
+                    injury_blocks: (injury_state.blocks_movement? ? "1" : "0"),
+                    injury_recovery: "hospital"
+                  } %>
+          <% else %>
+            <%= link_to injury_summary,
+                  inventory_path,
+                  class: "nl-injury-chip#{' nl-injury-chip--heavy' if injury_state.blocks_movement?}",
+                  title: t("game.injuries.outdoor_lock_title"),
+                  data: {
+                    injury_chip: "1",
+                    injury_blocks: (injury_state.blocks_movement? ? "1" : "0"),
+                    injury_recovery: "inventory"
+                  } %>
+          <% end %>
         <% end %>
         <% trauma_scrolls = Game::World::StartPlayerAssault.trauma_scroll_quantity(current_character) %>
         <% if trauma_scrolls.positive? || Game::World::CityBuildingCatalog.accessible?(character: current_character, building_key: "hospital") %>

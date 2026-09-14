@@ -33,7 +33,17 @@ RSpec.describe "world/_actions.html.erb", type: :view do
 
     render partial: "world/actions", locals: {available_actions: [], position:}
 
-    expect(rendered).to have_content("Move, Look, and Enter are unavailable")
+    expect(rendered).to have_content(I18n.t("game.world.actions_unavailable_title"))
+  end
+
+  it "explains the outdoor injury travel lock with an Inventory recovery link" do
+    assign(:movement_state, OpenStruct.new(locked_reason: :injured))
+
+    render partial: "world/actions", locals: {available_actions: [], position:}
+
+    expect(rendered).to have_css("[data-world-injury-lock='1']")
+    expect(rendered).to have_content(I18n.t("game.injuries.outdoor_lock"))
+    expect(rendered).to have_link(I18n.t("game.injuries.outdoor_lock_inventory"), href: inventory_path)
   end
 
   %w[drink fish].each do |action_type|

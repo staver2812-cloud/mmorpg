@@ -107,6 +107,16 @@ RSpec.describe Game::Movement::MapState do
     expect(MovementCommand.offered.where(character:)).to be_empty
   end
 
+  it "does not issue destinations while heavy injury blocks wilderness travel" do
+    Game::Combat::InjuryState.new(character:).apply!(severity: :heavy, duration: 2.hours)
+
+    state = described_class.new(character:).call
+
+    expect(state.destinations).to be_empty
+    expect(state.locked_reason).to eq(:injured)
+    expect(MovementCommand.offered.where(character:)).to be_empty
+  end
+
   it "does not create wilderness grid offers for city nodes" do
     zone.update!(location_type: "city")
 

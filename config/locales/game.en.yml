@@ -1325,6 +1325,9 @@ en:
       account_deletion_unavailable: "Account deletion is not available in the current MVP."
     injuries:
       blocks_movement: "Heavy injury: wilderness travel locked. Visit Coal Infirmary first."
+      outdoor_lock: "Wilderness travel locked by injury. Wait the timer, or clear it with a bag/scroll from Inventory — Infirmary opens after you return to Coal."
+      outdoor_lock_title: "Heavy/combat injury blocks wilderness movement until cleared or expired."
+      outdoor_lock_inventory: "Open Inventory"
       summary: "Injuries: %{list}"
       hospital_hint: "Infirmary: rest/bags/scrolls clear injuries instantly (timer is wait-out only)"
       cleared_light: "Cleared light injuries (%{count})."

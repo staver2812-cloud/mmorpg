@@ -14,7 +14,12 @@
   <% end %>
 <% end %>
 
-<% if @movement_state&.locked_reason == :fatigued %>
+<% if @movement_state&.locked_reason == :injured %>
+  <div class="nl-world-action-unavailable" data-world-injury-lock="1" title="<%= t("game.injuries.outdoor_lock_title") %>">
+    <span><%= t("game.injuries.outdoor_lock") %></span>
+    <%= link_to t("game.injuries.outdoor_lock_inventory"), inventory_path, class: "nl-sheet-link" %>
+  </div>
+<% elsif @movement_state&.locked_reason == :fatigued %>
   <span class="nl-world-action-unavailable" title="<%= t("game.world.actions_unavailable_title") %>"><%= t("game.world.actions_unavailable") %></span>
   <span class="nl-visually-hidden"><%= t("game.world.actions_unavailable_title") %></span>
 <% end %>

@@ -286,6 +286,14 @@ At effective fatigue `86%` or higher, the top-context row explains that Move,
 Look, and Enter are unavailable. The current map/cell still renders. City node
 navigation is not a wilderness action and is not blocked by this rule.
 
+When heavy or combat injury is active outdoors, `MapState` returns
+`locked_reason: :injured` with no destinations (same shape as fatigue). The
+top-context row explains the wilderness lock and links Inventory for
+bag/scroll clears; the injury chip also routes to Inventory while Infirmary is
+out of district reach, and to Coal Infirmary when that hotspot is accessible.
+This does not invent a walk-home exception: source evidence keeps heavy injury
+as a movement block.
+
 Before an offered wilderness entrance or local action completes, World checks the
 authoritative current cell for its live hostile encounter. Forced interruption
 requires Ashen Bait (`ashen_bait`): one unit is consumed and the shared fight
