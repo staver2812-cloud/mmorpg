@@ -893,7 +893,7 @@ en:
         route_increasing: "must span the flight in strictly increasing order"
         route_outdoor: "must stay within authored outdoor regions"
     buildings:
-      hospital_title: "Treatment shop observation"
+      hospital_title: "Infirmary"
       hospital_hint: "Recovery and pharmacy"
       hospital_rest_aria: "Hospital rest"
       hospital_rest_lead: "Injury timers (light ~20–45 min, heavy ~2 h, combat ~12 h) are how long an untreated injury lasts — not the heal cast time. Rest, healer bags, and scrolls clear injuries instantly."
