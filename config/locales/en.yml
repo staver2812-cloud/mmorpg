@@ -96,6 +96,7 @@ en:
     refresh_10s: "Refresh every 10 s"
     text_mode: "Text"
     tool_deferred: "Not available in this release yet."
+    tools_deferred_next: "Smiles and chat modes come later — use send/clear or return to City."
   auth:
     sign_in: "Sign in"
     sign_up: "Create character"

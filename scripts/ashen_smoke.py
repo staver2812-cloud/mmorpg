@@ -1340,6 +1340,12 @@ def main() -> int:
         ),
         f"url={r.url}",
     )
+    if r.status_code == 200 and 'data-chat-tools-next="1"' in r.text:
+        report.add(
+            "chat tools deferred City recovery",
+            'data-chat-recovery="world"' in r.text,
+            f"url={r.url}",
+        )
     if 'data-chat-empty="1"' in r.text:
         report.add(
             "compact chat empty recovery",

@@ -375,6 +375,11 @@
       <button type="button" class="nl-chat-tool nl-chat-tool--speed nl-chat-tool--disabled" aria-disabled="true" disabled title="<%= t("social.tool_deferred") %>" aria-label="<%= t("social.refresh_10s") %>">10s</button>
       <button type="button" class="nl-chat-tool nl-chat-tool--language nl-chat-tool--disabled" aria-disabled="true" disabled title="<%= t("social.tool_deferred") %>" aria-label="<%= t("social.text_mode") %>">Aa</button>
     </div>
+    <p class="nl-quests-board__meta nl-chat-tools-next" data-chat-tools-next="1">
+      <%= t("social.tools_deferred_next") %>
+      ·
+      <%= link_to t("arena.nav.city"), world_path, class: "nl-sheet-link", data: {turbo: false, chat_recovery: "world"} %>
+    </p>
 
     <div class="nl-status-icons">
       <span class="nl-time-display"><%= Time.current.strftime("%H:%M:%S") %></span>
