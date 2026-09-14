@@ -418,6 +418,16 @@ def main() -> int:
         and ('data-landmark-inside="1"' in r.text),
         f"url={r.url}",
     )
+    if (
+        'data-airship-route-deferred="1"' in r.text
+        or 'data-airship-any-affordable="0"' in r.text
+        or 'data-airship-routes-empty=' in r.text
+    ):
+        report.add(
+            "airship deferred/short recovery",
+            "data-airship-recovery=" in r.text,
+            f"url={r.url}",
+        )
 
     r = s.get(f"{BASE}/quests", timeout=TIMEOUT)
     quest_needles = [
