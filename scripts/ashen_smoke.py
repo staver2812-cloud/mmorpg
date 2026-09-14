@@ -208,6 +208,20 @@ def main() -> int:
                 'data-workshop-recovery="inventory"' in r.text,
                 f"url={r.url}",
             )
+        if path == "/city/buildings/tavern" and 'data-tavern-rumors-next=' in r.text:
+            report.add(
+                "tavern rumors next recovery",
+                "data-tavern-rumor-recovery=" in r.text,
+                f"url={r.url}",
+            )
+        if path == "/city/buildings/guard_tower" and (
+            'data-guard-square-next=' in r.text or 'data-guard-empty="1"' in r.text
+        ):
+            report.add(
+                "guard tower recovery",
+                "data-guard-recovery=" in r.text,
+                f"url={r.url}",
+            )
         time.sleep(0.1)
 
     r = s.get(f"{BASE}/player/{nick}", timeout=TIMEOUT)
