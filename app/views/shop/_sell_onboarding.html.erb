@@ -14,7 +14,7 @@
     <% unless merchant_unlocked %>
       <li>
         <% if Game::World::CityBuildingCatalog.accessible?(character: current_character, building_key: "market") %>
-          <%= link_to t("game.shop.sell_onboarding_market"), city_building_path("market"), class: "nl-shop-junk-link" %>
+          <%= link_to t("game.shop.sell_onboarding_market"), city_building_path("market"), class: "nl-shop-junk-link", data: {shop_recovery: "market"} %>
         <% else %>
           <%= t("game.shop.sell_onboarding_market_hint") %>
         <% end %>
@@ -27,7 +27,7 @@
       <%= link_to t("game.shop.sell_onboarding_licenses"),
             shop_path(mode: "licenses"),
             class: "nl-shop-junk-link",
-            data: {turbo_action: "advance"} %>
+            data: {turbo_action: "advance", shop_recovery: "licenses"} %>
     </li>
   </ol>
 </section>

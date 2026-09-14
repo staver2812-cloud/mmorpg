@@ -300,6 +300,13 @@ def main() -> int:
             'data-shop-recovery="inventory"' in r.text,
             f"url={r.url}",
         )
+    if 'data-shop-sell-onboarding="1"' in r.text:
+        report.add(
+            "shop sell onboarding recovery",
+            'data-shop-recovery="licenses"' in r.text
+            or 'data-shop-recovery="market"' in r.text,
+            f"url={r.url}",
+        )
     r = s.get(f"{BASE}/shop?mode=licenses", timeout=TIMEOUT)
     report.add(
         "shop licenses localized",
@@ -894,10 +901,18 @@ def main() -> int:
         and ("A character is required" not in r.text),
         f"url={r.url}",
     )
+    if r.status_code == 200 and "nl-arena-frame" in r.text:
+        report.add(
+            "arena chrome recovery",
+            'data-arena-recovery="city"' in r.text
+            or 'data-arena-recovery="character"' in r.text
+            or 'data-arena-recovery="inventory"' in r.text,
+            f"url={r.url}",
+        )
     if 'data-arena-recent-empty="1"' in r.text:
         report.add(
             "arena recent empty Duels recovery",
-            'ft=1' in r.text or "/arena" in r.text,
+            'data-arena-recovery="duels"' in r.text,
             f"url={r.url}",
         )
     if 'data-arena-room-locked="1"' in r.text:

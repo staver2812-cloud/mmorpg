@@ -30,10 +30,10 @@
             data-arena-max-mp="<%= current_character.max_mp %>"><%= current_character.current_hp %>/<%= current_character.max_hp %> | <%= current_character.current_mp %>/<%= current_character.max_mp %></span>
     </div>
     <div class="nl-arena-controls">
-      <%= link_to t("arena.nav.character"), player_path(name: current_character.name), class: "nl-arena-link" %>
-      <%= link_to t("arena.nav.inventory"), inventory_path, class: "nl-arena-link" %>
+      <%= link_to t("arena.nav.character"), player_path(name: current_character.name), class: "nl-arena-link", data: {arena_recovery: "character"} %>
+      <%= link_to t("arena.nav.inventory"), inventory_path, class: "nl-arena-link", data: {arena_recovery: "inventory"} %>
       <span class="nl-arena-link nl-arena-link--current"><%= t("arena.nav.arena") %></span>
-      <%= link_to t("arena.nav.city"), world_path, class: "nl-arena-link", data: {turbo: false} %>
+      <%= link_to t("arena.nav.city"), world_path, class: "nl-arena-link", data: {turbo: false, arena_recovery: "city"} %>
     </div>
   </div>
 
@@ -111,9 +111,9 @@
       <p class="nl-quests-board__meta">
         <%= t("arena.statistics_next") %>
         ·
-        <%= link_to t("arena.tabs.duels"), arena_index_path(ft: 1), class: "nl-sheet-link" %>
+        <%= link_to t("arena.tabs.duels"), arena_index_path(ft: 1), class: "nl-sheet-link", data: {arena_recovery: "duels"} %>
         ·
-        <%= link_to t("arena.nav.city"), world_path, class: "nl-sheet-link", data: {turbo: false} %>
+        <%= link_to t("arena.nav.city"), world_path, class: "nl-sheet-link", data: {turbo: false, arena_recovery: "city"} %>
       </p>
     </div>
   <% else %>
@@ -173,7 +173,7 @@
       <p class="nl-quests-board__meta">
         <%= t("arena.recent_empty") %>
         ·
-        <%= link_to t("arena.tabs.duels"), arena_index_path(ft: 1), class: "nl-sheet-link" %>
+        <%= link_to t("arena.tabs.duels"), arena_index_path(ft: 1), class: "nl-sheet-link", data: {arena_recovery: "duels"} %>
       </p>
     </div>
   <% end %>

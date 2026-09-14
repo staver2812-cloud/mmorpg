@@ -8,6 +8,6 @@
 <% elsif expired_trading %>
   <p class="nl-empty-note" data-shop-sell-license-status="expired">
     <%= t("game.shop.sell_license_expired", at: l(expired_trading.expires_at, format: :long)) %>
-    <%= link_to t("game.shop.sell_onboarding_licenses"), shop_path(mode: "licenses"), class: "nl-sheet-link" %>
+    <%= link_to t("game.shop.sell_onboarding_licenses"), shop_path(mode: "licenses"), class: "nl-sheet-link", data: {shop_recovery: "licenses"} %>
   </p>
 <% end %>
