@@ -210,6 +210,11 @@ def main() -> int:
         r.status_code == 200 and 'data-landmark-inside="1"' in r.text,
         f"url={r.url}",
     )
+    report.add(
+        "hospital traumatologist desk",
+        r.status_code == 200 and 'data-hospital-traumatologist="1"' in r.text,
+        f"url={r.url}",
+    )
     r = s.get(f"{BASE}/city/buildings/tavern", timeout=TIMEOUT, allow_redirects=True)
     report.add(
         "tavern landmark inside chrome",
@@ -237,6 +242,11 @@ def main() -> int:
         and ("data-shop-license-affordable=" in r.text)
         and ("Valid for" not in r.text)
         and (("Срок:" in r.text) or ("дн." in r.text)),
+        f"url={r.url}",
+    )
+    report.add(
+        "shop doctor onboarding",
+        r.status_code == 200 and 'data-shop-doctor-onboarding="1"' in r.text,
         f"url={r.url}",
     )
 
@@ -770,6 +780,16 @@ def main() -> int:
 
     r = s.get(f"{BASE}/world", timeout=TIMEOUT)
     report.add("locale switcher", ("RU" in r.text and "EN" in r.text) or "/locales" in r.text)
+    report.add(
+        "chat tools deferred markers",
+        r.status_code == 200
+        and 'nl-chat-tool--disabled' in r.text
+        and (
+            "Пока недоступно в этом релизе." in r.text
+            or "Not available in this release yet." in r.text
+        ),
+        f"url={r.url}",
+    )
 
     ok_back_f1, d_back_f1 = click_hotspot(s, "go_forpost1")
     report.add("return forpost1 after law", ok_back_f1, d_back_f1)
