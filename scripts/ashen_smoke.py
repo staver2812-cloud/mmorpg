@@ -297,7 +297,12 @@ def main() -> int:
         )
         report.add(
             "city_hall quest ready count",
-            ("data-city-hall-quest-ready=" in r.text) and ("Готово к сдаче" in r.text or "Ready to turn in" in r.text),
+            ("data-city-hall-quest-ready=" in r.text)
+            and ("data-city-hall-quest-active=" in r.text)
+            and ("data-city-hall-quest-available=" in r.text)
+            and ("data-city-hall-quest-locked=" in r.text)
+            and ("data-city-hall-quest-completed=" in r.text)
+            and ("Готово к сдаче" in r.text or "Ready to turn in" in r.text),
         )
         report.add(
             "city_hall residential links",

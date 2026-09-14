@@ -159,7 +159,11 @@
               <%= link_to chip, quests_path %>
             </p>
           <% end %>
-          <ul class="nl-quests__summary" aria-label="<%= t("game.quests.summary_aria") %>">
+          <ul class="nl-quests__summary" aria-label="<%= t("game.quests.summary_aria") %>"
+              data-city-hall-quest-active="<%= quest_counts.fetch("active", 0) %>"
+              data-city-hall-quest-available="<%= quest_counts.fetch("available", 0) %>"
+              data-city-hall-quest-locked="<%= quest_counts.fetch("locked", 0) %>"
+              data-city-hall-quest-completed="<%= quest_counts.fetch("completed", 0) %>">
             <li><span><%= t("game.quests.status.active") %></span> <b><%= quest_counts.fetch("active", 0) %></b></li>
             <li data-city-hall-ready-count="<%= ready_count %>"><span><%= t("game.quests.status.ready") %></span> <b><%= ready_count %></b></li>
             <li><span><%= t("game.quests.status.available") %></span> <b><%= quest_counts.fetch("available", 0) %></b></li>
