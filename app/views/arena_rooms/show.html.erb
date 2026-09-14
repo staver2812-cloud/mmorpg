@@ -115,6 +115,21 @@
           <%= t("arena.form.combat_trauma") %>
         </label>
         <p class="nl-arena-hint"><%= t("arena.form.combat_trauma_hint") %></p>
+        <% scroll_qty = Game::World::StartPlayerAssault.trauma_scroll_quantity(current_character) %>
+        <% if scroll_qty <= 0 %>
+          <p class="nl-quests-board__meta" data-arena-need-scroll="1">
+            <%= t("arena.combat_scroll_missing") %>
+            ·
+            <% if Game::World::CityBuildingCatalog.accessible?(character: current_character, building_key: "hospital") %>
+              <%= link_to t("game.buildings.hospital_title_short"),
+                    city_building_path("hospital", anchor: "hospital-premium-desk"),
+                    class: "nl-sheet-link",
+                    data: {arena_recovery: "hospital"} %>
+            <% else %>
+              <%= link_to t("arena.nav.city"), world_path, class: "nl-sheet-link", data: {turbo: false, arena_recovery: "city"} %>
+            <% end %>
+          </p>
+        <% end %>
 
         <% if active_tab != "1" %>
           <%= f.select :wait_minutes,
