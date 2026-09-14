@@ -210,11 +210,11 @@ def main() -> int:
         r.status_code == 200 and 'data-landmark-inside="1"' in r.text,
         f"url={r.url}",
     )
-    r = s.get(f"{BASE}/city/buildings/shop", timeout=TIMEOUT, allow_redirects=True)
+    r = s.get(f"{BASE}/city/buildings/souvenir_shop", timeout=TIMEOUT, allow_redirects=True)
     report.add(
-        "city shop landmark inside chrome",
+        "souvenir shop landmark inside chrome",
         r.status_code == 200
-        and 'data-building-key="shop"' in r.text
+        and 'data-building-key="souvenir_shop"' in r.text
         and 'data-landmark-inside="1"' in r.text,
         f"url={r.url}",
     )
