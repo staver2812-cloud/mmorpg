@@ -65,7 +65,7 @@ class User < ApplicationRecord
   def ensure_social_features!
     return if verified_for_social_features?
 
-    raise Pundit::NotAuthorizedError, "Email verification required"
+    raise Pundit::NotAuthorizedError, I18n.t("game.flashes.email_verification_required")
   end
 
   def moderator?

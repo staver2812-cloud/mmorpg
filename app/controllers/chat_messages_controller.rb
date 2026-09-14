@@ -49,7 +49,7 @@ class ChatMessagesController < ApplicationController
       current_user.ensure_social_features!
       prepare_local_chat_context
       unless params[:context_key].present?
-        raise Pundit::NotAuthorizedError, "Current chat location required"
+        raise Pundit::NotAuthorizedError, I18n.t("game.chat.location_required")
       end
       Chat::ChannelRouter.new(user: current_user).resolve(scope: :local)
     end

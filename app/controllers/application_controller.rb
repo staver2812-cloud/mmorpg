@@ -117,26 +117,31 @@ class ApplicationController < ActionController::Base
     record_current_session_activity
     @chat_session = current_user_session
     unless @chat_session && @chat_session.signed_out_at.nil?
-      raise Pundit::NotAuthorizedError, "Active login required"
+      raise Pundit::NotAuthorizedError, I18n.t("game.chat.login_required")
     end
 
     @chat_context = Chat::LocalContext.new(character: current_character).synchronize!
-    raise Pundit::NotAuthorizedError, "Current location required" unless @chat_context
+    raise Pundit::NotAuthorizedError, I18n.t("game.chat.location_required") unless @chat_context
 
     @chat_session_key = "#{current_user.id}:#{@chat_session.id}:#{@chat_session.signed_in_at.iso8601(6)}"
   end
 
-  def user_not_authorized
+  def user_not_authorized(exception = nil)
+    alert = exception&.message.to_s.strip
+    alert = I18n.t("errors.forbidden") if alert.blank? ||
+      alert == "Pundit::NotAuthorizedError" ||
+      alert.start_with?("not allowed to")
+
     respond_to do |format|
       format.html do
         redirect_target = request.referer.presence
 
         redirect_target = nil if redirect_target == request.url
 
-        redirect_to(redirect_target || root_path, alert: I18n.t("errors.forbidden"))
+        redirect_to(redirect_target || root_path, alert:)
       end
       format.turbo_stream { head :forbidden }
-      format.json { render json: {error: "forbidden"}, status: :forbidden }
+      format.json { render json: {error: alert}, status: :forbidden }
     end
   end
 
