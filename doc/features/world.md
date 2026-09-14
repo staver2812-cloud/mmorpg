@@ -1421,12 +1421,13 @@ and a due valid command completes. It then:
    state without new destinations when a command is still moving;
 2. otherwise cancels stale open movement offers and reconciles the accepted Look deadline, returning `local_action` without destinations while work remains active;
 3. derives effective fatigue and returns a `fatigued` locked state without destinations at `86%+`;
-4. evaluates all eight direction offsets against bounds and passability, where
+4. when heavy/combat injury blocks movement, returns an `injured` locked state without destinations;
+5. evaluates all eight direction offsets against bounds and passability, where
    a valid coordinate delta satisfies
    `abs(target.x - current.x) <= 1`,
    `abs(target.y - current.y) <= 1`, and target differs from current;
-5. persists fresh `MovementCommand` offers with random action keys and a 10-minute offer TTL;
-6. returns the map state used to render the viewport.
+6. persists fresh `MovementCommand` offers with random action keys and a 10-minute offer TTL;
+7. returns the map state used to render the viewport.
 
 For outdoor cells, `WorldController` separately resolves current-cell content and rotates
 `WorldActionOffer` rows for visible entrances and implemented local actions.
@@ -3001,6 +3002,7 @@ Before extending the World feature:
 | 2026-09-14 | Movement-offer and empty players-here specs assert via `game.flashes.movement_offer_unavailable` / `game.world.no_players` (RU-safe). |
 | 2026-09-14 | Owned Nature Child perk recovers four fatigue on Drink; without it, recovery remains two points. |
 | 2026-09-14 | Mine/exchange lobbies show explicit deferred reasons on disabled Descend/Choose/Buy controls. |
+| 2026-09-14 | Outdoor heavy/combat injury clears map destinations (`locked_reason: :injured`), shows recovery copy + Inventory CTA, and routes the injury chip to Inventory when Infirmary is out of district. |
 
 
 ## 19. Open-world parity audit (updated 2026-09-09)
