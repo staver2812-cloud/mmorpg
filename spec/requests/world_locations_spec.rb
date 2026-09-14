@@ -204,6 +204,39 @@ RSpec.describe "Open-world locations", type: :request do
     expect(position.reload).to have_attributes(zone:, x: 5, y: 6)
   end
 
+  it "states that mine lobby controls stay deferred until capture" do
+    position.update!(x: 4, y: 5)
+    create(
+      :tile_building,
+      :location_lobby,
+      zone: zone.name,
+      x: 4,
+      y: 5,
+      building_key: "podgorny_mine",
+      metadata: {
+        "presence_label" => "Dragon Fang, Mine",
+        "location" => {
+          "kind" => "mine",
+          "presence_label" => "Podgorny Mine",
+          "scene" => {"width" => 760, "height" => 255, "image" => "world/forpost-terrain.png"},
+          "features" => [{"key" => "exit", "label" => "Nature", "action_type" => "return_world", "placement" => "navigation"}],
+          "sections" => [
+            {"key" => "entrance", "label" => "Mine entrance", "summary_label" => "Podgorny Mine"},
+            {"key" => "shop", "label" => "Shop"}
+          ],
+          "unavailable_actions" => ["Descend"]
+        }
+      }
+    )
+
+    get world_location_path("podgorny_mine")
+
+    expect(response).to have_http_status(:success)
+    expect(response.body).to include('data-location-lobby-deferred="1"')
+    expect(response.body).to include(I18n.t("game.locations.lobby_deferred"))
+    expect(response.body).to include(I18n.t("game.locations.descend_deferred"))
+  end
+
   it "rejects stale location access after the persisted coordinate changes" do
     position.update!(x: 5)
 

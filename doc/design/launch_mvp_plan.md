@@ -23,7 +23,9 @@ village Trading Post share the starter Shop owner. Buy/Sell and eligible license
 
 ## Launch Principles
 
-- Player-facing implementation is English-only.
+- Player-facing UI ships localized EN/RU strings; the Rails default locale is
+  `:ru` for Ashen Veil soft launch. English remains a first-class locale, not
+  the sole player language.
 - Server state is authoritative; browser state previews and submits choices.
 - Every mutating world action is issued by the server and validated on submit.
 - Player, team, and NPC fights use the same combat mechanics.
