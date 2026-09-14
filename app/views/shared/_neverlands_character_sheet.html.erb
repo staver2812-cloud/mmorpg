@@ -150,7 +150,16 @@
       <tbody>
         <tr>
           <th><%= t("game.sheet.fatigue") %>:</th>
-          <td class="nl-sheet-chip nl-sheet-chip--fatigue"><%= fatigue %>%</td>
+          <td class="nl-sheet-chip nl-sheet-chip--fatigue">
+            <%= fatigue %>%
+            <% if character == current_character && fatigue.to_i.positive? %>
+              <% if Game::World::CityBuildingCatalog.accessible?(character:, building_key: "tavern") %>
+                · <%= link_to t("game.buildings.tavern_rest_cta"), city_building_path("tavern"), class: "nl-sheet-link", data: {sheet_recovery: "tavern"} %>
+              <% else %>
+                · <%= link_to t("arena.nav.city"), world_path, class: "nl-sheet-link", data: {sheet_recovery: "world"} %>
+              <% end %>
+            <% end %>
+          </td>
         </tr>
         <tr>
           <th><%= t("game.sheet.alignment") %>:</th>
