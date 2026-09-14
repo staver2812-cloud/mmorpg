@@ -1684,3 +1684,17 @@ button.nl-city-hotspot,
     width: calc(100% - 12px);
   }
 }
+
+@media (pointer: coarse) {
+  .nl-city-building-page .lbut,
+  .nl-city-building-tab,
+  .nl-world-location-tab,
+  .nl-world-location-sections .lbut,
+  .nl-handbook .lbut {
+    min-height: 44px;
+    min-width: 44px;
+    padding: 8px 10px;
+    font-size: 12px;
+    line-height: 1.25;
+  }
+}

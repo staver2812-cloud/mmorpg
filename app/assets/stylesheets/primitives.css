@@ -248,6 +248,22 @@ a:hover {
   text-decoration: none;
 }
 
+@media (pointer: coarse) {
+  .nl-stat-btn {
+    width: 44px;
+    min-width: 44px;
+    height: 44px;
+    font-size: 18px;
+    line-height: 44px;
+  }
+
+  .lbut {
+    min-height: 44px;
+    min-width: 44px;
+    padding: 8px 10px;
+  }
+}
+
 /* ---------------------------------------------------------------- *
  * Form fields (game.css textBox family)
  * ---------------------------------------------------------------- */
