@@ -1224,6 +1224,7 @@ Final rerun results are in the
 - 2026-09-14: Gallows east-gate note recovers to City.
 - 2026-09-14: Prison/Gallows Law desk links fall back to City when Law Abode is out of district.
 - 2026-09-14: Post landmark chrome recovers via City/Hall.
+- 2026-09-14: Smoke asserts Post desk / empty-note `data-post-recovery` markers.
 - 2026-09-14: Guard Tower, Pitch Forge landmark, and Tavern rumors recover via City/Market/Shop/Inventory/Hall CTAs.
 - 2026-09-14: Numismatics deferred desk recovers via Shop/Junk with `data-numismatics-recovery`; exchange buy-deferred lobby also offers Bank/Junk when accessible.
 - 2026-09-13: Infirmary, Pitch Bank, Law Abode, and Veil Obelisk desks also render the shared landmark chrome (inside lead + exit notes) for consistent exit affordances.

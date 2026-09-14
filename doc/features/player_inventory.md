@@ -505,6 +505,7 @@ shipped Inventory management routes.
 | 2026-09-13 | Transfer price field uses `game.common.nv_short` placeholder with `data-inventory-transfer-price`. |
 | 2026-09-14 | Deferred P2P Sell CTA exposes `data-inventory-recovery="shop_sell"`; broken repair CTA exposes workshop/World recovery. |
 | 2026-09-14 | Empty production-family where-hints expose `data-inventory-recovery` (World/Workshop/Quests). |
+| 2026-09-14 | Smoke asserts empty Quests-family Journal recovery (`data-inventory-recovery="quests"`). |
 | 2026-09-13 | Broken rows link to Pitch Forge (or show deferred hint) without inventing a repair transaction. |
 | 2026-09-13 | Carried durable rows expose `data-inventory-broken`, a Broken badge, and low/broken durability bar states; workshop repair remains deferred. |
 | 2026-09-13 | Junk CTA shows offer count plus estimated buyback NV (`data-inventory-junk-total`); same estimate authority as Ash Buyer. |

@@ -512,10 +512,18 @@ def main() -> int:
         and 'data-landmark-inside="1"' in r.text,
         f"url={r.url}",
     )
+    if r.status_code == 200:
+        report.add(
+            "post desk recovery",
+            'data-post-recovery="world"' in r.text
+            or 'data-post-recovery="city_hall"' in r.text,
+            f"url={r.url}",
+        )
     if r.status_code == 200 and 'data-post-empty="1"' in r.text:
         report.add(
             "post empty recovery CTA",
-            ("data-post-recovery=" in r.text) or ("/city/buildings/city_hall" in r.text),
+            'data-post-recovery="world"' in r.text
+            or 'data-post-recovery="city_hall"' in r.text,
             f"url={r.url}",
         )
     r = s.get(f"{BASE}/city/buildings/clan_hall", timeout=TIMEOUT, allow_redirects=True)
@@ -1190,6 +1198,13 @@ def main() -> int:
             'data-inventory-recovery="workshop"' in r.text,
             f"url={r.url}",
         )
+    r = s.get(f"{BASE}/inventory?category=quests", timeout=TIMEOUT)
+    if r.status_code == 200 and 'data-inventory-empty-hint="quests"' in r.text:
+        report.add(
+            "inventory empty quests Journal recovery",
+            'data-inventory-recovery="quests"' in r.text,
+            f"url={r.url}",
+        )
 
     r = s.get(f"{BASE}/character/licenses", timeout=TIMEOUT, allow_redirects=True)
     report.add(
@@ -1259,6 +1274,16 @@ def main() -> int:
         r = s.get(f"{BASE}/world", timeout=TIMEOUT)
         outdoorish = ("Пепельный Берег" in r.text) or ("nl-world-map" in r.text) or ("available-actions" in r.text)
         report.add("outdoor after west_gate", r.status_code == 200 and outdoorish, f"{r.status_code}")
+        if (
+            'data-world-injury-lock="1"' in r.text
+            or 'data-world-fatigue-lock="1"' in r.text
+            or 'data-world-enter-blocked="1"' in r.text
+        ):
+            report.add(
+                "outdoor action lock recovery",
+                "data-world-recovery=" in r.text,
+                f"url={r.url}",
+            )
         bait_chip_ok = (("Приманка:" in r.text) or ("nl-bait-chip" in r.text)) and (
             "data-bait-qty=" in r.text
         )
