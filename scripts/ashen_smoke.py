@@ -898,6 +898,12 @@ def main() -> int:
         and ('data-landmark-inside="1"' in r.text),
         f"url={r.url}",
     )
+    if r.status_code == 200 and 'data-building-key="bank"' in r.text:
+        report.add(
+            "bank building chrome recovery",
+            'data-building-recovery="world"' in r.text,
+            f"url={r.url}",
+        )
     if r.status_code == 200 and 'data-bank-vm-line="1"' in r.text:
         report.add(
             "bank VM desk recovery",

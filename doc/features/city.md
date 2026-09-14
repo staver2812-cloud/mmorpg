@@ -1222,6 +1222,7 @@ Final rerun results are in the
 - 2026-09-14: Smoke asserts Infirmary building chrome `data-building-recovery="world"`.
 - 2026-09-14: Smoke asserts Tavern/Forge building chrome City recoveries.
 - 2026-09-14: Smoke asserts Guard Tower building chrome City recovery.
+- 2026-09-14: Smoke asserts Pitch Bank building chrome City recovery.
 - 2026-09-14: Shop sell Junk link and doctor/perk onboarding expose `data-shop-recovery` / `data-doctor-recovery`; Airship short-NV Junk/Shop links expose `data-airship-recovery`.
 - 2026-09-14: Obelisk bind-first note recovers to City (`data-obelisk-recovery="world"`).
 - 2026-09-14: Law Abode current-alignment state recovers to City.
