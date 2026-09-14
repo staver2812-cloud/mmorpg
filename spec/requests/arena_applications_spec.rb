@@ -136,7 +136,7 @@ RSpec.describe "ArenaApplications", type: :request do
       end.not_to change(ArenaApplication, :count)
 
       expect(response).to have_http_status(:unprocessable_content)
-      expect(response.parsed_body.fetch("errors").join(" ")).to include("Timeout seconds is not included")
+      expect(response.parsed_body.fetch("errors").join(" ")).to include(I18n.t("game.fight.app_timeout_invalid"))
     end
   end
 

@@ -760,6 +760,8 @@ ru:
       app_alignment_mismatch: "Склонность не совпадает"
       app_recover_hp: "Восстановитесь перед боем: минимум %{percent}% HP"
       app_level_mismatch: "Уровень не подходит"
+      app_timeout_invalid: "Выберите допустимый таймаут"
+      app_trauma_invalid: "Выберите допустимый процент травмы"
       turn_need_action: "Выберите хотя бы одну атаку, блок или умение"
       turn_need_valid_shape: "Выберите хотя бы одну допустимую атаку, блок или слот магии/действия"
       turn_one_block: "За ход можно выбрать только один блок"

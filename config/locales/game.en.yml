@@ -760,6 +760,8 @@ en:
       app_alignment_mismatch: "Alignment does not match"
       app_recover_hp: "Recover before fighting: minimum %{percent}% HP"
       app_level_mismatch: "Level does not match"
+      app_timeout_invalid: "Choose an allowed timeout"
+      app_trauma_invalid: "Choose an allowed trauma percent"
       turn_need_action: "Choose at least one attack, block, or skill"
       turn_need_valid_shape: "Choose at least one valid attack, block, or magic/action slot"
       turn_one_block: "Only one block can be selected per turn"

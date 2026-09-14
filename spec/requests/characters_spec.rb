@@ -31,15 +31,15 @@ RSpec.describe CharactersController, type: :request do
         expect(response).to have_http_status(:success)
         expect(response.body).to include('<body class="nl-game-layout"')
         expect(response.body).to include('class="nl-character-page-grid"')
-        expect(response.body).to include("Stats")
+        expect(response.body).to include(I18n.t("game.profile.stats_title", name: character.name))
         expect(response.body).to include(I18n.t("game.profile.free_points"))
       end
 
       it "shows all allocatable stats" do
         get stats_character_path(character)
 
-        %w[Strength Dexterity Luck Health Knowledge].each do |stat|
-          expect(response.body).to include(stat)
+        Character::PRIMARY_STATS.each do |stat|
+          expect(response.body).to include(Character.stat_label(stat))
         end
       end
 
@@ -364,7 +364,7 @@ RSpec.describe CharactersController, type: :request do
         get skills_character_path(character)
 
         expect(response).to have_http_status(:success)
-        expect(response.body).to include("Skills")
+        expect(response.body).to include(I18n.t("game.profile.skills_title", name: character.name))
         expect(response.body).to include(I18n.t("game.profile.combat_points"))
         expect(response.body).to include(I18n.t("game.profile.peace_points"))
       end
