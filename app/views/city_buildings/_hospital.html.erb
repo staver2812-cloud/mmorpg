@@ -40,6 +40,31 @@
   </p>
 </section>
 
+<% clearance = Game::Shop::TraumatologistClearance.new(character: current_character) %>
+<section class="nl-handbook" aria-label="<%= t("game.shop.traumatologist_title") %>" data-hospital-traumatologist="1">
+  <h2><%= t("game.shop.traumatologist_title") %></h2>
+  <p><%= t("game.shop.traumatologist_lead") %></p>
+  <% if clearance.completed? %>
+    <p class="nl-empty-note" data-hospital-traumatologist-status="done"><%= t("game.shop.traumatologist_done") %></p>
+    <p class="nl-quests-board__meta">
+      <%= link_to t("game.shop.sell_onboarding_licenses"), shop_path(mode: "licenses"), class: "nl-sheet-link" %>
+    </p>
+  <% elsif clearance.visible? %>
+    <p>
+      <%= button_to t("game.shop.traumatologist_cta"),
+            city_building_traumatologist_path("hospital"),
+            method: :post,
+            class: "lbut",
+            form: {data: {turbo: false}} %>
+    </p>
+  <% else %>
+    <p class="nl-empty-note" data-hospital-traumatologist-status="need-perk"><%= t("game.shop.traumatologist_need_healer") %></p>
+    <p class="nl-quests-board__meta">
+      <%= link_to t("game.shop.traumatologist_open_perks"), perks_character_path(current_character), class: "nl-sheet-link" %>
+    </p>
+  <% end %>
+</section>
+
 <section class="nl-handbook" aria-label="<%= t("game.professions.ash_healer") %>">
   <h2><%= t("game.professions.ash_healer") %></h2>
   <p class="nl-handbook__lead">

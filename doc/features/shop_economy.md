@@ -297,7 +297,7 @@ profession-specific checks in addition to ordinary transaction eligibility:
 |---|---|---|
 | Trading I–III | `owns_perk?(:merchant)` and `metadata.profession_unlocks.merchant == true` | Merchant qualification below unlocks purchases. No positive numeric Trading prerequisite is imposed. |
 | Doctor I | `owns_perk?(:healer)` | Purchase and timed permission are implemented. This does not provide treatment or medical crafting. |
-| Doctor II–III | `owns_perk?(:healer)` and `metadata.profession_unlocks.traumatologist == true` | Definitions and the completion check exist; normal-play purchase remains blocked because the Traumatologist quest is unimplemented. |
+| Doctor II–III | `owns_perk?(:healer)` and `metadata.profession_unlocks.traumatologist == true` | Ashen Infirmary Traumatologist clearance sets the unlock flag. Neverlands quest dialogue remains deferred. |
 
 The source's 100 Doctor skill threshold governs entry to the Traumatologist
 quest, with equipment contributions allowed. No numeric Doctor quest-entry
@@ -434,9 +434,12 @@ not implement injury treatment and cannot authorize trading. Doctor qualificatio
 quests, renewal/stacking policy and expiry cleanup must not be inferred from a
 card title. Merchant qualification implements the published license-unlock steps
 above; its garment reward and original dialogue/receipt presentation remain
-incomplete. Doctor II/III require the Traumatologist quest, whose playable flow
-is not implemented. An active license blocks another purchase of the same kind,
-including another tier, until source renewal/upgrade behavior is established.
+incomplete. Doctor II/III require Traumatologist clearance: at Coal Infirmary,
+own Healer and complete the sandbox `TraumatologistClearance` step, which sets
+`metadata.profession_unlocks.traumatologist`. This is an explicit Ashen stand-in,
+not Neverlands Traumatologist quest parity. An active license blocks another
+purchase of the same kind, including another tier, until source renewal/upgrade
+behavior is established.
 Novice low-price heuristics and name-inferred license
 rights have been removed. There is no bargain, refund, repair, player order or
 remote-shop flow.
@@ -1211,6 +1214,7 @@ automated completion results are recorded in
 | 2026-09-14 | Shop request chrome assertions (title/funds/empty section) use RU-default `game.shop.*` / `game.common.*` i18n. |
 | 2026-09-14 | Merchant qualification request specs assert accept/pay/complete buttons via `game.shop.merchant_*_btn` (RU-safe). |
 | 2026-09-14 | Shop Sell without an active trading license shows onboarding steps (`game.shop.sell_onboarding_*`). |
+| 2026-09-14 | Ashen Infirmary Traumatologist clearance unlocks Doctor II–III via `profession_unlocks.traumatologist`. |
 | 2026-09-13 | TradeOffers stale/refresh alerts and LicenseRules purchase blocks use the same `game.shop.*` i18n surface. |
 | 2026-09-13 | Shop Location access and MerchantQualification step/payment alerts use `game.shop.*` / `game.flashes.shop_location_required`. |
 | 2026-09-13 | Shop buy desk exposes wallet/weight and any-affordable markers (`data-shop-wallet`, `data-shop-any-affordable`) plus per-row `data-shop-affordable`; sell mode adds `data-shop-any-sellable` / `data-shop-sellable`. License cards localize duration copy and expose `data-shop-license-affordable`. Sell rows drop hardcoded English quantity/durability chrome. |

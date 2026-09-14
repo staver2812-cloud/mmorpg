@@ -93,6 +93,15 @@
         <%= render "shop/buy_table", items: @shop_items %>
       <% end %>
     </div>
+    <% if @mode == "licenses" %>
+      <% traumatologist = Game::Shop::TraumatologistClearance.new(character: current_character) %>
+      <% if current_character.owns_perk?(:healer) && !traumatologist.completed? %>
+        <p class="nl-empty-note" data-shop-traumatologist-hint="1">
+          <%= t("game.shop.traumatologist_licenses_hint") %>
+          <%= link_to t("game.buildings.hospital_title_short"), city_building_path("hospital"), class: "nl-sheet-link" %>
+        </p>
+      <% end %>
+    <% end %>
     <% if @mode == "licenses" && Game::Shop::MerchantQualification.new(character: current_character).status.in?(%w[accepted paid]) %>
       <div class="nl-shop-qualification">
         <%= render "shop/merchant_qualification", location: :shop %>

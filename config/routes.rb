@@ -75,6 +75,7 @@ Rails.application.routes.draw do
   post "city/buildings/:building_key/sell", to: "city_buildings#sell", as: :city_building_sell
   post "city/buildings/:building_key/buy_premium", to: "city_buildings#buy_premium", as: :city_building_buy_premium
   post "city/buildings/:building_key/topup_vm", to: "city_buildings#topup_vm", as: :city_building_topup_vm
+  post "city/buildings/:building_key/traumatologist", to: "city_buildings#traumatologist", as: :city_building_traumatologist
   post "city/buildings/:building_key/bless", to: "city_buildings#bless", as: :city_building_bless
   post "city/buildings/:building_key/bank", to: "city_buildings#bank", as: :city_building_bank
   post "city/buildings/:building_key/bank_item", to: "city_buildings#bank_item", as: :city_building_bank_item
