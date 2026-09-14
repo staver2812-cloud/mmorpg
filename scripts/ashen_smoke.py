@@ -1434,8 +1434,10 @@ def main() -> int:
     report.add("shop no English chrome", not found_shop, f"found={found_shop}")
     if (
         r.status_code == 200
-        and 'data-shop-any-affordable="0"' in r.text
-        and ("data-shop-wallet=" in r.text)
+        and (
+            'data-shop-short-nv="1"' in r.text
+            or 'data-shop-any-affordable="0"' in r.text
+        )
     ):
         report.add(
             "shop short-NV recovery",

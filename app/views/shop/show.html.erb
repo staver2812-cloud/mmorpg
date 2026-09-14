@@ -77,6 +77,18 @@
                 <span class="nl-shop-junk-hint" title="<%= t("game.shop.junk_hint") %>"><%= t("game.shop.junk_hint_short") %></span>
               <% end %>
             </div>
+          <% elsif !shop_any_affordable %>
+            <p class="nl-quests-board__meta" data-shop-short-nv="1">
+              <%= t("game.shop.short_nv_next") %>
+              ·
+              <% if Game::World::CityBuildingCatalog.accessible?(character: current_character, building_key: "bank") %>
+                <%= link_to t("game.shop.open_bank"), city_building_path("bank"), class: "nl-sheet-link", data: {shop_recovery: "bank"} %>
+              <% elsif Game::World::CityBuildingCatalog.accessible?(character: current_character, building_key: "junk_dealer") %>
+                <%= link_to t("game.buildings.junk_dealer_link"), city_building_path("junk_dealer"), class: "nl-sheet-link", data: {shop_recovery: "junk"} %>
+              <% else %>
+                <%= link_to t("arena.nav.city"), world_path, class: "nl-sheet-link", data: {shop_recovery: "world"} %>
+              <% end %>
+            </p>
           <% end %>
         </div>
       <% end %>
