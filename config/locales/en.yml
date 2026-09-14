@@ -102,3 +102,35 @@ en:
     current_password: "Current password"
     current_password_hint: "we need your current password to confirm your changes"
     waiting_confirmation: "Confirmation pending for:"
+  activerecord:
+    attributes:
+      user:
+        profile_name: "Character nickname"
+        email: "Email"
+        password: "Password"
+        password_confirmation: "Confirm password"
+        remember_me: "Remember this device"
+    errors:
+      messages:
+        record_invalid: "Validation failed: %{errors}"
+        taken: "has already been taken"
+        blank: "can't be blank"
+        too_short: "is too short (minimum is %{count} characters)"
+        too_long: "is too long (maximum is %{count} characters)"
+        invalid: "is invalid"
+      models:
+        user:
+          attributes:
+            profile_name:
+              invalid_nickname: "allows letters, digits, space, _ and - (2–20)"
+              taken: "has already been taken"
+  time:
+    formats:
+      default: "%Y-%m-%d %H:%M"
+      short: "%b %d %H:%M"
+      long: "%B %d, %Y %H:%M:%S"
+  date:
+    formats:
+      default: "%Y-%m-%d"
+      short: "%b %d, %Y"
+      long: "%B %d, %Y"
