@@ -1121,6 +1121,7 @@ supplies only authoritative completion/loot facts and stable source keys.
 | Date | Change |
 |---|---|
 | 2026-09-13 | Localized remaining hard-coded arena character-required alerts (`game.flashes.arena_character_required` / `arena_character_required_participate`). |
+| 2026-09-13 | CombatProcessor player-facing reject flashes use `game.fight.errors.*` (turn/AP/target/ally/state). |
 | 2026-09-13 | Arena lobby exposes live HP/MP vitals and open-application markers (`data-arena-hp`/`mp`/`apps`/`has-application`) for smoke and HUD clarity. Application cards localize unavailable copy and mark accept readiness (`data-arena-app-acceptable`). Room grid and summary rows expose accessibility (`data-arena-room-accessible`). |
 | 2026-07-28 | Created the canonical bounded Arena Combat runtime handbook after implementing the full-width source fight hierarchy, shared player/NPC equipment rails, public shell-free fight log, eager-loaded equipment rendering, and responsive tablet/mobile adaptation. |
 | 2026-08-23 | Added the injected handoff of successful NPC loot and final participant results to the Game Shell-owned durable chat event timeline, with deterministic keys and retry coverage while preserving `CombatLogEntry` as the canonical fight log. |
