@@ -43,6 +43,13 @@
     <%= link_to t("arena.refresh"), arena_index_path(ft: active_tab), class: "nl-arena-link" %>
     <button type="button" class="nl-arena-link nl-arena-link--button" data-action="click->arena#showRooms"><%= t("arena.room_map") %></button>
   </div>
+  <% if total_applications.zero? %>
+    <p class="nl-quests-board__meta" data-arena-apps-empty="1">
+      <%= t("arena.apps_empty") %>
+      ·
+      <%= link_to t("arena.nav.city"), world_path, class: "nl-sheet-link", data: {turbo: false, arena_recovery: "city"} %>
+    </p>
+  <% end %>
 
   <div class="nl-arena-tabs">
     <%= link_to t("arena.tabs.duels"), arena_index_path(ft: 1), class: "nl-arena-tab #{'nl-arena-tab--active' if active_tab == '1'}" %>

@@ -656,6 +656,18 @@ def main() -> int:
         and ('data-landmark-inside="1"' in r.text),
         f"url={r.url}",
     )
+    if 'data-bank-wallet-empty="1"' in r.text:
+        report.add(
+            "bank empty wallet recovery",
+            "data-bank-recovery=" in r.text,
+            f"url={r.url}",
+        )
+    if 'data-bank-vault-empty="1"' in r.text:
+        report.add(
+            "bank empty vault recovery",
+            "data-bank-recovery=" in r.text,
+            f"url={r.url}",
+        )
     r = s.get(f"{BASE}/city/buildings/souvenir_shop", timeout=TIMEOUT, allow_redirects=True)
     report.add(
         "GET /city/buildings/souvenir_shop",
@@ -745,7 +757,7 @@ def main() -> int:
     if 'data-arena-apps-empty="1"' in r.text:
         report.add(
             "arena apps empty City recovery",
-            'data-arena-recovery="city"' in r.text or "/world" in r.text,
+            'data-arena-recovery="city"' in r.text,
             f"url={r.url}",
         )
     r = s.get(f"{BASE}/city/buildings/tavern", timeout=TIMEOUT, allow_redirects=True)
@@ -764,6 +776,12 @@ def main() -> int:
         ),
         f"url={r.url}",
     )
+    if 'data-tavern-full="1"' in r.text:
+        report.add(
+            "tavern full World recovery",
+            'data-tavern-recovery="world"' in r.text,
+            f"url={r.url}",
+        )
     ok_f1_law, d_f1_law = click_hotspot(s, "go_forpost1")
     report.add("travel go_forpost1 for law", ok_f1_law, d_f1_law)
     ok_f4, d_f4 = click_hotspot(s, "go_forpost4")

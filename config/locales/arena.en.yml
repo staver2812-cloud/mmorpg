@@ -7,6 +7,7 @@ en:
       arena: "Arena"
       city: "City"
     applications: "Applications"
+    apps_empty: "No open applications yet — enter a matching room and create or accept one."
     combat_scroll_missing: "Need a Combat Trauma Scroll in inventory (buy at Infirmary for VM)."
     your_level: "your level"
     all: "all"

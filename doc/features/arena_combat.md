@@ -1149,6 +1149,7 @@ supplies only authoritative completion/loot facts and stable source keys.
 | 2026-09-14 | Fight result duration formatting uses `game.fight.duration_*` units (RU-safe). |
 | 2026-09-14 | Fight AP/HP/MP chrome and shell player-sort links use fight/social i18n. |
 | 2026-09-14 | Empty Arena application lists recover to City (`data-arena-apps-empty`); locked rooms show level-gate hint and City recovery (`data-arena-room-locked`). |
+| 2026-09-14 | Smoke asserts Arena apps-empty / locked-room recoveries when those markers render. |
 | 2026-09-14 | Arena room form shows combat-trauma scroll shortage with Infirmary/City recovery (`data-arena-need-scroll`). |
 | 2026-09-14 | Short-landscape Arena match compresses paperdoll/log so fight controls stay reachable (`max-height: 430px`). |
 | 2026-09-14 | ≤360px Arena match further compresses paperdoll and fight selector/result tables. |
