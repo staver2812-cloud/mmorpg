@@ -41,6 +41,12 @@ en:
     ignore_self: "cannot be yourself"
     local_action_deadline_invalid: "must have a valid accepted local action deadline"
     local_action_result_required: "must have a local action result"
+    payload_must_be_object: "must be an object"
+    recipient_must_be_empty_for_world: "must be empty for world announcements"
+    recipient_required_for_personal: "is required for personal game events"
+    license_expires_after_start: "must be after activation"
+    license_offer_mismatch: "must be this character's license purchase"
+    shop_location_required: "must provide an authored Shop"
   hello: "Hello world"
   nav:
     your_character: "Character"

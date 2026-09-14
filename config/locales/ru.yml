@@ -12,6 +12,12 @@ ru:
     ignore_self: "нельзя игнорировать себя"
     local_action_deadline_invalid: "нужен корректный дедлайн принятого локального действия"
     local_action_result_required: "нужен результат локального действия"
+    payload_must_be_object: "должен быть объектом"
+    recipient_must_be_empty_for_world: "должен быть пустым для мировых объявлений"
+    recipient_required_for_personal: "обязателен для личных игровых событий"
+    license_expires_after_start: "должен быть позже активации"
+    license_offer_mismatch: "должен быть покупкой лицензии этого персонажа"
+    shop_location_required: "должен указывать авторскую Лавку"
   nav:
     your_character: "Персонаж"
     inventory: "Инвентарь"
