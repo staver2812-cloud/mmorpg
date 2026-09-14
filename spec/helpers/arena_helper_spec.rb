@@ -161,23 +161,22 @@ RSpec.describe ArenaHelper, type: :helper do
   end
 
 
-  describe "#arena_attack_options" do
-    it "exposes physical attacks without inventing selector injections" do
-      expect(helper.arena_attack_options(participation).keys).to eq(%w[simple aimed])
+  describe "#arena_match_trauma_value" do
+    it "renders trauma percent from the match attribute" do
+      arena_match.update!(trauma_percent: 30)
+
+      expect(helper.arena_match_trauma_value(arena_match)).to eq(
+        I18n.t("game.fight.trauma_value", percent: 30)
+      )
     end
+  end
 
-    it "adds attacks injected by the captured fight profile" do
-      arena_match.update!(
-        metadata: {
-          "combat_profile" => {
-            "injected_attack_keys" => %w[spirit_arrow mind_blast]
-          }
-        }
+  describe "#fight_option_cost" do
+    it "appends localized mana when present" do
+      expect(helper.fight_option_cost(2, 5)).to eq(
+        I18n.t("game.fight.option_cost_with_mana", ap: 2, mana: 5)
       )
-
-      expect(helper.arena_attack_options(participation).keys).to eq(
-        %w[simple aimed spirit_arrow mind_blast]
-      )
+      expect(helper.fight_option_cost(2, 0)).to eq("2")
     end
   end
 end

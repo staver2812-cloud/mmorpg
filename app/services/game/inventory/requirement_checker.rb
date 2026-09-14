@@ -85,12 +85,25 @@ module Game
             current:,
             label: I18n.t(
               "game.inventory.requirement_label",
-              name: key.to_s.titleize,
+              name: requirement_name(key),
               required: required.to_i,
               current:
             )
           }
         end
+      end
+
+      def requirement_name(key)
+        normalized = normalize_key(key)
+        return I18n.t("game.details.level") if normalized == "level"
+
+        detail_key = InventoriesHelper::ITEM_DETAIL_I18N_KEYS[normalized]
+        return I18n.t("game.details.#{detail_key}") if detail_key
+
+        skill_key = InventoriesHelper::ITEM_SKILL_I18N_KEYS[normalized]
+        return I18n.t("game.skills.#{skill_key}") if skill_key
+
+        I18n.t("game.details.#{normalized}", default: normalized.tr("_", " "))
       end
 
       def flattened_requirements

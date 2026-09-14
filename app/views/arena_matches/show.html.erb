@@ -74,7 +74,7 @@
     <span><b><%= fight_type_label(@arena_match.match_type) %></b></span>
     <span class="badge badge--<%= @arena_match.status %>"><%= arena_match_status_badge(@arena_match.status) %></span>
     <span><%= t("game.fight.turn_timeout") %>: <b><%= (@arena_match.turn_timeout_seconds || 300) / 60 %> <%= t("game.fight.min") %></b></span>
-    <span><%= t("game.fight.trauma") %>: <b><%= @arena_match.metadata.to_h.fetch("trauma", "normal") %></b></span>
+    <span><%= t("game.fight.trauma") %>: <b><%= arena_match_trauma_value(@arena_match) %></b></span>
     <%= link_to t("game.fight.log"), public_fight_log_path(@arena_match), class: "fr_but" %>
     <span class="fr_but fr_but_dis" title="<%= t("game.fight.inventory_locked") %>"><%= t("nav.inventory") %></span>
     <span class="fr_but_dis"><%= t("game.fight.mercenary") %></span>
@@ -108,7 +108,7 @@
 
     <%# Center: VS + Actions + Combat Log %>
     <div class="arena-center">
-      <div class="arena-vs-badge">VS</div>
+      <div class="arena-vs-badge"><%= t("arena.form.vs") %></div>
 
       <%# Turn timeout display %>
       <% if @arena_match.live? && @arena_match.current_turn_started_at %>
@@ -246,7 +246,7 @@
                                 data-ap-cost="<%= config['action_cost'] %>"
                                 data-mana-cost="<%= config['mana_cost'].to_i %>"
                                 data-body-parts="<%= covered_parts.join(',') %>">
-                          <%= t("game.fight.block_option", part: block_label, name: (config["name"] || key.titleize), cost: "#{config['action_cost']}#{("/#{config['mana_cost'].to_i} MP" if config['mana_cost'].to_i.positive?)}") %>
+                          <%= t("game.fight.block_option", part: block_label, name: (config["name"] || key.titleize), cost: fight_option_cost(config["action_cost"], config["mana_cost"])) %>
                         </option>
                       <% end %>
                     </select>

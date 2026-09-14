@@ -142,6 +142,20 @@ module ArenaHelper
     I18n.t("arena.levels", min: min, max: max)
   end
 
+  def arena_match_trauma_value(match)
+    percent = match.try(:trauma_percent).presence || match.metadata.to_h["trauma_percent"].presence
+    return I18n.t("game.fight.trauma_value", percent:) if percent.present?
+
+    I18n.t("game.fight.trauma_unknown")
+  end
+
+  def fight_option_cost(action_cost, mana_cost = 0)
+    mana = mana_cost.to_i
+    return action_cost.to_s if mana <= 0
+
+    I18n.t("game.fight.option_cost_with_mana", ap: action_cost, mana:)
+  end
+
   # ===========================================================================
   # Participant Data Helpers
   # ===========================================================================
