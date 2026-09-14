@@ -662,9 +662,9 @@ def main() -> int:
             "data-bank-recovery=" in r.text,
             f"url={r.url}",
         )
-    if 'data-bank-vault-empty="1"' in r.text:
+    if 'data-bank-vault-empty="1"' in r.text and 'data-bank-wallet-empty="1"' in r.text:
         report.add(
-            "bank empty vault recovery",
+            "bank empty vault+wallet recovery",
             "data-bank-recovery=" in r.text,
             f"url={r.url}",
         )
