@@ -1257,3 +1257,4 @@ Before extending Game Shell:
 | 2026-09-14 | English `social.*` shell chrome mirrors RU (`config/locales/en.yml`). |
 | 2026-09-14 | English `app.*` / `locales.*` / `errors.forbidden` mirrors complete `:en` shell chrome. |
 | 2026-09-14 | English ActiveRecord user attribute/error and date/time format mirrors for signup/account forms. |
+| 2026-09-14 | Auth/chat denial raises use `game.chat.*` / `game.flashes.character_required` / `email_verification_required`; HTML alerts prefer localized exception text over generic English policy denials. |
