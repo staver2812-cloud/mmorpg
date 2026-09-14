@@ -202,6 +202,12 @@ def main() -> int:
             r.status_code == 200 and hit,
             f"{r.status_code} data_ok={data_ok} text_ok={text_ok} missing={missing[:4]}",
         )
+        if path == "/city/buildings/hospital" and r.status_code == 200 and 'data-building-key="hospital"' in r.text:
+            report.add(
+                "hospital building chrome recovery",
+                'data-building-recovery="world"' in r.text,
+                f"url={r.url}",
+            )
         if path == "/city/buildings/workshop" and 'data-workshop-repair="deferred"' in r.text:
             report.add(
                 "workshop repair deferred recovery",
