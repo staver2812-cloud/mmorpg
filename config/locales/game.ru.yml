@@ -1253,7 +1253,11 @@ ru:
       crafted: "Скрафчено: %{name}. Навык «%{profession}»: %{skill}."
       min_skill: "мин. навык %{amount}"
       need_skill: "Нужен навык %{amount}+ (сейчас %{current})"
+      need_skill_named: "Нужен навык «%{profession}» %{amount}+ (сейчас %{current})."
       need_mats: "Не хватает: %{list}"
+      recipe_missing: "Такого рецепта нет."
+      gather_world: "Добыть в мире"
+      open_inventory: "Открыть Инвентарь"
       inputs: "нужно"
     locations:
       you_have: "У вас"
