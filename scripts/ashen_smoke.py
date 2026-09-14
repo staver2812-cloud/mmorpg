@@ -227,6 +227,17 @@ def main() -> int:
                     or 'data-shop-recovery="inventory"' in r.text,
                     f"url={r.url}",
                 )
+            r_empty = s.get(
+                f"{BASE}/shop?mode=buy&category=knives&min_price=1&max_price=0",
+                timeout=TIMEOUT,
+            )
+            report.add(
+                "shop buy empty licenses recovery",
+                r_empty.status_code == 200
+                and 'data-shop-buy-empty="1"' in r_empty.text
+                and 'data-shop-recovery="licenses"' in r_empty.text,
+                f"status={r_empty.status_code} url={r_empty.url}",
+            )
         if path == "/city/buildings/hospital" and r.status_code == 200 and 'data-building-key="hospital"' in r.text:
             report.add(
                 "hospital building chrome recovery",
@@ -1474,12 +1485,13 @@ def main() -> int:
             f"url={r.url}",
         )
     r = s.get(f"{BASE}/shop?mode=buy&category=knives&min_price=1&max_price=0", timeout=TIMEOUT)
-    if r.status_code == 200 and 'data-shop-buy-empty="1"' in r.text:
-        report.add(
-            "shop buy empty licenses recovery",
-            'data-shop-recovery="licenses"' in r.text,
-            f"url={r.url}",
-        )
+    report.add(
+        "shop buy empty licenses recovery",
+        r.status_code == 200
+        and 'data-shop-buy-empty="1"' in r.text
+        and 'data-shop-recovery="licenses"' in r.text,
+        f"status={r.status_code} url={r.url} empty={'data-shop-buy-empty=\"1\"' in r.text}",
+    )
     r = s.get(f"{BASE}/shop?mode=novice", timeout=TIMEOUT)
     if r.status_code == 200 and "data-shop-novice=" in r.text:
         report.add(
