@@ -883,6 +883,15 @@ en:
       arrival_unavailable: "Arrival station is unavailable."
       position_changed: "Position changed outside the accepted flight."
       path_unavailable: "Accepted flight path is no longer available."
+      validations:
+        departs_order: "must follow boarding and precede arrival"
+        snapshot_immutable: "Accepted flight details cannot change"
+        cannot_reopen: "cannot reopen a finished journey"
+        endpoints_invalid: "Flight endpoints must be valid city cells"
+        route_bounded: "must contain a bounded timed route"
+        route_integers: "must contain integer offsets, region ids, and coordinates"
+        route_increasing: "must span the flight in strictly increasing order"
+        route_outdoor: "must stay within authored outdoor regions"
     buildings:
       hospital_title: "Treatment shop observation"
       hospital_hint: "Recovery and pharmacy"
