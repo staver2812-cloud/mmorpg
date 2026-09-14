@@ -277,7 +277,7 @@ DOM placement, displayed location text, a player-list row, local storage, or a s
 | Chat creation | `POST /chat/local`; authorized explicit channel POST | Interactive | Policy and `MessageDispatcher` |
 | Inline HP/MP | Every shell render | Interactive presentation over authoritative values | Shared vitals partial and Stimulus controller |
 | Send, clear input, refresh chat, clear visible chat | Bottom controls | Interactive | `game-layout` presentation actions plus chat form/frame |
-| Smile palettes, chat mode/speed, transliteration, player actions | Bottom controls | Not Done | Measured CSS/text controls rendered; transition states remain evidence/implementation gaps |
+| Smile palettes, chat mode/speed, transliteration, player actions | Bottom controls | Partially Done — controls render disabled with `social.tool_deferred` titles and `data-chat-tools-deferred`; live smile/mode/speed/transliteration remain evidence gaps | Measured CSS/text controls rendered; transition states remain evidence/implementation gaps |
 
 ### 6.2 Header, main frame, and vitals
 
