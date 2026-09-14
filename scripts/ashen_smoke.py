@@ -535,7 +535,8 @@ def main() -> int:
         and ("data-temple-wallet=" in r.text)
         and ("data-temple-light=" in r.text)
         and ("data-temple-rite-ready=" in r.text)
-        and ("data-temple-can-afford=" in r.text),
+        and ("data-temple-can-afford=" in r.text)
+        and ('data-landmark-inside="1"' in r.text),
         f"url={r.url}",
     )
 
@@ -553,7 +554,8 @@ def main() -> int:
         and ("data-bank-can-withdraw=" in r.text)
         and ("data-bank-can-store=" in r.text)
         and ("data-bank-can-retrieve=" in r.text)
-        and ("data-bank-item-options=" in r.text),
+        and ("data-bank-item-options=" in r.text)
+        and ('data-landmark-inside="1"' in r.text),
         f"url={r.url}",
     )
     r = s.get(f"{BASE}/city/buildings/souvenir_shop", timeout=TIMEOUT, allow_redirects=True)
@@ -565,7 +567,8 @@ def main() -> int:
         and ("в сумке:" in r.text or "in bag:" in r.text)
         and ("data-souvenir-wallet=" in r.text)
         and ("data-souvenir-affordable=" in r.text)
-        and ("data-souvenir-any-affordable=" in r.text),
+        and ("data-souvenir-any-affordable=" in r.text)
+        and ('data-landmark-inside="1"' in r.text),
         f"url={r.url}",
     )
     r = s.get(f"{BASE}/city/buildings/auction", timeout=TIMEOUT, allow_redirects=True)
@@ -606,7 +609,8 @@ def main() -> int:
         and ("data-obelisk-bound=" in r.text)
         and ("data-obelisk-wallet=" in r.text)
         and ("data-obelisk-can-recall=" in r.text)
-        and ("data-obelisk-can-bind=" in r.text),
+        and ("data-obelisk-can-bind=" in r.text)
+        and ('data-landmark-inside="1"' in r.text),
         f"url={r.url}",
     )
 
