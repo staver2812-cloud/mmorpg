@@ -982,6 +982,13 @@ def main() -> int:
             'data-tavern-recovery="world"' in r.text,
             f"url={r.url}",
         )
+    if r.status_code == 200 and "data-fatigue-pct=" in r.text:
+        report.add(
+            "fatigue chip recovery",
+            'data-fatigue-recovery="tavern"' in r.text
+            or 'data-fatigue-recovery="world"' in r.text,
+            f"url={r.url}",
+        )
     ok_f1_law, d_f1_law = click_hotspot(s, "go_forpost1")
     report.add("travel go_forpost1 for law", ok_f1_law, d_f1_law)
     ok_f4, d_f4 = click_hotspot(s, "go_forpost4")
