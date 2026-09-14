@@ -88,7 +88,7 @@ module ArenaHelper
   end
 
   def arena_match_status_badge(status)
-    label = I18n.t("arena.match_status.#{status}", default: status.to_s.humanize)
+    label = I18n.t("arena.match_status.#{status}", default: status.to_s.tr("_", " "))
     css = MATCH_STATUS_CSS[status.to_sym] || "unknown"
     content_tag(:span, label, class: "match-status match-status--#{css}")
   end
