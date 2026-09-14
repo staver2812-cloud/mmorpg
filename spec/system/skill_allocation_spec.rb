@@ -176,7 +176,7 @@ RSpec.describe "Skill Allocation", type: :system, js: true do
     it "saves skill allocation to database" do
       click_button I18n.t("game.profile.allocation_save")
 
-      expect(page).to have_content("Skills saved")
+      expect(page).to have_content(I18n.t("game.flashes.skills_saved"))
       character.reload
       expect(character.passive_skill_level(:unarmed_combat)).to eq(10)
       expect(character.combat_skill_points).to eq(9)
@@ -186,7 +186,7 @@ RSpec.describe "Skill Allocation", type: :system, js: true do
       within_skill_row(:self_healing) { click_button "+" }
 
       click_button I18n.t("game.profile.allocation_save")
-      expect(page).to have_content("Skills saved", wait: 5)
+      expect(page).to have_content(I18n.t("game.flashes.skills_saved"), wait: 5)
 
       character.reload
       expect(character.passive_skill_level(:unarmed_combat)).to eq(10)
@@ -337,7 +337,7 @@ RSpec.describe "Skill Allocation", type: :system, js: true do
       click_button I18n.t("game.profile.allocation_save")
 
       expect(page).to have_css("#skill-allocation")
-      expect(page).to have_content("Skills saved")
+      expect(page).to have_content(I18n.t("game.flashes.skills_saved"))
     end
   end
 
