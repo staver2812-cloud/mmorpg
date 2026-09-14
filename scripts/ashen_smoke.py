@@ -937,6 +937,18 @@ def main() -> int:
         and ('data-landmark-inside="1"' in r.text),
         f"url={r.url}",
     )
+    if r.status_code == 200 and 'data-obelisk-bind-first="1"' in r.text:
+        report.add(
+            "obelisk bind-first recovery",
+            'data-obelisk-recovery="world"' in r.text,
+            f"url={r.url}",
+        )
+    if r.status_code == 200 and 'data-obelisk-can-recall="0"' in r.text and 'data-obelisk-bound="1"' in r.text:
+        report.add(
+            "obelisk short-NV recovery",
+            "data-obelisk-recovery=" in r.text,
+            f"url={r.url}",
+        )
 
     ok_main_tav, detail_main_tav = click_hotspot(s, "go_main")
     report.add("return main before tavern fatigue", ok_main_tav, detail_main_tav)
@@ -1162,6 +1174,20 @@ def main() -> int:
         report.add(
             "inventory empty equipment-sets recovery",
             'data-inventory-recovery="shop"' in r.text,
+            f"url={r.url}",
+        )
+    r = s.get(f"{BASE}/inventory?category=resources", timeout=TIMEOUT)
+    if r.status_code == 200 and 'data-inventory-empty-hint="world"' in r.text:
+        report.add(
+            "inventory empty family World recovery",
+            'data-inventory-recovery="world"' in r.text,
+            f"url={r.url}",
+        )
+    r = s.get(f"{BASE}/inventory?category=wood", timeout=TIMEOUT)
+    if r.status_code == 200 and 'data-inventory-empty-hint="workshop"' in r.text:
+        report.add(
+            "inventory empty wood Workshop recovery",
+            'data-inventory-recovery="workshop"' in r.text,
             f"url={r.url}",
         )
 

@@ -16,17 +16,17 @@
          when "resources", "alchemy", "fishing", "hunting" %>
         <p class="nl-quests-board__meta" data-inventory-empty-hint="world">
           <%= t("game.inventory.empty_hint_world") %>
-          <%= link_to t("nav.world"), world_path, class: "nl-sheet-link" %>
+          <%= link_to t("nav.world"), world_path, class: "nl-sheet-link", data: {inventory_recovery: "world"} %>
         </p>
       <% when "wood" %>
         <p class="nl-quests-board__meta" data-inventory-empty-hint="workshop">
           <%= t("game.inventory.empty_hint_workshop") %>
-          <%= link_to t("game.professions.tar_smith"), city_building_path("workshop"), class: "nl-sheet-link" %>
+          <%= link_to t("game.professions.tar_smith"), city_building_path("workshop"), class: "nl-sheet-link", data: {inventory_recovery: "workshop"} %>
         </p>
       <% when "quests" %>
         <p class="nl-quests-board__meta" data-inventory-empty-hint="quests">
           <%= t("game.inventory.empty_hint_quests") %>
-          <%= link_to t("nav.quests"), quests_path, class: "nl-sheet-link" %>
+          <%= link_to t("nav.quests"), quests_path, class: "nl-sheet-link", data: {inventory_recovery: "quests"} %>
         </p>
       <% end %>
     </section>

@@ -50,6 +50,8 @@
       <button type="button" class="lbut" disabled title="<%= t("game.buildings.obelisk_unbound_meta") %>"><%= t("game.buildings.obelisk_recall_cta", amount: Game::World::ObeliskRecall::RECALL_COST) %></button>
       <span class="nl-quests-board__meta" data-obelisk-bind-first="1">
         <%= t("game.buildings.obelisk_bind_first") %>
+        ·
+        <%= link_to t("arena.nav.city"), world_path, class: "nl-sheet-link", data: {obelisk_recovery: "world"} %>
       </span>
     <% end %>
   </p>
