@@ -1663,6 +1663,20 @@ button.nl-city-hotspot,
   .nl-city-building-page {
     padding: 0 4px;
   }
+
+  .nl-world-location-tabs {
+    flex-wrap: wrap;
+  }
+
+  .nl-world-location-tab {
+    flex: 1 1 40%;
+    min-width: 0;
+    font-size: 11px;
+  }
+
+  .nl-world-location-sections {
+    width: calc(100% - 8px);
+  }
 }
 
 @media (max-width: 720px) {
