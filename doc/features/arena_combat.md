@@ -1158,6 +1158,7 @@ supplies only authoritative completion/loot facts and stable source keys.
 | 2026-09-14 | Arena statistics tab and empty recent-fights recover to Duels/City; empty public fight logs link Arena/City. |
 | 2026-09-14 | Arena chrome Character/Inventory/City links and recent-empty Duels CTA expose `data-arena-recovery`. |
 | 2026-09-14 | Arena room topline Character/Inventory/Lobby/City links expose `data-arena-recovery`. |
+| 2026-09-15 | Level-gated Arena room GETs redirect to lobby with `arena_denied=1` recovery chrome (`data-arena-denied`). |
 | 2026-09-14 | Empty public fight log recovers via Arena/City with `data-fight-log-recovery`. |
 | 2026-09-13 | Arena lobby Stimulus client errors/confirm/countdown use `arena.client.*` via `data-arena-copy-value`. |
 | 2026-07-28 | Created the canonical bounded Arena Combat runtime handbook after implementing the full-width source fight hierarchy, shared player/NPC equipment rails, public shell-free fight log, eager-loaded equipment rendering, and responsive tablet/mobile adaptation. |
