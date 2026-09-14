@@ -185,9 +185,9 @@ def main() -> int:
         ("/inventory", ["nl-inventory", "Вес инвентаря", "Надеть", "Свойства"]),
         (f"/player/{nick}", ["nl-character-sheet", "Сейф", "nl-sheet-vault", "data-sheet-vault=", "Ячейка", "nl-sheet-locker", "data-sheet-locker=", "nl-sheet-vm", "data-sheet-vm=", "data-sheet-nv="]),
         # Arena lobby markers are asserted after city arena entry; early GET redirects to /world.
-        ("/city/buildings/tavern", ["data-building-key=\"tavern\"", "Отдохнуть за столом", "data-tavern-rumors=", "data-tavern-vitals=", "data-tavern-hp=", "data-tavern-mp=", "data-tavern-ready="]),
-        ("/city/buildings/guard_tower", ["data-building-key=\"guard_tower\"", "interact_hotspot", "data-guard-square=", "data-guard-here=", "data-guard-routes=", "data-landmark-inside=\"1\""]),
-        ("/city/buildings/workshop", ["data-building-key=\"workshop\"", "Смолокур", "Скрафтить", "data-workshop-repair=\"deferred\"", "data-workshop-mass=", "data-workshop-any-ready=", "data-workshop-recipe=", "data-workshop-ready=", "data-workshop-landmark=", "data-landmark-inside=\"1\""]),
+        ("/city/buildings/tavern", ["data-building-key=\"tavern\"", "Отдохнуть за столом", "data-tavern-rumors=", "data-tavern-rumors-next=", "data-tavern-vitals=", "data-tavern-hp=", "data-tavern-mp=", "data-tavern-ready="]),
+        ("/city/buildings/guard_tower", ["data-building-key=\"guard_tower\"", "interact_hotspot", "data-guard-square=", "data-guard-square-next=", "data-guard-here=", "data-guard-routes=", "data-landmark-inside=\"1\""]),
+        ("/city/buildings/workshop", ["data-building-key=\"workshop\"", "Смолокур", "Скрафтить", "data-workshop-repair=\"deferred\"", "data-workshop-mass=", "data-workshop-any-ready=", "data-workshop-recipe=", "data-workshop-ready=", "data-workshop-landmark=", "data-workshop-landmark-next=", "data-landmark-inside=\"1\""]),
         ("/city/buildings/hospital", ["data-building-key=\"hospital\"", "Лазарет", "Лекарь", "в сумке:", "data-hospital-assault=", "data-hospital-heal=", "data-hospital-vitals=", "data-hospital-vm=", "data-hospital-premium-affordable=", "data-hospital-premium-any-affordable=", "data-hospital-topup-ready=", "data-hospital-injuries=", "data-hospital-mass=", "data-hospital-combat=", "data-hospital-rest-ready=", "data-hospital-craft-any-ready=", "data-hospital-recipe=", "data-hospital-craft-ready="]),
     ]:
         r = s.get(urljoin(BASE + "/", path.lstrip("/")), timeout=TIMEOUT)
@@ -227,12 +227,20 @@ def main() -> int:
         r.status_code == 200 and 'data-hospital-traumatologist="1"' in r.text,
         f"url={r.url}",
     )
+    if 'data-hospital-traumatologist-status="need-perk"' in r.text:
+        report.add(
+            "hospital traumatologist need-perk recovery",
+            'data-hospital-traumatologist-next="1"' in r.text
+            and 'data-hospital-recovery="world"' in r.text,
+            f"url={r.url}",
+        )
     r = s.get(f"{BASE}/city/buildings/tavern", timeout=TIMEOUT, allow_redirects=True)
     report.add(
         "tavern landmark inside chrome",
         r.status_code == 200
         and 'data-building-key="tavern"' in r.text
-        and 'data-landmark-inside="1"' in r.text,
+        and 'data-landmark-inside="1"' in r.text
+        and 'data-tavern-rumors-next="1"' in r.text,
         f"url={r.url}",
     )
 
@@ -869,6 +877,11 @@ def main() -> int:
                 "outdoor obelisk chip affordability",
                 ("data-obelisk-chip-affordable=" in r.text) or ("nl-obelisk-chip-form" in r.text),
             )
+            if 'data-obelisk-chip-affordable="0"' in r.text:
+                report.add(
+                    "outdoor short obelisk recovery",
+                    'data-obelisk-recovery="city"' in r.text,
+                )
         ok_enter_w, d_enter_w = enter_building(s)
         report.add("enter city after west_gate", ok_enter_w, d_enter_w)
         r = s.get(f"{BASE}/world", timeout=TIMEOUT)
