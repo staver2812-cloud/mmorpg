@@ -169,12 +169,11 @@
                     title: t("game.world.obelisk_recall_chip_hint"),
                     form: {class: "nl-obelisk-chip-form", data: {turbo: false, obelisk_chip_affordable: "1"}} %>
             <% else %>
-              <span class="nl-obelisk-chip nl-obelisk-chip--short"
-                    data-obelisk-chip-affordable="0"
-                    title="<%= t("game.buildings.obelisk_need_nv", amount: Game::World::ObeliskRecall::RECALL_COST) %>">
-                <%= t("game.world.obelisk_recall_chip", amount: Game::World::ObeliskRecall::RECALL_COST) %>
-                · <%= t("game.buildings.obelisk_need_nv_short") %>
-              </span>
+              <%= link_to "#{t("game.world.obelisk_recall_chip", amount: Game::World::ObeliskRecall::RECALL_COST)} · #{t("game.buildings.obelisk_need_nv_short")}",
+                    world_path,
+                    class: "nl-obelisk-chip nl-obelisk-chip--short",
+                    title: t("game.buildings.obelisk_need_nv", amount: Game::World::ObeliskRecall::RECALL_COST),
+                    data: {obelisk_chip_affordable: "0", obelisk_recovery: "city"} %>
             <% end %>
           <% elsif Game::World::CityBuildingCatalog.accessible?(character: current_character, building_key: "obelisk") %>
             <%= link_to t("game.world.obelisk_bound_chip", place: obelisk_bound["zone_name"]),
@@ -182,9 +181,11 @@
                   class: "nl-obelisk-chip",
                   title: t("game.world.obelisk_bound_chip_hint") %>
           <% else %>
-            <span class="nl-obelisk-chip" title="<%= t("game.world.obelisk_bound_chip_hint") %>">
-              <%= t("game.world.obelisk_bound_chip", place: obelisk_bound["zone_name"]) %>
-            </span>
+            <%= link_to t("game.world.obelisk_bound_chip", place: obelisk_bound["zone_name"]),
+                  world_path,
+                  class: "nl-obelisk-chip",
+                  title: t("game.world.obelisk_bound_chip_hint"),
+                  data: {obelisk_recovery: "city"} %>
           <% end %>
         <% end %>
         <% if @zone&.outdoor? %>

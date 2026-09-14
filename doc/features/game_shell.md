@@ -1268,3 +1268,4 @@ Before extending Game Shell:
 | 2026-09-14 | Shell drops forced `min-width: 760px` so 390px viewports do not force page-level horizontal scroll. |
 | 2026-09-14 | Root `html/body` use `overflow-x: clip` as a belt-and-suspenders against page-level horizontal scroll. |
 | 2026-09-14 | Short-landscape shell compresses social/chat rows so controls stay reachable (`max-height: 430px`). |
+| 2026-09-14 | Outdoor short-NV Obelisk recall chip and out-of-district bound chip recover to City (`data-obelisk-recovery="city"`). |
