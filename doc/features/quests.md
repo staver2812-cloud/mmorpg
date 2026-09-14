@@ -59,6 +59,7 @@ novice → adept → master bags.
 
 | Date | Change |
 |---|---|
+| 2026-09-14 | Hall/World journal board link exposes `data-quest-recovery`; smoke asserts it. |
 | 2026-09-14 | Quests journal always links to Coal Hall board (`data-quest-hall-link`); when Hall is out of district the link opens City. Locked contracts recover to World. |
 | 2026-09-14 | Completed quest cards also recover to World (`data-quest-done`). |
 | 2026-09-14 | Coarse-pointer quest accept/turn-in controls and recovery links target ~44×44 CSS px (`UI-ADAPT-005`). |

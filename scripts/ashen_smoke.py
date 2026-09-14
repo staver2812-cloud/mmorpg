@@ -566,6 +566,12 @@ def main() -> int:
             and ("data-quest-ready-count=" in r.text)
             and ("data-quest-locked=" in r.text),
         )
+        report.add(
+            "quests hall recovery",
+            'data-quest-recovery="city_hall"' in r.text
+            or 'data-quest-recovery="world"' in r.text,
+            f"url={r.url}",
+        )
         r_hud = s.get(f"{BASE}/world", timeout=TIMEOUT)
         report.add(
             "quest HUD chip after journal",

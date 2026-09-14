@@ -6,7 +6,7 @@
     <p><%= t("game.quests.hint") %></p>
     <% if Game::World::CityBuildingCatalog.accessible?(character: current_character, building_key: "city_hall") %>
       <p class="nl-quests-board__meta" data-quest-hall-link="1">
-        <%= link_to t("game.quests.board_open_hall"), city_building_path("city_hall"), class: "nl-sheet-link" %>
+        <%= link_to t("game.quests.board_open_hall"), city_building_path("city_hall"), class: "nl-sheet-link", data: {quest_recovery: "city_hall"} %>
       </p>
     <% else %>
       <p class="nl-quests-board__meta" data-quest-hall-link="world">
