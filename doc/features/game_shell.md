@@ -1267,3 +1267,4 @@ Before extending Game Shell:
 | 2026-09-14 | Full chat channel empty state recovers to World. |
 | 2026-09-14 | Shell drops forced `min-width: 760px` so 390px viewports do not force page-level horizontal scroll. |
 | 2026-09-14 | Root `html/body` use `overflow-x: clip` as a belt-and-suspenders against page-level horizontal scroll. |
+| 2026-09-14 | Short-landscape shell compresses social/chat rows so controls stay reachable (`max-height: 430px`). |

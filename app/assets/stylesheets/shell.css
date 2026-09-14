@@ -845,3 +845,37 @@ input.nl-chat-input-field,
   .nl-vitals-text { font-size: 10px; }
   .nl-refresh-image { min-width: 52px; }
 }
+
+/* Short landscape phones: keep chat tools reachable without burying the main pane. */
+@media (max-height: 430px) and (orientation: landscape) {
+  .nl-game-layout {
+    --nl-top-bar-height: 28px;
+    --nl-social-height: 120px;
+    --nl-chat-controls-height: 34px;
+    grid-template-rows: var(--nl-top-bar-height) minmax(0, 1fr) 4px var(--nl-social-height) 1px var(--nl-chat-controls-height);
+    min-height: 0;
+  }
+
+  .nl-social-row {
+    grid-template-columns: minmax(0, 1fr) minmax(120px, 34%);
+    grid-template-rows: 1fr;
+  }
+
+  .nl-chat-history {
+    height: 100%;
+    border-right: 1px solid #d8cdaf;
+    border-bottom: 0;
+  }
+
+  .nl-players-float {
+    display: block;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+  }
+
+  .nl-flash-container {
+    bottom: 160px;
+    width: min(340px, calc(100vw - 12px));
+  }
+}

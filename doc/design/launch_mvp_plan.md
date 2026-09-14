@@ -80,7 +80,7 @@ contract while an adjacent uncaptured state remains Not Done.
 |---|---|---|---|
 | `SHELL-UI-001` | Persistent authenticated shell and shared chrome | Done for captured base frame | Gameplay fidelity and adaptive UI matrix |
 | `SHELL-CHAT-001` | Auxiliary shell/chat controls | Partially Done — inert smile/mode/speed/translit controls are disabled with deferred copy; live cycles remain uncaptured | Gameplay fidelity and adaptive UI matrix |
-| `RESPONSIVE-001` | Adaptive UI across supported sizes and inputs | Done for recorded bounded checks; shell no longer forces 760px page min-width (390px path); expanded standard audit still open | Gameplay fidelity and adaptive UI matrix |
+| `RESPONSIVE-001` | Adaptive UI across supported sizes and inputs | Done for recorded bounded checks; shell no longer forces 760px page min-width (390px path); short-landscape social compression added; expanded standard audit still open | Gameplay fidelity and adaptive UI matrix |
 | `SOCIAL-CHAT-001` | Chat, mixed gameplay-event timeline, channels, presence, and player context | Partially Implemented; cell/room chat, session-backed presence, and durable fight/item/NV events are implemented | Social/chat design and shell parity rows |
 | `CHARACTER-PROGRESSION-001` | Profile, stats, skills, perks, and allocation | Fully Implemented within declared boundary | Character-development audit and Pillar 1 |
 | `INVENTORY-UI-001` | Current equipment-family layout | Done | Gameplay fidelity and adaptive UI matrix |
