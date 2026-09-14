@@ -69,7 +69,17 @@
         <%= f.submit t("game.buildings.bank_withdraw_cta"), class: "lbut", disabled: vault_nv <= 0 %>
       <% end %>
       <% if vault_nv <= 0 %>
-        <p class="nl-quests-board__meta" data-bank-vault-empty="1"><%= t("game.buildings.bank_vault_empty") %></p>
+        <p class="nl-quests-board__meta" data-bank-vault-empty="1">
+          <%= t("game.buildings.bank_vault_empty") %>
+          <% if wallet_nv <= 0 %>
+            ·
+            <% if Game::World::CityBuildingCatalog.accessible?(character: current_character, building_key: "junk_dealer") %>
+              <%= link_to t("game.buildings.junk_dealer_link"), city_building_path("junk_dealer"), class: "nl-sheet-link", data: {bank_recovery: "junk"} %>
+            <% else %>
+              <%= link_to t("arena.nav.city"), world_path, class: "nl-sheet-link", data: {bank_recovery: "world"} %>
+            <% end %>
+          <% end %>
+        </p>
       <% end %>
       <% if vault_nv.positive? %>
         <%= button_to t("game.buildings.bank_withdraw_all_cta", amount: vault_nv),

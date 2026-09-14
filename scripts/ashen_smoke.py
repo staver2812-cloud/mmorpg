@@ -429,6 +429,10 @@ def main() -> int:
             "chain shows locked contracts",
             ("Закрыто" in r.text) and ("Хвост Завесы" in r.text),
         )
+        report.add(
+            "quest locked recovery CTA",
+            'data-quest-locked="1"' in r.text and ("quest_recovery" in r.text or "/world" in r.text),
+        )
         # Chain gate: veil_tail requires lure completion — expect safe reject.
         r_acc = s.post(
             f"{BASE}/quests/veil_tail_delivery/accept",
@@ -576,6 +580,12 @@ def main() -> int:
         and ("data-temple-light=" in r.text)
         and ("data-temple-rite-ready=" in r.text)
         and ("data-temple-can-afford=" in r.text)
+        and (
+            'data-temple-no-light="1"' in r.text
+            or 'data-temple-rite-ready="1"' in r.text
+            or 'data-temple-injury="0"' in r.text
+            or "temple_recovery" in r.text
+        )
         and ('data-landmark-inside="1"' in r.text),
         f"url={r.url}",
     )
