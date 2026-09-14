@@ -106,15 +106,15 @@ class WorldActionOffer < ApplicationRecord
     return unless accepted? && metadata.to_h.key?("local_action_ends_at")
 
     unless TIMED_LOCAL_ACTION_TYPES.include?(action_type) && accepted_at && local_action_ends_at && local_action_ends_at > accepted_at
-      errors.add(:metadata, "must have a valid accepted local action deadline")
+      errors.add(:metadata, I18n.t("errors.local_action_deadline_invalid"))
     end
-    errors.add(:metadata, "must have a local action result") if local_action_result.blank?
+    errors.add(:metadata, I18n.t("errors.local_action_result_required")) if local_action_result.blank?
   end
 
   def coordinates_within_zone_bounds
     return unless zone && x.is_a?(Integer) && y.is_a?(Integer)
 
-    errors.add(:x, "must be within zone bounds") unless x < zone.width
-    errors.add(:y, "must be within zone bounds") unless y < zone.height
+    errors.add(:x, I18n.t("manage.coord_outside_zone")) unless x < zone.width
+    errors.add(:y, I18n.t("manage.coord_outside_zone")) unless y < zone.height
   end
 end

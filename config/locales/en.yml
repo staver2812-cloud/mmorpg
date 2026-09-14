@@ -37,6 +37,10 @@ en:
     switch: "Language"
   errors:
     forbidden: "You do not have access to this action."
+    character_limit_reached: "character limit reached"
+    ignore_self: "cannot be yourself"
+    local_action_deadline_invalid: "must have a valid accepted local action deadline"
+    local_action_result_required: "must have a local action result"
   hello: "Hello world"
   nav:
     your_character: "Character"

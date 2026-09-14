@@ -874,7 +874,7 @@ class Character < ApplicationRecord
     return unless user
 
     if user.characters.count >= User::MAX_CHARACTERS
-      errors.add(:base, "character limit reached")
+      errors.add(:base, I18n.t("errors.character_limit_reached"))
     end
   end
 

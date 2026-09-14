@@ -74,7 +74,7 @@ RSpec.describe Character, type: :model do
       extra_character = build(:character, user: user)
 
       expect(extra_character).not_to be_valid
-      expect(extra_character.errors[:base]).to include("character limit reached")
+      expect(extra_character.errors[:base]).to include(I18n.t("errors.character_limit_reached"))
     end
   end
 

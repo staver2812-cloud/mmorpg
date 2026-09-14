@@ -71,7 +71,7 @@ RSpec.describe WorldActionOffer, type: :model do
 
       expect(edge_offer).to be_valid
       expect(outside_offer).not_to be_valid
-      expect(outside_offer.errors[:x]).to include("must be within zone bounds")
+      expect(outside_offer.errors[:x]).to include(I18n.t("manage.coord_outside_zone"))
       expect(negative_offer).not_to be_valid
     end
 

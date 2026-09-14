@@ -8,6 +8,10 @@ ru:
     switch: "Язык"
   errors:
     forbidden: "У вас нет доступа к этому действию."
+    character_limit_reached: "достигнут лимит персонажей"
+    ignore_self: "нельзя игнорировать себя"
+    local_action_deadline_invalid: "нужен корректный дедлайн принятого локального действия"
+    local_action_result_required: "нужен результат локального действия"
   nav:
     your_character: "Персонаж"
     inventory: "Инвентарь"
