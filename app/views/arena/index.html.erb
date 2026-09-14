@@ -86,6 +86,8 @@
                   <%= t("arena.unavailable") %>
                   ·
                   <%= t("arena.room_locked_hint") %>
+                  ·
+                  <%= link_to t("arena.nav.city"), world_path, class: "nl-sheet-link", data: {turbo: false, arena_recovery: "city"} %>
                 </span>
               <% end %>
             </td>
