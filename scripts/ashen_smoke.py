@@ -1221,6 +1221,17 @@ def main() -> int:
                 or 'data-arena-recovery="duels"' in r_locked.text,
                 f"url={r_locked.url}",
             )
+    r_missing = s.get(f"{BASE}/log/999999999", timeout=TIMEOUT, allow_redirects=True)
+    report.add(
+        "public fight log missing recovery",
+        r_missing.status_code == 404
+        and 'data-fight-log-missing="1"' in r_missing.text
+        and (
+            'data-fight-log-recovery="arena"' in r_missing.text
+            or 'data-fight-log-recovery="city"' in r_missing.text
+        ),
+        f"status={r_missing.status_code} url={r_missing.url}",
+    )
     r = s.get(f"{BASE}/city/buildings/tavern", timeout=TIMEOUT, allow_redirects=True)
     report.add(
         "GET /city/buildings/tavern fatigue copy",

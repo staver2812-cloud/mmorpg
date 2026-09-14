@@ -1691,11 +1691,28 @@ button.nl-city-hotspot,
   .nl-world-location-tab,
   .nl-world-location-sections .lbut,
   .nl-handbook .lbut,
-  .nl-world-action-button {
+  .nl-world-action-button,
+  .city-view-container .nl-sheet-link,
+  .location-info-panel .nl-sheet-link {
     min-height: 44px;
     min-width: 44px;
     padding: 8px 10px;
     font-size: 12px;
     line-height: 1.25;
+  }
+}
+
+@media (max-width: 360px) {
+  .nl-city-building-page,
+  .nl-world-location-sections,
+  .nl-world-location-viewport,
+  .city-view-container,
+  .location-info-panel {
+    min-width: 0;
+    max-width: 100%;
+  }
+
+  .nl-world-location-tab {
+    flex: 1 1 100%;
   }
 }
