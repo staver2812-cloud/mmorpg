@@ -397,8 +397,10 @@ class WorldController < ApplicationController
           tile_id: @tile_state.tile.id,
           local_action_type: local_action["type"],
           source_id: local_action["source_id"],
-          label: local_action["label"].presence ||
-            MapTileTemplate.default_local_action_label(local_action["type"]),
+          label: MapTileTemplate.player_local_action_label(
+            local_action["type"],
+            local_action["label"]
+          ),
           description: local_action["description"]
         },
         offer:

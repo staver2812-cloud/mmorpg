@@ -431,6 +431,18 @@ ru:
       local_action_not_implemented: "Локальное действие не реализовано."
       local_action_wrong_cell: "Локальное действие не на текущей клетке."
       local_action_deadline_invalid: "Срок локального действия некорректен."
+      local_action:
+        resource_search:
+          label: "Осмотреться"
+          message: "В этой местности нет полезной растительности."
+        fishing:
+          label: "Рыбачить"
+          message: "Нет приманки."
+        drinking:
+          label: "Пить"
+          message: "Всё прошло хорошо."
+        digging:
+          label: "Копать"
       action_offer_mismatch: "Предложение действия не совпадает с этим локальным действием."
       action_offer_not_accepted: "Предложение действия больше не принято."
       location_feature_unavailable: "Функция локации недоступна."

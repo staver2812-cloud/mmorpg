@@ -161,7 +161,7 @@ RSpec.describe "World Interactions", type: :system, js: true do
             {
               "type" => "resource_search",
               "source_id" => "look",
-              "label" => "Look Around",
+              "label" => I18n.t("game.world.local_action.resource_search.label"),
               "description" => "Search for herbs and local resources."
             }
           ]
@@ -169,9 +169,9 @@ RSpec.describe "World Interactions", type: :system, js: true do
       )
 
       visit world_path
-      click_button "Look Around"
+      click_button I18n.t("game.world.local_action.resource_search.label")
 
-      expect(page).to have_css("dialog[open]", text: "There is no useful vegetation in this area.")
+      expect(page).to have_css("dialog[open]", text: I18n.t("game.world.local_action.resource_search.message"))
       expect(page).to have_css("body.nl-game-layout", count: 1)
       expect(page).to have_css(".nl-map-container", count: 1)
       expect(page).to have_css(".nl-map-container[data-nl-world-map-work-active-value='true']")
@@ -179,7 +179,7 @@ RSpec.describe "World Interactions", type: :system, js: true do
       expect(page).not_to have_css(".nl-tile-clickable--available")
       expect(page).to have_button("Your character", disabled: true)
       expect(page).to have_button("Inventory", disabled: true)
-      expect(page).to have_button("Look Around", disabled: true)
+      expect(page).to have_button(I18n.t("game.world.local_action.resource_search.label"), disabled: true)
       expect(find(".nl-timer-seconds").text.to_i).to be_between(20, 28)
       action = WorldActionOffer.accepted.find_by!(character:, action_type: "search_resources")
       deadline = action.local_action_ends_at
@@ -194,7 +194,7 @@ RSpec.describe "World Interactions", type: :system, js: true do
 
       expect(page).not_to have_css("dialog")
       expect(page).to have_css(".nl-map-container[data-nl-world-map-work-active-value='true']")
-      expect(page).to have_button("Look Around", disabled: true)
+      expect(page).to have_button(I18n.t("game.world.local_action.resource_search.label"), disabled: true)
       expect(action.reload.local_action_ends_at).to eq(deadline)
 
       action.update!(
@@ -207,7 +207,7 @@ RSpec.describe "World Interactions", type: :system, js: true do
       JS
 
       expect(page).to have_css(".nl-map-container[data-nl-world-map-work-active-value='false']")
-      expect(page).to have_button("Look Around", disabled: false)
+      expect(page).to have_button(I18n.t("game.world.local_action.resource_search.label"), disabled: false)
       expect(page).to have_button("Inventory", disabled: false)
       expect(position.reload).to have_attributes(x: 5, y: 5)
       expect(action.reload).to be_completed

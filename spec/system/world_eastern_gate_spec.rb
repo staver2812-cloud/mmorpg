@@ -46,8 +46,8 @@ RSpec.describe "Repaired eastern gate and pond route", type: :system, js: true d
     expect_world_location("Outpost, East Gate")
     within("#available-actions") do
       expect(page).to have_button("Enter")
-      expect(page).to have_no_button("Drink")
-      expect(page).to have_no_button("Fish")
+      expect(page).to have_no_button(I18n.t("game.world.local_action.drinking.label"))
+      expect(page).to have_no_button(I18n.t("game.world.local_action.fishing.label"))
     end
 
     expect(page).to have_css(".nl-map-container[data-viewport-ready='true']")
@@ -68,10 +68,10 @@ RSpec.describe "Repaired eastern gate and pond route", type: :system, js: true d
     expect_idle_cell(12, 10)
     expect_world_location("Пепельный Берег")
     within("#available-actions") do
-      expect(page).to have_button("Look Around")
+      expect(page).to have_button(I18n.t("game.world.local_action.resource_search.label"))
       expect(page).to have_no_button("Enter")
-      expect(page).to have_no_button("Drink")
-      expect(page).to have_no_button("Fish")
+      expect(page).to have_no_button(I18n.t("game.world.local_action.drinking.label"))
+      expect(page).to have_no_button(I18n.t("game.world.local_action.fishing.label"))
     end
 
     click_button "Move east"
@@ -79,9 +79,9 @@ RSpec.describe "Repaired eastern gate and pond route", type: :system, js: true d
     expect_world_location("Пепельный Берег, Pond")
     expect(position.reload).to have_attributes(zone: outdoors, x: 13, y: 10)
     within("#available-actions") do
-      expect(page).to have_button("Look Around")
-      expect(page).to have_button("Drink")
-      expect(page).to have_button("Fish")
+      expect(page).to have_button(I18n.t("game.world.local_action.resource_search.label"))
+      expect(page).to have_button(I18n.t("game.world.local_action.drinking.label"))
+      expect(page).to have_button(I18n.t("game.world.local_action.fishing.label"))
       expect(page).to have_no_button("Enter")
     end
 
@@ -100,8 +100,8 @@ RSpec.describe "Repaired eastern gate and pond route", type: :system, js: true d
     expect_idle_cell(12, 10)
     expect_world_location("Пепельный Берег")
     within("#available-actions") do
-      expect(page).to have_no_button("Drink")
-      expect(page).to have_no_button("Fish")
+      expect(page).to have_no_button(I18n.t("game.world.local_action.drinking.label"))
+      expect(page).to have_no_button(I18n.t("game.world.local_action.fishing.label"))
     end
     click_button "Move northwest"
     expect_idle_cell(11, 9)

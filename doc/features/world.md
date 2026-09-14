@@ -2979,6 +2979,7 @@ Before extending the World feature:
 | 2026-09-13 | HUD heal-scroll chip (`combat_heal_scroll` count) beside Assault trauma-scroll chip; Infirmary link when colocated. |
 | 2026-09-13 | Law Abode alignment pledge/change via `Game::World::LawAlignmentPledge`. |
 | 2026-09-13 | Movement complete/queue fail reasons and local-action cell/deadline fails use `game.world.*` i18n. |
+| 2026-09-13 | Default Look/Fish/Drink labels and empty-result messages use `game.world.local_action.*` i18n (seeded English defaults still resolve). |
 
 
 ## 19. Open-world parity audit (updated 2026-09-09)

@@ -93,7 +93,7 @@ RSpec.describe "Open-world locations", type: :request do
     work = create(:world_action_offer, :accepted, character:, zone:, x: 4, y: 6,
       action_type: "search_resources", metadata: {
         "local_action_ends_at" => 28.seconds.from_now.iso8601(6),
-        "local_action_result" => "There is no useful vegetation in this area."
+        "local_action_result" => I18n.t("game.world.local_action.resource_search.message")
       })
     context = character.reload.gameplay_context
     deadline = work.local_action_ends_at

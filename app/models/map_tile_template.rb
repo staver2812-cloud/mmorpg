@@ -130,7 +130,13 @@ class MapTileTemplate < ApplicationRecord
   end
 
   def self.default_local_action_label(action_type)
-    local_action_definition(action_type)&.fetch("default_label", nil)
+    definition = local_action_definition(action_type)
+    return unless definition
+
+    I18n.t(
+      "game.world.local_action.#{action_type}.label",
+      default: definition.fetch("default_label")
+    )
   end
 
   def self.local_action_implemented?(action_type)
@@ -138,7 +144,37 @@ class MapTileTemplate < ApplicationRecord
   end
 
   def self.default_local_action_message(action_type)
-    local_action_definition(action_type)&.fetch("default_message", nil)
+    definition = local_action_definition(action_type)
+    return unless definition
+
+    english_default = definition["default_message"]
+    return unless english_default
+
+    I18n.t(
+      "game.world.local_action.#{action_type}.message",
+      default: english_default
+    )
+  end
+
+  # Prefer i18n for the structural English defaults while preserving custom manage labels.
+  def self.player_local_action_label(action_type, stored_label = nil)
+    definition = local_action_definition(action_type)
+    return stored_label.presence unless definition
+
+    english_default = definition.fetch("default_label")
+    return stored_label if stored_label.present? && stored_label != english_default
+
+    default_local_action_label(action_type)
+  end
+
+  def self.player_local_action_message(action_type, stored_message = nil)
+    definition = local_action_definition(action_type)
+    return stored_message.presence unless definition
+
+    english_default = definition["default_message"]
+    return stored_message if stored_message.present? && stored_message != english_default
+
+    default_local_action_message(action_type).presence || stored_message.presence
   end
 
   def self.source_action_id_for(action_type)

@@ -48,14 +48,20 @@ module Game
           end
 
           now = clock.call
-          result_message = local_action["result_message"].presence || MapTileTemplate.default_local_action_message(local_action_type)
+          result_message = MapTileTemplate.player_local_action_message(
+            local_action_type,
+            local_action["result_message"]
+          )
           if interruption.hint.present?
             result_message = "#{result_message} #{interruption.hint}"
           end
           action_offer.update!(metadata: action_offer.metadata.to_h.merge(
             "local_action_ends_at" => (now + rules.local_action_duration_seconds(local_action_type)).iso8601(6),
             "local_action_result" => result_message,
-            "label" => local_action["label"].presence || MapTileTemplate.default_local_action_label(local_action_type)
+            "label" => MapTileTemplate.player_local_action_label(
+              local_action_type,
+              local_action["label"]
+            )
           ).merge(apply_effect(at: now)))
           cancel_sibling_offers!(now)
 

@@ -431,6 +431,18 @@ en:
       local_action_not_implemented: "Local action is not implemented."
       local_action_wrong_cell: "Local action is not on the current cell."
       local_action_deadline_invalid: "Local action deadline is invalid."
+      local_action:
+        resource_search:
+          label: "Look Around"
+          message: "There is no useful vegetation in this area."
+        fishing:
+          label: "Fish"
+          message: "No bait available."
+        drinking:
+          label: "Drink"
+          message: "Everything went well."
+        digging:
+          label: "Dig"
       action_offer_mismatch: "Action offer does not match this local action."
       action_offer_not_accepted: "Action offer is no longer accepted."
       location_feature_unavailable: "Location feature is unavailable"

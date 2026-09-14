@@ -26,7 +26,7 @@ RSpec.describe Game::World::PerformLocalAction do
     expect { result }.not_to change(InventoryItem, :count)
 
     expect(result.success).to be true
-    expect(result.message).to eq("There is no useful vegetation in this area.")
+    expect(result.message).to eq(I18n.t("game.world.local_action.resource_search.message"))
     expect(action_offer.reload).to be_accepted
     expect(action_offer.local_action_ends_at).to eq(Time.current + 28.seconds)
     expect(action_offer.local_action_result).to eq(result.message)
@@ -195,7 +195,7 @@ RSpec.describe Game::World::PerformLocalAction do
 
       expect { result }.not_to change(InventoryItem, :count)
       expect(result.success).to be true
-      expect(result.message).to eq("No bait available.")
+      expect(result.message).to eq(I18n.t("game.world.local_action.fishing.message"))
       expect(action_offer.reload.local_action_ends_at).to eq(Time.current + 30.seconds)
       expect(character.reload.fatigue_percent).to eq(7)
       expect(character.passive_skills).to eq(original_skills)
@@ -203,7 +203,7 @@ RSpec.describe Game::World::PerformLocalAction do
 
       travel 10.seconds
       repeated = described_class.new(character:, tile:, local_action_type:, action_offer:).call
-      expect(repeated.message).to eq("No bait available.")
+      expect(repeated.message).to eq(I18n.t("game.world.local_action.fishing.message"))
       expect(action_offer.reload.local_action_remaining_seconds).to eq(20)
       expect(character.reload.fatigue_percent).to eq(7)
     end
@@ -223,7 +223,7 @@ RSpec.describe Game::World::PerformLocalAction do
       expect { result }.not_to change(InventoryItem, :count)
 
       expect(result.success).to be true
-      expect(result.message).to eq("Everything went well.")
+      expect(result.message).to eq(I18n.t("game.world.local_action.drinking.message"))
       expect(character.reload.fatigue_percent).to eq(5)
       expect(action_offer.reload.local_action_ends_at).to eq(Time.current + 60.seconds)
       expect(action_offer.metadata).to include("fatigue_recovery_points" => 2, "fatigue_recovery_applied" => 2,

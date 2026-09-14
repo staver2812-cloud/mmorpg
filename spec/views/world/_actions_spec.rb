@@ -47,7 +47,7 @@ RSpec.describe "world/_actions.html.erb", type: :view do
 
       render partial: "world/actions", locals: {available_actions: [], position:}
 
-      ["Look Around", "Fish", "Drink"].each do |label|
+      [I18n.t("game.world.local_action.resource_search.label"), I18n.t("game.world.local_action.fishing.label"), I18n.t("game.world.local_action.drinking.label")].each do |label|
         expect(rendered).to have_button(label, disabled: true, count: 1)
       end
       expect(rendered).not_to have_css("form, input[name='action_key']", visible: :all)
@@ -55,12 +55,12 @@ RSpec.describe "world/_actions.html.erb", type: :view do
   end
 
   it "retains the accepted action label if its authored declaration was removed during work" do
-    assign(:active_world_action, build(:world_action_offer, :accepted, action_type: "drink", metadata: {"label" => "Drink"}))
+    assign(:active_world_action, build(:world_action_offer, :accepted, action_type: "drink", metadata: {"label" => I18n.t("game.world.local_action.drinking.label")}))
     assign(:tile_state, Game::World::TileStateResolver::Result.new(local_actions: []))
 
     render partial: "world/actions", locals: {available_actions: [], position:}
 
-    expect(rendered).to have_button("Drink", disabled: true, count: 1)
+    expect(rendered).to have_button(I18n.t("game.world.local_action.drinking.label"), disabled: true, count: 1)
     expect(rendered).not_to have_css("form, input[name='action_key']", visible: :all)
   end
 
@@ -124,7 +124,7 @@ RSpec.describe "world/_actions.html.erb", type: :view do
             tile_id: 7,
             local_action_type: "resource_search",
             source_id: "look",
-            label: "Look Around",
+            label: I18n.t("game.world.local_action.resource_search.label"),
             description: "Search for herbs and local resources."
           },
           offer: OpenStruct.new(action_key: "resource-action-key")
@@ -133,7 +133,7 @@ RSpec.describe "world/_actions.html.erb", type: :view do
       position:
     }
 
-    expect(rendered).to have_button("Look Around")
+    expect(rendered).to have_button(I18n.t("game.world.local_action.resource_search.label"))
     expect(rendered).to have_content("Search for herbs and local resources.")
     expect(rendered).to have_css("input[name='tile_id'][value='7']", visible: :all)
     expect(rendered).to have_css("input[name='local_action_type'][value='resource_search']", visible: :all)

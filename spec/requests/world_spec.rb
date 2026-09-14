@@ -673,7 +673,7 @@ RSpec.describe "World", type: :request do
       get world_path
 
       expect(response).to have_http_status(:success)
-      expect(response.body).to include("Look Around")
+      expect(response.body).to include(I18n.t("game.world.local_action.resource_search.label"))
       expect(response.body).to include("Search for herbs and local resources")
       expect(response.body).to include('name="action_key"')
     end
@@ -687,7 +687,7 @@ RSpec.describe "World", type: :request do
       expect(offer.reload).to be_accepted
       expect(offer.local_action_ends_at).to be_within(1.second).of(Time.current + 28.seconds)
       follow_redirect!
-      expect(response.body).to include("There is no useful vegetation in this area.")
+      expect(response.body).to include(I18n.t("game.world.local_action.resource_search.message"))
       expect(offer.reload).to be_accepted
       expect(position.reload).to have_attributes(x: 5, y: 5)
     end
