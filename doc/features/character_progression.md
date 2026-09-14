@@ -313,7 +313,8 @@ numeric profession proficiency, completed quest qualification, and an active
 timed license. Profession proficiency is not an ordinary allocatable skill or
 another name for the perk. Shop reads saved Trading proficiency for resale
 rates but does not grow it after sales. Doctor II/III purchase checks the
-Traumatologist completion flag; it does not independently check Doctor
+Traumatologist completion flag set by Ashen Infirmary `TraumatologistClearance`;
+it does not independently check Doctor
 proficiency. The published `100` Doctor proficiency requirement belongs to
 entering that still-unimplemented quest, with equipment allowed to contribute.
 The Doctor wiki does not state an additional license-purchase quest gate for
