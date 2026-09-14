@@ -1473,7 +1473,7 @@ def main() -> int:
             and 'data-shop-recovery="world"' in r.text,
             f"url={r.url}",
         )
-    r = s.get(f"{BASE}/shop?mode=buy&category=knives&min_price=999999", timeout=TIMEOUT)
+    r = s.get(f"{BASE}/shop?mode=buy&category=knives&min_price=1&max_price=0", timeout=TIMEOUT)
     if r.status_code == 200 and 'data-shop-buy-empty="1"' in r.text:
         report.add(
             "shop buy empty licenses recovery",
