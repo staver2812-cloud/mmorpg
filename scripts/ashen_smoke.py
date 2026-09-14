@@ -292,6 +292,7 @@ def main() -> int:
         and 'data-building-key="numismatics"' in r.text
         and ("data-numismatics=" in r.text)
         and ('data-numismatics-listings="0"' in r.text)
+        and ('data-numismatics-deferred="1"' in r.text)
         and ("Нет предложений" in r.text or "No MVP listings" in r.text)
     )
     numismatics_gated = "/world" in r.url or 'data-building-key="numismatics"' not in r.text
@@ -346,6 +347,12 @@ def main() -> int:
         and 'data-landmark-inside="1"' in r.text,
         f"url={r.url}",
     )
+    if r.status_code == 200 and 'data-post-empty="1"' in r.text:
+        report.add(
+            "post empty recovery CTA",
+            ("data-post-recovery=" in r.text) or ("/city/buildings/city_hall" in r.text),
+            f"url={r.url}",
+        )
     r = s.get(f"{BASE}/city/buildings/clan_hall", timeout=TIMEOUT, allow_redirects=True)
     report.add(
         "GET /city/buildings/clan_hall",
@@ -479,7 +486,8 @@ def main() -> int:
         r.status_code == 200
         and ('data-library-handbook="1"' in r.text)
         and ("Справочник Пепельной Завесы" in r.text or "Ashen Veil handbook" in r.text)
-        and ('data-landmark-inside="1"' in r.text),
+        and ('data-landmark-inside="1"' in r.text)
+        and ('data-library-next="1"' in r.text),
         f"url={r.url}",
     )
     if r.status_code == 200:

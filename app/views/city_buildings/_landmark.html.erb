@@ -54,6 +54,19 @@
           <p><%= t("game.buildings.library_fatigue_body") %></p>
         </article>
       </div>
+      <p class="nl-quests-board__meta" data-library-next="1">
+        <%= t("game.buildings.library_next") %>
+      </p>
+      <p>
+        <%= link_to t("arena.nav.city"), world_path, class: "lbut", data: {turbo: false} %>
+        <%= link_to t("game.shop.title"), shop_path, class: "lbut" %>
+        <% if Game::World::CityBuildingCatalog.accessible?(character: current_character, building_key: "city_hall") %>
+          <%= link_to t("game.buildings.city_hall_short"), city_building_path("city_hall"), class: "lbut" %>
+        <% end %>
+        <% if Game::World::CityBuildingCatalog.accessible?(character: current_character, building_key: "hospital") %>
+          <%= link_to t("game.buildings.hospital_title_short"), city_building_path("hospital"), class: "lbut" %>
+        <% end %>
+      </p>
     </section>
   <% when "tavern" %>
     <section class="nl-handbook" data-tavern-rumors="1">
@@ -220,13 +233,17 @@
         ·
         <%= t("game.world.heal_scroll_chip", count: heal_owned) %>
       </p>
-      <% if assault_owned.zero? && Game::World::CityBuildingCatalog.accessible?(character: current_character, building_key: "hospital") %>
+      <% if assault_owned.zero? %>
         <p class="nl-quests-board__meta" data-clan-hall-need-scroll="1">
           <%= t("game.buildings.clan_hall_need_scroll") %>
           ·
-          <%= link_to t("game.buildings.hospital_title_short"),
-                city_building_path("hospital", anchor: "hospital-premium-desk"),
-                data: {turbo: false, clan_hall_recovery: "hospital"} %>
+          <% if Game::World::CityBuildingCatalog.accessible?(character: current_character, building_key: "hospital") %>
+            <%= link_to t("game.buildings.hospital_title_short"),
+                  city_building_path("hospital", anchor: "hospital-premium-desk"),
+                  data: {turbo: false, clan_hall_recovery: "hospital"} %>
+          <% else %>
+            <%= link_to t("arena.nav.city"), world_path, data: {turbo: false, clan_hall_recovery: "world"} %>
+          <% end %>
         </p>
       <% end %>
       <h3><%= t("game.buildings.clan_hall_presence_title") %></h3>
@@ -300,5 +317,15 @@
       <li><%= t("game.buildings.landmark_entry_note") %></li>
       <li><%= t("game.buildings.landmark_exit_note") %></li>
     </ul>
+    <p class="nl-quests-board__meta" data-landmark-fallback="1">
+      <%= t("game.buildings.landmark_fallback_next") %>
+    </p>
+    <p>
+      <%= link_to t("arena.nav.city"), world_path, class: "lbut", data: {turbo: false} %>
+      <%= link_to t("game.shop.title"), shop_path, class: "lbut" %>
+      <% if Game::World::CityBuildingCatalog.accessible?(character: current_character, building_key: "city_hall") %>
+        <%= link_to t("game.buildings.city_hall_short"), city_building_path("city_hall"), class: "lbut" %>
+      <% end %>
+    </p>
   <% end %>
 </section>
