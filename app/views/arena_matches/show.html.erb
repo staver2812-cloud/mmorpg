@@ -156,7 +156,7 @@
         <div class="arena-action-panel" data-arena-match-target="actionButtons">
           <%# AP Bar %>
           <div class="arena-ap-bar" data-arena-match-target="apBar">
-            <span class="ap-label">ОД:</span>
+            <span class="ap-label"><%= t("game.fight.ap_label") %></span>
             <div class="ap-bar-container">
               <div class="ap-bar-fill" style="width: 100%"></div>
             </div>
@@ -195,7 +195,7 @@
                         data-ap-cost="<%= config['action_cost'] %>"
                         data-mana-cost="<%= config['mana_cost'].to_i %>">
                   <span><%= fight_action_display_name(key, config) %></span>
-                  <small><%= config["action_cost"] %>/<%= config["mana_cost"].to_i %> MP</small>
+                  <small><%= t("game.fight.option_cost_with_mana", ap: config["action_cost"], mana: config["mana_cost"].to_i) %></small>
                 </button>
               <% else %>
                 <span class="nl-fight-magic-slot nl-fight-magic-slot--empty"

@@ -46,6 +46,10 @@ ru:
   social:
     chat_players: "Чат и игроки рядом"
     sort: "Сорт:"
+    sort_az: "а-я"
+    sort_za: "я-а"
+    sort_lvl_asc: "0-33"
+    sort_lvl_desc: "33-0"
     refresh: "обновл."
     loading: "Загрузка..."
     unknown: "Неизвестно"

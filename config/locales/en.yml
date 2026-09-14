@@ -76,6 +76,10 @@ en:
   social:
     chat_players: "Chat and nearby players"
     sort: "Sort:"
+    sort_az: "a-z"
+    sort_za: "z-a"
+    sort_lvl_asc: "0-33"
+    sort_lvl_desc: "33-0"
     refresh: "refresh"
     loading: "Loading..."
     unknown: "Unknown"

@@ -37,7 +37,7 @@ end %>
 
   <%# HP Bar %>
   <div class="fighter-hp">
-    <div class="fighter-hp-bar" title="HP: <%= p_data.current_hp %>/<%= p_data.max_hp %>">
+    <div class="fighter-hp-bar" title="<%= t("game.fight.hp_title", current: p_data.current_hp, max: p_data.max_hp) %>">
       <div class="fighter-hp-fill fighter-hp-fill--<%= hp_color_class(p_data.hp_percent) %>"
            style="width: <%= p_data.hp_percent %>%"></div>
       <span class="fighter-hp-text"><%= p_data.current_hp %>/<%= p_data.max_hp %></span>
@@ -48,7 +48,7 @@ end %>
   <%# MP Bar (players only) %>
   <% unless p_data.is_npc %>
     <div class="fighter-mp">
-      <div class="fighter-mp-bar" title="MP: <%= p_data.current_mp %>/<%= p_data.max_mp %>">
+      <div class="fighter-mp-bar" title="<%= t("game.fight.mp_title", current: p_data.current_mp, max: p_data.max_mp) %>">
         <div class="fighter-mp-fill" style="width: <%= p_data.mp_percent %>%"></div>
         <span class="fighter-mp-text"><%= p_data.current_mp %>/<%= p_data.max_mp %></span>
       </div>

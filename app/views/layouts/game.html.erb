@@ -269,10 +269,10 @@
       <div class="nl-players-header-float">
         <span class="nl-sort-links">
           <%= t("social.sort") %>
-          <a href="#" data-action="click->game-layout#sortPlayers" data-sort="az">a-z</a>
-          <a href="#" data-action="click->game-layout#sortPlayers" data-sort="za">z-a</a>
-          <a href="#" data-action="click->game-layout#sortPlayers" data-sort="lvl-asc">0-33</a>
-          <a href="#" data-action="click->game-layout#sortPlayers" data-sort="lvl-desc">33-0</a>
+          <a href="#" data-action="click->game-layout#sortPlayers" data-sort="az"><%= t("social.sort_az") %></a>
+          <a href="#" data-action="click->game-layout#sortPlayers" data-sort="za"><%= t("social.sort_za") %></a>
+          <a href="#" data-action="click->game-layout#sortPlayers" data-sort="lvl-asc"><%= t("social.sort_lvl_asc") %></a>
+          <a href="#" data-action="click->game-layout#sortPlayers" data-sort="lvl-desc"><%= t("social.sort_lvl_desc") %></a>
         </span>
         <label class="nl-refresh-check">
           <input type="checkbox" checked data-action="change->game-layout#toggleAutoRefresh">
