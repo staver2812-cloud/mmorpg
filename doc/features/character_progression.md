@@ -754,6 +754,7 @@ Before extending Character Progression:
 | 2026-09-14 | Owner profile idle allocation note links to World and Training hall when no free primary-stat points remain. |
 | 2026-09-14 | Visitor empty public-perks note recovers via World. |
 | 2026-09-14 | Empty Your licenses note recovers via Shop Licenses. |
+| 2026-09-14 | Idle Stats/Skills/Perks allocation pages recover to World when no free points remain. |
 | 2026-09-13 | Skill/perk allocation UI prefers captured RU source labels for `:ru`, localizes skill categories and spend rejects. |
 | 2026-09-13 | Stat/skill/perk allocation Reset/Save and `(base: N)` chrome use `game.profile.allocation_*` / `stat_base` i18n. |
 | 2026-09-13 | Character/licenses page titles use `game.profile.*_title`; license kinds use `game.licenses.kinds.*`. |
