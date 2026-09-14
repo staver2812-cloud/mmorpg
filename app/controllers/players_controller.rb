@@ -133,7 +133,11 @@ class PlayersController < ApplicationController
   def public_perks
     @character.owned_perk_keys.map do |key|
       definition = Game::Skills::PerkRegistry.find(key)
-      {key: key, name: definition[:name], source_id: definition[:source_id]}
+      {
+        key: key,
+        name: Game::Skills::PerkRegistry.display_name(definition),
+        source_id: definition[:source_id]
+      }
     end
   end
 
