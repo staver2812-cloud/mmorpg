@@ -225,7 +225,7 @@ class Character < ApplicationRecord
   end
 
   def alignment_label
-    ALIGNMENT_LABELS.fetch(alignment, "None")
+    I18n.t("game.buildings.law_alignment.#{alignment}", default: ALIGNMENT_LABELS.fetch(alignment, ALIGNMENT_LABELS.fetch("none")))
   end
 
   def alignment_display

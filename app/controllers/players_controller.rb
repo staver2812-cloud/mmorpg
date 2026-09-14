@@ -88,7 +88,7 @@ class PlayersController < ApplicationController
     if (match = active_arena_match_for(@character))
       sublocation = match.arena_room&.name || label
       return {
-        label: "#{sublocation} [in combat]",
+        label: I18n.t("game.profile.location_in_combat", place: sublocation),
         zone: position.zone&.name,
         x: position.x,
         y: position.y,

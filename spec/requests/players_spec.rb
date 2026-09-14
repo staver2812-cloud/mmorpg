@@ -203,7 +203,8 @@ RSpec.describe "Players", type: :request do
 
       get player_path(name: character.name, format: :json)
       expect(response.parsed_body.dig("character", "location")).to include(
-        "label" => "Village approach [in combat]", "sublocation" => "Village approach",
+        "label" => I18n.t("game.profile.location_in_combat", place: "Village approach"),
+        "sublocation" => "Village approach",
         "active_fight" => {"id" => match.id, "path" => public_fight_log_path(match), "status" => "live"}
       )
     end
@@ -222,9 +223,9 @@ RSpec.describe "Players", type: :request do
 
       position.destroy!
       get player_path(name: character.name)
-      expect(Nokogiri::HTML(response.body).at_css(".nl-profile-location").text).to eq("Unknown")
+      expect(Nokogiri::HTML(response.body).at_css(".nl-profile-location").text).to eq(I18n.t("game.profile.unknown_location"))
       get player_path(name: character.name, format: :json)
-      expect(response.parsed_body.dig("character", "location")).to eq("label" => "Unknown")
+      expect(response.parsed_body.dig("character", "location")).to eq("label" => I18n.t("game.profile.unknown_location"))
     end
 
     it "does not resolve account profile names without a character" do

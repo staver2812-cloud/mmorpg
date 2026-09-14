@@ -54,7 +54,7 @@ RSpec.describe Game::World::Presence do
 
     result = described_class.new(character:).call
 
-    expect(result.label).to eq("Shop")
+    expect(result.label).to eq(I18n.t("game.world.shop_presence"))
     expect(result.players).to contain_exactly(character, inside)
   end
 
@@ -163,7 +163,7 @@ RSpec.describe Game::World::Presence do
   it "returns no location or player data without a persisted position" do
     result = described_class.new(character: create(:character)).call
 
-    expect(result).to have_attributes(players: [], label: "Unknown", count: 0)
+    expect(result).to have_attributes(players: [], label: I18n.t("game.profile.unknown_location"), count: 0)
   end
 
   it "returns a label without querying or counting the online audience" do
@@ -182,8 +182,8 @@ RSpec.describe Game::World::Presence do
 
     expect(queries.grep(/FROM "(?:characters|user_sessions)"|COUNT\(/i)).to be_empty
     expect(queries.grep(/FROM "map_tile_templates"/).size).to eq(1)
-    expect(described_class.new(character: nil).label).to eq("Unknown")
-    expect(described_class.new(character: create(:character)).label).to eq("Unknown")
+    expect(described_class.new(character: nil).label).to eq(I18n.t("game.profile.unknown_location"))
+    expect(described_class.new(character: create(:character)).label).to eq(I18n.t("game.profile.unknown_location"))
   end
 
   it "requires a recent open session, excludes the exact expiry boundary, and deduplicates devices" do
@@ -242,7 +242,7 @@ RSpec.describe Game::World::Presence do
 
       character.remember_gameplay_context!(name: "shop")
       result = described_class.new(character:).call
-      expect(result.label).to eq("Shop")
+      expect(result.label).to eq(I18n.t("game.world.shop_presence"))
       expect(result.players).to contain_exactly(character, shop)
       expect(described_class.new(character:).context_key).to end_with("room:shop")
     end

@@ -13,7 +13,7 @@
 <% metadata = character.metadata.to_h %>
 <% fatigue = profile_fatigue(character) %>
 
-<section class="nl-character-sheet" aria-label="<%= character.name %> character sheet">
+<section class="nl-character-sheet" aria-label="<%= t("game.sheet.aria_label", name: character.name) %>">
   <div class="nl-character-doll-column">
     <%= render "shared/equipment_paperdoll",
       character: character,
