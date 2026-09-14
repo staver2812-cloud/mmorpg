@@ -41,6 +41,7 @@ en:
       fight_started: "Fight started"
     statistics_title: "Fight Statistics"
     statistics_hint: "Search for current and finished fights stays in this frame."
+    statistics_next: "Open Duels for live rooms, or return to City."
     recent_fights: "Recent fights"
     log: "log"
     ago: "%{time} ago"

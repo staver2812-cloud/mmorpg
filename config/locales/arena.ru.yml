@@ -41,6 +41,7 @@ ru:
       fight_started: "Бой начался"
     statistics_title: "Статистика боёв"
     statistics_hint: "Поиск текущих и завершённых боёв — в этом окне."
+    statistics_next: "Откройте Дуэли для живых комнат или вернитесь в Город."
     recent_fights: "Недавние бои"
     log: "лог"
     ago: "%{time} назад"
