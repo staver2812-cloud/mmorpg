@@ -3003,6 +3003,7 @@ Before extending the World feature:
 | 2026-09-14 | Owned Nature Child perk recovers four fatigue on Drink; without it, recovery remains two points. |
 | 2026-09-14 | Mine/exchange lobbies show explicit deferred reasons on disabled Descend/Choose/Buy controls. |
 | 2026-09-14 | Outdoor heavy/combat injury clears map destinations (`locked_reason: :injured`), shows recovery copy + Inventory CTA, and routes the injury chip to Inventory when Infirmary is out of district. |
+| 2026-09-14 | Outdoor fatigue lock links to Tavern when colocated (else City); blocked Enter shows visible reason (`data-world-enter-blocked`). |
 
 
 ## 19. Open-world parity audit (updated 2026-09-09)
