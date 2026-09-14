@@ -96,7 +96,7 @@ module Arena
         npc_participation.lock!
         validate_npc_participation!
         participation = player_participation
-        raise InvalidParticipantError, "Loot recipient must participate in the match" unless participation
+        raise InvalidParticipantError, I18n.t("arena.validations.loot_recipient_required") unless participation
 
         participation.lock!
 
@@ -146,7 +146,7 @@ module Arena
       when "currency"
         award_currency(entry, entry_index)
       else
-        raise InvalidEntryError, "Unsupported loot kind: #{loot_kind(entry)}"
+        raise InvalidEntryError, I18n.t("arena.validations.loot_kind_unsupported", kind: loot_kind(entry))
       end
     end
 
@@ -156,7 +156,7 @@ module Arena
 
     def award_item(entry, entry_index)
       item_template = find_item_template!(entry)
-      quantity = positive_integer(entry.fetch(:quantity, 1), field: "Item quantity")
+      quantity = positive_integer(entry.fetch(:quantity, 1), field: I18n.t("arena.validations.loot_field_item_quantity"))
       event_key = event_key_for(entry_index)
 
       Game::Inventory::Manager.new(inventory: character.inventory).add_item!(
@@ -177,9 +177,9 @@ module Arena
     end
 
     def award_currency(entry, entry_index)
-      amount = positive_integer(entry[:amount], field: "Currency amount")
+      amount = positive_integer(entry[:amount], field: I18n.t("arena.validations.loot_field_currency_amount"))
       currency = entry.fetch(:currency, "NV").to_s.upcase
-      raise InvalidEntryError, "Unsupported loot currency: #{currency}" unless currency == "NV"
+      raise InvalidEntryError, I18n.t("arena.validations.loot_currency_unsupported", currency: currency) unless currency == "NV"
 
       event_key = event_key_for(entry_index)
       wallet = character.user.currency_wallet || character.user.create_currency_wallet!(nv_balance: 0)
@@ -210,12 +210,12 @@ module Arena
       return template if template
 
       identity = key.presence || name.presence || "missing"
-      raise InvalidEntryError, "Loot item template not found: #{identity}"
+      raise InvalidEntryError, I18n.t("arena.validations.loot_item_missing", identity: identity)
     end
 
     def positive_integer(value, field:)
       amount = Integer(value, exception: false)
-      raise InvalidEntryError, "#{field} must be a positive integer" unless amount&.positive?
+      raise InvalidEntryError, I18n.t("arena.validations.loot_positive_integer", field: field) unless amount&.positive?
 
       amount
     end
@@ -284,7 +284,7 @@ module Arena
     def validate_npc_participation!
       return if npc_participation.arena_match_id == match.id && npc_participation.npc?
 
-      raise InvalidParticipantError, "Loot source must be an NPC in the match"
+      raise InvalidParticipantError, I18n.t("arena.validations.loot_source_npc_required")
     end
 
     def player_participation

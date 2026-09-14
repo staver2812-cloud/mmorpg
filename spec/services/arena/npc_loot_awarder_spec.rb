@@ -290,7 +290,7 @@ RSpec.describe Arena::NpcLootAwarder do
 
       expect { award_loot }.to raise_error(
         described_class::InvalidParticipantError,
-        "Loot recipient must participate in the match"
+        I18n.t("arena.validations.loot_recipient_required")
       )
       expect(user.currency_wallet.reload.nv_balance).to eq(0)
       expect(npc_participation.reload.metadata).not_to have_key("loot_resolution")
