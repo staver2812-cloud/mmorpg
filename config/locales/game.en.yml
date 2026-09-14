@@ -519,6 +519,18 @@ en:
       two_handed: "Two-handed"
       two_handed_skill: "Two-Handed Skill"
     skills:
+      categories:
+        combat: "Combat Skills"
+        resistance: "Resistances"
+        magic: "Magic"
+        peace_world: "Peace Skills"
+      pools:
+        combat: "combat"
+        peace: "peace"
+      errors:
+        not_found: "Skill not found"
+        no_pool_points: "No %{pool} skill points available"
+        at_maximum: "Skill is at maximum level"
       unarmed_combat: "Unarmed Combat"
       sword_skill: "Sword Skill"
       axe_skill: "Axe Skill"
@@ -531,6 +543,12 @@ en:
       dual_wielding: "Dual Wielding"
       stealth: "Stealth"
       linguistics: "Linguistics"
+    perks:
+      descriptions:
+        more_strength: "Adds one effective Strength for every two character levels, rounded down."
+        careful_fighter: "Halves each equipped item's post-fight durability-loss chance."
+        merchant: "Allows entry into the trading profession. Shop selling also requires an active trading license."
+        healer: "Allows entry into the medical profession. Medical practice also requires a doctor license."
     licenses:
       empty: "You have no licenses."
       type: "Type"

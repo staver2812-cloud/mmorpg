@@ -103,7 +103,11 @@ RSpec.describe "Players", type: :request do
       expect(character_payload.dig("equipment", "main_hand", "name")).to eq("Knife")
       expect(character_payload.dig("numeric_skills", "unarmed_combat")).to eq(10)
       expect(character_payload.fetch("perks")).to include(
-        {"key" => "more_strength", "name" => "More Strength", "source_id" => 7}
+        {
+          "key" => "more_strength",
+          "name" => Game::Skills::PerkRegistry.display_name(Game::Skills::PerkRegistry.find(:more_strength)),
+          "source_id" => 7
+        }
       )
       expect(body).not_to have_key("email")
     end
@@ -117,8 +121,10 @@ RSpec.describe "Players", type: :request do
       get player_path(name: character.name)
 
       expect(response).to have_http_status(:ok)
-      expect(response.body).to include("Perks")
-      expect(response.body).to include("More Strength")
+      expect(response.body).to include(I18n.t("game.profile.perks"))
+      expect(response.body).to include(
+        Game::Skills::PerkRegistry.display_name(Game::Skills::PerkRegistry.find(:more_strength))
+      )
     end
 
     it "shows an unfinished arena fight link in the public location" do

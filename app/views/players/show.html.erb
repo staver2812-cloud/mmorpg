@@ -58,7 +58,7 @@
           <h2><%= t("game.profile.perks") %></h2>
           <ul class="nl-profile-perk-list">
             <% @character.owned_perk_keys.each do |perk_key| %>
-              <li><%= Game::Skills::PerkRegistry.find(perk_key)[:name] %></li>
+              <li><%= Game::Skills::PerkRegistry.display_name(Game::Skills::PerkRegistry.find(perk_key)) %></li>
             <% end %>
           </ul>
         </div>

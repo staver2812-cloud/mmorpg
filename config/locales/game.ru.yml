@@ -519,6 +519,18 @@ ru:
       two_handed: "Двуручное"
       two_handed_skill: "Двуручное оружие"
     skills:
+      categories:
+        combat: "Боевые умения"
+        resistance: "Сопротивления"
+        magic: "Магия"
+        peace_world: "Мирные умения"
+      pools:
+        combat: "боевых"
+        peace: "мирных"
+      errors:
+        not_found: "Умение не найдено"
+        no_pool_points: "Нет свободных %{pool} очков умений"
+        at_maximum: "Умение уже на максимуме"
       unarmed_combat: "Рукопашный бой"
       sword_skill: "Мечи"
       axe_skill: "Топоры"
@@ -531,6 +543,12 @@ ru:
       dual_wielding: "Парное оружие"
       stealth: "Скрытность"
       linguistics: "Лингвистика"
+    perks:
+      descriptions:
+        more_strength: "Даёт +1 к эффективной Силе за каждые два уровня персонажа (вниз)."
+        careful_fighter: "Вдвое снижает шанс потери прочности экипировки после боя."
+        merchant: "Открывает профессию торговца. Продажа в лавке также требует активной торговой лицензии."
+        healer: "Открывает профессию лекаря. Практика также требует врачебной лицензии."
     licenses:
       empty: "У вас нет лицензий."
       type: "Тип"

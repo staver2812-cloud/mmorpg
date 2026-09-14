@@ -13,16 +13,17 @@
       <% @perk_definitions.each do |perk_key, definition| %>
         <% owned = @character.owns_perk?(perk_key) %>
         <div class="nl-skill-row nl-perk-row" data-perk="<%= perk_key %>">
+          <% perk_name = Game::Skills::PerkRegistry.display_name(definition) %>
           <div class="nl-skill-info">
-            <span class="nl-skill-name"><%= definition[:name] %></span>
-            <p class="nl-skill-description"><%= definition[:description] %></p>
+            <span class="nl-skill-name"><%= perk_name %></span>
+            <p class="nl-skill-description"><%= Game::Skills::PerkRegistry.display_description(definition) %></p>
           </div>
 
           <div class="nl-skill-controls">
             <% if !owned && @perk_points.positive? %>
               <button type="button"
                       class="nl-stat-btn nl-stat-btn--minus"
-                      aria-label="<%= t("game.profile.perk_remove_aria", name: definition[:name]) %>"
+                      aria-label="<%= t("game.profile.perk_remove_aria", name: perk_name) %>"
                       data-action="click->perk-allocation#removePerk"
                       data-perk-allocation-perk-param="<%= perk_key %>">
                 -
@@ -39,7 +40,7 @@
             <% if !owned && @perk_points.positive? %>
               <button type="button"
                       class="nl-stat-btn nl-stat-btn--plus"
-                      aria-label="<%= t("game.profile.perk_add_aria", name: definition[:name]) %>"
+                      aria-label="<%= t("game.profile.perk_add_aria", name: perk_name) %>"
                       data-action="click->perk-allocation#addPerk"
                       data-perk-allocation-perk-param="<%= perk_key %>">
                 +

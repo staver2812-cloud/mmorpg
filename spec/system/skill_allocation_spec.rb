@@ -24,27 +24,27 @@ RSpec.describe "Skill Allocation", type: :system, js: true do
 
     it "displays both captured skill point pools" do
       within(".nl-allocation-pool--combat") do
-        expect(page).to have_content("Combat points:")
+        expect(page).to have_content(I18n.t("game.profile.combat_points"))
         expect(page).to have_content("10")
       end
 
       within(".nl-allocation-pool--peace") do
-        expect(page).to have_content("Peace points:")
+        expect(page).to have_content(I18n.t("game.profile.peace_points"))
         expect(page).to have_content("5")
       end
     end
 
     it "displays captured Neverlands skill categories" do
-      expect(page).to have_content("Combat Skills")
-      expect(page).to have_content("Magic")
-      expect(page).to have_content("Resistances")
-      expect(page).to have_content("Peace Skills")
+      expect(page).to have_content(Game::Skills::PassiveSkillRegistry.categories.fetch(:combat).fetch(:name))
+      expect(page).to have_content(Game::Skills::PassiveSkillRegistry.categories.fetch(:magic).fetch(:name))
+      expect(page).to have_content(Game::Skills::PassiveSkillRegistry.categories.fetch(:resistance).fetch(:name))
+      expect(page).to have_content(Game::Skills::PassiveSkillRegistry.categories.fetch(:peace_world).fetch(:name))
       expect(page).not_to have_content("Survival")
     end
 
     it "displays skills with source-backed values and gains" do
-      expect(page).to have_content("Unarmed Combat")
-      expect(page).to have_content("Wanderer")
+      expect(page).to have_content(Game::Skills::PassiveSkillRegistry.display_name(Game::Skills::PassiveSkillRegistry.find(:unarmed_combat)))
+      expect(page).to have_content(Game::Skills::PassiveSkillRegistry.display_name(Game::Skills::PassiveSkillRegistry.find(:wanderer)))
       expect(page).to have_content("[000/100]")
       expect(page).to have_css(".nl-skill-gain[data-skill='unarmed_combat']", text: "+10")
       expect(page).to have_css(".nl-skill-gain[data-skill='self_healing']", text: "+2")

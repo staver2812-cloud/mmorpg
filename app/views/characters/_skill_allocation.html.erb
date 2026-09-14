@@ -63,8 +63,11 @@
             <% skill_info = @skills_data[skill_key] %>
             <div class="nl-skill-row">
               <div class="nl-skill-info">
-                <span class="nl-skill-name"><%= definition[:name] %></span>
-                <p class="nl-skill-description"><%= definition[:description] %></p>
+                <span class="nl-skill-name"><%= Game::Skills::PassiveSkillRegistry.display_name(definition) %></span>
+                <% desc = Game::Skills::PassiveSkillRegistry.display_description(definition) %>
+                <% if desc.present? %>
+                  <p class="nl-skill-description"><%= desc %></p>
+                <% end %>
               </div>
 
               <div class="nl-skill-controls">

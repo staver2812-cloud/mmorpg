@@ -107,6 +107,25 @@ module Game
             end
           end.uniq
         end
+
+        def display_name(definition)
+          return nil if definition.blank?
+
+          if I18n.locale.to_s.start_with?("ru")
+            definition[:source_name].presence || definition[:name]
+          else
+            definition[:name]
+          end
+        end
+
+        def display_description(definition)
+          return nil if definition.blank?
+
+          I18n.t(
+            "game.perks.descriptions.#{definition[:key]}",
+            default: definition[:description]
+          )
+        end
       end
     end
   end

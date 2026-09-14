@@ -372,22 +372,22 @@ RSpec.describe CharactersController, type: :request do
       it "shows source-backed skills" do
         get skills_character_path(character)
 
-        expect(response.body).to include("Wanderer")
-        expect(response.body).to include("Unarmed Combat")
+        expect(response.body).to include(Game::Skills::PassiveSkillRegistry.display_name(Game::Skills::PassiveSkillRegistry.find(:wanderer)))
+        expect(response.body).to include(Game::Skills::PassiveSkillRegistry.display_name(Game::Skills::PassiveSkillRegistry.find(:unarmed_combat)))
       end
 
       it "shows available skill points count" do
         get skills_character_path(character)
 
         # Default character has combat_skill_points: 5 and peace_skill_points: 5
-        expect(response.body).to include("Combat points:")
+        expect(response.body).to include(I18n.t("game.profile.combat_points"))
       end
 
       it "shows skill categories" do
         get skills_character_path(character)
 
-        expect(response.body).to include("Combat Skills")
-        expect(response.body).to include("Peace Skills")
+        expect(response.body).to include(Game::Skills::PassiveSkillRegistry.categories.fetch(:combat).fetch(:name))
+        expect(response.body).to include(Game::Skills::PassiveSkillRegistry.categories.fetch(:peace_world).fetch(:name))
       end
     end
 
@@ -727,12 +727,13 @@ RSpec.describe CharactersController, type: :request do
 
     it "renders the captured binary perk and separate point pool" do
       get perks_character_path(character)
+      perk = Game::Skills::PerkRegistry.find(:more_strength)
 
       expect(response).to have_http_status(:success)
-      expect(response.body).to include("Possible new perks:")
-      expect(response.body).to include("More Strength")
-      expect(response.body).to include("Source #7")
-      expect(response.body).to include("Adds one effective Strength for every two character levels, rounded down.")
+      expect(response.body).to include(I18n.t("game.profile.possible_perks"))
+      expect(response.body).to include(Game::Skills::PerkRegistry.display_name(perk))
+      expect(response.body).to include(I18n.t("game.profile.perk_source", id: 7))
+      expect(response.body).to include(Game::Skills::PerkRegistry.display_description(perk))
     end
 
     it "requires authentication" do
