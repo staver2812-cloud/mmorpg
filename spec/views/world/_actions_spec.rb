@@ -37,6 +37,8 @@ RSpec.describe "world/_actions.html.erb", type: :view do
   end
 
   it "explains the outdoor injury travel lock with an Inventory recovery link" do
+    character = create(:character)
+    allow(view).to receive(:current_character).and_return(character)
     assign(:movement_state, OpenStruct.new(locked_reason: :injured))
 
     render partial: "world/actions", locals: {available_actions: [], position:}
@@ -44,12 +46,17 @@ RSpec.describe "world/_actions.html.erb", type: :view do
     expect(rendered).to have_css("[data-world-injury-lock='1']")
     expect(rendered).to have_content(I18n.t("game.injuries.outdoor_lock"))
     expect(rendered).to have_link(I18n.t("game.injuries.outdoor_lock_inventory"), href: inventory_path)
+    expect(rendered).not_to have_css("[data-world-injury-obelisk='1']")
   end
 
   it "mentions Obelisk recall when bound during the outdoor injury lock" do
     character = create(:character)
+    character.update!(
+      metadata: character.metadata.to_h.merge(
+        "ashen_obelisk" => {"zone_id" => position.zone_id, "x" => 1, "y" => 1, "zone_name" => "Coal"}
+      )
+    )
     allow(view).to receive(:current_character).and_return(character)
-    Game::World::ObeliskRecall.new(character:, action: "bind").call
     assign(:movement_state, OpenStruct.new(locked_reason: :injured))
 
     render partial: "world/actions", locals: {available_actions: [], position:}
