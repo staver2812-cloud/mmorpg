@@ -905,6 +905,12 @@ def main() -> int:
         and ('data-landmark-inside="1"' in r.text),
         f"url={r.url}",
     )
+    if r.status_code == 200 and 'data-law-choice-current-next="1"' in r.text:
+        report.add(
+            "law current-choice recovery",
+            'data-law-recovery="world"' in r.text,
+            f"url={r.url}",
+        )
     r = s.get(f"{BASE}/world", timeout=TIMEOUT)
     report.add(
         "alignment chip on Law Quarter",
@@ -922,6 +928,13 @@ def main() -> int:
         and ('data-landmark-inside="1"' in r.text),
         f"url={r.url}",
     )
+    if r.status_code == 200 and 'data-prison="1"' in r.text:
+        report.add(
+            "prison desk recovery",
+            'data-prison-recovery="law"' in r.text
+            or 'data-prison-recovery="world"' in r.text,
+            f"url={r.url}",
+        )
     r = s.get(f"{BASE}/city/buildings/gallows", timeout=TIMEOUT, allow_redirects=True)
     report.add(
         "GET /city/buildings/gallows east hint",
@@ -973,6 +986,19 @@ def main() -> int:
         'data-inventory-player-sell="deferred"' in r.text,
         f"url={r.url}",
     )
+    if 'data-inventory-player-sell="deferred"' in r.text:
+        report.add(
+            "inventory player-sell Shop recovery",
+            'data-inventory-recovery="shop_sell"' in r.text,
+            f"url={r.url}",
+        )
+    if 'data-inventory-repair="deferred"' in r.text:
+        report.add(
+            "inventory repair deferred recovery",
+            'data-inventory-recovery="workshop"' in r.text
+            or 'data-inventory-recovery="world"' in r.text,
+            f"url={r.url}",
+        )
     report.add(
         "inventory junk hint or link",
         ("Скупщику:" in r.text) or ("Junk buyer:" in r.text),

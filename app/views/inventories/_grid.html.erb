@@ -72,7 +72,7 @@
               <p class="nl-empty-note"><%= t("game.inventory.player_sales_unavailable") %></p>
               <p class="nl-quests-board__meta"><%= t("game.inventory.player_sales_shop_hint") %></p>
               <p class="nl-quests-board__meta">
-                <%= link_to t("game.inventory.player_sales_shop_cta"), shop_path(mode: "sell"), class: "nl-sheet-link" %>
+                <%= link_to t("game.inventory.player_sales_shop_cta"), shop_path(mode: "sell"), class: "nl-sheet-link", data: {inventory_recovery: "shop_sell"} %>
               </p>
             </details>
           <% end %>
@@ -97,7 +97,7 @@
                     <span class="nl-inventory-broken-badge"><%= t("game.inventory.item_broken") %></span>
                     <div class="nl-inventory-broken-hint" data-inventory-repair="deferred">
                       <% if Game::World::CityBuildingCatalog.accessible?(character: current_character, building_key: "workshop") %>
-                        <%= link_to t("game.inventory.repair_deferred_cta"), city_building_path("workshop"), data: {turbo: false} %>
+                        <%= link_to t("game.inventory.repair_deferred_cta"), city_building_path("workshop"), data: {turbo: false, inventory_recovery: "workshop"} %>
                       <% else %>
                         <%= t("game.inventory.repair_deferred_hint") %>
                         ·
