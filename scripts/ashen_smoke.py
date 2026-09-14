@@ -208,6 +208,18 @@ def main() -> int:
                 'data-building-recovery="world"' in r.text,
                 f"url={r.url}",
             )
+        if path == "/city/buildings/tavern" and r.status_code == 200 and 'data-building-key="tavern"' in r.text:
+            report.add(
+                "tavern building chrome recovery",
+                'data-building-recovery="world"' in r.text,
+                f"url={r.url}",
+            )
+        if path == "/city/buildings/workshop" and r.status_code == 200 and 'data-building-key="workshop"' in r.text:
+            report.add(
+                "workshop building chrome recovery",
+                'data-building-recovery="world"' in r.text,
+                f"url={r.url}",
+            )
         if path == "/city/buildings/workshop" and 'data-workshop-repair="deferred"' in r.text:
             report.add(
                 "workshop repair deferred recovery",
