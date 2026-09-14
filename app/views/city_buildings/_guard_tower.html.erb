@@ -12,7 +12,10 @@
     <%= t("game.buildings.guard_routes_count", count: routes.size) %>
   </p>
   <% if routes.empty? %>
-    <p class="nl-quests-board__meta"><%= t("game.buildings.guard_empty") %></p>
+    <p class="nl-quests-board__meta" data-guard-empty="1">
+      <%= t("game.buildings.guard_empty") %>
+      <%= link_to t("game.common.city"), world_path, class: "nl-sheet-link" %>
+    </p>
   <% else %>
     <ul class="nl-city-landmark__notes">
       <% routes.each do |route| %>
