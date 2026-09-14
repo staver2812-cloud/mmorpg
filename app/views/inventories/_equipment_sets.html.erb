@@ -31,6 +31,10 @@
       <% end %>
     </table>
   <% else %>
-    <p class="nl-empty-note"><%= t("game.inventory.no_equipment_sets") %></p>
+    <p class="nl-empty-note" data-equipment-sets-empty="1">
+      <%= t("game.inventory.no_equipment_sets") %>
+      ·
+      <%= link_to t("game.shop.title"), shop_path(mode: "buy"), class: "nl-sheet-link", data: {inventory_recovery: "shop"} %>
+    </p>
   <% end %>
 </div>
