@@ -102,7 +102,7 @@ class ArenaRoom < ApplicationRecord
 
   def level_range_valid
     if level_min.present? && level_max.present? && level_min > level_max
-      errors.add(:level_max, "must be greater than or equal to level_min")
+      errors.add(:level_max, I18n.t("manage.level_max_below_min"))
     end
   end
 end

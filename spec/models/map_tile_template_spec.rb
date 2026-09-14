@@ -68,7 +68,7 @@ RSpec.describe MapTileTemplate, type: :model do
       tile[:zone] = "#<Zone:0x000012345>"  # Bypass setter to simulate corrupted data
 
       expect(tile).not_to be_valid
-      expect(tile.errors[:zone]).to include("must be a zone name string, not a Zone object")
+      expect(tile.errors[:zone]).to include(I18n.t("manage.zone_must_be_name"))
     end
   end
 

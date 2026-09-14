@@ -191,7 +191,7 @@ class ItemTemplate < ApplicationRecord
     return unless equipment?
     return if EQUIPMENT_SLOTS.include?(slot) || SLOT_ALIASES.key?(slot.to_s) || slot == "none"
 
-    errors.add(:slot, "must be a valid equipment slot for equipment items")
+    errors.add(:slot, I18n.t("manage.equipment_slot_invalid"))
   end
 
   def shop_catalog_entry
@@ -203,7 +203,7 @@ class ItemTemplate < ApplicationRecord
     return unless shop_catalog_entry["sold"] == true
     return if available_in_shop? && (shop_stock.empty? || valid_shop_stock?)
 
-    errors.add(:enhancement_rules, "shop goods require a valid mode, definition, price, and authored stock")
+    errors.add(:enhancement_rules, I18n.t("manage.shop_catalog_invalid"))
   end
 
   def valid_shop_stock?

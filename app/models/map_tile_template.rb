@@ -58,7 +58,7 @@ class MapTileTemplate < ApplicationRecord
 
   def zone_must_be_string
     if zone.present? && zone.to_s.start_with?("#<Zone:")
-      errors.add(:zone, "must be a zone name string, not a Zone object")
+      errors.add(:zone, I18n.t("manage.zone_must_be_name"))
     end
   end
 
@@ -204,7 +204,7 @@ class MapTileTemplate < ApplicationRecord
     return unless metadata.to_h.key?("presence_label")
     return if presence_label
 
-    errors.add(:metadata, "presence label must contain 1 to 120 characters")
+    errors.add(:metadata, I18n.t("manage.presence_label_length"))
   end
 
   def cell_art_must_be_source_backed
@@ -297,7 +297,7 @@ class MapTileTemplate < ApplicationRecord
     known_zone = Zone.find_by(name: zone)
     return unless known_zone && x.is_a?(Integer) && y.is_a?(Integer)
 
-    errors.add(:x, "must be within zone bounds") unless x < known_zone.width
-    errors.add(:y, "must be within zone bounds") unless y < known_zone.height
+    errors.add(:x, I18n.t("manage.coord_outside_zone")) unless x < known_zone.width
+    errors.add(:y, I18n.t("manage.coord_outside_zone")) unless y < known_zone.height
   end
 end

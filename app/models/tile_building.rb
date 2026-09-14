@@ -192,7 +192,7 @@ class TileBuilding < ApplicationRecord
     return unless metadata.to_h.key?("presence_label")
 
     label = metadata["presence_label"]
-    errors.add(:metadata, "presence label must be a non-empty string") unless label.is_a?(String) && label.present?
+    errors.add(:metadata, I18n.t("manage.presence_label_blank")) unless label.is_a?(String) && label.present?
   end
 
   def location_configuration_must_be_valid

@@ -124,6 +124,6 @@ class CityHotspot < ApplicationRecord
     return unless action_params.to_h.key?("polygon")
     return if presentation_polygon
 
-    errors.add(:action_params, "polygon must contain 3 to 32 percentage points enclosing an area")
+    errors.add(:action_params, I18n.t("manage.hotspot_polygon_invalid"))
   end
 end

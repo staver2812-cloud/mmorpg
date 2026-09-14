@@ -160,7 +160,7 @@ RSpec.describe TileBuilding, type: :model do
       [nil, "", " ", 3, []].each do |invalid_label|
         building.metadata = {"presence_label" => invalid_label}
         expect(building).not_to be_valid
-        expect(building.errors[:metadata]).to include("presence label must be a non-empty string")
+        expect(building.errors[:metadata]).to include(I18n.t("manage.presence_label_blank"))
       end
     end
 
