@@ -245,6 +245,12 @@ RSpec.describe MapTileTemplate, type: :model do
         .to eq(I18n.t("game.world.local_action.resource_search.nothing_found"))
       expect(MapTileTemplate.player_local_action_message("resource_search", "Nothing useful here."))
         .to eq(I18n.t("game.world.local_action.resource_search.message"))
+      expect(MapTileTemplate.player_local_action_description("resource_search", "Search for herbs and local resources."))
+        .to eq(I18n.t("game.world.local_action.resource_search.description"))
+      expect(MapTileTemplate.player_local_action_description("resource_search", "Search this cell for herbs or local resources."))
+        .to eq(I18n.t("game.world.local_action.resource_search.description"))
+      expect(MapTileTemplate.player_local_action_description("resource_search", "Custom scout note"))
+        .to eq("Custom scout note")
       expect(MapTileTemplate.local_action_type_for_world_action("search_resources")).to eq("resource_search")
     end
 
