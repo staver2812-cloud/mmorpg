@@ -353,6 +353,13 @@ def main() -> int:
             or 'data-market-recovery="junk"' in r.text,
             f"url={r.url}",
         )
+    if r.status_code == 200 and 'data-building-key="market"' in r.text:
+        report.add(
+            "market desk Shop/Junk recovery",
+            'data-market-recovery="shop"' in r.text
+            or 'data-market-recovery="junk"' in r.text,
+            f"url={r.url}",
+        )
     if 'data-junk-total="0"' in r.text:
         report.add(
             "junk empty Inventory recovery",
@@ -656,6 +663,12 @@ def main() -> int:
         and ('data-landmark-inside="1"' in r.text),
         f"url={r.url}",
     )
+    if r.status_code == 200:
+        report.add(
+            "magic school desk recovery",
+            "data-school-recovery=" in r.text,
+            f"url={r.url}",
+        )
     if r.status_code == 200 and 'data-school-spent="1"' in r.text:
         report.add(
             "magic school spent recovery",
