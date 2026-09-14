@@ -356,6 +356,10 @@ def main() -> int:
         and ("data-clan-hall-presence-count=" in r.text)
         and ("data-clan-hall-assault=" in r.text)
         and ("data-clan-hall-heal=" in r.text)
+        and (
+            'data-clan-hall-need-scroll="1"' in r.text
+            or 'data-clan-hall-assault="0"' not in r.text
+        )
         and ('data-landmark-inside="1"' in r.text),
         f"url={r.url}",
     )
@@ -510,6 +514,10 @@ def main() -> int:
         and ("data-school-can-allocate=" in r.text)
         and ("data-school-can-allocate-stats=" in r.text)
         and ("data-school-can-allocate-skills=" in r.text)
+        and (
+            'data-school-spent="1"' in r.text
+            or 'data-school-can-allocate="1"' in r.text
+        )
         and ('data-landmark-inside="1"' in r.text),
         f"url={r.url}",
     )
@@ -601,6 +609,7 @@ def main() -> int:
         and ("data-auction-vault=" in r.text)
         and ("data-auction-vm=" in r.text)
         and ('data-auction-lots="deferred"' in r.text)
+        and ('data-auction-lots-deferred="1"' in r.text)
         and ('data-auction-can-list="0"' in r.text)
         and ('data-auction-can-bid="0"' in r.text)
         and ('data-landmark-inside="1"' in r.text),

@@ -186,6 +186,12 @@
             <% if combat_pts.positive? || peace_pts.positive? %>
               <%= link_to t("game.buildings.school_allocate_skills"), skills_character_path(current_character), class: "lbut", data: {school_allocate: "skills"} %>
             <% end %>
+          <% else %>
+            <span class="nl-quests-board__meta" data-school-spent="1">
+              <%= t("game.buildings.school_spent") %>
+              ·
+              <%= link_to t("arena.nav.city"), world_path, data: {turbo: false, school_recovery: "world"} %>
+            </span>
           <% end %>
         </p>
       <% end %>
@@ -214,6 +220,15 @@
         ·
         <%= t("game.world.heal_scroll_chip", count: heal_owned) %>
       </p>
+      <% if assault_owned.zero? && Game::World::CityBuildingCatalog.accessible?(character: current_character, building_key: "hospital") %>
+        <p class="nl-quests-board__meta" data-clan-hall-need-scroll="1">
+          <%= t("game.buildings.clan_hall_need_scroll") %>
+          ·
+          <%= link_to t("game.buildings.hospital_title_short"),
+                city_building_path("hospital", anchor: "hospital-premium-desk"),
+                data: {turbo: false, clan_hall_recovery: "hospital"} %>
+        </p>
+      <% end %>
       <h3><%= t("game.buildings.clan_hall_presence_title") %></h3>
       <p class="nl-quests-board__meta"><%= t("game.buildings.clan_hall_presence_lead") %></p>
       <div class="nl-clan-hall-presence"
@@ -265,6 +280,9 @@
               wallet: wallet.nv_balance.to_i,
               vault: vault,
               marks: wallet.veil_marks.to_i) %>
+      </p>
+      <p class="nl-quests-board__meta" data-auction-lots-deferred="1">
+        <%= t("game.buildings.auction_lots_deferred") %>
       </p>
       <p>
         <%= link_to t("game.shop.title"), shop_path, class: "lbut" %>

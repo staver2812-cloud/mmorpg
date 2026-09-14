@@ -53,5 +53,9 @@
     <% end %>
   </div>
 <% else %>
-  <p class="nl-empty-note nl-shop-empty"><%= t("game.shop.empty_section") %></p>
+  <p class="nl-empty-note nl-shop-empty" data-shop-licenses-empty="1">
+    <%= t("game.shop.empty_section") %>
+    ·
+    <%= link_to t("game.shop.modes.buy"), shop_path(mode: "buy"), class: "nl-sheet-link", data: {shop_licenses_recovery: "buy"} %>
+  </p>
 <% end %>
