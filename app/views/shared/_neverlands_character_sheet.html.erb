@@ -32,6 +32,16 @@
             <th><span class="nl-money-mark" aria-hidden="true">NV</span> <%= t("game.sheet.money") %>:</th>
             <td class="nl-sheet-nv" data-sheet-nv="<%= character.user&.currency_wallet&.nv_balance.to_i %>">
               <%= number_with_delimiter(character.user&.currency_wallet&.nv_balance || 0) %> NV
+              <% if character == current_character && character.user&.currency_wallet&.nv_balance.to_i <= 0 %>
+                ·
+                <% if Game::World::CityBuildingCatalog.accessible?(character:, building_key: "junk_dealer") %>
+                  <%= link_to t("game.buildings.junk_dealer_link"), city_building_path("junk_dealer"), class: "nl-sheet-link", data: {sheet_recovery: "junk"} %>
+                <% elsif Game::World::CityBuildingCatalog.accessible?(character:, building_key: "shop") %>
+                  <%= link_to t("game.shop.modes.sell"), shop_path(mode: "sell"), class: "nl-sheet-link", data: {sheet_recovery: "shop"} %>
+                <% else %>
+                  <%= link_to t("arena.nav.city"), world_path, class: "nl-sheet-link", data: {sheet_recovery: "world"} %>
+                <% end %>
+              <% end %>
             </td>
           </tr>
           <% if character == current_character %>
@@ -41,6 +51,8 @@
                 <%= number_with_delimiter(character.user&.currency_wallet&.veil_marks.to_i) %> VM
                 <% if Game::World::CityBuildingCatalog.accessible?(character:, building_key: "hospital") %>
                   · <%= link_to t("game.sheet.veil_marks_open_cta"), city_building_path("hospital"), class: "nl-sheet-link" %>
+                <% elsif character == current_character %>
+                  · <%= link_to t("arena.nav.city"), world_path, class: "nl-sheet-link", data: {sheet_recovery: "world"} %>
                 <% end %>
               </td>
             </tr>
