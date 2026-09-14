@@ -52,6 +52,8 @@
           <turbo-frame id="stat-allocation" class="nl-allocation-frame">
             <%= render "characters/stat_allocation" %>
           </turbo-frame>
+        <% else %>
+          <p class="nl-empty-note" data-profile-allocation="idle"><%= t("game.profile.no_stat_points") %></p>
         <% end %>
       <% elsif @character.owned_perk_keys.any? %>
         <div class="nl-panel">
@@ -62,6 +64,8 @@
             <% end %>
           </ul>
         </div>
+      <% else %>
+        <p class="nl-empty-note" data-profile-perks="empty"><%= t("game.profile.no_public_perks") %></p>
       <% end %>
     </main>
   </div>
