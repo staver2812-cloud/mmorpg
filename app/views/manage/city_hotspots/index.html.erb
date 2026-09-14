@@ -14,7 +14,7 @@
         <td><%= hotspot.position_x %>,<%= hotspot.position_y %> · <%= hotspot.width || "—" %>×<%= hotspot.height || "—" %></td><td><%= management_boolean(hotspot.active?) %></td>
         <td class="nl-manage-table-actions"><%= link_to t("manage.view"), manage_city_hotspot_path(hotspot) %> <%= link_to t("manage.edit"), edit_manage_city_hotspot_path(hotspot) %></td></tr>
     <% end %>
-    <% if @city_hotspots.empty? %><tr><td colspan="8" class="nl-manage-empty">No city actions found.</td></tr><% end %>
+    <% if @city_hotspots.empty? %><tr><td colspan="8" class="nl-manage-empty"><%= t("manage.views.empty_city_actions") %></td></tr><% end %>
   </tbody>
 </table></div>
 <%= render "manage/shared/pagination", pagination: @pagination %>

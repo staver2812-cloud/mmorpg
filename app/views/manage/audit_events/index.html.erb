@@ -10,7 +10,7 @@
     <% @audit_events.each do |event| %>
       <tr><td><%= l(event.created_at, format: :long) %></td><td><%= event.actor.profile_name %></td><td><%= event.action %></td><td><%= event.record_type %></td><td><%= event.record_label %></td><td><%= link_to t("manage.view"), manage_audit_event_path(event) %></td></tr>
     <% end %>
-    <% if @audit_events.empty? %><tr><td colspan="6" class="nl-manage-empty">No audit events found.</td></tr><% end %>
+    <% if @audit_events.empty? %><tr><td colspan="6" class="nl-manage-empty"><%= t("manage.views.empty_audit_events") %></td></tr><% end %>
   </tbody>
 </table></div>
 <%= render "manage/shared/pagination", pagination: @pagination %>

@@ -7,7 +7,7 @@
       <tr><td><%= city.metadata.to_h["city_key"].presence || "—" %></td><td><%= city.city_node_key.presence || "—" %></td><td><%= city.display_name %></td><td><%= city.name %></td><td><%= city.width %> × <%= city.height %></td>
         <td class="nl-manage-table-actions"><%= link_to t("manage.view"), manage_city_path(city) %> <%= link_to t("manage.edit"), edit_manage_city_path(city) %></td></tr>
     <% end %>
-    <% if @cities.empty? %><tr><td colspan="6" class="nl-manage-empty">No city nodes found.</td></tr><% end %>
+    <% if @cities.empty? %><tr><td colspan="6" class="nl-manage-empty"><%= t("manage.views.empty_city_nodes") %></td></tr><% end %>
   </tbody>
 </table></div>
 <%= render "manage/shared/pagination", pagination: @pagination %>

@@ -14,7 +14,7 @@
 
 <div class="nl-manage-table-wrap">
   <table class="nl-manage-table">
-    <thead><tr><th><%= t("manage.views.col_zone") %></th><th><%= t("manage.views.col_cell") %></th><th><%= t("manage.views.col_terrain") %></th><th><%= t("manage.views.col_passable") %></th><th><%= t("manage.views.col_resources") %></th><th>Updated</th><th><%= t("manage.views.col_actions") %></th></tr></thead>
+    <thead><tr><th><%= t("manage.views.col_zone") %></th><th><%= t("manage.views.col_cell") %></th><th><%= t("manage.views.col_terrain") %></th><th><%= t("manage.views.col_passable") %></th><th><%= t("manage.views.col_resources") %></th><th><%= t("manage.views.col_updated") %></th><th><%= t("manage.views.col_actions") %></th></tr></thead>
     <tbody>
       <% @world_cells.each do |cell| %>
         <tr>
@@ -30,7 +30,7 @@
           </td>
         </tr>
       <% end %>
-      <% if @world_cells.empty? %><tr><td colspan="7" class="nl-manage-empty">No world cells found.</td></tr><% end %>
+      <% if @world_cells.empty? %><tr><td colspan="7" class="nl-manage-empty"><%= t("manage.views.empty_world_cells") %></td></tr><% end %>
     </tbody>
   </table>
 </div>
