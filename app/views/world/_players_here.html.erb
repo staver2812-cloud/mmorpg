@@ -10,7 +10,7 @@
             <span class="player-level">[<%= pos.character.level %>]</span>
           </div>
           <div class="player-actions">
-            <%= link_to t("game.common.info"), player_path(name: pos.character.name), title: "Character" %>
+            <%= link_to t("game.common.info"), player_path(name: pos.character.name), title: t("nav.your_character") %>
           </div>
         </li>
       <% end %>

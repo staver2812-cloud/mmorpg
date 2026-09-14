@@ -55,6 +55,8 @@ ru:
     resend_unlock: "Не получили письмо разблокировки?"
     sign_in_with: "Войти через %{provider}"
     change_password: "Сменить пароль"
+    new_password: "Новый пароль"
+    confirm_new_password: "Подтвердите новый пароль"
     send_reset: "Отправить инструкции"
     back_to_login: "Назад ко входу"
     update: "Обновить"

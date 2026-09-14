@@ -10,7 +10,18 @@
      data-controller="arena"
      data-arena-room-id-value="<%= @room.id %>"
      data-arena-character-id-value="<%= current_character.id %>"
-     data-arena-character-level-value="<%= current_character.level %>">
+     data-arena-character-level-value="<%= current_character.level %>"
+     data-arena-copy-value="<%= {
+       room_level: t("arena.client.room_level"),
+       submit_failed: t("arena.client.submit_failed"),
+       accept_failed: t("arena.client.accept_failed"),
+       cancel_failed: t("arena.client.cancel_failed"),
+       network_error: t("arena.client.network_error"),
+       choose_fight_kind: t("arena.client.choose_fight_kind"),
+       choose_timeout: t("arena.client.choose_timeout"),
+       fight_started: t("arena.client.fight_started"),
+       cancel_confirm: t("arena.cancel_confirm")
+     }.to_json %>">
   <div class="nl-arena-topline">
     <div class="nl-arena-character">
       <%= current_character.name %>[<%= current_character.level %>]
