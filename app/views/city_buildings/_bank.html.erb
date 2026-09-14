@@ -81,7 +81,10 @@
     </p>
   <% else %>
     <% if deposit_options.empty? %>
-      <p class="nl-quests-board__meta"><%= t("game.buildings.bank_item_no_bags") %></p>
+      <p class="nl-quests-board__meta" data-bank-item-empty="1">
+        <%= t("game.buildings.bank_item_no_bags") %>
+        <%= link_to t("game.shop.open_inventory"), inventory_path, class: "nl-sheet-link" %>
+      </p>
     <% else %>
       <% deposit_options.each do |name, key, qty| %>
         <p>
