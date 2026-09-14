@@ -234,6 +234,17 @@ RSpec.describe MapTileTemplate, type: :model do
       expect(MapTileTemplate.local_action_implemented?(nil)).to be false
     end
 
+    it "resolves structural default labels and messages through i18n" do
+      expect(MapTileTemplate.player_local_action_label("resource_search", "Look Around"))
+        .to eq(I18n.t("game.world.local_action.resource_search.label"))
+      expect(MapTileTemplate.player_local_action_label("resource_search", "Custom Look"))
+        .to eq("Custom Look")
+      expect(MapTileTemplate.player_local_action_message("fishing", nil))
+        .to eq(I18n.t("game.world.local_action.fishing.message"))
+      expect(MapTileTemplate.player_local_action_message("fishing", "Custom bait note"))
+        .to eq("Custom bait note")
+    end
+
     it "does not expose an inactive local action" do
       tile = build(:map_tile_template, :with_inactive_resource_search)
 
