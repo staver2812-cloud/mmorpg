@@ -1345,6 +1345,7 @@ en:
       chip: "%{title} %{progress}/%{target}"
       chip_ready: "Turn in: %{title} %{progress}/%{target}"
       hint: "Starter contracts from Coal Hall. Bots ambush about every 5 minutes; forced fights need Ashen Bait."
+      board_open_hall: "Open Coal Hall quest board"
       giver: "Giver: %{name}"
       accept: "Accept"
       turn_in: "Turn in"
