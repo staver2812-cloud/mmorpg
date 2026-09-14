@@ -111,7 +111,7 @@ module Arena
         broadcast_new_application(application)
         Result.new(success?: true, application: application)
       else
-        Result.new(success?: false, errors: application.errors.full_messages)
+        Result.new(success?: false, errors: application.errors.map(&:message))
       end
     end
 
