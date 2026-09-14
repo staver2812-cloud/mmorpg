@@ -203,15 +203,28 @@ def main() -> int:
             f"{r.status_code} data_ok={data_ok} text_ok={text_ok} missing={missing[:4]}",
         )
         if path == "/shop" and r.status_code == 200:
-            if (
-                'data-shop-short-nv="1"' in r.text
-                or 'data-shop-any-affordable="0"' in r.text
-            ):
+            if 'data-shop-short-nv="1"' in r.text:
                 report.add(
                     "shop short-NV recovery",
                     'data-shop-recovery="bank"' in r.text
                     or 'data-shop-recovery="junk"' in r.text
                     or 'data-shop-recovery="world"' in r.text,
+                    f"url={r.url}",
+                )
+            elif 'data-shop-buy-blocked="1"' in r.text:
+                report.add(
+                    "shop buy-blocked recovery",
+                    'data-shop-recovery="inventory"' in r.text
+                    and 'data-shop-recovery="world"' in r.text,
+                    f"url={r.url}",
+                )
+            elif 'data-shop-any-affordable="0"' in r.text:
+                report.add(
+                    "shop short-NV recovery",
+                    'data-shop-recovery="bank"' in r.text
+                    or 'data-shop-recovery="junk"' in r.text
+                    or 'data-shop-recovery="world"' in r.text
+                    or 'data-shop-recovery="inventory"' in r.text,
                     f"url={r.url}",
                 )
         if path == "/city/buildings/hospital" and r.status_code == 200 and 'data-building-key="hospital"' in r.text:

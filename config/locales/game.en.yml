@@ -334,6 +334,7 @@ en:
       open_inventory: "Open Inventory"
       open_bank: "Open Bank"
       short_nv_next: "Not enough NV for this tab — top up the vault or return to the city."
+      buy_blocked_next: "Nothing on this tab can be bought right now — free bag space or return to the city."
       open_perks: "Open Perks"
       trading_license_required: "Trading license required to sell to the shop."
       sell_onboarding_title: "Sell requires a trading license"

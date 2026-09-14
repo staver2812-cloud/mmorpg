@@ -78,17 +78,30 @@
               <% end %>
             </div>
           <% elsif @shop_items.present? && !shop_any_affordable %>
-            <p class="nl-quests-board__meta" data-shop-short-nv="1">
-              <%= t("game.shop.short_nv_next") %>
-              ·
-              <% if Game::World::CityBuildingCatalog.accessible?(character: current_character, building_key: "bank") %>
-                <%= link_to t("game.shop.open_bank"), city_building_path("bank"), class: "nl-sheet-link", data: {shop_recovery: "bank"} %>
-              <% elsif Game::World::CityBuildingCatalog.accessible?(character: current_character, building_key: "junk_dealer") %>
-                <%= link_to t("game.buildings.junk_dealer_link"), city_building_path("junk_dealer"), class: "nl-sheet-link", data: {shop_recovery: "junk"} %>
-              <% else %>
+            <% short_nv_desk = @shop_items.any? { |template|
+                 shop_buy_block_reason(template) == I18n.t("game.shop.not_enough_nv")
+               } %>
+            <% if short_nv_desk %>
+              <p class="nl-quests-board__meta" data-shop-short-nv="1">
+                <%= t("game.shop.short_nv_next") %>
+                ·
+                <% if Game::World::CityBuildingCatalog.accessible?(character: current_character, building_key: "bank") %>
+                  <%= link_to t("game.shop.open_bank"), city_building_path("bank"), class: "nl-sheet-link", data: {shop_recovery: "bank"} %>
+                <% elsif Game::World::CityBuildingCatalog.accessible?(character: current_character, building_key: "junk_dealer") %>
+                  <%= link_to t("game.buildings.junk_dealer_link"), city_building_path("junk_dealer"), class: "nl-sheet-link", data: {shop_recovery: "junk"} %>
+                <% else %>
+                  <%= link_to t("arena.nav.city"), world_path, class: "nl-sheet-link", data: {shop_recovery: "world"} %>
+                <% end %>
+              </p>
+            <% else %>
+              <p class="nl-quests-board__meta" data-shop-buy-blocked="1">
+                <%= t("game.shop.buy_blocked_next") %>
+                ·
+                <%= link_to t("game.shop.open_inventory"), inventory_path, class: "nl-sheet-link", data: {shop_recovery: "inventory"} %>
+                ·
                 <%= link_to t("arena.nav.city"), world_path, class: "nl-sheet-link", data: {shop_recovery: "world"} %>
-              <% end %>
-            </p>
+              </p>
+            <% end %>
           <% end %>
         </div>
       <% end %>
