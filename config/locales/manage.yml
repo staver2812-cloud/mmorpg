@@ -356,6 +356,9 @@ en:
         city: "city"
         outdoor: "outdoor"
         village: "village"
+      errors_prevented:
+        one: "%{count} error prevented this change:"
+        other: "%{count} errors prevented this change:"
       enums:
         hotspot_type:
           building: "building"
