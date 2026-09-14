@@ -243,6 +243,12 @@ def main() -> int:
             or 'data-sheet-recovery="world"' in r.text,
             f"url={r.url}",
         )
+    if r.status_code == 200 and 'data-profile-tabs="1"' in r.text:
+        report.add(
+            "player profile tabs recovery",
+            "data-profile-recovery=" in r.text,
+            f"url={r.url}",
+        )
     if r.status_code == 200 and 'data-profile-allocation="idle"' in r.text:
         report.add(
             "player allocation idle recovery",
@@ -356,6 +362,21 @@ def main() -> int:
             "trauma empty chip recovery",
             'data-trauma-recovery="hospital"' in r.text
             or 'data-trauma-recovery="world"' in r.text,
+            f"url={r.url}",
+        )
+    if r.status_code == 200 and 'data-bait-qty="0"' in r.text and 'data-bait-recovery=' in r.text:
+        report.add(
+            "city empty bait recovery",
+            'data-bait-recovery="souvenir_shop"' in r.text
+            or 'data-bait-recovery="shop"' in r.text
+            or 'data-bait-recovery="city"' in r.text,
+            f"url={r.url}",
+        )
+    if r.status_code == 200 and 'data-shell-recovery="quests"' in r.text:
+        report.add(
+            "shell Q/A tool recovery",
+            'data-shell-recovery="quests"' in r.text
+            and 'data-shell-recovery="licenses"' in r.text,
             f"url={r.url}",
         )
     report.add(

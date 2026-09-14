@@ -212,7 +212,7 @@
             <%= link_to t("game.world.bait_chip", count: bait_qty),
                   (bait_link == "shop" ? shop_path : city_building_path(bait_link)),
                   class: "nl-bait-chip nl-bait-chip--empty",
-                  data: {bait_qty: bait_qty},
+                  data: {bait_qty: bait_qty, bait_recovery: bait_link},
                   title: t("game.world.bait_chip_city_hint") %>
           <% else %>
             <span class="nl-bait-chip" data-bait-qty="<%= bait_qty %>" title="<%= t("game.world.bait_chip_hint") %>">
@@ -383,8 +383,8 @@
           <span class="nl-chat-tool nl-chat-tool--quests nl-chat-tool--disabled" aria-disabled="true" title="<%= t("game.fight.inventory_locked") %>">Q</span>
           <span class="nl-chat-tool nl-chat-tool--abilities nl-chat-tool--disabled" aria-disabled="true" title="<%= t("game.fight.inventory_locked") %>">A</span>
         <% else %>
-          <%= link_to "Q", quests_path, class: "nl-chat-tool nl-chat-tool--quests", aria: {label: t("nav.quests")}, title: t("nav.quests"), data: {turbo_frame: "_top"} %>
-          <%= link_to "A", character_licenses_path, class: "nl-chat-tool nl-chat-tool--abilities", aria: {label: t("nav.abilities")}, title: t("nav.abilities"), data: {turbo_frame: "_top"} %>
+          <%= link_to "Q", quests_path, class: "nl-chat-tool nl-chat-tool--quests", aria: {label: t("nav.quests")}, title: t("nav.quests"), data: {turbo_frame: "_top", shell_recovery: "quests"} %>
+          <%= link_to "A", character_licenses_path, class: "nl-chat-tool nl-chat-tool--abilities", aria: {label: t("nav.abilities")}, title: t("nav.abilities"), data: {turbo_frame: "_top", shell_recovery: "licenses"} %>
         <% end %>
       <% end %>
     </div>
