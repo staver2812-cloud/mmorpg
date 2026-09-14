@@ -44,6 +44,11 @@
               </p>
             <% else %>
               <button type="button" class="lbut" disabled><%= t("game.common.unavailable") %></button>
+              <p class="nl-quests-board__meta" data-airship-route-deferred="1">
+                <%= t("game.buildings.airship_route_deferred") %>
+                ·
+                <%= link_to t("arena.nav.city"), world_path, data: {turbo: false, airship_recovery: "world"} %>
+              </p>
             <% end %>
           </td>
         </tr>

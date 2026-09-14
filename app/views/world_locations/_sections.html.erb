@@ -10,6 +10,13 @@
     <p class="nl-world-location-wallet"><%= t("game.locations.you_have") %>: <b><%= number_with_delimiter(@wallet&.nv_balance || 0) %> NV</b></p>
   <% end %>
   <p class="nl-empty-note" data-location-lobby-deferred="1"><%= t("game.locations.lobby_deferred") %></p>
+  <p class="nl-quests-board__meta" data-location-lobby-next="1">
+    <%= t("game.locations.lobby_next") %>
+    ·
+    <%= link_to t("arena.nav.city"), world_path, data: {turbo: false, location_recovery: "world"} %>
+    ·
+    <%= link_to t("game.shop.title"), shop_path, data: {turbo: false, location_recovery: "shop"} %>
+  </p>
   <% if @location_section %>
     <section class="nl-world-location-section" aria-label="<%= @location_section.fetch('label') %>">
       <% if @building.location_kind == "mine" && @location_section["summary_label"].present? %>

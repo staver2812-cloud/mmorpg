@@ -20,7 +20,11 @@
   <p>
     <% if already_full %>
       <button type="button" class="lbut" disabled title="<%= t("game.buildings.tavern_already_full") %>"><%= t("game.buildings.tavern_rest_cta") %></button>
-      <span class="nl-quests-board__meta"><%= t("game.buildings.tavern_already_full") %></span>
+      <span class="nl-quests-board__meta" data-tavern-full="1">
+        <%= t("game.buildings.tavern_already_full") %>
+        ·
+        <%= link_to t("arena.nav.city"), world_path, data: {turbo: false, tavern_recovery: "world"} %>
+      </span>
     <% else %>
       <%= button_to t("game.buildings.tavern_rest_cta"),
             city_building_rest_path("tavern"),

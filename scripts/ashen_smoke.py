@@ -676,7 +676,11 @@ def main() -> int:
         and ("data-tavern-vitals=" in r.text)
         and ("data-tavern-ready=" in r.text)
         and ("data-tavern-hp=" in r.text)
-        and ("data-tavern-mp=" in r.text),
+        and ("data-tavern-mp=" in r.text)
+        and (
+            'data-tavern-full="1"' in r.text
+            or 'data-tavern-ready="1"' in r.text
+        ),
         f"url={r.url}",
     )
     ok_f1_law, d_f1_law = click_hotspot(s, "go_forpost1")
