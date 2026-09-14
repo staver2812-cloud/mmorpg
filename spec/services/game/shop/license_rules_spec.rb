@@ -39,6 +39,25 @@ RSpec.describe Game::Shop::LicenseRules do
     expect(rules.active?(:trading)).to be(false)
   end
 
+  it "resolves the soonest active license and the latest expired grant" do
+    template = create(:item_template, stack_limit: 1, enhancement_rules: {"license" => {
+      "kind" => "trading", "tier" => 1, "duration_days" => 3
+    }})
+    offer = create(:world_action_offer, character:, action_type: "shop_buy", target: template, status: "completed")
+    expired = CharacterLicense.create!(character:, item_template: template, world_action_offer: offer,
+      kind: "trading", tier: 1, name: "Old", starts_at: 5.days.ago, expires_at: 2.days.ago)
+    active = CharacterLicense.create!(character:, item_template: template, world_action_offer: offer,
+      kind: "trading", tier: 1, name: "Live", starts_at: 1.hour.ago, expires_at: 2.days.from_now)
+
+    scoped = described_class.new(character:, active_licenses: [expired, active])
+    expect(scoped.active_license(:trading)).to eq(active)
+    expect(scoped.latest_expired_license(:trading)).to eq(expired)
+
+    travel 3.days
+    expect(described_class.new(character:).active_license(:trading)).to be_nil
+    expect(described_class.new(character:).latest_expired_license(:trading)).to eq(active)
+  end
+
   it "rejects malformed, mismatched or stacked license definitions" do
     template = license_template
     template.enhancement_rules["license"]["duration_days"] = 300
