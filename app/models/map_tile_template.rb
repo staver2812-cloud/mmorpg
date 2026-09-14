@@ -13,6 +13,7 @@ class MapTileTemplate < ApplicationRecord
       "world_action_type" => "search_resources",
       "implemented" => true,
       "default_label" => "Look Around",
+      "default_description" => "Search for herbs and local resources.",
       "default_message" => "There is no useful vegetation in this area."
     },
     "fishing" => {
@@ -175,6 +176,25 @@ class MapTileTemplate < ApplicationRecord
     default_local_action_label(action_type)
   end
 
+  # Prefer i18n for structural English descriptions while preserving custom manage copy.
+  def self.player_local_action_description(action_type, stored_description = nil)
+    definition = local_action_definition(action_type)
+    known = translate_known_description(stored_description)
+    return known if known != stored_description
+
+    return stored_description.presence unless definition
+
+    english_default = definition["default_description"]
+    return stored_description if stored_description.present? && stored_description != english_default
+
+    return stored_description.presence if english_default.blank?
+
+    I18n.t(
+      "game.world.local_action.#{action_type}.description",
+      default: english_default
+    )
+  end
+
   def self.player_local_action_message(action_type, stored_message = nil)
     definition = local_action_definition(action_type)
     return translate_known_result_message(stored_message) if definition.nil?
@@ -197,6 +217,11 @@ class MapTileTemplate < ApplicationRecord
     "Everything went well." => "game.world.local_action.drinking.message"
   }.freeze
 
+  KNOWN_DESCRIPTIONS = {
+    "Search for herbs and local resources." => "game.world.local_action.resource_search.description",
+    "Search this cell for herbs or local resources." => "game.world.local_action.resource_search.description"
+  }.freeze
+
   def self.translate_known_result_message(message)
     return message if message.blank?
 
@@ -206,6 +231,16 @@ class MapTileTemplate < ApplicationRecord
     I18n.t(key, default: message)
   end
   private_class_method :translate_known_result_message
+
+  def self.translate_known_description(description)
+    return description if description.blank?
+
+    key = KNOWN_DESCRIPTIONS[description]
+    return description unless key
+
+    I18n.t(key, default: description)
+  end
+  private_class_method :translate_known_description
 
   def self.source_action_id_for(action_type)
     local_action_definition(action_type)&.fetch("source_id", nil)

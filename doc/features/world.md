@@ -2990,6 +2990,7 @@ Before extending the World feature:
 | 2026-09-14 | World move/entry closed-failure request specs assert via `game.flashes.move_started` / `building_not_found` / `game.world.*` (RU-safe). |
 | 2026-09-14 | Fatigue actions-unavailable title and city enter flash request specs assert via `game.world.actions_unavailable_title` / `entered` (RU-safe). |
 | 2026-09-14 | Movement-offer and empty players-here specs assert via `game.flashes.movement_offer_unavailable` / `game.world.no_players` (RU-safe). |
+| 2026-09-14 | Look Around action descriptions translate known English defaults via `MapTileTemplate.player_local_action_description`. |
 
 
 ## 19. Open-world parity audit (updated 2026-09-09)

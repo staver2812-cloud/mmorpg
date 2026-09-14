@@ -674,7 +674,7 @@ RSpec.describe "World", type: :request do
 
       expect(response).to have_http_status(:success)
       expect(response.body).to include(I18n.t("game.world.local_action.resource_search.label"))
-      expect(response.body).to include("Search for herbs and local resources")
+      expect(response.body).to include(I18n.t("game.world.local_action.resource_search.description"))
       expect(response.body).to include('name="action_key"')
     end
 

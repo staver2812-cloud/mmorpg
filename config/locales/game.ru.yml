@@ -478,6 +478,7 @@ ru:
       local_action:
         resource_search:
           label: "Осмотреться"
+          description: "Искать травы и местные ресурсы."
           message: "В этой местности нет полезной растительности."
           nothing_found: "Ничего не найдено."
         fishing:

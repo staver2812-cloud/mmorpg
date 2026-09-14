@@ -478,6 +478,7 @@ en:
       local_action:
         resource_search:
           label: "Look Around"
+          description: "Search for herbs and local resources."
           message: "There is no useful vegetation in this area."
           nothing_found: "Nothing found."
         fishing:

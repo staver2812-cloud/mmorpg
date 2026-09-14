@@ -401,7 +401,10 @@ class WorldController < ApplicationController
             local_action["type"],
             local_action["label"]
           ),
-          description: local_action["description"]
+          description: MapTileTemplate.player_local_action_description(
+            local_action["type"],
+            local_action["description"]
+          )
         },
         offer:
       }
