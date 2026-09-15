@@ -1139,6 +1139,7 @@ en:
       obelisk_no_position: "No position to bind."
       obelisk_in_combat: "Finish the fight first."
       obelisk_bad_action: "Unknown obelisk action."
+      obelisk_desk_denied_next: "Obelisk action did not complete — bind or recall with a valid action, or return to the city."
       obelisk_denied_next: "Obelisk recall is not available — bind at the Veil Obelisk or return to City."
       law_aria: "Law Abode"
       law_only: "Alignment is declared only at the Law Abode."

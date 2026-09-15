@@ -1274,6 +1274,26 @@ def main() -> int:
             'data-building-recovery="world"' in r.text,
             f"url={r.url}",
         )
+        token = csrf_from(r.text)
+        if token:
+            r_desk = s.post(
+                f"{BASE}/city/buildings/obelisk/obelisk",
+                data={
+                    "authenticity_token": token,
+                    "obelisk_action": "__bad__",
+                },
+                headers={"Accept": "text/html"},
+                timeout=TIMEOUT,
+                allow_redirects=True,
+            )
+            report.add(
+                "city obelisk desk denied recovery",
+                r_desk.status_code == 200
+                and 'data-obelisk-desk-denied="1"' in r_desk.text
+                and 'data-obelisk-recovery="world"' in r_desk.text
+                and 'data-obelisk-recovery="obelisk"' in r_desk.text,
+                f"status={r_desk.status_code} url={r_desk.url}",
+            )
     if r.status_code == 200 and 'data-obelisk-bind-first="1"' in r.text:
         report.add(
             "obelisk bind-first recovery",

@@ -2,6 +2,15 @@
          data-obelisk-bound="<%= local_assigns[:bound].present? ? "1" : "0" %>">
   <h2><%= t("game.buildings.obelisk_title") %></h2>
   <p class="nl-handbook__lead"><%= t("game.buildings.obelisk_lead", amount: Game::World::ObeliskRecall::RECALL_COST) %></p>
+  <% if params[:obelisk_desk_denied].to_s == "1" %>
+    <p class="nl-quests-board__meta" data-obelisk-desk-denied="1">
+      <%= t("game.buildings.obelisk_desk_denied_next") %>
+      ·
+      <%= link_to t("arena.nav.city"), world_path, class: "nl-sheet-link", data: {obelisk_recovery: "world"} %>
+      ·
+      <%= link_to t("game.buildings.obelisk_title"), city_building_path("obelisk"), class: "nl-sheet-link", data: {obelisk_recovery: "obelisk"} %>
+    </p>
+  <% end %>
   <% bound = local_assigns[:bound] %>
   <% wallet = current_user.currency_wallet || current_user.create_currency_wallet!(nv_balance: 0) %>
   <% balance = wallet.nv_balance.to_d %>

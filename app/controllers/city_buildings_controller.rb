@@ -238,7 +238,7 @@ class CityBuildingsController < ApplicationController
         redirect_to city_building_path("obelisk"), notice: result.message
       end
     else
-      redirect_to city_building_path("obelisk"), alert: result.message
+      redirect_to city_building_path("obelisk", obelisk_desk_denied: 1), alert: result.message
     end
   end
 

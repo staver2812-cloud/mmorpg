@@ -83,4 +83,17 @@ RSpec.describe "City building action denied recovery", type: :request do
     expect(response.body).to include('data-temple-recovery="world"')
     expect(response.body).to include('data-temple-recovery="temple"')
   end
+
+  it "recovers when a city obelisk desk action fails" do
+    create(:city_hotspot, :building, zone: city, key: "obelisk", name: "Obelisk",
+      action_params: {"feature" => "obelisk"})
+
+    post city_building_obelisk_path("obelisk"), params: {obelisk_action: "__bad__"}
+
+    expect(response).to redirect_to(city_building_path("obelisk", obelisk_desk_denied: 1))
+    follow_redirect!
+    expect(response.body).to include('data-obelisk-desk-denied="1"')
+    expect(response.body).to include('data-obelisk-recovery="world"')
+    expect(response.body).to include('data-obelisk-recovery="obelisk"')
+  end
 end
