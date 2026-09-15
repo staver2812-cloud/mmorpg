@@ -5768,6 +5768,145 @@ def main() -> int:
                                     ex_ok,
                                     f"enter={d_x} status={r_ex.status_code} url={r_ex.url}",
                                 )
+                                if ex_ok:
+                                    sr_flags["west_lobbies_ok"] = True
+
+    if sr_flags.get("west_lobbies_ok") or sr_flags.get("premium_ok"):
+        # Soft-release social gift: second account receives a craft mat from the smoker.
+        # Return to city if the west lobby walk left us outdoors.
+        r_here = s.get(f"{BASE}/world", timeout=TIMEOUT, allow_redirects=True)
+        token = csrf_from(r_here.text) or token
+        if 'data-nl-world-map-player-x-value=' in r_here.text:
+            walked_city, city_detail, token = walk_toward(s, token, 6, 8, max_steps=10)
+            if walked_city:
+                enter_building(s)
+            else:
+                report.add(
+                    "soft-release return city before gift",
+                    False,
+                    city_detail,
+                )
+        s2 = requests.Session()
+        s2.headers.update({"User-Agent": "ashen-smoke/1.0", "Accept-Language": "ru"})
+        r_su2 = s2.get(f"{BASE}/users/sign_up", timeout=TIMEOUT)
+        token2 = csrf_from(r_su2.text)
+        nick2 = f"Gift{uuid.uuid4().hex[:8]}"
+        email2 = f"gift_{uuid.uuid4().hex[:10]}@example.com"
+        password2 = "SmokePass123!"
+        gift_ready = False
+        if token2:
+            r_reg2 = s2.post(
+                f"{BASE}/users",
+                data={
+                    "authenticity_token": token2,
+                    "user[profile_name]": nick2,
+                    "user[email]": email2,
+                    "user[password]": password2,
+                    "user[password_confirmation]": password2,
+                    "commit": "Создать аккаунт",
+                },
+                timeout=TIMEOUT,
+                allow_redirects=True,
+            )
+            gift_ready = r_reg2.status_code in (200, 302) and (
+                nick2 in r_reg2.text or "/world" in r_reg2.url
+            )
+        report.add(
+            "soft-release gift recipient signup",
+            gift_ready,
+            f"nick={nick2}",
+        )
+        if gift_ready:
+            # Ensure donor has a free craft mat to gift.
+            click_hotspot(s, "go_main")
+            click_hotspot(s, "go_forpost3")
+            click_hotspot(s, "souvenir_shop")
+            r_sv = s.get(
+                f"{BASE}/city/buildings/souvenir_shop",
+                timeout=TIMEOUT,
+                allow_redirects=True,
+            )
+            token = csrf_from(r_sv.text) or token
+            s.post(
+                f"{BASE}/city/buildings/souvenir_shop/souvenir",
+                data={"authenticity_token": token, "item_key": "wood_chips"},
+                headers={"Accept": "text/html"},
+                timeout=TIMEOUT,
+                allow_redirects=True,
+            )
+            r_inv = s.get(f"{BASE}/inventory", timeout=TIMEOUT, allow_redirects=True)
+            token = csrf_from(r_inv.text) or token
+            gift_m = re.search(
+                r'data-item-id="(\d+)"[^>]*data-item-key="wood_chips"'
+                r'|data-item-key="wood_chips"[^>]*data-item-id="(\d+)"',
+                r_inv.text,
+            )
+            gift_item_id = None
+            if gift_m:
+                gift_item_id = gift_m.group(1) or gift_m.group(2)
+            if gift_item_id:
+                r_gift = s.post(
+                    f"{BASE}/inventory/gift_item",
+                    data={
+                        "authenticity_token": token,
+                        "item_id": gift_item_id,
+                        "recipient_name": nick2,
+                        "quantity": "1",
+                    },
+                    headers={"Accept": "text/html"},
+                    timeout=TIMEOUT,
+                    allow_redirects=True,
+                )
+                gift_ok = (
+                    r_gift.status_code == 200
+                    and "transfer_denied=1" not in r_gift.url
+                    and 'data-inventory-transfer-denied="1"' not in r_gift.text
+                )
+                report.add(
+                    "soft-release gifts wood_chips to peer",
+                    gift_ok,
+                    f"status={r_gift.status_code} url={r_gift.url} to={nick2} item_id={gift_item_id}",
+                )
+                if gift_ok:
+                    r_peer = s2.get(
+                        f"{BASE}/inventory",
+                        timeout=TIMEOUT,
+                        allow_redirects=True,
+                    )
+                    peer_ok = (
+                        r_peer.status_code == 200
+                        and 'data-item-key="wood_chips"' in r_peer.text
+                    )
+                    report.add(
+                        "soft-release peer bag has gifted wood_chips",
+                        peer_ok,
+                        f"status={r_peer.status_code} url={r_peer.url}",
+                    )
+                    token = csrf_from(r_gift.text) or token
+                    r_nv = s.post(
+                        f"{BASE}/inventory/transfer_money",
+                        data={
+                            "authenticity_token": token,
+                            "recipient_name": nick2,
+                            "amount": "1",
+                        },
+                        headers={"Accept": "text/html"},
+                        timeout=TIMEOUT,
+                        allow_redirects=True,
+                    )
+                    report.add(
+                        "soft-release transfers 1 NV to peer",
+                        r_nv.status_code == 200
+                        and "transfer_denied=1" not in r_nv.url
+                        and 'data-inventory-transfer-denied="1"' not in r_nv.text,
+                        f"status={r_nv.status_code} url={r_nv.url} to={nick2}",
+                    )
+            else:
+                report.add(
+                    "soft-release gifts wood_chips to peer",
+                    False,
+                    "no wood_chips in donor bag",
+                )
 
     failed = report.failed
     print("\n=== SUMMARY ===")

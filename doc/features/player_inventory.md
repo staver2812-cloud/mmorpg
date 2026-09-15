@@ -502,6 +502,7 @@ shipped Inventory management routes.
 | 2026-09-15 | Soft-release smoke unequips a paperdoll slot after wear via body `slot` (rejects `equip_denied`). |
 | 2026-09-15 | Soft-release smoke saves an equipment set while geared, unequips, then wears the set (rejects `set_denied`). |
 | 2026-09-15 | Soft-release smoke deletes the saved equipment set after wear (rejects `set_denied`). |
+| 2026-09-15 | Soft-release smoke gifts `wood_chips` and 1 NV to a second signed-up character, then asserts the peer bag. |
 | 2026-09-15 | Soft-release smoke uses bag `ashen_bandage` via body `item_id` after Relic Shop buy (rejects `use_denied`/`item_denied`). Inventory slots expose `data-item-key`. |
 | 2026-09-13 | Equipment-set save/wear/delete success and failure alerts use `game.inventory.set_*` i18n. |
 | 2026-09-13 | Direct transfer/gift/NV and deferred player-sale alerts use `game.inventory.*` i18n. |
