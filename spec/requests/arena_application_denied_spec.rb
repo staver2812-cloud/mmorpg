@@ -23,7 +23,7 @@ RSpec.describe "Arena application denied", type: :request do
         combat_trauma: "1"
       }
 
-    expect(response).to redirect_to(arena_room_path(room, application_denied: 1))
+    expect(response).to redirect_to(arena_index_path(application_denied: 1))
     follow_redirect!
     expect(response.body).to include('data-application-denied="1"')
     expect(response.body).to include('data-application-recovery="lobby"')

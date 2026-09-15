@@ -37,7 +37,7 @@ class ArenaApplicationsController < ApplicationController
         format.html { redirect_to arena_room_path(@room), notice: I18n.t("game.flashes.application_submitted") }
         format.json { render json: {success: true, application: result.application}, status: :created }
       else
-        format.html { redirect_to arena_room_path(@room, application_denied: 1), alert: result.errors.join(", ") }
+        format.html { redirect_to arena_index_path(application_denied: 1), alert: result.errors.join(", ") }
         format.json { render json: {success: false, errors: result.errors}, status: :unprocessable_entity }
       end
     end
@@ -65,7 +65,7 @@ class ArenaApplicationsController < ApplicationController
         end
       else
         format.html do
-          redirect_to arena_room_path(@application.arena_room, application_denied: 1),
+          redirect_to arena_index_path(application_denied: 1),
             alert: result.errors.join(", ")
         end
         format.json { render json: {success: false, errors: result.errors}, status: :unprocessable_entity }
@@ -92,7 +92,7 @@ class ArenaApplicationsController < ApplicationController
         format.json { render json: {success: true} }
       else
         format.html do
-          redirect_to arena_room_path(@application.arena_room, application_denied: 1),
+          redirect_to arena_index_path(application_denied: 1),
             alert: result.errors.join(", ")
         end
         format.json { render json: {success: false, errors: result.errors}, status: :unprocessable_entity }

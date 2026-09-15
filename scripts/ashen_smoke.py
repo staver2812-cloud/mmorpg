@@ -1398,6 +1398,33 @@ def main() -> int:
             'data-arena-recovery="city"' in r.text,
             f"url={r.url}",
         )
+    any_room = re.search(r'data-arena-room="(\d+)"', r.text)
+    if any_room:
+        token = csrf_from(r.text) or token
+        r_app_fail = s.post(
+            f"{BASE}/arena_rooms/{any_room.group(1)}/arena_applications",
+            data={
+                "authenticity_token": token,
+                "fight_type": "duel",
+                "fight_kind": "free",
+                "timeout_seconds": "180",
+                "combat_trauma": "1",
+            },
+            headers={"Accept": "text/html"},
+            timeout=TIMEOUT,
+            allow_redirects=True,
+        )
+        report.add(
+            "arena application action denied recovery",
+            r_app_fail.status_code == 200
+            and 'data-application-denied="1"' in r_app_fail.text
+            and (
+                'data-application-recovery="lobby"' in r_app_fail.text
+                or 'data-application-recovery="city"' in r_app_fail.text
+            ),
+            f"status={r_app_fail.status_code} url={r_app_fail.url}",
+        )
+        token = csrf_from(r_app_fail.text) or token
     room_path = None
     room_m = re.search(
         r'href="(?:https?://[^"/]+)?(/arena_rooms/\d+(?:\?[^"]*)?)"',
@@ -1429,33 +1456,6 @@ def main() -> int:
                 and 'data-arena-recovery="lobby"' in r_room.text,
                 f"url={r_room.url}",
             )
-            room_id_m = re.search(r"/arena_rooms/(\d+)", r_room.url)
-            if room_id_m:
-                token = csrf_from(r_room.text) or token
-                r_app_fail = s.post(
-                    f"{BASE}/arena_rooms/{room_id_m.group(1)}/arena_applications",
-                    data={
-                        "authenticity_token": token,
-                        "fight_type": "duel",
-                        "fight_kind": "free",
-                        "timeout_seconds": "180",
-                        "combat_trauma": "1",
-                    },
-                    headers={"Accept": "text/html"},
-                    timeout=TIMEOUT,
-                    allow_redirects=True,
-                )
-                report.add(
-                    "arena application action denied recovery",
-                    r_app_fail.status_code == 200
-                    and 'data-application-denied="1"' in r_app_fail.text
-                    and (
-                        'data-application-recovery="lobby"' in r_app_fail.text
-                        or 'data-application-recovery="city"' in r_app_fail.text
-                    ),
-                    f"status={r_app_fail.status_code} url={r_app_fail.url}",
-                )
-                token = csrf_from(r_app_fail.text) or token
     locked_m = re.search(
         r'data-arena-room="(\d+)"[^>]*data-arena-room-accessible="0"|data-arena-room-accessible="0"[^>]*data-arena-room="(\d+)"',
         r.text,
