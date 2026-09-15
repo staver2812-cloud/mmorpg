@@ -2704,6 +2704,56 @@ def main() -> int:
                                                                     ),
                                                                     f"status={r_alloc_ok.status_code} url={r_alloc_ok.url}",
                                                                 )
+                                                                if (
+                                                                    r_alloc_ok.status_code == 200
+                                                                    and "allocation_denied=1" not in r_alloc_ok.url
+                                                                ):
+                                                                    token = csrf_from(r_alloc_ok.text) or token
+                                                                    r_shop_buy = s.get(
+                                                                        f"{BASE}/shop?mode=buy",
+                                                                        timeout=TIMEOUT,
+                                                                        allow_redirects=True,
+                                                                    )
+                                                                    token = csrf_from(r_shop_buy.text) or token
+                                                                    offer_m = re.search(
+                                                                        r'data-shop-affordable="1"[\s\S]{0,1200}?'
+                                                                        r'name="item_template_id"[^>]*value="(\d+)"'
+                                                                        r'[\s\S]{0,400}?name="action_key"[^>]*value="([^"]+)"',
+                                                                        r_shop_buy.text,
+                                                                    )
+                                                                    if not offer_m:
+                                                                        offer_m = re.search(
+                                                                            r'name="item_template_id"[^>]*value="(\d+)"'
+                                                                            r'[\s\S]{0,400}?name="action_key"[^>]*value="([^"]+)"'
+                                                                            r'[\s\S]{0,400}?data-shop-affordable="1"',
+                                                                            r_shop_buy.text,
+                                                                        )
+                                                                    if offer_m:
+                                                                        r_bought = s.post(
+                                                                            f"{BASE}/shop/buy",
+                                                                            data={
+                                                                                "authenticity_token": token,
+                                                                                "mode": "buy",
+                                                                                "item_template_id": offer_m.group(1),
+                                                                                "action_key": offer_m.group(2),
+                                                                            },
+                                                                            headers={"Accept": "text/html"},
+                                                                            timeout=TIMEOUT,
+                                                                            allow_redirects=True,
+                                                                        )
+                                                                        report.add(
+                                                                            "soft-release shop buy affordable item",
+                                                                            r_bought.status_code == 200
+                                                                            and "trade_denied=1" not in r_bought.url
+                                                                            and "shop_denied=1" not in r_bought.url,
+                                                                            f"status={r_bought.status_code} url={r_bought.url} item={offer_m.group(1)}",
+                                                                        )
+                                                                    else:
+                                                                        report.add(
+                                                                            "soft-release shop buy affordable item",
+                                                                            False,
+                                                                            "no affordable buy offer on shop desk",
+                                                                        )
                                                         else:
                                                             report.add(
                                                                 "soft-release has free stat points after quests",
