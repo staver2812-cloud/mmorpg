@@ -365,7 +365,7 @@ RSpec.describe "Inventories", type: :request do
         price: "12.50"
       }
 
-      expect(response).to redirect_to(inventory_path)
+      expect(response).to redirect_to(inventory_path(transfer_denied: 1))
       expect(flash[:alert]).to eq(I18n.t("game.inventory.player_sales_unavailable"))
       expect(user.currency_wallet.reload.nv_balance).to eq(0)
       expect(recipient_user.currency_wallet.reload.nv_balance).to eq(12.75)
