@@ -4730,8 +4730,8 @@ def main() -> int:
         r_ar = s.get(f"{BASE}/arena", timeout=TIMEOUT, allow_redirects=True)
         ar_ok = (
             r_ar.status_code == 200
-            and ("nl-arena" in r_ar.text or 'data-arena="' in r_ar.text or "Арена" in r_ar.text)
-            and ("Дуэли" in r_ar.text or "duel" in r_ar.text.lower() or "Help" in r_ar.text or "Зал" in r_ar.text or "room" in r_ar.text.lower())
+            and ("nl-arena-frame" in r_ar.text or "nl-arena" in r_ar.text)
+            and ("Арена" in r_ar.text or "Дуэли" in r_ar.text)
         )
         report.add(
             "soft-release arena lobby visit",
