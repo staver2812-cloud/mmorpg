@@ -2501,6 +2501,40 @@ def main() -> int:
                                 ),
                                 f"status={r_tin.status_code} url={r_tin.url}",
                             )
+                            if r_tin.status_code == 200 and "quest_denied=1" not in r_tin.url:
+                                token = csrf_from(r_tin.text) or token
+                                r_chain = s.get(f"{BASE}/quests", timeout=TIMEOUT, allow_redirects=True)
+                                token = csrf_from(r_chain.text) or token
+                                tail_m = re.search(
+                                    r'action="(/quests/veil_tail_delivery/turn_in)"',
+                                    r_chain.text,
+                                )
+                                if tail_m:
+                                    r_tail = s.post(
+                                        urljoin(BASE + "/", tail_m.group(1).lstrip("/")),
+                                        data={"authenticity_token": token},
+                                        headers={"Accept": "text/html"},
+                                        timeout=TIMEOUT,
+                                        allow_redirects=True,
+                                    )
+                                    report.add(
+                                        "soft-release turns in veil_tail_delivery",
+                                        r_tail.status_code == 200
+                                        and "quest_denied=1" not in r_tail.url
+                                        and (
+                                            "бинт" in r_tail.text.lower()
+                                            or "bandage" in r_tail.text.lower()
+                                            or "Смолокур" in r_tail.text
+                                            or "В работе" in r_tail.text
+                                        ),
+                                        f"status={r_tail.status_code} url={r_tail.url}",
+                                    )
+                                else:
+                                    report.add(
+                                        "soft-release turns in veil_tail_delivery",
+                                        False,
+                                        "no veil_tail turn_in after lure",
+                                    )
                         else:
                             report.add(
                                 "help hall win turns in veil_lure_drill",
