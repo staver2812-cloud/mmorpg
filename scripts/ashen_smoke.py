@@ -1245,6 +1245,17 @@ def main() -> int:
                 or 'data-arena-recovery="duels"' in r_locked.text,
                 f"url={r_locked.url}",
             )
+    r_match = s.get(f"{BASE}/arena_matches/999999999", timeout=TIMEOUT, allow_redirects=True)
+    report.add(
+        "arena match denied recovery",
+        r_match.status_code == 200
+        and 'data-arena-denied="1"' in r_match.text
+        and (
+            'data-arena-recovery="city"' in r_match.text
+            or 'data-arena-recovery="duels"' in r_match.text
+        ),
+        f"status={r_match.status_code} url={r_match.url}",
+    )
     r_missing = s.get(f"{BASE}/log/999999999", timeout=TIMEOUT, allow_redirects=True)
     report.add(
         "public fight log missing recovery",

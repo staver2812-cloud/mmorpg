@@ -4,6 +4,7 @@ class ArenaMatchesController < ApplicationController
   before_action :authenticate_user!
   before_action :set_arena_match, only: [:show, :action, :claim_timeout, :finish, :log]
   before_action :require_character, only: [:action, :claim_timeout, :finish]
+  rescue_from ActiveRecord::RecordNotFound, with: :match_missing
 
   def show
     authorize @arena_match
@@ -179,6 +180,12 @@ class ArenaMatchesController < ApplicationController
 
   def set_arena_match
     @arena_match = ArenaMatch.find(params[:id])
+  end
+
+  def match_missing
+    redirect_to arena_index_path(arena_denied: 1),
+      alert: I18n.t("game.flashes.arena_match_missing"),
+      status: :see_other
   end
 
   def match_payload

@@ -1353,6 +1353,7 @@ ru:
       email_verification_required: "Нужно подтвердить email."
       active_fight: "У вас уже есть активный бой."
       arena_room_unavailable: "Этот зал арены недоступен."
+      arena_match_missing: "Такой бой арены не найден."
       application_submitted: "Заявка подана."
       application_accepted: "Заявка принята."
       application_canceled: "Заявка отменена."
