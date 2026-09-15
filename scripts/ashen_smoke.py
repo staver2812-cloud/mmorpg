@@ -5418,9 +5418,18 @@ def main() -> int:
                 )
                 village_ok = (
                     r_vil.status_code == 200
-                    and "frontier_village" in r_vil.url
-                    and 'data-location-lobby-deferred="1"' in r_vil.text
-                    and 'data-location-recovery="world"' in r_vil.text
+                    and "frontier_village_entrance" in r_vil.url
+                    and "nl-world-location-scene--village" in r_vil.text
+                    and (
+                        "trading_post" in r_vil.text
+                        or "nl-world-location-hotspot--trading_post" in r_vil.text
+                    )
+                    and (
+                        'data-location-recovery="world"' in r_vil.text
+                        or "Leave the village" in r_vil.text
+                        or "return_world" in r_vil.text
+                        or "nl-world-location-hotspot--exit" in r_vil.text
+                    )
                 )
                 report.add(
                     "soft-release frontier village lobby",

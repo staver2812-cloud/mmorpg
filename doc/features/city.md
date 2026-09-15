@@ -1190,7 +1190,7 @@ Final rerun results are in the
 - 2026-09-15: Soft-release smoke re-drinks at the pond after Nature Child perk (post-perk outdoor Drink).
 - 2026-09-15: Soft-release smoke re-checks Merchant collect-shop status after outdoor Drink and asserts 1000 NV pay stays blocked.
 - 2026-09-15: Soft-release smoke claims Infirmary sandbox VM topup, buys trauma/heal scrolls, asserts HUD chips, and uses `combat_heal_scroll` from Inventory.
-- 2026-09-15: Soft-release smoke walks west gate → Frontier Village / Podgorny Mine / Resource Exchange lobbies and asserts deferred lobby recovery CTAs.
+- 2026-09-15: Soft-release smoke walks west gate → Frontier Village square (Trading Post) plus Podgorny Mine / Resource Exchange deferred lobbies.
 - 2026-09-15: Soft-release smoke returns from the east-gate pond path and binds at the Veil Obelisk.
 - 2026-09-15: Bank item locker chrome exposes stored item_key via data-bank-item (was empty key).
 - 2026-09-15: Failed outdoor `POST /world/obelisk` recovers on World with `obelisk_denied=1` chrome.
