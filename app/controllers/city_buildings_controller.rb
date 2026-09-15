@@ -113,11 +113,7 @@ class CityBuildingsController < ApplicationController
       character: current_character,
       item_key: params[:item_key]
     ).call
-    if result.success
-      redirect_to city_building_path("hospital"), notice: result.message
-    else
-      redirect_to city_building_path("hospital"), alert: result.message
-    end
+    redirect_hospital(result)
   end
 
   def topup_vm
@@ -127,11 +123,7 @@ class CityBuildingsController < ApplicationController
     end
 
     result = Game::Shop::VeilMarksTopUp.new(character: current_character).call
-    if result.success
-      redirect_to city_building_path("hospital"), notice: result.message
-    else
-      redirect_to city_building_path("hospital"), alert: result.message
-    end
+    redirect_hospital(result)
   end
 
   def traumatologist
@@ -141,11 +133,7 @@ class CityBuildingsController < ApplicationController
     end
 
     result = Game::Shop::TraumatologistClearance.new(character: current_character).call
-    if result.success
-      redirect_to city_building_path("hospital"), notice: result.message
-    else
-      redirect_to city_building_path("hospital"), alert: result.message
-    end
+    redirect_hospital(result)
   end
 
   def bless
@@ -307,5 +295,11 @@ class CityBuildingsController < ApplicationController
     extra = result.success ? {} : {bank_denied: 1}
     flash_opts = result.success ? {notice: result.message} : {alert: result.message}
     redirect_to city_building_path("bank", **extra), **flash_opts
+  end
+
+  def redirect_hospital(result)
+    extra = result.success ? {} : {hospital_denied: 1}
+    flash_opts = result.success ? {notice: result.message} : {alert: result.message}
+    redirect_to city_building_path("hospital", **extra), **flash_opts
   end
 end

@@ -109,4 +109,17 @@ RSpec.describe "City building action denied recovery", type: :request do
     expect(response.body).to include('data-law-recovery="world"')
     expect(response.body).to include('data-law-recovery="law"')
   end
+
+  it "recovers when an Infirmary traumatologist step fails" do
+    create(:city_hotspot, :building, zone: city, key: "hospital", name: "Hospital",
+      action_params: {"feature" => "hospital"})
+
+    post city_building_traumatologist_path("hospital")
+
+    expect(response).to redirect_to(city_building_path("hospital", hospital_denied: 1))
+    follow_redirect!
+    expect(response.body).to include('data-hospital-denied="1"')
+    expect(response.body).to include('data-hospital-recovery="world"')
+    expect(response.body).to include('data-hospital-recovery="hospital"')
+  end
 end

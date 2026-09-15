@@ -987,6 +987,7 @@ en:
       hospital_combat_only: "Free rest does not clear combat trauma. Buy a scroll or craft a master bag — treatment is instant."
       hospital_in_combat: "Finish the fight first."
       hospital_only: "Healing rest is only available in the Infirmary."
+      hospital_denied_next: "Infirmary action did not complete — check perks, VM, or stock, then try again or return to the city."
       rest_unavailable: "You cannot rest here."
       tavern_aria: "Tavern rest"
       tavern_rest_title: "Coal table"

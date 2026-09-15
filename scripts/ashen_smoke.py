@@ -361,6 +361,23 @@ def main() -> int:
             and 'data-hospital-recovery="world"' in r.text,
             f"url={r.url}",
         )
+        token = csrf_from(r.text)
+        if token:
+            r_hosp = s.post(
+                f"{BASE}/city/buildings/hospital/traumatologist",
+                data={"authenticity_token": token},
+                headers={"Accept": "text/html"},
+                timeout=TIMEOUT,
+                allow_redirects=True,
+            )
+            report.add(
+                "hospital denied recovery",
+                r_hosp.status_code == 200
+                and 'data-hospital-denied="1"' in r_hosp.text
+                and 'data-hospital-recovery="world"' in r_hosp.text
+                and 'data-hospital-recovery="hospital"' in r_hosp.text,
+                f"status={r_hosp.status_code} url={r_hosp.url}",
+            )
     r = s.get(f"{BASE}/city/buildings/tavern", timeout=TIMEOUT, allow_redirects=True)
     report.add(
         "tavern landmark inside chrome",
