@@ -1388,6 +1388,20 @@ def main() -> int:
         and 'data-assault-recovery="world"' in r_assault.text,
         f"status={r_assault.status_code} url={r_assault.url}",
     )
+    token = csrf_from(r_assault.text) or token
+    r_obelisk = s.post(
+        f"{BASE}/world/obelisk",
+        data={"authenticity_token": token, "obelisk_action": "__bad__"},
+        timeout=TIMEOUT,
+        allow_redirects=True,
+    )
+    report.add(
+        "obelisk denied recovery",
+        r_obelisk.status_code == 200
+        and 'data-obelisk-denied="1"' in r_obelisk.text
+        and 'data-obelisk-recovery="world"' in r_obelisk.text,
+        f"status={r_obelisk.status_code} url={r_obelisk.url}",
+    )
     r_loc = s.get(f"{BASE}/world/locations/podgorny_mine", timeout=TIMEOUT, allow_redirects=True)
     if 'data-location-denied="1"' in r_loc.text:
         report.add(

@@ -1148,6 +1148,7 @@ Final rerun results are in the
 - 2026-09-13: Salt Market building notice is localized (`data-market-notice`); stall rent/player lots remain view-only.
 - 2026-09-13: Veil Obelisk bind/recall (`POST .../obelisk`): stores coordinates in character metadata and recalls for 15 NV; desk exposes `data-obelisk-can-bind` / `data-obelisk-can-recall` / unbound marker.
 - 2026-09-13: Outdoor Obelisk recall chip plus Tavern table fatigue clear alongside HP/MP.
+- 2026-09-15: Failed outdoor `POST /world/obelisk` recovers on World with `obelisk_denied=1` chrome.
 - 2026-09-14: Manage index titles/empty rows/pagination and NPC state labels use `manage.*` i18n.
 - 2026-09-14: Manage building/hotspot show+form destination labels and NPC template key fallback use `manage.views.*` i18n.
 - 2026-09-14: Narrow/coarse city building controls reflow below the scene (`nl-city-building-controls`, `UI-ADAPT-005`).

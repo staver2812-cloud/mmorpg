@@ -8,7 +8,9 @@ class WorldObelisksController < ApplicationController
 
   def create
     unless params[:obelisk_action].to_s == "recall"
-      redirect_to world_path, alert: I18n.t("game.buildings.obelisk_bad_action") and return
+      redirect_to world_path(obelisk_denied: 1),
+        alert: I18n.t("game.buildings.obelisk_bad_action"),
+        status: :see_other and return
     end
 
     result = Game::World::ObeliskRecall.new(
@@ -18,7 +20,7 @@ class WorldObelisksController < ApplicationController
     if result.success
       redirect_to world_path, notice: result.message
     else
-      redirect_back fallback_location: world_path, alert: result.message
+      redirect_to world_path(obelisk_denied: 1), alert: result.message, status: :see_other
     end
   end
 end
