@@ -1164,6 +1164,7 @@ supplies only authoritative completion/loot facts and stable source keys.
 | 2026-09-15 | Failed arena application create/accept/cancel recovers on the lobby with `application_denied=1` chrome (also shown on room when reachable). |
 | 2026-09-15 | Seeded/migrated Help Hall (`slug: help`, levels `0-5`) so level-zero soft-release characters can enter an Arena room. |
 | 2026-09-15 | Help Hall auto-ensures a training-dummy NPC application so level-zero players can accept a soft-release fight. |
+| 2026-09-15 | Soft-release smoke covers outdoor bait interrupt fight start/finish after the starter quest and gear loop. |
 | 2026-09-15 | Failed fight turn/timeout/premature finish recovers on the match with `match_denied=1` chrome. |
 | 2026-09-15 | Missing arena application accept/cancel redirects to the lobby with `arena_denied=1` recovery chrome. |
 | 2026-09-15 | Creating an application against a missing arena room also recovers with `arena_denied=1` chrome. |
