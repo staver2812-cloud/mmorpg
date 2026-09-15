@@ -2373,6 +2373,7 @@ def main() -> int:
                         timeout=TIMEOUT,
                         allow_redirects=True,
                     )
+                    # Surrender loses: DefeatRecovery may send the player to Hospital.
                     report.add(
                         "help hall fight surrender+finish recovery",
                         r_fin.status_code == 200
@@ -2380,6 +2381,7 @@ def main() -> int:
                         and (
                             "/arena" in r_fin.url
                             or "/world" in r_fin.url
+                            or "/city/" in r_fin.url
                             or "nl-arena-frame" in r_fin.text
                         ),
                         f"status={r_fin.status_code} url={r_fin.url}",
