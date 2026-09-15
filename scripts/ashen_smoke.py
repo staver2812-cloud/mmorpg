@@ -134,7 +134,7 @@ def enter_building(session: requests.Session) -> Tuple[bool, str]:
 
 def main() -> int:
     report = Report()
-    sr_flags = {"auction_ok": False, "airship_ok": False}
+    sr_flags = {"auction_ok": False, "airship_ok": False, "city_hall_ok": False}
     s = requests.Session()
     s.headers.update({"User-Agent": "ashen-smoke/1.0", "Accept-Language": "ru"})
 
@@ -4662,6 +4662,29 @@ def main() -> int:
             hall_ok,
             f"status={r_hall.status_code} url={r_hall.url}",
         )
+        sr_flags["city_hall_ok"] = bool(hall_ok)
+
+    if sr_flags.get("city_hall_ok"):
+        # City Hall is Trade; Guard Tower is Central Square (main).
+        ok_main_gt, d_main_gt = click_hotspot(s, "go_main")
+        if not ok_main_gt:
+            report.add("soft-release guard tower visit", False, f"no main: {d_main_gt}")
+        else:
+            r_gt = s.get(
+                f"{BASE}/city/buildings/guard_tower",
+                timeout=TIMEOUT,
+                allow_redirects=True,
+            )
+            gt_ok = (
+                r_gt.status_code == 200
+                and 'data-building-key="guard_tower"' in r_gt.text
+                and 'data-landmark-inside="1"' in r_gt.text
+            )
+            report.add(
+                "soft-release guard tower visit",
+                gt_ok,
+                f"status={r_gt.status_code} url={r_gt.url}",
+            )
 
     failed = report.failed
     print("\n=== SUMMARY ===")
