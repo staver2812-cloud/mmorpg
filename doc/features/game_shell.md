@@ -1267,6 +1267,7 @@ Before extending Game Shell:
 | 2026-09-14 | Empty trauma/heal chips always render and recover via Infirmary premium desk or City; outdoor fatigue and unset-alignment chips recover via Tavern/City/Law when out of district; presence Assault blocked recovers to Infirmary. |
 | 2026-09-15 | Outdoor empty bait chip is a City recovery link (`data-bait-recovery="city"`); smoke asserts it when qty=0. |
 | 2026-09-15 | Soft-release smoke steps from west gate toward a shore foe, starts a bait interrupt fight via shell Inventory, then finishes. |
+| 2026-09-15 | Soft-release smoke logs out and logs back in to restore the persisted game surface. |
 | 2026-09-14 | Empty trauma/heal scroll chips recover via Infirmary or City (`data-trauma-recovery` / `data-heal-recovery`). |
 | 2026-09-14 | Alignment/fatigue/quest/obelisk shell chips expose `data-alignment-recovery` / `data-fatigue-recovery` / `data-quest-recovery` / `data-obelisk-recovery` when linking. |
 | 2026-09-14 | City empty bait chip recovers via Souvenir/Shop (`data-bait-recovery`); footer Q/A tools expose `data-shell-recovery`. |
