@@ -1919,6 +1919,7 @@ def main() -> int:
                 "target_y": "0",
                 "action_key": "__bad_ashen_move__",
             },
+            headers={"Accept": "text/html"},
             timeout=TIMEOUT,
             allow_redirects=True,
         )
