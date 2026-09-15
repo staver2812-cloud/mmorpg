@@ -5552,6 +5552,123 @@ def main() -> int:
                     r_tin.status_code == 200 and "quest_denied=1" not in r_tin.url,
                     f"status={r_tin.status_code} url={r_tin.url}",
                 )
+                if r_tin.status_code == 200 and "quest_denied=1" not in r_tin.url:
+                    token = csrf_from(r_tin.text) or token
+                    r_lq = s.get(f"{BASE}/quests", timeout=TIMEOUT, allow_redirects=True)
+                    token = csrf_from(r_lq.text) or token
+                    if 'action="/quests/tar_lure_pack_contract/accept"' in r_lq.text:
+                        r_lacc = s.post(
+                            f"{BASE}/quests/tar_lure_pack_contract/accept",
+                            data={"authenticity_token": token},
+                            headers={"Accept": "text/html"},
+                            timeout=TIMEOUT,
+                            allow_redirects=True,
+                        )
+                        token = csrf_from(r_lacc.text) or token
+                        report.add(
+                            "soft-release accepts tar_lure_pack_contract",
+                            r_lacc.status_code == 200 and "quest_denied=1" not in r_lacc.url,
+                            f"status={r_lacc.status_code} url={r_lacc.url}",
+                        )
+                    else:
+                        report.add(
+                            "soft-release accepts tar_lure_pack_contract",
+                            "tar_lure_pack_contract" in r_lq.text
+                            or 'action="/quests/tar_lure_pack_contract/turn_in"' in r_lq.text,
+                            "already active or missing accept",
+                        )
+                    click_hotspot(s, "go_forpost3")
+                    click_hotspot(s, "souvenir_shop")
+                    for item_key, times in (("ashen_bait", 3), ("wood_chips", 1)):
+                        for _ in range(times):
+                            r_sv = s.get(
+                                f"{BASE}/city/buildings/souvenir_shop",
+                                timeout=TIMEOUT,
+                                allow_redirects=True,
+                            )
+                            token = csrf_from(r_sv.text) or token
+                            r_buy = s.post(
+                                f"{BASE}/city/buildings/souvenir_shop/souvenir",
+                                data={"authenticity_token": token, "item_key": item_key},
+                                headers={"Accept": "text/html"},
+                                timeout=TIMEOUT,
+                                allow_redirects=True,
+                            )
+                            token = csrf_from(r_buy.text) or token
+                            if r_buy.status_code != 200 or "souvenir_denied=1" in r_buy.url:
+                                break
+                    click_hotspot(s, "go_main")
+                    r_forge = s.get(
+                        f"{BASE}/city/buildings/workshop",
+                        timeout=TIMEOUT,
+                        allow_redirects=True,
+                    )
+                    token = csrf_from(r_forge.text) or token
+                    lure_ready = (
+                        'data-workshop-recipe="tar_lure_pack"' in r_forge.text
+                        and re.search(
+                            r'data-workshop-recipe="tar_lure_pack"[^>]*data-workshop-ready="1"'
+                            r'|data-workshop-ready="1"[^>]*data-workshop-recipe="tar_lure_pack"',
+                            r_forge.text,
+                        )
+                    )
+                    if lure_ready:
+                        r_lure = s.post(
+                            f"{BASE}/city/buildings/workshop/craft",
+                            data={
+                                "authenticity_token": token,
+                                "recipe_key": "tar_lure_pack",
+                            },
+                            headers={"Accept": "text/html"},
+                            timeout=TIMEOUT,
+                            allow_redirects=True,
+                        )
+                        token = csrf_from(r_lure.text) or token
+                        lure_ok = (
+                            r_lure.status_code == 200 and "craft_denied=1" not in r_lure.url
+                        )
+                        report.add(
+                            "soft-release crafts tar_lure_pack",
+                            lure_ok,
+                            f"status={r_lure.status_code} url={r_lure.url}",
+                        )
+                        if lure_ok:
+                            r_lq2 = s.get(
+                                f"{BASE}/quests",
+                                timeout=TIMEOUT,
+                                allow_redirects=True,
+                            )
+                            token = csrf_from(r_lq2.text) or token
+                            lure_turn = re.search(
+                                r'action="(/quests/tar_lure_pack_contract/turn_in)"',
+                                r_lq2.text,
+                            )
+                            if lure_turn:
+                                r_ltin = s.post(
+                                    urljoin(BASE + "/", lure_turn.group(1).lstrip("/")),
+                                    data={"authenticity_token": token},
+                                    headers={"Accept": "text/html"},
+                                    timeout=TIMEOUT,
+                                    allow_redirects=True,
+                                )
+                                report.add(
+                                    "soft-release turns in tar_lure_pack_contract",
+                                    r_ltin.status_code == 200
+                                    and "quest_denied=1" not in r_ltin.url,
+                                    f"status={r_ltin.status_code} url={r_ltin.url}",
+                                )
+                            else:
+                                report.add(
+                                    "soft-release turns in tar_lure_pack_contract",
+                                    False,
+                                    "no turn_in control",
+                                )
+                    else:
+                        report.add(
+                            "soft-release crafts tar_lure_pack",
+                            False,
+                            f"not ready url={r_forge.url}",
+                        )
             else:
                 report.add(
                     "soft-release turns in tar_field_kit_contract",
