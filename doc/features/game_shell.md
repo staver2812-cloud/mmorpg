@@ -1270,6 +1270,7 @@ Before extending Game Shell:
 | 2026-09-15 | Soft-release smoke logs out and logs back in to restore the persisted game surface. |
 | 2026-09-15 | Soft-release smoke sends one ordinary local chat line from the shell composer after bandage use. |
 | 2026-09-15 | Soft-release smoke performs outdoor Look (`resource_search`) on the shore cell after the west-gate step, before bait. |
+| 2026-09-15 | Soft-release smoke walks from east gate toward the pond and drinks (`drinking`). |
 | 2026-09-14 | Empty trauma/heal scroll chips recover via Infirmary or City (`data-trauma-recovery` / `data-heal-recovery`). |
 | 2026-09-14 | Alignment/fatigue/quest/obelisk shell chips expose `data-alignment-recovery` / `data-fatigue-recovery` / `data-quest-recovery` / `data-obelisk-recovery` when linking. |
 | 2026-09-14 | City empty bait chip recovers via Souvenir/Shop (`data-bait-recovery`); footer Q/A tools expose `data-shell-recovery`. |
