@@ -9,9 +9,10 @@ class AirshipsController < ApplicationController
   def show
     @airship_state = travel.state
     unless @airship_state
-      respond_to do |format|
-        format.json { render json: {phase: "disembarked"} }
-        format.html { redirect_to denied_resume_path, status: :see_other }
+      if request.format.json?
+        render json: {phase: "disembarked"}
+      else
+        redirect_to denied_resume_path, status: :see_other
       end
       return
     end
