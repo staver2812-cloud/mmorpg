@@ -3003,7 +3003,7 @@ Before extending the World feature:
 | 2026-09-14 | Movement-offer and empty players-here specs assert via `game.flashes.movement_offer_unavailable` / `game.world.no_players` (RU-safe). |
 | 2026-09-14 | Owned Nature Child perk recovers four fatigue on Drink; without it, recovery remains two points. |
 | 2026-09-14 | Mine/exchange lobbies show explicit deferred reasons on disabled Descend/Choose/Buy controls. |
-| 2026-09-15 | Wrong-cell World location GETs redirect to World with `location_denied=1` recovery chrome (`data-location-denied`). |
+| 2026-09-15 | Wrong-cell or unknown World location keys redirect to World with `location_denied=1` recovery chrome (`data-location-denied`). |
 | 2026-09-14 | Exchange buy-deferred note recovers via Shop plus Bank/Junk when those desks are accessible (`data-location-recovery`). |
 | 2026-09-14 | Outdoor injury/fatigue/enter-blocked notes recover via Inventory/Hospital/Tavern/City (`data-world-recovery`). |
 | 2026-09-14 | Shell injury/wear chips expose `data-injury-recovery` / `data-wear-recovery` when those chips render. |
