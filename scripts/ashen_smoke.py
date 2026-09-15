@@ -5040,6 +5040,8 @@ def main() -> int:
         sr_flags["nc_drink_ok"] = bool(nc_drank)
 
     if sr_flags.get("nc_drink_ok"):
+        # Drink holds a 60s local-action lock before movement offers return.
+        time.sleep(62)
         # Walk pond -> east-gate cell, re-enter city, then assert merchant collect-shop.
         returned = False
         return_detail = "no path to east gate"
