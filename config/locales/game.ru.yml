@@ -381,6 +381,7 @@ ru:
       merchant_receipt_ready: "Оплаченный чек готов."
       merchant_receipt_done: "Чек получен. Вернитесь на Базар."
       merchant_unavailable: "Прогресс квалификации недоступен."
+      merchant_denied_next: "Квалификация торговца здесь недоступна — откройте Рынок или лицензии в Лавке, когда будете готовы."
       merchant_accept_btn: "Принять квалификацию торговца"
       merchant_pay_btn: "Оплатить 1 000 NV и забрать чек"
       merchant_complete_btn: "Завершить квалификацию торговца"

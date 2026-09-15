@@ -58,7 +58,7 @@ RSpec.describe "Merchant qualification", type: :request do
       character_id: other.id, fee: 0, receipt_transaction_id: 1,
       metadata: {profession_unlocks: {merchant: true}, merchant_qualification: {status: "paid"}}
     }
-    expect(response).to have_http_status(:see_other)
+    expect(response).to redirect_to(world_path(merchant_denied: 1))
     expect(character.reload.metadata.dig("profession_unlocks", "merchant")).not_to be true
     expect(other.reload.metadata.dig("profession_unlocks", "merchant")).not_to be true
     expect(user.currency_wallet.reload.nv_balance).to eq(1_500)
@@ -67,11 +67,13 @@ RSpec.describe "Merchant qualification", type: :request do
   it "rejects direct steps from an unrelated saved room and hides controls without Merchant" do
     character.remember_gameplay_context!(name: "world")
     post accept_merchant_qualification_path
+    expect(response).to redirect_to(world_path(merchant_denied: 1))
     expect(character.reload.metadata).not_to have_key("merchant_qualification")
     character.update!(perks: {})
     get city_building_path("market")
     expect(response.body).not_to include(I18n.t("game.shop.merchant_accept_btn"))
     post accept_merchant_qualification_path
+    expect(response).to redirect_to(world_path(merchant_denied: 1))
     expect(character.reload.metadata).not_to have_key("merchant_qualification")
   end
 end

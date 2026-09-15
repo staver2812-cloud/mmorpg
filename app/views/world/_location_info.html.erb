@@ -46,6 +46,13 @@
       <%= link_to t("arena.nav.city"), world_path, class: "nl-sheet-link", data: {action_recovery: "world"} %>
     </p>
   <% end %>
+  <% if params[:merchant_denied].to_s == "1" %>
+    <p class="nl-quests-board__meta" data-merchant-denied="1">
+      <%= t("game.shop.merchant_denied_next") %>
+      ·
+      <%= link_to t("arena.nav.city"), world_path, class: "nl-sheet-link", data: {merchant_recovery: "world"} %>
+    </p>
+  <% end %>
   <% if params[:location_denied].to_s == "1" %>
     <p class="nl-quests-board__meta" data-location-denied="1">
       <%= t("game.locations.denied_next") %>

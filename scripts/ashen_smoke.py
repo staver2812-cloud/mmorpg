@@ -1470,6 +1470,21 @@ def main() -> int:
         ),
         f"status={r_enter.status_code} url={r_enter.url}",
     )
+    token = csrf_from(r_enter.text) or token
+    r_merch = s.post(
+        f"{BASE}/merchant_qualification/accept",
+        data={"authenticity_token": token},
+        headers={"Accept": "text/html"},
+        timeout=TIMEOUT,
+        allow_redirects=True,
+    )
+    report.add(
+        "merchant denied recovery",
+        r_merch.status_code == 200
+        and 'data-merchant-denied="1"' in r_merch.text
+        and 'data-merchant-recovery="world"' in r_merch.text,
+        f"status={r_merch.status_code} url={r_merch.url}",
+    )
     r_loc = s.get(f"{BASE}/world/locations/podgorny_mine", timeout=TIMEOUT, allow_redirects=True)
     if 'data-location-denied="1"' in r_loc.text:
         report.add(

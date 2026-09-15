@@ -381,6 +381,7 @@ en:
       merchant_receipt_ready: "Your paid receipt is ready."
       merchant_receipt_done: "Receipt received. Return to the Market."
       merchant_unavailable: "Qualification progress is unavailable."
+      merchant_denied_next: "Merchant qualification is not available here — open Market or Shop Licenses when ready."
       merchant_accept_btn: "Accept Merchant qualification"
       merchant_pay_btn: "Pay 1,000 NV and collect receipt"
       merchant_complete_btn: "Complete Merchant qualification"
