@@ -1135,6 +1135,26 @@ def main() -> int:
             'data-building-recovery="world"' in r.text,
             f"url={r.url}",
         )
+        token = csrf_from(r.text)
+        if token:
+            r_souv = s.post(
+                f"{BASE}/city/buildings/souvenir_shop/souvenir",
+                data={
+                    "authenticity_token": token,
+                    "item_key": "__missing_ashen_souvenir__",
+                },
+                headers={"Accept": "text/html"},
+                timeout=TIMEOUT,
+                allow_redirects=True,
+            )
+            report.add(
+                "souvenir denied recovery",
+                r_souv.status_code == 200
+                and 'data-souvenir-denied="1"' in r_souv.text
+                and 'data-souvenir-recovery="world"' in r_souv.text
+                and 'data-souvenir-recovery="souvenir"' in r_souv.text,
+                f"status={r_souv.status_code} url={r_souv.url}",
+            )
     if 'data-souvenir-any-affordable="0"' in r.text:
         report.add(
             "souvenir short-NV recovery",

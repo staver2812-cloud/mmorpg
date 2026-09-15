@@ -44,4 +44,17 @@ RSpec.describe "City building action denied recovery", type: :request do
     expect(response.body).to include('data-post-recovery="world"')
     expect(response.body).to include('data-post-recovery="post"')
   end
+
+  it "recovers when a souvenir purchase fails" do
+    create(:city_hotspot, :building, zone: city, key: "souvenir_shop", name: "Souvenir",
+      action_params: {"feature" => "souvenir_shop"})
+
+    post city_building_souvenir_path("souvenir_shop"), params: {item_key: "__missing_ashen_souvenir__"}
+
+    expect(response).to redirect_to(city_building_path("souvenir_shop", souvenir_denied: 1))
+    follow_redirect!
+    expect(response.body).to include('data-souvenir-denied="1"')
+    expect(response.body).to include('data-souvenir-recovery="world"')
+    expect(response.body).to include('data-souvenir-recovery="souvenir"')
+  end
 end

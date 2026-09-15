@@ -1114,6 +1114,7 @@ en:
       souvenir_need_nv_short: "Need NV"
       souvenir_bought: "Bought %{name} (−%{amount} NV)."
       souvenir_unknown: "Unknown offering."
+      souvenir_denied_next: "Purchase did not complete — check the offering and funds, then try again or return to the city."
       souvenir_short: "Need %{amount} NV."
       souvenir_full: "Inventory is full."
       obelisk_aria: "Veil Obelisk"

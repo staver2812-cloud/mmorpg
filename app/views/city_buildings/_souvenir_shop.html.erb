@@ -1,6 +1,15 @@
 <section class="nl-handbook" aria-label="<%= t("game.buildings.souvenir_aria") %>">
   <h2><%= t("game.buildings.souvenir_title") %></h2>
   <p class="nl-handbook__lead"><%= t("game.buildings.souvenir_lead") %></p>
+  <% if params[:souvenir_denied].to_s == "1" %>
+    <p class="nl-quests-board__meta" data-souvenir-denied="1">
+      <%= t("game.buildings.souvenir_denied_next") %>
+      ·
+      <%= link_to t("arena.nav.city"), world_path, class: "nl-sheet-link", data: {souvenir_recovery: "world"} %>
+      ·
+      <%= link_to t("game.buildings.souvenir_title"), city_building_path("souvenir_shop"), class: "nl-sheet-link", data: {souvenir_recovery: "souvenir"} %>
+    </p>
+  <% end %>
   <% wallet = current_user.currency_wallet || current_user.create_currency_wallet!(nv_balance: 0) %>
   <% balance = wallet.nv_balance.to_d %>
   <% any_affordable = Game::World::SouvenirPurchase::OFFERINGS.any? { |_key, price| balance >= price.to_d } %>

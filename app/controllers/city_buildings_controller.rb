@@ -218,11 +218,9 @@ class CityBuildingsController < ApplicationController
       character: current_character,
       item_key: params[:item_key]
     ).call
-    if result.success
-      redirect_to city_building_path("souvenir_shop"), notice: result.message
-    else
-      redirect_to city_building_path("souvenir_shop"), alert: result.message
-    end
+    extra = result.success ? {} : {souvenir_denied: 1}
+    flash_opts = result.success ? {notice: result.message} : {alert: result.message}
+    redirect_to city_building_path("souvenir_shop", **extra), **flash_opts
   end
 
   def obelisk
