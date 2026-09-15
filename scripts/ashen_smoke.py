@@ -2311,6 +2311,86 @@ def main() -> int:
             f"keys={keys[:8]}",
         )
 
+    # Soft-release Help Hall NPC fight last so combat interruption cannot break travel.
+    ok_arena2, d_arena2 = click_hotspot(s, "arena")
+    if ok_arena2:
+        r_lobby = s.get(f"{BASE}/arena", timeout=TIMEOUT, allow_redirects=True)
+        open_room = re.search(
+            r'data-arena-room="(\d+)"[^>]*data-arena-room-accessible="1"'
+            r'|data-arena-room-accessible="1"[^>]*data-arena-room="(\d+)"',
+            r_lobby.text,
+        )
+        if open_room:
+            rid = open_room.group(1) or open_room.group(2)
+            r_room = s.get(f"{BASE}/arena_rooms/{rid}", timeout=TIMEOUT, allow_redirects=True)
+            token = csrf_from(r_room.text) or token
+            accept_m = re.search(
+                r'action="(/arena_rooms/\d+/arena_applications/\d+/accept)"',
+                r_room.text,
+            )
+            if accept_m:
+                r_fight = s.post(
+                    urljoin(BASE + "/", accept_m.group(1).lstrip("/")),
+                    data={"authenticity_token": token},
+                    headers={"Accept": "text/html"},
+                    timeout=TIMEOUT,
+                    allow_redirects=True,
+                )
+                report.add(
+                    "help hall NPC accept starts fight",
+                    r_fight.status_code == 200
+                    and (
+                        "arena-match-page" in r_fight.text
+                        or "nl-fight-topline" in r_fight.text
+                        or "/arena_matches/" in r_fight.url
+                    ),
+                    f"status={r_fight.status_code} url={r_fight.url}",
+                )
+                match_m = re.search(r"/arena_matches/(\d+)", r_fight.url)
+                if match_m:
+                    mid = match_m.group(1)
+                    live = False
+                    for _ in range(20):
+                        r_state = s.get(f"{BASE}/arena_matches/{mid}", timeout=TIMEOUT, allow_redirects=True)
+                        token = csrf_from(r_state.text) or token
+                        if 'data-arena-match-status-value="live"' in r_state.text or 'data-arena-match-status-value="completed"' in r_state.text:
+                            live = True
+                            break
+                        time.sleep(1)
+                    report.add("help hall fight reaches live", live, f"match={mid}")
+                    r_surr = s.post(
+                        f"{BASE}/arena_matches/{mid}/action",
+                        data={"authenticity_token": token, "action_type": "surrender"},
+                        headers={"Accept": "text/html"},
+                        timeout=TIMEOUT,
+                        allow_redirects=True,
+                    )
+                    token = csrf_from(r_surr.text) or token
+                    r_fin = s.post(
+                        f"{BASE}/arena_matches/{mid}/finish",
+                        data={"authenticity_token": token},
+                        headers={"Accept": "text/html"},
+                        timeout=TIMEOUT,
+                        allow_redirects=True,
+                    )
+                    report.add(
+                        "help hall fight surrender+finish recovery",
+                        r_fin.status_code == 200
+                        and "match_denied=1" not in r_fin.url
+                        and (
+                            "/arena" in r_fin.url
+                            or "/world" in r_fin.url
+                            or "nl-arena-frame" in r_fin.text
+                        ),
+                        f"status={r_fin.status_code} url={r_fin.url}",
+                    )
+            else:
+                report.add("help hall NPC accept starts fight", False, "no accept control")
+        else:
+            report.add("help hall NPC accept starts fight", False, "no open room at end")
+    else:
+        report.add("help hall NPC accept starts fight", False, d_arena2)
+
     failed = report.failed
     print("\n=== SUMMARY ===")
     print(f"passed={len(report.checks) - len(failed)} failed={len(failed)} total={len(report.checks)}")
