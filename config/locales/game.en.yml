@@ -1355,6 +1355,7 @@ en:
       active_fight: "You already have an active fight."
       arena_room_unavailable: "This arena room is unavailable."
       arena_match_missing: "That arena fight was not found."
+      arena_application_missing: "That arena application was not found."
       application_submitted: "Application submitted."
       application_accepted: "Application accepted."
       application_canceled: "Application canceled."

@@ -1355,6 +1355,7 @@ ru:
       active_fight: "У вас уже есть активный бой."
       arena_room_unavailable: "Этот зал арены недоступен."
       arena_match_missing: "Такой бой арены не найден."
+      arena_application_missing: "Такая заявка арены не найдена."
       application_submitted: "Заявка подана."
       application_accepted: "Заявка принята."
       application_canceled: "Заявка отменена."

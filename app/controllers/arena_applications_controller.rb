@@ -8,6 +8,7 @@ class ArenaApplicationsController < ApplicationController
   before_action :set_room, only: [:index, :create]
   before_action :ensure_room_access!, only: :index
   before_action :set_application, only: [:accept, :destroy, :cancel]
+  rescue_from ActiveRecord::RecordNotFound, with: :application_or_room_missing
 
   # GET /arena_rooms/:arena_room_id/arena_applications
   def index
@@ -112,6 +113,20 @@ class ArenaApplicationsController < ApplicationController
 
   def set_application
     @application = ArenaApplication.find(params[:id])
+  end
+
+  def application_or_room_missing
+    respond_to do |format|
+      format.html do
+        redirect_to arena_index_path(arena_denied: 1),
+          alert: I18n.t("game.flashes.arena_application_missing"),
+          status: :see_other
+      end
+      format.json do
+        render json: {success: false, errors: [I18n.t("game.flashes.arena_application_missing")]},
+          status: :not_found
+      end
+    end
   end
 
   def require_character
