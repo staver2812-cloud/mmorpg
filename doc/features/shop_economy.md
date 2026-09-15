@@ -1214,6 +1214,7 @@ automated completion results are recorded in
 |---|---|
 | 2026-09-13 | Purchase/Sale success and rejection alerts use `game.shop.*` i18n (ru/en); English copy preserves prior trade vocabulary for specs. |
 | 2026-09-14 | Shop Sell Junk link exposes `data-shop-recovery="junk"`; empty Sell recovers via Inventory; doctor perk step exposes `data-doctor-recovery="perks"`. |
+| 2026-09-15 | Failed Merchant qualification steps recover on World with `merchant_denied=1` chrome. |
 | 2026-09-14 | Sell onboarding Market/Licenses links and expired trading-license hint expose `data-shop-recovery`. |
 | 2026-09-14 | Merchant desk exposes `data-merchant-desk` / `data-merchant-status`; Novice empty/denied recovers via Buy. |
 | 2026-09-14 | Shop request chrome assertions (title/funds/empty section) use RU-default `game.shop.*` / `game.common.*` i18n. |
