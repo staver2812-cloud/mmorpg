@@ -106,7 +106,7 @@
   <h3><%= t("game.buildings.bank_item_title") %></h3>
   <p class="nl-quests-board__meta"><%= t("game.buildings.bank_item_lead") %></p>
   <% if stored.present? %>
-    <p data-bank-item="<%= stored["key"] %>">
+    <p data-bank-item="<%= stored["item_key"] %>">
       <%= t("game.buildings.bank_item_stored", name: stored["name"], qty: stored["quantity"]) %>
       <%= button_to t("game.buildings.bank_item_withdraw_cta"),
             city_building_bank_item_path("bank"),
