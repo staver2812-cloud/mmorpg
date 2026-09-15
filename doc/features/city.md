@@ -1187,6 +1187,7 @@ Final rerun results are in the
 - 2026-09-15: Soft-release smoke opens Quests journal after licenses.
 - 2026-09-15: Soft-release smoke opens Dealer House landmark from Business Quarter after Quests.
 - 2026-09-15: Soft-release smoke opens player profile and World shell after Dealer House.
+- 2026-09-15: Soft-release smoke re-drinks at the pond after Nature Child perk (post-perk outdoor Drink).
 - 2026-09-15: Soft-release smoke returns from the east-gate pond path and binds at the Veil Obelisk.
 - 2026-09-15: Bank item locker chrome exposes stored item_key via data-bank-item (was empty key).
 - 2026-09-15: Failed outdoor `POST /world/obelisk` recovers on World with `obelisk_denied=1` chrome.

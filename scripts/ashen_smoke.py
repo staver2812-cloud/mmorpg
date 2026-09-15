@@ -4948,6 +4948,95 @@ def main() -> int:
             world_ok,
             f"status={r_world.status_code} url={r_world.url}",
         )
+        sr_flags["world_ok"] = bool(world_ok)
+
+    if sr_flags.get("world_ok"):
+        # Revisit pond drink after Nature Child perk (earlier drink was pre-perk).
+        click_hotspot(s, "go_main")
+        click_hotspot(s, "go_forpost1")
+        ok_fp4n, d_fp4n = click_hotspot(s, "go_forpost4")
+        nc_drank = False
+        nc_detail = f"no forpost4: {d_fp4n}"
+        if ok_fp4n:
+            ok_egn, d_egn = click_hotspot(s, "east_gate")
+            nc_detail = f"no east_gate: {d_egn}"
+            if ok_egn:
+                nc_detail = "no drinking offer"
+                for _ in range(12):
+                    r_pond_n = s.get(f"{BASE}/world", timeout=TIMEOUT, allow_redirects=True)
+                    token = csrf_from(r_pond_n.text) or token
+                    drink_m = re.search(
+                        r'data-local-action-type="drinking"[^>]*data-tile-id="(\d+)"[^>]*data-action-key="([^"]+)"'
+                        r'|data-tile-id="(\d+)"[^>]*data-local-action-type="drinking"[^>]*data-action-key="([^"]+)"'
+                        r'|value="drinking"[^>]*name="local_action_type"[\s\S]{0,400}?value="(\d+)"[^>]*name="tile_id"[\s\S]{0,200}?value="([^"]+)"[^>]*name="action_key"'
+                        r'|value="(\d+)"[^>]*name="tile_id"[\s\S]{0,400}?value="drinking"[^>]*name="local_action_type"[\s\S]{0,200}?value="([^"]+)"[^>]*name="action_key"',
+                        r_pond_n.text,
+                    )
+                    if drink_m:
+                        d_tile = next((g for g in drink_m.groups()[0::2] if g), None)
+                        d_key = next((g for g in drink_m.groups()[1::2] if g), None)
+                        if d_tile and d_key:
+                            r_drink_n = s.post(
+                                f"{BASE}/world/perform_local_action",
+                                data={
+                                    "authenticity_token": token,
+                                    "tile_id": d_tile,
+                                    "local_action_type": "drinking",
+                                    "action_key": d_key,
+                                },
+                                headers={"Accept": "text/html"},
+                                timeout=TIMEOUT,
+                                allow_redirects=True,
+                            )
+                            nc_drank = (
+                                r_drink_n.status_code == 200
+                                and "action_denied=1" not in r_drink_n.url
+                                and 'data-action-denied="1"' not in r_drink_n.text
+                            )
+                            nc_detail = f"status={r_drink_n.status_code} url={r_drink_n.url} tile={d_tile}"
+                            break
+                    dests = []
+                    for dm in re.finditer(
+                        r'data-direction="([^"]+)"[^>]*'
+                        r'data-target-x="(-?\d+)"[^>]*'
+                        r'data-target-y="(-?\d+)"[^>]*'
+                        r'data-action-key="([^"]+)"[^>]*'
+                        r'data-travel-seconds="(\d+)"'
+                        r'|data-target-x="(-?\d+)"[^>]*'
+                        r'data-target-y="(-?\d+)"[^>]*'
+                        r'data-direction="([^"]+)"[^>]*'
+                        r'data-action-key="([^"]+)"[^>]*'
+                        r'data-travel-seconds="(\d+)"',
+                        r_pond_n.text,
+                    ):
+                        if dm.group(1):
+                            dests.append((dm.group(1), int(dm.group(2)), int(dm.group(3)), dm.group(4), int(dm.group(5))))
+                        else:
+                            dests.append((dm.group(8), int(dm.group(6)), int(dm.group(7)), dm.group(9), int(dm.group(10))))
+                    if not dests:
+                        nc_detail = "no dests toward pond"
+                        break
+                    # Prefer steps that approach pond 13,10 (tile 279 route).
+                    dests.sort(key=lambda d: abs(d[1] - 13) + abs(d[2] - 10))
+                    direction, tx, ty, akey, secs = dests[0]
+                    r_step = s.post(
+                        f"{BASE}/world/move",
+                        data={
+                            "authenticity_token": token,
+                            "direction": direction,
+                            "target_x": tx,
+                            "target_y": ty,
+                            "action_key": akey,
+                        },
+                        headers={"Accept": "text/html"},
+                        timeout=TIMEOUT,
+                        allow_redirects=True,
+                    )
+                    if r_step.status_code != 200 or "action_denied=1" in r_step.url:
+                        nc_detail = f"step fail {r_step.status_code} {r_step.url}"
+                        break
+                    time.sleep(min(secs + 2, 40))
+        report.add("soft-release nature_child drink", nc_drank, nc_detail)
 
     failed = report.failed
     print("\n=== SUMMARY ===")
