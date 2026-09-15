@@ -1157,6 +1157,8 @@ Final rerun results are in the
 - 2026-09-15: Soft-release smoke withdraws 5 NV from Bank of Resin after deposit.
 - 2026-09-15: Soft-release smoke saves a personal note at the Post after bank withdraw.
 - 2026-09-15: Soft-release smoke clears the personal Post note after save.
+- 2026-09-15: Soft-release smoke stores then retrieves one bag stack in the Bank item locker.
+- 2026-09-15: Bank item locker chrome exposes stored item_key via data-bank-item (was empty key).
 - 2026-09-15: Failed outdoor `POST /world/obelisk` recovers on World with `obelisk_denied=1` chrome.
 - 2026-09-14: Manage index titles/empty rows/pagination and NPC state labels use `manage.*` i18n.
 - 2026-09-14: Manage building/hotspot show+form destination labels and NPC template key fallback use `manage.views.*` i18n.
