@@ -10,7 +10,8 @@ class WorldObelisksController < ApplicationController
     unless params[:obelisk_action].to_s == "recall"
       redirect_to world_path(obelisk_denied: 1),
         alert: I18n.t("game.buildings.obelisk_bad_action"),
-        status: :see_other and return
+        status: :see_other
+      return
     end
 
     result = Game::World::ObeliskRecall.new(
