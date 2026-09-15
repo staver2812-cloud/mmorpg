@@ -1433,6 +1433,26 @@ def main() -> int:
         and 'data-hotspot-recovery="world"' in r_hot.text,
         f"status={r_hot.status_code} url={r_hot.url}",
     )
+    token = csrf_from(r_hot.text) or token
+    # After law-quarter travel smoke is still in city; west_gate later goes outdoor.
+    # Missing tile_id is enough for action_denied even in city HTML chrome.
+    r_act = s.post(
+        f"{BASE}/world/perform_local_action",
+        data={
+            "authenticity_token": token,
+            "tile_id": "999999999",
+            "local_action_type": "look",
+        },
+        timeout=TIMEOUT,
+        allow_redirects=True,
+    )
+    report.add(
+        "action denied recovery",
+        r_act.status_code == 200
+        and 'data-action-denied="1"' in r_act.text
+        and 'data-action-recovery="world"' in r_act.text,
+        f"status={r_act.status_code} url={r_act.url}",
+    )
     r_loc = s.get(f"{BASE}/world/locations/podgorny_mine", timeout=TIMEOUT, allow_redirects=True)
     if 'data-location-denied="1"' in r_loc.text:
         report.add(

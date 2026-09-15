@@ -495,6 +495,7 @@ en:
       assault_target_offline: "Target is offline."
       assault_denied_next: "That assault is not available — stay on this cell or buy a trauma scroll."
       hotspot_denied_next: "That city action is gone — pick a current hotspot on this square."
+      action_denied_next: "That cell action is not available — refresh the square and try again."
       quarter_pending: "This quarter is not ready yet."
       cell_actions: "Current cell actions"
       location: "Location"
