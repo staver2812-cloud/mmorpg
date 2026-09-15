@@ -1114,6 +1114,7 @@ ru:
       souvenir_need_nv_short: "Нет NV"
       souvenir_bought: "Куплено: %{name} (−%{amount} NV)."
       souvenir_unknown: "Такого товара нет."
+      souvenir_denied_next: "Покупка не выполнена — проверьте товар и средства, затем повторите или вернитесь в город."
       souvenir_short: "Нужно %{amount} NV."
       souvenir_full: "Инвентарь переполнен."
       obelisk_aria: "Обелиск Завесы"
