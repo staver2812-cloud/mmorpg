@@ -26,8 +26,8 @@ module ArenaEntryGate
     end
 
     respond_to do |format|
-      format.html { redirect_to world_path, alert: I18n.t("game.flashes.arena_gate") }
-      format.turbo_stream { redirect_to world_path, status: :see_other, alert: I18n.t("game.flashes.arena_gate") }
+      format.html { redirect_to world_path(arena_gate_denied: 1), alert: I18n.t("game.flashes.arena_gate") }
+      format.turbo_stream { redirect_to world_path(arena_gate_denied: 1), status: :see_other, alert: I18n.t("game.flashes.arena_gate") }
       format.json do
         render json: {
           success: false,
@@ -35,7 +35,7 @@ module ArenaEntryGate
           errors: [I18n.t("game.flashes.arena_gate")]
         }, status: :forbidden
       end
-      format.any { redirect_to world_path, alert: I18n.t("game.flashes.arena_gate") }
+      format.any { redirect_to world_path(arena_gate_denied: 1), alert: I18n.t("game.flashes.arena_gate") }
     end
   end
 

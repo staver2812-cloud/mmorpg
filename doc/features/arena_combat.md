@@ -1158,6 +1158,7 @@ supplies only authoritative completion/loot facts and stable source keys.
 | 2026-09-14 | Arena statistics tab and empty recent-fights recover to Duels/City; empty public fight logs link Arena/City. |
 | 2026-09-14 | Arena chrome Character/Inventory/City links and recent-empty Duels CTA expose `data-arena-recovery`. |
 | 2026-09-14 | Arena room topline Character/Inventory/Lobby/City links expose `data-arena-recovery`. |
+| 2026-09-15 | Direct Arena lobby entry without the city hotspot redirects to World with `arena_gate_denied=1` recovery chrome. |
 | 2026-09-15 | Missing arena application accept/cancel redirects to the lobby with `arena_denied=1` recovery chrome. |
 | 2026-09-15 | Creating an application against a missing arena room also recovers with `arena_denied=1` chrome. |
 | 2026-09-15 | Missing arena room ids redirect to the lobby with `arena_denied=1` recovery chrome. |

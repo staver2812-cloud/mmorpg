@@ -498,6 +498,7 @@ en:
       assault_denied_next: "That assault is not available — stay on this cell or buy a trauma scroll."
       hotspot_denied_next: "That city action is gone — pick a current hotspot on this square."
       action_denied_next: "That cell action is not available — refresh the square and try again."
+      arena_gate_denied_next: "Arena lobby is entered from the city Arena hotspot — return to the square and use the Arena building."
       quarter_pending: "This quarter is not ready yet."
       cell_actions: "Current cell actions"
       location: "Location"

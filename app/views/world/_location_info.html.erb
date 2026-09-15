@@ -18,6 +18,15 @@
       <%= link_to t("arena.nav.city"), world_path, class: "nl-sheet-link", data: {building_recovery: "world"} %>
     </p>
   <% end %>
+  <% if params[:arena_gate_denied].to_s == "1" %>
+    <p class="nl-quests-board__meta" data-arena-gate-denied="1">
+      <%= t("game.world.arena_gate_denied_next") %>
+      ·
+      <%= link_to t("arena.nav.city"), world_path, class: "nl-sheet-link", data: {arena_recovery: "world"} %>
+      ·
+      <%= link_to t("arena.nav.arena"), world_path, class: "nl-sheet-link", data: {arena_recovery: "square"} %>
+    </p>
+  <% end %>
   <% if params[:assault_denied].to_s == "1" %>
     <p class="nl-quests-board__meta" data-assault-denied="1">
       <%= t("game.world.assault_denied_next") %>

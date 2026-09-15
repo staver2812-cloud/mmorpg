@@ -1346,6 +1346,17 @@ def main() -> int:
 
     ok_main_tav, detail_main_tav = click_hotspot(s, "go_main")
     report.add("return main before tavern fatigue", ok_main_tav, detail_main_tav)
+    r_gate = s.get(f"{BASE}/arena", timeout=TIMEOUT, allow_redirects=True)
+    report.add(
+        "arena gate denied recovery",
+        r_gate.status_code == 200
+        and 'data-arena-gate-denied="1"' in r_gate.text
+        and (
+            'data-arena-recovery="world"' in r_gate.text
+            or 'data-arena-recovery="square"' in r_gate.text
+        ),
+        f"status={r_gate.status_code} url={r_gate.url}",
+    )
     ok_arena, d_arena = click_hotspot(s, "arena")
     report.add("enter arena hotspot", ok_arena, d_arena)
     r = s.get(f"{BASE}/arena", timeout=TIMEOUT, allow_redirects=True)
