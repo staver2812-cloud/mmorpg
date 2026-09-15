@@ -46,6 +46,19 @@
       <% end %>
     </p>
   <% end %>
+  <% if params[:arena_gate_denied].to_s == "1" %>
+    <p class="nl-quests-board__meta" data-arena-gate-denied="1">
+      <%= t("game.world.arena_gate_denied_next") %>
+      ·
+      <%= link_to t("arena.nav.city"), world_path, class: "nl-sheet-link", data: {arena_recovery: "world"} %>
+      ·
+      <% if hotspots.any? { |hotspot| hotspot.key.to_s == "arena" } %>
+        <span data-arena-recovery="square"><%= t("arena.nav.arena") %></span>
+      <% else %>
+        <%= link_to t("arena.nav.arena"), world_path, class: "nl-sheet-link", data: {arena_recovery: "square"} %>
+      <% end %>
+    </p>
+  <% end %>
   <% if params[:assault_denied].to_s == "1" %>
     <p class="nl-quests-board__meta" data-assault-denied="1">
       <%= t("game.world.assault_denied_next") %>
