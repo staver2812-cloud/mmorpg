@@ -70,4 +70,17 @@ RSpec.describe "City building action denied recovery", type: :request do
     expect(response.body).to include('data-junk-recovery="world"')
     expect(response.body).to include('data-junk-recovery="junk"')
   end
+
+  it "recovers when a temple blessing fails" do
+    create(:city_hotspot, :building, zone: city, key: "temple", name: "Temple",
+      action_params: {"feature" => "temple"})
+
+    post city_building_bless_path("temple")
+
+    expect(response).to redirect_to(city_building_path("temple", temple_denied: 1))
+    follow_redirect!
+    expect(response.body).to include('data-temple-denied="1"')
+    expect(response.body).to include('data-temple-recovery="world"')
+    expect(response.body).to include('data-temple-recovery="temple"')
+  end
 end

@@ -155,11 +155,9 @@ class CityBuildingsController < ApplicationController
     end
 
     result = Game::World::TempleBlessing.new(character: current_character).call
-    if result.success
-      redirect_to city_building_path("temple"), notice: result.message
-    else
-      redirect_to city_building_path("temple"), alert: result.message
-    end
+    extra = result.success ? {} : {temple_denied: 1}
+    flash_opts = result.success ? {notice: result.message} : {alert: result.message}
+    redirect_to city_building_path("temple", **extra), **flash_opts
   end
 
   def bank

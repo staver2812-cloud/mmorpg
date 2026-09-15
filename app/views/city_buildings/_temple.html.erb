@@ -12,6 +12,15 @@
          data-temple-rite-ready="<%= can_rite ? "1" : "0" %>">
   <h2><%= t("game.buildings.temple_rite_title") %></h2>
   <p class="nl-handbook__lead"><%= t("game.buildings.temple_rite_lead", amount: Game::World::TempleBlessing::COST_NV) %></p>
+  <% if params[:temple_denied].to_s == "1" %>
+    <p class="nl-quests-board__meta" data-temple-denied="1">
+      <%= t("game.buildings.temple_denied_next") %>
+      ·
+      <%= link_to t("arena.nav.city"), world_path, class: "nl-sheet-link", data: {temple_recovery: "world"} %>
+      ·
+      <%= link_to t("game.buildings.temple_rite_title"), city_building_path("temple"), class: "nl-sheet-link", data: {temple_recovery: "temple"} %>
+    </p>
+  <% end %>
   <p class="nl-quests-board__meta"><%= t("game.buildings.temple_wallet", amount: balance.to_i) %></p>
   <% if (injury_summary = injury_state.summary).present? %>
     <p class="nl-quests-board__meta" data-temple-injury="1">

@@ -1006,6 +1006,7 @@ en:
       temple_need_nv_short: "Need NV"
       temple_blessed: "Cleared light injuries: %{count} (−%{amount} NV)."
       temple_no_light: "No light injuries — the rite is not needed."
+      temple_denied_next: "Rite did not complete — need light injuries and NV, then try again or return to the city."
       temple_no_injuries: "No injuries right now — the rite is not required."
       temple_short: "Need %{amount} NV for the rite."
       temple_in_combat: "Finish the fight first."

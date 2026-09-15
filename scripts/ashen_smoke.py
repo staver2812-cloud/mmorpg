@@ -1066,6 +1066,23 @@ def main() -> int:
             'data-building-recovery="world"' in r.text,
             f"url={r.url}",
         )
+        token = csrf_from(r.text)
+        if token:
+            r_temple = s.post(
+                f"{BASE}/city/buildings/temple/bless",
+                data={"authenticity_token": token},
+                headers={"Accept": "text/html"},
+                timeout=TIMEOUT,
+                allow_redirects=True,
+            )
+            report.add(
+                "temple denied recovery",
+                r_temple.status_code == 200
+                and 'data-temple-denied="1"' in r_temple.text
+                and 'data-temple-recovery="world"' in r_temple.text
+                and 'data-temple-recovery="temple"' in r_temple.text,
+                f"status={r_temple.status_code} url={r_temple.url}",
+            )
 
     r = s.get(f"{BASE}/city/buildings/bank", timeout=TIMEOUT, allow_redirects=True)
     report.add(
