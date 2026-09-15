@@ -1530,6 +1530,23 @@ def main() -> int:
             'data-tavern-recovery="world"' in r.text,
             f"url={r.url}",
         )
+        token = csrf_from(r.text)
+        if token:
+            r_rest = s.post(
+                f"{BASE}/city/buildings/tavern/rest",
+                data={"authenticity_token": token},
+                headers={"Accept": "text/html"},
+                timeout=TIMEOUT,
+                allow_redirects=True,
+            )
+            report.add(
+                "tavern rest denied recovery",
+                r_rest.status_code == 200
+                and 'data-rest-denied="1"' in r_rest.text
+                and 'data-tavern-recovery="world"' in r_rest.text
+                and 'data-tavern-recovery="tavern"' in r_rest.text,
+                f"status={r_rest.status_code} url={r_rest.url}",
+            )
     if r.status_code == 200 and "data-fatigue-pct=" in r.text:
         report.add(
             "fatigue chip recovery",

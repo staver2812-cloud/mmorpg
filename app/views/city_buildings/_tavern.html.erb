@@ -9,6 +9,15 @@
          data-tavern-fatigue="<%= fatigue %>">
   <h2><%= t("game.buildings.tavern_rest_title") %></h2>
   <p class="nl-handbook__lead"><%= t("game.buildings.tavern_rest_lead") %></p>
+  <% if params[:rest_denied].to_s == "1" %>
+    <p class="nl-quests-board__meta" data-rest-denied="1">
+      <%= t("game.buildings.rest_denied_next") %>
+      ·
+      <%= link_to t("arena.nav.city"), world_path, class: "nl-sheet-link", data: {tavern_recovery: "world"} %>
+      ·
+      <%= link_to t("game.buildings.tavern_rest_title"), city_building_path("tavern"), class: "nl-sheet-link", data: {tavern_recovery: "tavern"} %>
+    </p>
+  <% end %>
   <p class="nl-quests-board__meta"
      data-tavern-vitals="1"
      data-tavern-hp="<%= hp %>"

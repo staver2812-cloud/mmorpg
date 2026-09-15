@@ -135,4 +135,18 @@ RSpec.describe "City building action denied recovery", type: :request do
     expect(response.body).to include('data-workshop-recovery="world"')
     expect(response.body).to include('data-workshop-recovery="workshop"')
   end
+
+  it "recovers when a tavern rest fails because the character is already full" do
+    create(:city_hotspot, :building, zone: city, key: "tavern", name: "Tavern",
+      action_params: {"feature" => "tavern"})
+    character.update!(current_hp: character.effective_max_hp, current_mp: character.effective_max_mp)
+
+    post city_building_rest_path("tavern")
+
+    expect(response).to redirect_to(city_building_path("tavern", rest_denied: 1))
+    follow_redirect!
+    expect(response.body).to include('data-rest-denied="1"')
+    expect(response.body).to include('data-tavern-recovery="world"')
+    expect(response.body).to include('data-tavern-recovery="tavern"')
+  end
 end

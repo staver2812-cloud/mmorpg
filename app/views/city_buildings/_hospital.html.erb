@@ -25,6 +25,15 @@
       <%= link_to t("game.buildings.hospital_title_short"), city_building_path("hospital"), class: "nl-sheet-link", data: {hospital_recovery: "hospital"} %>
     </p>
   <% end %>
+  <% if params[:rest_denied].to_s == "1" %>
+    <p class="nl-quests-board__meta" data-rest-denied="1">
+      <%= t("game.buildings.rest_denied_next") %>
+      ·
+      <%= link_to t("arena.nav.city"), world_path, class: "nl-sheet-link", data: {hospital_recovery: "world"} %>
+      ·
+      <%= link_to t("game.buildings.hospital_title_short"), city_building_path("hospital"), class: "nl-sheet-link", data: {hospital_recovery: "hospital"} %>
+    </p>
+  <% end %>
   <p class="nl-quests-board__meta"><%= t("game.buildings.hospital_combat_rule") %></p>
   <p class="nl-quests-board__meta" data-hospital-vitals="1" data-hospital-rest-ready="<%= needs_rest ? "1" : "0" %>" data-hospital-combat="<%= combat_left ? "1" : "0" %>">
     <%= t("game.buildings.hospital_vitals", hp: hp, max_hp: max_hp, mp: mp, max_mp: max_mp) %>

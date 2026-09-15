@@ -64,20 +64,18 @@ class CityBuildingsController < ApplicationController
     case @building_key
     when "hospital"
       result = Game::World::HospitalRest.new(character: current_character).call
-      target = city_building_path("hospital")
+      target_key = "hospital"
     when "tavern"
       result = Game::World::TavernRest.new(character: current_character).call
-      target = city_building_path("tavern")
+      target_key = "tavern"
     else
       redirect_to world_path(building_denied: 1), alert: I18n.t("game.buildings.rest_unavailable"), status: :see_other
       return
     end
 
-    if result.success
-      redirect_to target, notice: result.message
-    else
-      redirect_to target, alert: result.message
-    end
+    extra = result.success ? {} : {rest_denied: 1}
+    flash_opts = result.success ? {notice: result.message} : {alert: result.message}
+    redirect_to city_building_path(target_key, **extra), **flash_opts
   end
 
   def craft

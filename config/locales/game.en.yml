@@ -996,6 +996,7 @@ en:
       tavern_vitals: "Now: %{hp}/%{max_hp} HP · %{mp}/%{max_mp} MP · fatigue %{fatigue}%"
       tavern_rested: "You rested at the table. HP, MP, and fatigue are full. Injuries unchanged."
       tavern_already_full: "You are already rested and fresh."
+      rest_denied_next: "Rest did not complete — you may already be full, or try again from the desk / city."
       tavern_in_combat: "Finish the fight first."
       temple_aria: "Temple rites"
       temple_only: "Rites are only available in the Temple."
