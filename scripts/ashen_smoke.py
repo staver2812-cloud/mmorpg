@@ -1053,6 +1053,27 @@ def main() -> int:
             'data-building-recovery="world"' in r.text,
             f"url={r.url}",
         )
+        token = csrf_from(r.text)
+        if token:
+            r_bank = s.post(
+                f"{BASE}/city/buildings/bank/bank",
+                data={
+                    "authenticity_token": token,
+                    "bank_action": "deposit",
+                    "amount": "0",
+                },
+                headers={"Accept": "text/html"},
+                timeout=TIMEOUT,
+                allow_redirects=True,
+            )
+            report.add(
+                "bank denied recovery",
+                r_bank.status_code == 200
+                and 'data-bank-denied="1"' in r_bank.text
+                and 'data-bank-recovery="world"' in r_bank.text
+                and 'data-bank-recovery="bank"' in r_bank.text,
+                f"status={r_bank.status_code} url={r_bank.url}",
+            )
     if r.status_code == 200 and 'data-bank-vm-line="1"' in r.text:
         report.add(
             "bank VM desk recovery",

@@ -1033,6 +1033,7 @@ en:
       bank_short_wallet: "Wallet needs %{amount} NV."
       bank_short_vault: "Vault needs %{amount} NV."
       bank_bad_amount: "Enter an amount greater than zero."
+      bank_denied_next: "Bank transfer did not complete — check the amount, then try again or return to the city."
       bank_bad_action: "Unknown bank action."
       bank_item_title: "Item locker"
       bank_item_lead: "One unequipped item stack. More slots later."

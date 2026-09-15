@@ -173,11 +173,7 @@ class CityBuildingsController < ApplicationController
       amount: params[:amount],
       action: params[:bank_action]
     ).call
-    if result.success
-      redirect_to city_building_path("bank"), notice: result.message
-    else
-      redirect_to city_building_path("bank"), alert: result.message
-    end
+    redirect_bank(result)
   end
 
   def bank_item
@@ -192,11 +188,7 @@ class CityBuildingsController < ApplicationController
       item_key: params[:item_key],
       quantity: params[:quantity]
     ).call
-    if result.success
-      redirect_to city_building_path("bank"), notice: result.message
-    else
-      redirect_to city_building_path("bank"), alert: result.message
-    end
+    redirect_bank(result)
   end
 
   def post
@@ -319,5 +311,11 @@ class CityBuildingsController < ApplicationController
     )
 
     redirect_to world_path(building_denied: 1), alert: I18n.t("game.flashes.building_district_required")
+  end
+
+  def redirect_bank(result)
+    extra = result.success ? {} : {bank_denied: 1}
+    flash_opts = result.success ? {notice: result.message} : {alert: result.message}
+    redirect_to city_building_path("bank", **extra), **flash_opts
   end
 end

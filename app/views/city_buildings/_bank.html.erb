@@ -16,6 +16,15 @@
           wallet: local_assigns.fetch(:wallet_nv, 0),
           vault: local_assigns.fetch(:vault_nv, 0)) %>
   </p>
+  <% if params[:bank_denied].to_s == "1" %>
+    <p class="nl-quests-board__meta" data-bank-denied="1">
+      <%= t("game.buildings.bank_denied_next") %>
+      ·
+      <%= link_to t("arena.nav.city"), world_path, class: "nl-sheet-link", data: {bank_recovery: "world"} %>
+      ·
+      <%= link_to t("game.buildings.bank_title"), city_building_path("bank"), class: "nl-sheet-link", data: {bank_recovery: "bank"} %>
+    </p>
+  <% end %>
   <p class="nl-quests-board__meta" data-bank-vm-line="1">
     <%= t("game.buildings.bank_vm", amount: local_assigns.fetch(:veil_marks, 0)) %>
     <% if Game::World::CityBuildingCatalog.accessible?(character: current_character, building_key: "hospital") %>
