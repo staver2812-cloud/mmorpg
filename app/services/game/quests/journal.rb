@@ -275,10 +275,17 @@ module Game
         return unless template
 
         inventory = character.inventory || character.create_inventory!(slot_capacity: 30, weight_capacity: 100)
-        Game::Inventory::Manager.new(inventory:).add_item!(
-          item_template: template,
-          quantity: 1
-        )
+        begin
+          Game::Inventory::Manager.new(inventory:).add_item!(
+            item_template: template,
+            quantity: 1
+          )
+        rescue Game::Inventory::Manager::CapacityExceededError
+          # Soft-release: do not soft-lock turn-in when the bag is full; XP/NV still grant.
+          Rails.logger.info(
+            "[quests] skipped item reward #{item_key} for character=#{character.id} (inventory full)"
+          )
+        end
       end
 
       def title_for(quest)
