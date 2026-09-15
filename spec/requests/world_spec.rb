@@ -1642,9 +1642,10 @@ RSpec.describe "World", type: :request do
       it "redirects with alert for HTML format" do
         post interact_hotspot_world_path, params: {hotspot_id: 99999}
 
-        expect(response).to redirect_to(world_path)
+        expect(response).to redirect_to(world_path(hotspot_denied: 1))
         follow_redirect!
         expect(response.body).to include("not found")
+        expect(response.body).to include('data-hotspot-denied="1"')
       end
 
       it "returns turbo stream error for Turbo format" do
@@ -1670,7 +1671,7 @@ RSpec.describe "World", type: :request do
       it "redirects with alert for HTML format" do
         post interact_hotspot_world_path, params: city_action_params(high_level_hotspot)
 
-        expect(response).to redirect_to(world_path)
+        expect(response).to redirect_to(world_path(hotspot_denied: 1))
         follow_redirect!
         expect(response.body).to include("level 50")
       end
