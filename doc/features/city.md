@@ -1151,6 +1151,7 @@ Final rerun results are in the
 - 2026-09-15: DefeatRecovery Infirmary landings expose `defeat_recovered=1` soft-release chrome (`data-defeat-recovery` City / square→Arena CTAs; Arena lobby stays hotspot-gated).
 - 2026-09-15: Soft-release smoke follows outdoor bait-fight DefeatRecovery Infirmary → City CTA.
 - 2026-09-15: Soft-release smoke opens Coal Tide Tavern and rests after outdoor DefeatRecovery return.
+- 2026-09-15: Soft-release smoke sells one junk-accepted bag item at the Ash Buyer after logout/login restore.
 - 2026-09-15: Failed outdoor `POST /world/obelisk` recovers on World with `obelisk_denied=1` chrome.
 - 2026-09-14: Manage index titles/empty rows/pagination and NPC state labels use `manage.*` i18n.
 - 2026-09-14: Manage building/hotspot show+form destination labels and NPC template key fallback use `manage.views.*` i18n.

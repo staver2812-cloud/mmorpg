@@ -3282,6 +3282,70 @@ def main() -> int:
                                                                                                                                             ),
                                                                                                                                             f"status={r_in.status_code} url={r_in.url}",
                                                                                                                                         )
+                                                                                                                                        if r_in.status_code == 200 and nick in r_in.text:
+                                                                                                                                            click_hotspot(s, "go_main")
+                                                                                                                                            ok_fp, d_fp = click_hotspot(s, "go_forpost1")
+                                                                                                                                            if not ok_fp:
+                                                                                                                                                report.add(
+                                                                                                                                                    "soft-release junk buyback",
+                                                                                                                                                    False,
+                                                                                                                                                    f"no forpost1: {d_fp}",
+                                                                                                                                                )
+                                                                                                                                            else:
+                                                                                                                                                ok_jd, d_jd = click_hotspot(s, "junk_dealer")
+                                                                                                                                                r_jd = s.get(
+                                                                                                                                                    f"{BASE}/city/buildings/junk_dealer",
+                                                                                                                                                    timeout=TIMEOUT,
+                                                                                                                                                    allow_redirects=True,
+                                                                                                                                                )
+                                                                                                                                                token = csrf_from(r_jd.text) or token
+                                                                                                                                                can_sell = 'data-junk-can-sell="1"' in r_jd.text
+                                                                                                                                                junk_key = None
+                                                                                                                                                for pref in (
+                                                                                                                                                    "ashen_bait",
+                                                                                                                                                    "wood_chips",
+                                                                                                                                                    "ash_herb",
+                                                                                                                                                    "rat_tail",
+                                                                                                                                                    "ashen_bandage",
+                                                                                                                                                ):
+                                                                                                                                                    if f'data-junk-item="{pref}"' in r_jd.text:
+                                                                                                                                                        junk_key = pref
+                                                                                                                                                        break
+                                                                                                                                                if not junk_key:
+                                                                                                                                                    jm = re.search(r'data-junk-item="([^"]+)"', r_jd.text)
+                                                                                                                                                    junk_key = jm.group(1) if jm else None
+                                                                                                                                                if ok_jd or 'data-building-key="junk_dealer"' in r_jd.text:
+                                                                                                                                                    if can_sell and junk_key:
+                                                                                                                                                        r_sell = s.post(
+                                                                                                                                                            f"{BASE}/city/buildings/junk_dealer/sell",
+                                                                                                                                                            data={
+                                                                                                                                                                "authenticity_token": token,
+                                                                                                                                                                "item_key": junk_key,
+                                                                                                                                                                "quantity": "1",
+                                                                                                                                                            },
+                                                                                                                                                            headers={"Accept": "text/html"},
+                                                                                                                                                            timeout=TIMEOUT,
+                                                                                                                                                            allow_redirects=True,
+                                                                                                                                                        )
+                                                                                                                                                        report.add(
+                                                                                                                                                            "soft-release junk buyback",
+                                                                                                                                                            r_sell.status_code == 200
+                                                                                                                                                            and "junk_denied=1" not in r_sell.url
+                                                                                                                                                            and 'data-junk-denied="1"' not in r_sell.text,
+                                                                                                                                                            f"status={r_sell.status_code} url={r_sell.url} item={junk_key}",
+                                                                                                                                                        )
+                                                                                                                                                    else:
+                                                                                                                                                        report.add(
+                                                                                                                                                            "soft-release junk buyback",
+                                                                                                                                                            False,
+                                                                                                                                                            f"can_sell={can_sell} key={junk_key} open={ok_jd}",
+                                                                                                                                                        )
+                                                                                                                                                else:
+                                                                                                                                                    report.add(
+                                                                                                                                                        "soft-release junk buyback",
+                                                                                                                                                        False,
+                                                                                                                                                        d_jd,
+                                                                                                                                                    )
                                                                                                                             else:
                                                                                                                                 report.add(
                                                                                                                                     "soft-release outdoor defeat returns City",
