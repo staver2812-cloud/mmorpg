@@ -2529,6 +2529,67 @@ def main() -> int:
                                         ),
                                         f"status={r_tail.status_code} url={r_tail.url}",
                                     )
+                                    if r_tail.status_code == 200 and "quest_denied=1" not in r_tail.url:
+                                        token = csrf_from(r_tail.text) or token
+                                        # Prefer forge craft when ready; starter kit also ships one bandage.
+                                        r_forge = s.get(
+                                            f"{BASE}/city/buildings/workshop",
+                                            timeout=TIMEOUT,
+                                            allow_redirects=True,
+                                        )
+                                        token = csrf_from(r_forge.text) or token
+                                        if (
+                                            r_forge.status_code == 200
+                                            and 'data-building-key="workshop"' in r_forge.text
+                                            and (
+                                                'data-workshop-recipe="ashen_bandage"' in r_forge.text
+                                                or 'recipe_key" value="ashen_bandage"' in r_forge.text
+                                                or "ashen_bandage" in r_forge.text
+                                            )
+                                        ):
+                                            r_craft = s.post(
+                                                f"{BASE}/city/buildings/workshop/craft",
+                                                data={
+                                                    "authenticity_token": token,
+                                                    "recipe_key": "ashen_bandage",
+                                                },
+                                                headers={"Accept": "text/html"},
+                                                timeout=TIMEOUT,
+                                                allow_redirects=True,
+                                            )
+                                            token = csrf_from(r_craft.text) or token
+                                            report.add(
+                                                "soft-release crafts ashen_bandage",
+                                                r_craft.status_code == 200
+                                                and "craft_denied=1" not in r_craft.url,
+                                                f"status={r_craft.status_code} url={r_craft.url}",
+                                            )
+                                        r_band_q = s.get(f"{BASE}/quests", timeout=TIMEOUT, allow_redirects=True)
+                                        token = csrf_from(r_band_q.text) or token
+                                        band_m = re.search(
+                                            r'action="(/quests/tar_smith_first_bandage/turn_in)"',
+                                            r_band_q.text,
+                                        )
+                                        if band_m:
+                                            r_band = s.post(
+                                                urljoin(BASE + "/", band_m.group(1).lstrip("/")),
+                                                data={"authenticity_token": token},
+                                                headers={"Accept": "text/html"},
+                                                timeout=TIMEOUT,
+                                                allow_redirects=True,
+                                            )
+                                            report.add(
+                                                "soft-release turns in tar_smith_first_bandage",
+                                                r_band.status_code == 200
+                                                and "quest_denied=1" not in r_band.url,
+                                                f"status={r_band.status_code} url={r_band.url}",
+                                            )
+                                        else:
+                                            report.add(
+                                                "soft-release turns in tar_smith_first_bandage",
+                                                False,
+                                                "no bandage turn_in control",
+                                            )
                                 else:
                                     report.add(
                                         "soft-release turns in veil_tail_delivery",
