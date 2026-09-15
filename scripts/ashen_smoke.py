@@ -1753,6 +1753,21 @@ def main() -> int:
         f"status={r_act.status_code} url={r_act.url}",
     )
     token = csrf_from(r_act.text) or token
+    r_ctx = s.post(
+        f"{BASE}/world/context",
+        data={"authenticity_token": token, "context": "https://evil.example"},
+        headers={"Accept": "text/html"},
+        timeout=TIMEOUT,
+        allow_redirects=True,
+    )
+    report.add(
+        "world context denied recovery",
+        r_ctx.status_code == 200
+        and 'data-action-denied="1"' in r_ctx.text
+        and 'data-action-recovery="world"' in r_ctx.text,
+        f"status={r_ctx.status_code} url={r_ctx.url}",
+    )
+    token = csrf_from(r_ctx.text) or token
     r_enter = s.post(
         f"{BASE}/world/enter_building",
         data={"authenticity_token": token, "building_id": "999999999"},

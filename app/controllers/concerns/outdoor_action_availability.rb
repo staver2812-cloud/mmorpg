@@ -23,7 +23,7 @@ module OutdoorActionAvailability
           I18n.t("game.world.local_action_in_progress")
         end
         if message
-          redirect_to world_path, alert: message, status: :see_other
+          redirect_to world_path(action_denied: 1), alert: message, status: :see_other
           next
         end
 
