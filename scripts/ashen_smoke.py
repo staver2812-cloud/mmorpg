@@ -3334,6 +3334,72 @@ def main() -> int:
                                                                                                                                                             and 'data-junk-denied="1"' not in r_sell.text,
                                                                                                                                                             f"status={r_sell.status_code} url={r_sell.url} item={junk_key}",
                                                                                                                                                         )
+                                                                                                                                                        if (
+                                                                                                                                                            r_sell.status_code == 200
+                                                                                                                                                            and "junk_denied=1" not in r_sell.url
+                                                                                                                                                            and 'data-junk-denied="1"' not in r_sell.text
+                                                                                                                                                        ):
+                                                                                                                                                            click_hotspot(s, "go_main")
+                                                                                                                                                            ok_fp3, d_fp3 = click_hotspot(s, "go_forpost3")
+                                                                                                                                                            if not ok_fp3:
+                                                                                                                                                                report.add(
+                                                                                                                                                                    "soft-release souvenir buy",
+                                                                                                                                                                    False,
+                                                                                                                                                                    f"no forpost3: {d_fp3}",
+                                                                                                                                                                )
+                                                                                                                                                            else:
+                                                                                                                                                                ok_sv, d_sv = click_hotspot(s, "souvenir_shop")
+                                                                                                                                                                r_sv = s.get(
+                                                                                                                                                                    f"{BASE}/city/buildings/souvenir_shop",
+                                                                                                                                                                    timeout=TIMEOUT,
+                                                                                                                                                                    allow_redirects=True,
+                                                                                                                                                                )
+                                                                                                                                                                token = csrf_from(r_sv.text) or token
+                                                                                                                                                                wallet_m = re.search(
+                                                                                                                                                                    r'data-souvenir-wallet="(\d+)"',
+                                                                                                                                                                    r_sv.text,
+                                                                                                                                                                )
+                                                                                                                                                                wallet_nv = int(wallet_m.group(1)) if wallet_m else 0
+                                                                                                                                                                souv_key = None
+                                                                                                                                                                for pref in ("wood_chips", "ash_herb", "ashen_bait"):
+                                                                                                                                                                    m_row = re.search(
+                                                                                                                                                                        rf'<article[^>]*data-souvenir-item="{pref}"[^>]*>',
+                                                                                                                                                                        r_sv.text,
+                                                                                                                                                                    )
+                                                                                                                                                                    if m_row and 'data-souvenir-affordable="1"' in m_row.group(0):
+                                                                                                                                                                        souv_key = pref
+                                                                                                                                                                        break
+                                                                                                                                                                if ok_sv or 'data-building-key="souvenir_shop"' in r_sv.text:
+                                                                                                                                                                    if souv_key:
+                                                                                                                                                                        r_buy = s.post(
+                                                                                                                                                                            f"{BASE}/city/buildings/souvenir_shop/souvenir",
+                                                                                                                                                                            data={
+                                                                                                                                                                                "authenticity_token": token,
+                                                                                                                                                                                "item_key": souv_key,
+                                                                                                                                                                            },
+                                                                                                                                                                            headers={"Accept": "text/html"},
+                                                                                                                                                                            timeout=TIMEOUT,
+                                                                                                                                                                            allow_redirects=True,
+                                                                                                                                                                        )
+                                                                                                                                                                        report.add(
+                                                                                                                                                                            "soft-release souvenir buy",
+                                                                                                                                                                            r_buy.status_code == 200
+                                                                                                                                                                            and "souvenir_denied=1" not in r_buy.url
+                                                                                                                                                                            and 'data-souvenir-denied="1"' not in r_buy.text,
+                                                                                                                                                                            f"status={r_buy.status_code} url={r_buy.url} item={souv_key} wallet={wallet_nv}",
+                                                                                                                                                                        )
+                                                                                                                                                                    else:
+                                                                                                                                                                        report.add(
+                                                                                                                                                                            "soft-release souvenir buy",
+                                                                                                                                                                            False,
+                                                                                                                                                                            f"no affordable souvenir wallet={wallet_nv}",
+                                                                                                                                                                        )
+                                                                                                                                                                else:
+                                                                                                                                                                    report.add(
+                                                                                                                                                                        "soft-release souvenir buy",
+                                                                                                                                                                        False,
+                                                                                                                                                                        d_sv,
+                                                                                                                                                                    )
                                                                                                                                                     else:
                                                                                                                                                         report.add(
                                                                                                                                                             "soft-release junk buyback",
