@@ -1398,9 +1398,23 @@ def main() -> int:
             'data-arena-recovery="city"' in r.text,
             f"url={r.url}",
         )
-    room_m = re.search(r'href="(/arena_rooms/\d+(?:\?[^"]*)?)"', r.text)
+    room_path = None
+    room_m = re.search(
+        r'href="(?:https?://[^"/]+)?(/arena_rooms/\d+(?:\?[^"]*)?)"',
+        r.text,
+    )
     if room_m:
-        r_room = s.get(urljoin(BASE + "/", room_m.group(1).lstrip("/")), timeout=TIMEOUT, allow_redirects=True)
+        room_path = room_m.group(1)
+    else:
+        open_room = re.search(
+            r'data-arena-room="(\d+)"[^>]*data-arena-room-accessible="1"'
+            r'|data-arena-room-accessible="1"[^>]*data-arena-room="(\d+)"',
+            r.text,
+        )
+        if open_room:
+            room_path = f"/arena_rooms/{open_room.group(1) or open_room.group(2)}"
+    if room_path:
+        r_room = s.get(urljoin(BASE + "/", room_path.lstrip("/")), timeout=TIMEOUT, allow_redirects=True)
         report.add(
             "GET arena room chrome",
             r_room.status_code == 200 and "nl-arena-frame" in r_room.text,
