@@ -20,7 +20,6 @@ quests:
     reward:
       experience: 25
       currency_nv: 20
-      item_key: ashen_bait
     unlocks: [veil_tail_delivery]
     sort: 1
 
