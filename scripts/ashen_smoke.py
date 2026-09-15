@@ -1359,6 +1359,21 @@ def main() -> int:
             or 'data-building-recovery="world"' in r_denied.text,
             f"url={r_denied.url}",
         )
+    r_bldg_miss = s.get(
+        f"{BASE}/city/buildings/__missing_ashen_building__",
+        timeout=TIMEOUT,
+        allow_redirects=True,
+    )
+    report.add(
+        "building missing key recovery",
+        r_bldg_miss.status_code == 200
+        and 'data-building-denied="1"' in r_bldg_miss.text
+        and (
+            'data-building-recovery="main"' in r_bldg_miss.text
+            or 'data-building-recovery="world"' in r_bldg_miss.text
+        ),
+        f"status={r_bldg_miss.status_code} url={r_bldg_miss.url}",
+    )
     r_loc = s.get(f"{BASE}/world/locations/podgorny_mine", timeout=TIMEOUT, allow_redirects=True)
     if 'data-location-denied="1"' in r_loc.text:
         report.add(

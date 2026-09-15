@@ -283,7 +283,7 @@ class CityBuildingsController < ApplicationController
   def load_building
     @building_key = params[:building_key].to_s
     @building = Game::World::CityBuildingCatalog.fetch(@building_key)
-    redirect_to(world_path, alert: I18n.t("game.flashes.building_not_found")) unless @building
+    redirect_to(world_path(building_denied: 1), alert: I18n.t("game.flashes.building_not_found")) unless @building
   end
 
   # Entry changes saved room state. Revalidate and render under the same lock

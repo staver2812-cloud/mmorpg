@@ -1238,6 +1238,7 @@ Final rerun results are in the
 - 2026-09-14: Smoke asserts Post desk / empty-note `data-post-recovery` markers.
 - 2026-09-14: Guard Tower, Pitch Forge landmark, and Tavern rumors recover via City/Market/Shop/Inventory/Hall CTAs.
 - 2026-09-15: Out-of-district building GETs redirect to World with `building_denied=1` recovery chrome (`data-building-denied`, `data-building-recovery`).
+- 2026-09-15: Unknown city building keys also redirect to World with `building_denied=1` recovery chrome.
 - 2026-09-14: Numismatics deferred desk recovers via Shop/Junk with `data-numismatics-recovery`; exchange buy-deferred lobby also offers Bank/Junk when accessible.
 - 2026-09-13: Infirmary, Pitch Bank, Law Abode, and Veil Obelisk desks also render the shared landmark chrome (inside lead + exit notes) for consistent exit affordances.
 - 2026-09-13: Infirmary premium desk shows live Assault/Heal scroll bag totals matching HUD chips; greys out VM buys when short (`data-hospital-premium-affordable`); also `data-hospital-premium-any-affordable` and sandbox top-up readiness (`data-hospital-topup-ready` / `data-hospital-topup-wait`); rest desk lists live injury summary (`data-hospital-injuries`); healer craft shows bag mass/slots (`data-hospital-mass`); rest readiness exposed as `data-hospital-rest-ready`.
