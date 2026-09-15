@@ -494,6 +494,7 @@ shipped Inventory management routes.
 | 2026-08-25 | Made the shared multi-unit item-add contract explicitly atomic: an Inventory lock plus nested savepoint rolls back partial stack and carried-mass writes before a caller records a capacity failure. |
 | 2026-08-26 | Clarified the Combat-owned Careful Fighter wear handoff and recorded repair as a deferred workshop/profession transaction rather than an inventory durability reset. |
 | 2026-09-15 | Missing inventory row on equip/use/transfer recovers on Inventory with `item_denied=1` chrome. |
+| 2026-09-15 | Failed equip/unequip recovers on Inventory with `equip_denied=1` chrome; failed use/discard with `use_denied=1`. |
 | 2026-09-15 | Failed item/NV transfer/gift recovers on Inventory with `transfer_denied=1` chrome. |
 | 2026-09-15 | Failed equipment-set wear/save/delete recovers on Inventory with `set_denied=1` chrome. |
 | 2026-09-15 | Discard of a missing inventory row recovers on Inventory with `item_denied=1` and a City CTA. |

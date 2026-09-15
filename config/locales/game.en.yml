@@ -137,6 +137,8 @@ en:
       not_enough_nv: "Not enough NV."
       item_not_found: "Item not found."
       item_denied_next: "That item is no longer in your bag."
+      equip_denied_next: "That equip or unequip did not work — check the slot and try again from Inventory."
+      use_denied_next: "That item could not be used or discarded — check Inventory and try again."
       item_not_equipment: "Item is not equipment."
       item_already_equipped: "Item is already equipped."
       invalid_equipment_slot: "Invalid equipment slot."

@@ -53,14 +53,14 @@ class InventoriesController < ApplicationController
             locals: {type: :alert, message: result[:error]}
           ), status: :unprocessable_content
         end
-        format.html { redirect_to inventory_redirect_path, alert: result[:error] }
+        format.html { redirect_to inventory_redirect_path(equip_denied: 1), alert: result[:error] }
       end
     end
   end
 
   # POST /inventory/unequip
   def unequip
-    slot = params[:slot].to_sym
+    slot = params[:slot].presence&.to_sym
 
     result = Game::Inventory::EquipmentService.new(
       character: current_character,
@@ -83,7 +83,7 @@ class InventoriesController < ApplicationController
             locals: {type: :alert, message: result[:error]}
           ), status: :unprocessable_content
         end
-        format.html { redirect_to inventory_redirect_path, alert: result[:error] }
+        format.html { redirect_to inventory_redirect_path(equip_denied: 1), alert: result[:error] }
       end
     end
   end
@@ -121,7 +121,7 @@ class InventoriesController < ApplicationController
             locals: {type: "alert", message: result[:error]}
           )
         end
-        format.html { redirect_to inventory_redirect_path, alert: result[:error] }
+        format.html { redirect_to inventory_redirect_path(use_denied: 1), alert: result[:error] }
       end
     end
   end
@@ -135,7 +135,7 @@ class InventoriesController < ApplicationController
     if result[:success]
       redirect_to inventory_redirect_path, notice: result[:message]
     else
-      redirect_to inventory_redirect_path, alert: result[:error]
+      redirect_to inventory_redirect_path(use_denied: 1), alert: result[:error]
     end
   end
 

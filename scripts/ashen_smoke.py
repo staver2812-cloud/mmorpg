@@ -1912,6 +1912,21 @@ def main() -> int:
         f"status={r_equip.status_code} url={r_equip.url}",
     )
     token = csrf_from(r_equip.text) or token
+    r_unequip = s.post(
+        f"{BASE}/inventory/unequip",
+        data={"authenticity_token": token, "slot": "main_hand"},
+        headers={"Accept": "text/html"},
+        timeout=TIMEOUT,
+        allow_redirects=True,
+    )
+    report.add(
+        "inventory unequip denied recovery",
+        r_unequip.status_code == 200
+        and 'data-inventory-equip-denied="1"' in r_unequip.text
+        and 'data-inventory-recovery="world"' in r_unequip.text,
+        f"status={r_unequip.status_code} url={r_unequip.url}",
+    )
+    token = csrf_from(r_unequip.text) or token
     r_set = s.post(
         f"{BASE}/inventory/wear_equipment_set",
         data={"authenticity_token": token, "set_name": "__missing_ashen_set__"},

@@ -36,6 +36,20 @@
           <%= link_to t("arena.nav.city"), world_path, class: "nl-sheet-link", data: {inventory_recovery: "world"} %>
         </p>
       <% end %>
+      <% if params[:equip_denied].to_s == "1" %>
+        <p class="nl-quests-board__meta" data-inventory-equip-denied="1">
+          <%= t("game.inventory.equip_denied_next") %>
+          ·
+          <%= link_to t("arena.nav.city"), world_path, class: "nl-sheet-link", data: {inventory_recovery: "world"} %>
+        </p>
+      <% end %>
+      <% if params[:use_denied].to_s == "1" %>
+        <p class="nl-quests-board__meta" data-inventory-use-denied="1">
+          <%= t("game.inventory.use_denied_next") %>
+          ·
+          <%= link_to t("arena.nav.city"), world_path, class: "nl-sheet-link", data: {inventory_recovery: "world"} %>
+        </p>
+      <% end %>
       <% if params[:set_denied].to_s == "1" %>
         <p class="nl-quests-board__meta" data-inventory-set-denied="1">
           <%= t("game.inventory.set_denied_next") %>

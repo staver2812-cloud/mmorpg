@@ -18,4 +18,13 @@ RSpec.describe "Inventory equip denied", type: :request do
     expect(response.body).to include('data-inventory-item-denied="1"')
     expect(response.body).to include('data-inventory-recovery="world"')
   end
+
+  it "recovers when unequipping an empty slot" do
+    post unequip_inventory_path, params: {slot: "main_hand"}
+
+    expect(response).to redirect_to(inventory_path(equip_denied: 1))
+    follow_redirect!
+    expect(response.body).to include('data-inventory-equip-denied="1"')
+    expect(response.body).to include('data-inventory-recovery="world"')
+  end
 end
