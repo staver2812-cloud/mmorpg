@@ -3,6 +3,15 @@
   <p class="nl-handbook__lead">
     <%= t("game.professions.tar_smith_lead", skill: local_assigns.fetch(:skill, 0)) %>
   </p>
+  <% if params[:craft_denied].to_s == "1" %>
+    <p class="nl-quests-board__meta" data-craft-denied="1">
+      <%= t("game.professions.craft_denied_next") %>
+      ·
+      <%= link_to t("arena.nav.city"), world_path, class: "nl-sheet-link", data: {workshop_recovery: "world"} %>
+      ·
+      <%= link_to t("game.professions.tar_smith"), city_building_path("workshop"), class: "nl-sheet-link", data: {workshop_recovery: "workshop"} %>
+    </p>
+  <% end %>
   <% inv = current_character.inventory %>
   <% bag_weight = inv&.current_weight.to_i || 0 %>
   <% bag_max = inv&.max_weight.to_i || current_character.carrying_capacity.to_i %>

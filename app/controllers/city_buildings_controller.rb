@@ -89,18 +89,17 @@ class CityBuildingsController < ApplicationController
     recipe = Game::Professions::Catalog.recipe(params[:recipe_key])
     profession = recipe && Game::Professions::Catalog.professions[recipe["profession"].to_s]
     if profession && profession["building_key"].to_s != @building_key
-      redirect_to city_building_path(@building_key), alert: I18n.t("game.professions.wrong_building") and return
+      redirect_to city_building_path(@building_key, craft_denied: 1),
+        alert: I18n.t("game.professions.wrong_building") and return
     end
 
     result = Game::Professions::Craft.new(
       character: current_character,
       recipe_key: params[:recipe_key]
     ).call
-    if result.success
-      redirect_to city_building_path(@building_key), notice: result.message
-    else
-      redirect_to city_building_path(@building_key), alert: result.message
-    end
+    extra = result.success ? {} : {craft_denied: 1}
+    flash_opts = result.success ? {notice: result.message} : {alert: result.message}
+    redirect_to city_building_path(@building_key, **extra), **flash_opts
   end
 
   def buy_premium

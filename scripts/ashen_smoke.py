@@ -276,6 +276,26 @@ def main() -> int:
                 'data-building-recovery="world"' in r.text,
                 f"url={r.url}",
             )
+            token = csrf_from(r.text)
+            if token:
+                r_craft = s.post(
+                    f"{BASE}/city/buildings/workshop/craft",
+                    data={
+                        "authenticity_token": token,
+                        "recipe_key": "__missing_ashen_recipe__",
+                    },
+                    headers={"Accept": "text/html"},
+                    timeout=TIMEOUT,
+                    allow_redirects=True,
+                )
+                report.add(
+                    "workshop craft denied recovery",
+                    r_craft.status_code == 200
+                    and 'data-craft-denied="1"' in r_craft.text
+                    and 'data-workshop-recovery="world"' in r_craft.text
+                    and 'data-workshop-recovery="workshop"' in r_craft.text,
+                    f"status={r_craft.status_code} url={r_craft.url}",
+                )
         if path == "/city/buildings/guard_tower" and r.status_code == 200 and 'data-building-key="guard_tower"' in r.text:
             report.add(
                 "guard tower building chrome recovery",

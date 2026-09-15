@@ -1298,6 +1298,7 @@ en:
       hospital_craft_none_ready: "No healer craft is ready — gather herbs outdoors or check Inventory."
       bag_capacity: "Bag: %{weight}/%{max} mass · %{slots}/%{slot_max} slots"
       workshop_only: "Crafting is only available at the Pitch Forge or Infirmary."
+      craft_denied_next: "Craft did not complete — check materials and recipe, then try again or return to the city."
       wrong_building: "That recipe belongs to another building."
       craft_cta: "Craft"
       crafted: "Crafted: %{name}. %{profession} skill: %{skill}."

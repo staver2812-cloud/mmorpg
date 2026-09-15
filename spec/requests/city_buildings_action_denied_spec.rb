@@ -122,4 +122,17 @@ RSpec.describe "City building action denied recovery", type: :request do
     expect(response.body).to include('data-hospital-recovery="world"')
     expect(response.body).to include('data-hospital-recovery="hospital"')
   end
+
+  it "recovers when a workshop craft fails" do
+    create(:city_hotspot, :building, zone: city, key: "workshop", name: "Workshop",
+      action_params: {"feature" => "workshop"})
+
+    post city_building_craft_path("workshop"), params: {recipe_key: "__missing_ashen_recipe__"}
+
+    expect(response).to redirect_to(city_building_path("workshop", craft_denied: 1))
+    follow_redirect!
+    expect(response.body).to include('data-craft-denied="1"')
+    expect(response.body).to include('data-workshop-recovery="world"')
+    expect(response.body).to include('data-workshop-recovery="workshop"')
+  end
 end
