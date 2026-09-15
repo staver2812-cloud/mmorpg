@@ -4723,6 +4723,39 @@ def main() -> int:
             hosp_ok,
             f"status={r_hosp.status_code} url={r_hosp.url}",
         )
+        sr_flags["hospital_ok"] = bool(hosp_ok)
+
+    if sr_flags.get("hospital_ok"):
+        # Arena lobby hotspot is on Central Square with Infirmary.
+        r_ar = s.get(f"{BASE}/arena", timeout=TIMEOUT, allow_redirects=True)
+        ar_ok = (
+            r_ar.status_code == 200
+            and ("nl-arena" in r_ar.text or 'data-arena="' in r_ar.text or "Арена" in r_ar.text)
+            and ("Дуэли" in r_ar.text or "duel" in r_ar.text.lower() or "Help" in r_ar.text or "Зал" in r_ar.text or "room" in r_ar.text.lower())
+        )
+        report.add(
+            "soft-release arena lobby visit",
+            ar_ok,
+            f"status={r_ar.status_code} url={r_ar.url}",
+        )
+        sr_flags["arena_ok"] = bool(ar_ok)
+
+    if sr_flags.get("arena_ok"):
+        r_tav = s.get(
+            f"{BASE}/city/buildings/tavern",
+            timeout=TIMEOUT,
+            allow_redirects=True,
+        )
+        tav_ok = (
+            r_tav.status_code == 200
+            and 'data-building-key="tavern"' in r_tav.text
+            and 'data-landmark-inside="1"' in r_tav.text
+        )
+        report.add(
+            "soft-release tavern visit",
+            tav_ok,
+            f"status={r_tav.status_code} url={r_tav.url}",
+        )
 
     failed = report.failed
     print("\n=== SUMMARY ===")

@@ -1176,6 +1176,8 @@ Final rerun results are in the
 - 2026-09-15: Soft-release smoke opens Guard Tower from Central Square after City Hall.
 - 2026-09-15: Soft-release smoke opens Pitch Forge workshop desk from Central Square after Guard Tower.
 - 2026-09-15: Soft-release smoke opens Coal Infirmary from Central Square after workshop.
+- 2026-09-15: Soft-release smoke opens Arena lobby from Central Square after Infirmary.
+- 2026-09-15: Soft-release smoke opens Tavern from Central Square after Arena lobby.
 - 2026-09-15: Soft-release smoke returns from the east-gate pond path and binds at the Veil Obelisk.
 - 2026-09-15: Bank item locker chrome exposes stored item_key via data-bank-item (was empty key).
 - 2026-09-15: Failed outdoor `POST /world/obelisk` recovers on World with `obelisk_denied=1` chrome.
