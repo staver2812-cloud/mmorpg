@@ -117,6 +117,7 @@ en:
       set_saved: "Equipment set saved."
       set_not_found: "Equipment set not found."
       set_denied_next: "That equipment set is not available."
+      transfer_denied_next: "That transfer did not go through — check the name and stay nearby."
       set_empty: "Equipment set is empty."
       set_cannot_wear: "Equipment set cannot be worn with current item state."
       set_worn: "Equipment set worn."

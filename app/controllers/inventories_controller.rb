@@ -174,7 +174,7 @@ class InventoriesController < ApplicationController
       quantity: transfer_quantity
     )
 
-    redirect_to inventory_redirect_path, flash_for_result(result)
+    redirect_after_transfer(result)
   end
 
   def gift_item
@@ -186,7 +186,7 @@ class InventoriesController < ApplicationController
       gift: true
     )
 
-    redirect_to inventory_redirect_path, flash_for_result(result)
+    redirect_after_transfer(result)
   end
 
   def sell_to_player
@@ -198,7 +198,7 @@ class InventoriesController < ApplicationController
       price: params[:price]
     )
 
-    redirect_to inventory_redirect_path, flash_for_result(result)
+    redirect_after_transfer(result)
   end
 
   def transfer_money
@@ -207,7 +207,7 @@ class InventoriesController < ApplicationController
       amount: params[:amount]
     )
 
-    redirect_to inventory_redirect_path, flash_for_result(result)
+    redirect_after_transfer(result)
   end
 
   private
@@ -294,6 +294,11 @@ class InventoriesController < ApplicationController
 
   def redirect_after_set_mutation(result)
     extra = result.success ? {} : {set_denied: 1}
+    redirect_to inventory_redirect_path(**extra), flash_for_result(result)
+  end
+
+  def redirect_after_transfer(result)
+    extra = result.success ? {} : {transfer_denied: 1}
     redirect_to inventory_redirect_path(**extra), flash_for_result(result)
   end
 

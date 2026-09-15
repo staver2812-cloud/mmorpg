@@ -1641,6 +1641,24 @@ def main() -> int:
         ),
         f"status={r_set.status_code} url={r_set.url}",
     )
+    token = csrf_from(r_set.text) or token
+    r_xfer = s.post(
+        f"{BASE}/inventory/transfer_money",
+        data={
+            "authenticity_token": token,
+            "recipient_name": "__missing_ashen_player__",
+            "amount": "1",
+        },
+        timeout=TIMEOUT,
+        allow_redirects=True,
+    )
+    report.add(
+        "inventory transfer denied recovery",
+        r_xfer.status_code == 200
+        and 'data-inventory-transfer-denied="1"' in r_xfer.text
+        and 'data-inventory-recovery="world"' in r_xfer.text,
+        f"status={r_xfer.status_code} url={r_xfer.url}",
+    )
     if 'data-equipment-sets-empty="1"' in r.text:
         report.add(
             "inventory empty equipment-sets recovery",
