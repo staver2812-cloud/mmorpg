@@ -25,4 +25,13 @@
       <%= link_to t("arena.nav.city"), world_path, class: "nl-sheet-link", data: {location_recovery: "world"} %>
     </p>
   <% end %>
+  <% if params[:character_denied].to_s == "1" %>
+    <p class="nl-quests-board__meta" data-character-denied="1">
+      <%= t("game.sheet.denied_next") %>
+      ·
+      <%= link_to t("arena.nav.character"), player_path(name: current_character.name), class: "nl-sheet-link", data: {character_recovery: "sheet"} %>
+      ·
+      <%= link_to t("arena.nav.city"), world_path, class: "nl-sheet-link", data: {character_recovery: "world"} %>
+    </p>
+  <% end %>
 </div>

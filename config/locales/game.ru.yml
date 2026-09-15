@@ -423,6 +423,7 @@ ru:
       knowledge: "Знания"
     sheet:
       aria_label: "Лист персонажа %{name}"
+      denied_next: "Управление доступно только для вашего персонажа — откройте свой лист."
       money: "Деньги"
       veil_marks: "Марки"
       veil_marks_open_cta: "Лазарет"
@@ -1330,6 +1331,7 @@ ru:
       alloc_not_enough_perk_points: "Недостаточно очков способностей"
       alloc_perks_exclusive: "Выбранные способности взаимоисключающие"
       own_character_only: "Вы можете управлять только своим персонажем."
+      character_missing: "Персонаж не найден."
       move_started: "Перемещение начато."
       location_gone: "Эта локация больше недоступна."
       building_not_found: "Здание не найдено."

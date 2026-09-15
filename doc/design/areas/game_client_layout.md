@@ -177,10 +177,10 @@ new minimum-width, short-landscape, coarse-pointer or zoom requirements.
 Soft-release CSS now includes ≤360px shell compression, short-landscape
 shell/Arena, and coarse-pointer ~44px controls across major gameplay desks;
 auth/public login, Shop status-row recoveries, Quests cards, Inventory, Manage,
-and profile/player boards, World/City denial chrome, and public fight logs also
-compress under ≤360px / coarse pointers. Expanded RESPONSIVE audit for the
-recorded acceptance sample at 320 CSS px / those inputs (plus 200% zoom) remains
-open.
+and profile/player boards, World/City denial chrome, public fight logs, chat/presence,
+and shared primitives also compress under ≤360px / coarse pointers. Expanded
+RESPONSIVE audit for the recorded acceptance sample at 320 CSS px / those inputs
+(plus 200% zoom) remains open.
 
 ## UI Style Maintainability And Domain SRP
 

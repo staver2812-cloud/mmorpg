@@ -748,6 +748,7 @@ Before extending Character Progression:
 | 2026-07-29 | Reordered the parameter column to the captured profile sequence, dropped the uncaptured Attack/Defense/Critical rows, gave the visitor profile its own identity line, and split the presentation into `character_sheet.css` and `player.css`. |
 | 2026-08-23 | Documented that Arena supplies the actual persisted solo-NPC XP award for recipient fight-completion feedback while Character Progression remains the XP/level authority. |
 | 2026-09-14 | Owner sheet Vault/VM open CTAs expose `data-sheet-recovery` (Bank/Infirmary/World). |
+| 2026-09-15 | Missing/foreign character progression redirects to World with `character_denied=1` recovery chrome. |
 | 2026-09-13 | Owner sheet shows private Veil Marks balance (`data-sheet-vm`) with Infirmary link when colocated; NV wallet also exposes `data-sheet-nv`; locker occupancy uses `data-sheet-locker`; vault NV uses `data-sheet-vault`. |
 | 2026-09-14 | Level-up service rejects non-integer/negative XP via `errors.experience_non_negative`. |
 | 2026-09-14 | Allocation/perk and profile chrome request specs assert via `game.flashes.alloc_*` / `perks_saved` / `game.profile.sections` (RU-safe). |

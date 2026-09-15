@@ -423,6 +423,7 @@ en:
       knowledge: "Knowledge"
     sheet:
       aria_label: "%{name} character sheet"
+      denied_next: "You can only manage your own character — open your sheet."
       money: "Money"
       veil_marks: "Marks"
       veil_marks_open_cta: "Infirmary"
@@ -1330,6 +1331,7 @@ en:
       alloc_not_enough_perk_points: "Not enough new-perk points"
       alloc_perks_exclusive: "Selected perks are mutually exclusive"
       own_character_only: "You can only manage your own character."
+      character_missing: "Character not found."
       move_started: "Move started."
       location_gone: "This location is no longer available."
       building_not_found: "Building not found."

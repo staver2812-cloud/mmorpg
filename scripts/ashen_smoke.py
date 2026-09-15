@@ -1232,6 +1232,14 @@ def main() -> int:
         ),
         f"status={r_missing.status_code} url={r_missing.url}",
     )
+    r_char = s.get(f"{BASE}/characters/999999999/stats", timeout=TIMEOUT, allow_redirects=True)
+    if 'data-character-denied="1"' in r_char.text:
+        report.add(
+            "character denied recovery",
+            'data-character-recovery="sheet"' in r_char.text
+            or 'data-character-recovery="world"' in r_char.text,
+            f"url={r_char.url}",
+        )
     r = s.get(f"{BASE}/city/buildings/tavern", timeout=TIMEOUT, allow_redirects=True)
     report.add(
         "GET /city/buildings/tavern fatigue copy",

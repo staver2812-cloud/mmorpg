@@ -121,12 +121,16 @@ class CharactersController < ApplicationController
 
   def set_character
     @character = Character.find(params[:id])
+  rescue ActiveRecord::RecordNotFound
+    redirect_to world_path(character_denied: 1), alert: I18n.t("game.flashes.character_missing") and return
   end
 
   def authorize_character!
+    return if performed?
+
     authorize @character, :manage_progression?
   rescue Pundit::NotAuthorizedError
-    redirect_to root_path, alert: I18n.t("game.flashes.own_character_only")
+    redirect_to world_path(character_denied: 1), alert: I18n.t("game.flashes.own_character_only") and return
   end
 
   def build_stats_data
