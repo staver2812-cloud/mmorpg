@@ -13,6 +13,16 @@
       <% end %>
     </nav>
 
+    <% if params[:trade_denied].to_s == "1" %>
+      <p class="nl-quests-board__meta" data-shop-trade-denied="1">
+        <%= t("game.shop.trade_denied_next") %>
+        ·
+        <%= link_to t("arena.nav.city"), world_path, class: "nl-sheet-link", data: {shop_recovery: "world"} %>
+        ·
+        <%= link_to t("game.shop.title"), shop_path(mode: @mode), class: "nl-sheet-link", data: {shop_recovery: "shop"} %>
+      </p>
+    <% end %>
+
     <% unless @mode == "licenses" %>
       <div class="nl-shop-filter-viewport">
         <nav class="nl-shop-categories" aria-label="<%= t("game.shop.category_aria") %>">

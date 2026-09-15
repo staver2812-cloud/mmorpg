@@ -339,6 +339,7 @@ en:
       short_nv_next: "Not enough NV for this tab — top up the vault or return to the city."
       buy_blocked_next: "Nothing on this tab can be bought right now — free bag space or return to the city."
       denied_next: "Shop is not available here — return to a trading location."
+      trade_denied_next: "Trade did not complete — check stock, funds, or item, then try again or return to World."
       denied_use_main: "Take the Central Square route, then open Shop."
       open_perks: "Open Perks"
       trading_license_required: "Trading license required to sell to the shop."

@@ -37,7 +37,7 @@ class ShopController < ApplicationController
       quantity: shop_quantity
     ).call
 
-    redirect_to shop_return_path, flash_for(result)
+    redirect_after_trade(result)
   end
 
   def sell
@@ -49,10 +49,15 @@ class ShopController < ApplicationController
       quantity: shop_quantity
     ).call
 
-    redirect_to shop_return_path(mode: "sell"), flash_for(result)
+    redirect_after_trade(result, mode: "sell")
   end
 
   private
+
+  def redirect_after_trade(result, **overrides)
+    extra = result.success ? {} : {trade_denied: 1}
+    redirect_to shop_return_path(**overrides.merge(extra)), flash_for(result)
+  end
 
   def load_shop
     @shop_license_rules = Game::Shop::LicenseRules.new(character: current_character,

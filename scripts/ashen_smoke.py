@@ -238,6 +238,26 @@ def main() -> int:
                 and 'data-shop-recovery="licenses"' in r_empty.text,
                 f"status={r_empty.status_code} url={r_empty.url}",
             )
+            token = csrf_from(r.text) or csrf_from(r_empty.text)
+            if token:
+                r_trade = s.post(
+                    f"{BASE}/shop/buy",
+                    data={
+                        "authenticity_token": token,
+                        "item_template_id": "0",
+                    },
+                    headers={"Accept": "text/html"},
+                    timeout=TIMEOUT,
+                    allow_redirects=True,
+                )
+                report.add(
+                    "shop trade denied recovery",
+                    r_trade.status_code == 200
+                    and 'data-shop-trade-denied="1"' in r_trade.text
+                    and 'data-shop-recovery="world"' in r_trade.text
+                    and 'data-shop-recovery="shop"' in r_trade.text,
+                    f"status={r_trade.status_code} url={r_trade.url}",
+                )
         if path == "/city/buildings/hospital" and r.status_code == 200 and 'data-building-key="hospital"' in r.text:
             report.add(
                 "hospital building chrome recovery",

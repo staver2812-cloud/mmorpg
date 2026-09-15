@@ -202,7 +202,7 @@ RSpec.describe "Shop", type: :request do
 
       post buy_shop_path, params: {item_template_id: item_template.id, action_key:}
 
-      expect(response).to redirect_to(shop_path)
+      expect(response).to redirect_to(shop_path(trade_denied: 1))
       expect(flash[:alert]).to eq(I18n.t("game.inventory.no_free_slots"))
       expect(wallet.reload.nv_balance).to eq(200)
       expect(wallet.currency_transactions).to be_empty
@@ -231,8 +231,19 @@ RSpec.describe "Shop", type: :request do
         post buy_shop_path, params: {item_template_id: item_template.id, action_key:}
       }.not_to change { inventory.inventory_items.count }
 
-      expect(response).to redirect_to(shop_path)
+      expect(response).to redirect_to(shop_path(trade_denied: 1))
       expect(flash[:alert]).to include(I18n.t("game.shop.not_enough_nv"))
+    end
+
+    it "surfaces trade_denied recovery chrome when the catalog item is missing" do
+      post buy_shop_path, params: {item_template_id: 0}
+
+      expect(response).to redirect_to(shop_path(trade_denied: 1))
+      follow_redirect!
+      expect(response.body).to include('data-shop-trade-denied="1"')
+      expect(response.body).to include('data-shop-recovery="world"')
+      expect(response.body).to include('data-shop-recovery="shop"')
+      expect(wallet.reload.nv_balance).to eq(200)
     end
   end
 
@@ -277,7 +288,7 @@ RSpec.describe "Shop", type: :request do
         post sell_shop_path, params: {item_id: inventory_item.id, action_key:}
       }.not_to change { wallet.reload.nv_balance }
 
-      expect(response).to redirect_to(shop_path(mode: "sell"))
+      expect(response).to redirect_to(shop_path(mode: "sell", trade_denied: 1))
       expect(flash[:alert]).to include("cannot be sold")
     end
 
@@ -290,7 +301,7 @@ RSpec.describe "Shop", type: :request do
       }.not_to change { wallet.reload.nv_balance }
 
       expect(inventory_item.reload.quantity).to eq(2)
-      expect(response).to redirect_to(shop_path(mode: "sell"))
+      expect(response).to redirect_to(shop_path(mode: "sell", trade_denied: 1))
       expect(flash[:alert]).to include(I18n.t("game.shop.broken_cannot_sell"))
     end
   end
@@ -304,6 +315,7 @@ RSpec.describe "Shop", type: :request do
         post sell_shop_path, params: {item_id: item.id, action_key:}
       }.not_to change { [wallet.reload.nv_balance, shop_account.reload.nv_balance, shop_stock.reload.current, item.reload.quantity] }
 
+      expect(response).to redirect_to(shop_path(mode: "sell", trade_denied: 1))
       expect(flash[:alert]).to include(I18n.t("game.inventory.trade_license_required"))
     end
 
@@ -311,6 +323,7 @@ RSpec.describe "Shop", type: :request do
       get shop_path
       post buy_shop_path, params: {item_template_id: item_template.id}
 
+      expect(response).to redirect_to(shop_path(trade_denied: 1))
       expect(flash[:alert]).to include(I18n.t("game.shop.shop_action_stale"))
       expect(wallet.reload.nv_balance).to eq(200)
       expect(inventory.inventory_items).to be_empty
@@ -323,6 +336,7 @@ RSpec.describe "Shop", type: :request do
       expect(wallet.reload.nv_balance).to eq(160)
       expect(inventory.inventory_items.sum(:quantity)).to eq(1)
       expect(wallet.currency_transactions.count).to eq(1)
+      expect(response).to redirect_to(shop_path(trade_denied: 1))
       expect(flash[:alert]).to include(I18n.t("game.shop.shop_action_stale"))
     end
 
@@ -330,6 +344,7 @@ RSpec.describe "Shop", type: :request do
       action_key = buy_offer
       [0, 2, 99, -1, "1.5", "invalid"].each do |quantity|
         post buy_shop_path, params: {item_template_id: item_template.id, action_key:, quantity:}
+        expect(response).to redirect_to(shop_path(trade_denied: 1))
         expect(flash[:alert]).to include(I18n.t("game.shop.buy_one_at_a_time"))
       end
 
@@ -344,6 +359,7 @@ RSpec.describe "Shop", type: :request do
 
       post sell_shop_path, params: {item_id: foreign.id, action_key:}
 
+      expect(response).to redirect_to(shop_path(mode: "sell", trade_denied: 1))
       expect(flash[:alert]).to eq(I18n.t("game.inventory.item_not_found"))
       expect(foreign.reload).to be_persisted
       expect(wallet.reload.nv_balance).to eq(200)
