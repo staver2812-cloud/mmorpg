@@ -403,6 +403,7 @@ en:
       character_title: "%{name} — Character"
       location_in_combat: "%{place} [in combat]"
       free_points: "Free points"
+      allocation_denied_next: "That allocation did not save — check free points and try again from your sheet."
       combat_points: "Combat points"
       peace_points: "Peace points"
       possible_perks: "Possible new perks"

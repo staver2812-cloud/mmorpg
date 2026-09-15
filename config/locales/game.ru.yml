@@ -403,6 +403,7 @@ ru:
       character_title: "%{name} — Персонаж"
       location_in_combat: "%{place} [в бою]"
       free_points: "Свободные очки"
+      allocation_denied_next: "Распределение не сохранено — проверьте свободные очки и повторите с листа персонажа."
       combat_points: "Боевые очки"
       peace_points: "Мирные очки"
       possible_perks: "Доступные способности"

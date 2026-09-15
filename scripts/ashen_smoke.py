@@ -1504,6 +1504,29 @@ def main() -> int:
             or 'data-character-recovery="world"' in r_char.text,
             f"url={r_char.url}",
         )
+    r_sheet = s.get(f"{BASE}/player/{nick}", timeout=TIMEOUT)
+    char_id_match = re.search(r"/characters/(\d+)/stats", r_sheet.text)
+    if char_id_match:
+        char_id = char_id_match.group(1)
+        token = csrf_from(r_sheet.text) or token
+        r_alloc = s.post(
+            f"{BASE}/characters/{char_id}/stats",
+            data={"_method": "patch", "authenticity_token": token},
+            headers={"Accept": "text/html"},
+            timeout=TIMEOUT,
+            allow_redirects=True,
+        )
+        report.add(
+            "allocation denied recovery",
+            r_alloc.status_code == 200
+            and 'data-allocation-denied="1"' in r_alloc.text
+            and (
+                'data-allocation-recovery="world"' in r_alloc.text
+                or 'data-allocation-recovery="sheet"' in r_alloc.text
+            ),
+            f"status={r_alloc.status_code} url={r_alloc.url}",
+        )
+        token = csrf_from(r_alloc.text) or token
     r_player = s.get(f"{BASE}/player/NobodyNowhere999", timeout=TIMEOUT, allow_redirects=True)
     if 'data-player-denied="1"' in r_player.text:
         report.add(
