@@ -3388,6 +3388,50 @@ def main() -> int:
                                                                                                                                                                             and 'data-souvenir-denied="1"' not in r_buy.text,
                                                                                                                                                                             f"status={r_buy.status_code} url={r_buy.url} item={souv_key} wallet={wallet_nv}",
                                                                                                                                                                         )
+                                                                                                                                                                        if (
+                                                                                                                                                                            r_buy.status_code == 200
+                                                                                                                                                                            and "souvenir_denied=1" not in r_buy.url
+                                                                                                                                                                            and 'data-souvenir-denied="1"' not in r_buy.text
+                                                                                                                                                                        ):
+                                                                                                                                                                            r_inv_use = s.get(
+                                                                                                                                                                                f"{BASE}/inventory",
+                                                                                                                                                                                timeout=TIMEOUT,
+                                                                                                                                                                                allow_redirects=True,
+                                                                                                                                                                            )
+                                                                                                                                                                            token = csrf_from(r_inv_use.text) or token
+                                                                                                                                                                            use_m = re.search(
+                                                                                                                                                                                r'data-item-id="(\d+)"[^>]*data-item-key="ashen_bandage"'
+                                                                                                                                                                                r'|data-item-key="ashen_bandage"[^>]*data-item-id="(\d+)"',
+                                                                                                                                                                                r_inv_use.text,
+                                                                                                                                                                            )
+                                                                                                                                                                            use_item_id = None
+                                                                                                                                                                            if use_m:
+                                                                                                                                                                                use_item_id = use_m.group(1) or use_m.group(2)
+                                                                                                                                                                            if use_item_id:
+                                                                                                                                                                                r_use = s.post(
+                                                                                                                                                                                    f"{BASE}/inventory/use",
+                                                                                                                                                                                    data={
+                                                                                                                                                                                        "authenticity_token": token,
+                                                                                                                                                                                        "item_id": use_item_id,
+                                                                                                                                                                                    },
+                                                                                                                                                                                    headers={"Accept": "text/html"},
+                                                                                                                                                                                    timeout=TIMEOUT,
+                                                                                                                                                                                    allow_redirects=True,
+                                                                                                                                                                                )
+                                                                                                                                                                                report.add(
+                                                                                                                                                                                    "soft-release uses ashen_bandage",
+                                                                                                                                                                                    r_use.status_code == 200
+                                                                                                                                                                                    and "use_denied=1" not in r_use.url
+                                                                                                                                                                                    and "item_denied=1" not in r_use.url
+                                                                                                                                                                                    and 'data-inventory-item-denied="1"' not in r_use.text,
+                                                                                                                                                                                    f"status={r_use.status_code} url={r_use.url} item_id={use_item_id}",
+                                                                                                                                                                                )
+                                                                                                                                                                            else:
+                                                                                                                                                                                report.add(
+                                                                                                                                                                                    "soft-release uses ashen_bandage",
+                                                                                                                                                                                    False,
+                                                                                                                                                                                    "no ashen_bandage in bag",
+                                                                                                                                                                                )
                                                                                                                                                                     else:
                                                                                                                                                                         report.add(
                                                                                                                                                                             "soft-release souvenir buy",

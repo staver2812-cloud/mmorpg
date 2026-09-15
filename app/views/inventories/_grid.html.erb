@@ -12,6 +12,7 @@
     <% durability_pct = inventory_item_durability_percent(item) %>
     <div class="inventory-slot filled nl-inventory-item<%= ' nl-inventory-item--broken' if broken %>"
          data-item-id="<%= item.id %>"
+         data-item-key="<%= item.item_template.key %>"
          <% if durable %>data-inventory-broken="<%= broken ? "1" : "0" %>"<% end %>
          data-action="click->inventory#selectItem">
       <div class="nl-inventory-item-icon">
