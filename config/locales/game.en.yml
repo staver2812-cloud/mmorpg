@@ -383,6 +383,8 @@ en:
       merchant_complete_btn: "Complete Merchant qualification"
     profile:
       sections: "Character sections"
+      missing_title: "Player not found"
+      missing_next: "That player is gone — open your sheet or return to the city."
       overview: "Overview"
       skills: "Skills"
       perks: "Perks"
@@ -1332,6 +1334,7 @@ en:
       alloc_perks_exclusive: "Selected perks are mutually exclusive"
       own_character_only: "You can only manage your own character."
       character_missing: "Character not found."
+      player_missing: "Player not found."
       move_started: "Move started."
       location_gone: "This location is no longer available."
       building_not_found: "Building not found."

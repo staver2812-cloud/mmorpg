@@ -49,6 +49,17 @@ class PlayersController < ApplicationController
     @character = Character
       .includes(:user, {inventory: {inventory_items: :item_template}}, {position: :zone})
       .find_by!("LOWER(characters.name) = ?", params[:name].to_s.downcase)
+  rescue ActiveRecord::RecordNotFound
+    respond_to do |format|
+      format.html do
+        if user_signed_in?
+          redirect_to world_path(player_denied: 1), alert: I18n.t("game.flashes.player_missing") and return
+        end
+
+        render "missing", status: :not_found
+      end
+      format.json { render json: {error: I18n.t("game.flashes.player_missing")}, status: :not_found }
+    end
   end
 
   def equipped_items_for(character)

@@ -62,6 +62,15 @@
       <%= link_to t("arena.nav.city"), world_path, class: "nl-sheet-link", data: {character_recovery: "world"} %>
     </p>
   <% end %>
+  <% if params[:player_denied].to_s == "1" %>
+    <p class="nl-quests-board__meta" data-player-denied="1">
+      <%= t("game.profile.missing_next") %>
+      ·
+      <%= link_to t("arena.nav.character"), player_path(name: current_character.name), class: "nl-sheet-link", data: {player_recovery: "sheet"} %>
+      ·
+      <%= link_to t("arena.nav.city"), world_path, class: "nl-sheet-link", data: {player_recovery: "world"} %>
+    </p>
+  <% end %>
 
   <div class="nl-city-viewport<%= ' nl-city-viewport--pending' unless image_asset %>"
        data-controller="<%= 'nl-scene-size nl-city-map' if image_asset %>"

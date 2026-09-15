@@ -383,6 +383,8 @@ ru:
       merchant_complete_btn: "Завершить квалификацию торговца"
     profile:
       sections: "Разделы персонажа"
+      missing_title: "Игрок не найден"
+      missing_next: "Такого игрока нет — откройте свой лист или вернитесь в город."
       overview: "Обзор"
       skills: "Навыки"
       perks: "Способности"
@@ -1332,6 +1334,7 @@ ru:
       alloc_perks_exclusive: "Выбранные способности взаимоисключающие"
       own_character_only: "Вы можете управлять только своим персонажем."
       character_missing: "Персонаж не найден."
+      player_missing: "Игрок не найден."
       move_started: "Перемещение начато."
       location_gone: "Эта локация больше недоступна."
       building_not_found: "Здание не найдено."

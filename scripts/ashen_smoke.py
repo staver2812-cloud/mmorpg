@@ -1240,6 +1240,21 @@ def main() -> int:
             or 'data-character-recovery="world"' in r_char.text,
             f"url={r_char.url}",
         )
+    r_player = s.get(f"{BASE}/player/NobodyNowhere999", timeout=TIMEOUT, allow_redirects=True)
+    if 'data-player-denied="1"' in r_player.text:
+        report.add(
+            "player missing recovery",
+            'data-player-recovery="sheet"' in r_player.text
+            or 'data-player-recovery="world"' in r_player.text,
+            f"url={r_player.url}",
+        )
+    elif r_player.status_code == 404 and 'data-player-missing="1"' in r_player.text:
+        report.add(
+            "player missing recovery",
+            'data-player-recovery="home"' in r_player.text
+            or 'data-player-recovery="sign_in"' in r_player.text,
+            f"url={r_player.url}",
+        )
     r = s.get(f"{BASE}/city/buildings/tavern", timeout=TIMEOUT, allow_redirects=True)
     report.add(
         "GET /city/buildings/tavern fatigue copy",
