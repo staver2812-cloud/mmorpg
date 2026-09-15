@@ -4920,6 +4920,34 @@ def main() -> int:
             dh_ok,
             f"status={r_dh.status_code} url={r_dh.url}",
         )
+        sr_flags["dealer_ok"] = bool(dh_ok)
+
+    if sr_flags.get("dealer_ok"):
+        r_pl = s.get(f"{BASE}/player/{nick}", timeout=TIMEOUT, allow_redirects=True)
+        pl_ok = (
+            r_pl.status_code == 200
+            and nick in r_pl.text
+            and ("nl-player" in r_pl.text or "Очки" in r_pl.text or "stats" in r_pl.text.lower() or "характерист" in r_pl.text.lower())
+        )
+        report.add(
+            "soft-release player profile visit",
+            pl_ok,
+            f"status={r_pl.status_code} url={r_pl.url}",
+        )
+        sr_flags["profile_ok"] = bool(pl_ok)
+
+    if sr_flags.get("profile_ok"):
+        r_world = s.get(f"{BASE}/world", timeout=TIMEOUT, allow_redirects=True)
+        world_ok = (
+            r_world.status_code == 200
+            and ("data-world=" in r_world.text or "nl-world" in r_world.text or "nl-map" in r_world.text)
+            and nick in r_world.text
+        )
+        report.add(
+            "soft-release world shell visit",
+            world_ok,
+            f"status={r_world.status_code} url={r_world.url}",
+        )
 
     failed = report.failed
     print("\n=== SUMMARY ===")
