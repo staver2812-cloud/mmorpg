@@ -1914,7 +1914,7 @@ def main() -> int:
     token = csrf_from(r_equip.text) or token
     r_unequip = s.post(
         f"{BASE}/inventory/unequip",
-        data={"authenticity_token": token, "slot": "main_hand"},
+        data={"authenticity_token": token, "slot": "head"},
         headers={"Accept": "text/html"},
         timeout=TIMEOUT,
         allow_redirects=True,

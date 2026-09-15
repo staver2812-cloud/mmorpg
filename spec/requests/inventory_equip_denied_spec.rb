@@ -20,7 +20,7 @@ RSpec.describe "Inventory equip denied", type: :request do
   end
 
   it "recovers when unequipping an empty slot" do
-    post unequip_inventory_path, params: {slot: "main_hand"}
+    post unequip_inventory_path, params: {slot: "head"}
 
     expect(response).to redirect_to(inventory_path(equip_denied: 1))
     follow_redirect!
