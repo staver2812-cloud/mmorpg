@@ -5037,6 +5037,121 @@ def main() -> int:
                         break
                     time.sleep(min(secs + 2, 40))
         report.add("soft-release nature_child drink", nc_drank, nc_detail)
+        sr_flags["nc_drink_ok"] = bool(nc_drank)
+
+    if sr_flags.get("nc_drink_ok"):
+        # Walk pond -> east-gate cell, re-enter city, then assert merchant collect-shop.
+        returned = False
+        return_detail = "no path to east gate"
+        for _back_i in range(10):
+            r_back = s.get(f"{BASE}/world", timeout=TIMEOUT, allow_redirects=True)
+            token = csrf_from(r_back.text) or token
+            if 'action="/world/enter_building"' in r_back.text or "enter_building" in r_back.text:
+                ok_ent, d_ent = enter_building(s)
+                if ok_ent:
+                    returned = True
+                    return_detail = d_ent
+                    break
+                return_detail = f"enter failed: {d_ent}"
+                break
+            dests = []
+            for dm in re.finditer(
+                r'data-direction="([^"]+)"[^>]*'
+                r'data-target-x="(-?\d+)"[^>]*'
+                r'data-target-y="(-?\d+)"[^>]*'
+                r'data-action-key="([^"]+)"[^>]*'
+                r'data-travel-seconds="(\d+)"'
+                r'|data-target-x="(-?\d+)"[^>]*'
+                r'data-target-y="(-?\d+)"[^>]*'
+                r'data-direction="([^"]+)"[^>]*'
+                r'data-action-key="([^"]+)"[^>]*'
+                r'data-travel-seconds="(\d+)"',
+                r_back.text,
+            ):
+                if dm.group(1):
+                    dests.append((dm.group(1), int(dm.group(2)), int(dm.group(3)), dm.group(4), int(dm.group(5))))
+                else:
+                    dests.append((dm.group(8), int(dm.group(6)), int(dm.group(7)), dm.group(9), int(dm.group(10))))
+            if not dests:
+                return_detail = "no dests toward east gate"
+                break
+            # East gate outdoor cell is near 11,9.
+            dests.sort(key=lambda d: abs(d[1] - 11) + abs(d[2] - 9))
+            direction, tx, ty, akey, secs = dests[0]
+            r_step = s.post(
+                f"{BASE}/world/move",
+                data={
+                    "authenticity_token": token,
+                    "direction": direction,
+                    "target_x": tx,
+                    "target_y": ty,
+                    "action_key": akey,
+                },
+                headers={"Accept": "text/html"},
+                timeout=TIMEOUT,
+                allow_redirects=True,
+            )
+            if r_step.status_code != 200 or "action_denied=1" in r_step.url:
+                return_detail = f"step fail {r_step.status_code} {r_step.url}"
+                break
+            time.sleep(min(secs + 2, 40))
+        if not returned:
+            report.add("soft-release merchant collect-shop status", False, return_detail)
+        else:
+            click_hotspot(s, "go_main")
+            click_hotspot(s, "go_forpost1")
+            r_mkt2 = s.get(
+                f"{BASE}/city/buildings/market",
+                timeout=TIMEOUT,
+                allow_redirects=True,
+            )
+            mkt_ok = (
+                r_mkt2.status_code == 200
+                and 'data-merchant-desk="1"' in r_mkt2.text
+                and (
+                    'data-merchant-status="collect-shop"' in r_mkt2.text
+                    or 'data-merchant-status="accepted"' in r_mkt2.text
+                    or 'data-merchant-status="collect-shop-pay"' in r_mkt2.text
+                )
+            )
+            report.add(
+                "soft-release merchant collect-shop status",
+                mkt_ok,
+                f"status={r_mkt2.status_code} url={r_mkt2.url}",
+            )
+            sr_flags["merchant_status_ok"] = bool(mkt_ok)
+
+    if sr_flags.get("merchant_status_ok"):
+        # Soft-release wallet cannot fund 1000 NV receipt; Shop pay must stay blocked.
+        click_hotspot(s, "go_main")
+        r_shop_pay = s.get(f"{BASE}/shop", timeout=TIMEOUT, allow_redirects=True)
+        token = csrf_from(r_shop_pay.text) or token
+        r_pay = s.post(
+            f"{BASE}/merchant_qualification/pay",
+            data={"authenticity_token": token},
+            headers={"Accept": "text/html"},
+            timeout=TIMEOUT,
+            allow_redirects=True,
+        )
+        pay_blocked = (
+            r_pay.status_code == 200
+            and (
+                "merchant_denied=1" in r_pay.url
+                or 'data-merchant-denied="1"' in r_pay.text
+                or "1000" in r_pay.text
+                or "недостаточно" in r_pay.text.lower()
+                or "insufficient" in r_pay.text.lower()
+                or 'data-merchant-status="collect-shop-pay"' in r_pay.text
+                or 'data-merchant-status="collect-shop"' in r_pay.text
+            )
+            and 'data-merchant-status="completed"' not in r_pay.text
+            and 'data-merchant-status="paid"' not in r_pay.text
+        )
+        report.add(
+            "soft-release merchant pay short-NV blocked",
+            pay_blocked,
+            f"status={r_pay.status_code} url={r_pay.url}",
+        )
 
     failed = report.failed
     print("\n=== SUMMARY ===")
