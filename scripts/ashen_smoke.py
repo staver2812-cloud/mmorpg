@@ -9,6 +9,7 @@ Usage:
 
 from __future__ import annotations
 
+import html as html_lib
 import os
 import re
 import sys
@@ -16,7 +17,7 @@ import time
 import uuid
 from dataclasses import dataclass, field
 from typing import List, Optional, Tuple
-from urllib.parse import urljoin
+from urllib.parse import parse_qs, urljoin, urlsplit
 
 import requests
 
@@ -2711,8 +2712,9 @@ def main() -> int:
                                                                     token = csrf_from(r_alloc_ok.text) or token
                                                                     # Refresh world/shop action offers after arena/quest chain.
                                                                     s.get(f"{BASE}/world", timeout=TIMEOUT, allow_redirects=True)
+                                                                    # Knives is the default Buy category and stays wearable at soft-release levels.
                                                                     r_shop_buy = s.get(
-                                                                        f"{BASE}/shop?mode=buy",
+                                                                        f"{BASE}/shop?mode=buy&category=knives",
                                                                         timeout=TIMEOUT,
                                                                         allow_redirects=True,
                                                                     )
@@ -2720,6 +2722,7 @@ def main() -> int:
                                                                     any_aff = 'data-shop-any-affordable="1"' in r_shop_buy.text
                                                                     item_id = None
                                                                     action_key = None
+                                                                    durable_pick = None
                                                                     for row_m in re.finditer(
                                                                         r'<tr([^>]*)>([\s\S]*?)</tr>',
                                                                         r_shop_buy.text,
@@ -2737,15 +2740,23 @@ def main() -> int:
                                                                         )
                                                                         if not ak_m:
                                                                             continue
-                                                                        item_id = tid_m.group(1)
-                                                                        action_key = ak_m.group(1) or ak_m.group(2)
-                                                                        break
+                                                                        pick = (
+                                                                            tid_m.group(1),
+                                                                            ak_m.group(1) or ak_m.group(2),
+                                                                        )
+                                                                        if item_id is None:
+                                                                            item_id, action_key = pick
+                                                                        if "nl-shop-durability" in body and durable_pick is None:
+                                                                            durable_pick = pick
+                                                                    if durable_pick:
+                                                                        item_id, action_key = durable_pick
                                                                     if item_id and action_key:
                                                                         r_bought = s.post(
                                                                             f"{BASE}/shop/buy",
                                                                             data={
                                                                                 "authenticity_token": token,
                                                                                 "mode": "buy",
+                                                                                "category": "knives",
                                                                                 "item_template_id": item_id,
                                                                                 "action_key": action_key,
                                                                             },
@@ -2777,39 +2788,41 @@ def main() -> int:
                                                                                 r'name="item_id"[^>]*value="(\d+)"',
                                                                                 r_inv.text,
                                                                             )
+                                                                            wear_item_id = None
                                                                             if wear_m and wear_m.group(1):
-                                                                                r_wear = s.post(
-                                                                                    urljoin(BASE + "/", wear_m.group(1).lstrip("/")),
-                                                                                    data={"authenticity_token": token},
-                                                                                    headers={"Accept": "text/html"},
-                                                                                    timeout=TIMEOUT,
-                                                                                    allow_redirects=True,
-                                                                                )
-                                                                            elif wear_m and wear_m.group(2):
+                                                                                action_url = html_lib.unescape(wear_m.group(1))
+                                                                                qs = parse_qs(urlsplit(action_url).query)
+                                                                                wear_item_id = (qs.get("item_id") or [None])[0]
+                                                                            elif wear_m and wear_m.group(3):
+                                                                                wear_item_id = wear_m.group(3)
+                                                                            if wear_item_id:
+                                                                                # Prefer body item_id — query-only POSTs can 404 → item_denied.
                                                                                 r_wear = s.post(
                                                                                     f"{BASE}/inventory/equip",
                                                                                     data={
                                                                                         "authenticity_token": token,
-                                                                                        "item_id": wear_m.group(3),
+                                                                                        "item_id": wear_item_id,
                                                                                     },
                                                                                     headers={"Accept": "text/html"},
                                                                                     timeout=TIMEOUT,
                                                                                     allow_redirects=True,
                                                                                 )
-                                                                            else:
-                                                                                r_wear = None
-                                                                            if r_wear is not None:
                                                                                 report.add(
                                                                                     "soft-release equips inventory item",
                                                                                     r_wear.status_code == 200
-                                                                                    and "equip_denied=1" not in r_wear.url,
-                                                                                    f"status={r_wear.status_code} url={r_wear.url}",
+                                                                                    and "equip_denied=1" not in r_wear.url
+                                                                                    and "item_denied=1" not in r_wear.url
+                                                                                    and 'data-inventory-item-denied="1"'
+                                                                                    not in r_wear.text
+                                                                                    and 'data-inventory-equip-denied="1"'
+                                                                                    not in r_wear.text,
+                                                                                    f"status={r_wear.status_code} url={r_wear.url} item_id={wear_item_id}",
                                                                                 )
                                                                             else:
                                                                                 report.add(
                                                                                     "soft-release equips inventory item",
-                                                                                    True,
-                                                                                    "no wearable bag item (buy may be non-equipment)",
+                                                                                    False,
+                                                                                    "no wearable bag item after knives buy",
                                                                                 )
                                                                     else:
                                                                         report.add(
