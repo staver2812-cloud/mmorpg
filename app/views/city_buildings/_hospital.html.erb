@@ -20,9 +20,9 @@
     <p class="nl-quests-board__meta" data-defeat-recovery="1">
       <%= t("game.buildings.defeat_recovery_next") %>
       ·
-      <%= link_to t("arena.nav.arena"), arena_index_path, class: "nl-sheet-link", data: {defeat_recovery: "arena"} %>
-      ·
       <%= link_to t("arena.nav.city"), world_path, class: "nl-sheet-link", data: {defeat_recovery: "world"} %>
+      ·
+      <%= link_to t("game.buildings.defeat_recovery_arena_hint"), world_path, class: "nl-sheet-link", data: {defeat_recovery: "arena_square"} %>
     </p>
   <% end %>
   <% if params[:hospital_denied].to_s == "1" %>

@@ -2402,8 +2402,8 @@ def main() -> int:
                             "help hall defeat hospital recovery chrome",
                             'data-defeat-recovery="1"' in r_fin.text
                             and (
-                                'data-defeat-recovery="arena"' in r_fin.text
-                                or 'data-defeat-recovery="world"' in r_fin.text
+                                'data-defeat-recovery="world"' in r_fin.text
+                                or 'data-defeat-recovery="arena_square"' in r_fin.text
                             ),
                             f"url={r_fin.url}",
                         )
