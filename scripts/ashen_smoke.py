@@ -4884,6 +4884,42 @@ def main() -> int:
             lic_ok,
             f"status={r_lic.status_code} url={r_lic.url}",
         )
+        sr_flags["licenses_ok"] = bool(lic_ok)
+
+    if sr_flags.get("licenses_ok"):
+        r_qj = s.get(f"{BASE}/quests", timeout=TIMEOUT, allow_redirects=True)
+        qj_ok = (
+            r_qj.status_code == 200
+            and "nl-quests" in r_qj.text
+            and ("журнал" in r_qj.text.lower() or "quest" in r_qj.text.lower() or "Задания" in r_qj.text)
+        )
+        report.add(
+            "soft-release quests journal visit",
+            qj_ok,
+            f"status={r_qj.status_code} url={r_qj.url}",
+        )
+        sr_flags["quests_ok"] = bool(qj_ok)
+
+    if sr_flags.get("quests_ok"):
+        # Dealer house is Business Quarter; return via Trade -> Square -> Business.
+        click_hotspot(s, "go_forpost1")
+        click_hotspot(s, "go_main")
+        click_hotspot(s, "go_forpost3")
+        r_dh = s.get(
+            f"{BASE}/city/buildings/dealer_house",
+            timeout=TIMEOUT,
+            allow_redirects=True,
+        )
+        dh_ok = (
+            r_dh.status_code == 200
+            and 'data-building-key="dealer_house"' in r_dh.text
+            and 'data-landmark-inside="1"' in r_dh.text
+        )
+        report.add(
+            "soft-release dealer house visit",
+            dh_ok,
+            f"status={r_dh.status_code} url={r_dh.url}",
+        )
 
     failed = report.failed
     print("\n=== SUMMARY ===")
