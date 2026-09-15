@@ -2638,6 +2638,78 @@ def main() -> int:
                                                         and "quest_denied=1" not in r_bag.url,
                                                         f"status={r_bag.status_code} url={r_bag.url}",
                                                     )
+                                                    if r_bag.status_code == 200 and "quest_denied=1" not in r_bag.url:
+                                                        token = csrf_from(r_bag.text) or token
+                                                        r_sheet2 = s.get(
+                                                            f"{BASE}/player/{nick}",
+                                                            timeout=TIMEOUT,
+                                                            allow_redirects=True,
+                                                        )
+                                                        cid_m = re.search(r"/characters/(\d+)/stats", r_sheet2.text)
+                                                        if cid_m:
+                                                            cid = cid_m.group(1)
+                                                            r_stats = s.get(
+                                                                f"{BASE}/characters/{cid}/stats",
+                                                                timeout=TIMEOUT,
+                                                                allow_redirects=True,
+                                                            )
+                                                            token = csrf_from(r_stats.text) or token
+                                                            free_m = re.search(
+                                                                r'data-stat-allocation-free-value="(\d+)"',
+                                                                r_stats.text,
+                                                            )
+                                                            free_pts = int(free_m.group(1)) if free_m else 0
+                                                            report.add(
+                                                                "soft-release has free stat points after quests",
+                                                                free_pts > 0,
+                                                                f"free={free_pts}",
+                                                            )
+                                                            if free_pts > 0:
+                                                                r_alloc_ok = s.post(
+                                                                    f"{BASE}/characters/{cid}/stats",
+                                                                    data={
+                                                                        "_method": "patch",
+                                                                        "authenticity_token": token,
+                                                                        "allocated_stats[strength]": "1",
+                                                                        "allocated_stats[dexterity]": "0",
+                                                                        "allocated_stats[luck]": "0",
+                                                                        "allocated_stats[vitality]": "0",
+                                                                        "allocated_stats[intelligence]": "0",
+                                                                    },
+                                                                    headers={"Accept": "text/html"},
+                                                                    timeout=TIMEOUT,
+                                                                    allow_redirects=True,
+                                                                )
+                                                                report.add(
+                                                                    "soft-release allocates strength point",
+                                                                    r_alloc_ok.status_code == 200
+                                                                    and "allocation_denied=1" not in r_alloc_ok.url
+                                                                    and (
+                                                                        'data-stat-allocation-free-value="'
+                                                                        + str(free_pts - 1)
+                                                                        + '"'
+                                                                        in r_alloc_ok.text
+                                                                        or "stats_saved" in r_alloc_ok.text.lower()
+                                                                        or "сохран" in r_alloc_ok.text.lower()
+                                                                        or free_pts - 1
+                                                                        == int(
+                                                                            (
+                                                                                re.search(
+                                                                                    r'data-stat-allocation-free-value="(\d+)"',
+                                                                                    r_alloc_ok.text,
+                                                                                )
+                                                                                or [None, "-1"]
+                                                                            )[1]
+                                                                        )
+                                                                    ),
+                                                                    f"status={r_alloc_ok.status_code} url={r_alloc_ok.url}",
+                                                                )
+                                                        else:
+                                                            report.add(
+                                                                "soft-release has free stat points after quests",
+                                                                False,
+                                                                "no character stats link",
+                                                            )
                                                 else:
                                                     report.add(
                                                         "soft-release turns in ash_healer_first_bag",

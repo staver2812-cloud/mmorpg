@@ -62,6 +62,7 @@ novice → adept → master bags.
 
 | Date | Change |
 |---|---|
+| 2026-09-15 | Soft-release smoke chain: Help Hall win → `veil_lure_drill` → `veil_tail_delivery` → forge bandage → Infirmary healer bag turn-ins. |
 | 2026-09-15 | Soft-release turn-in: bag-full item rewards are skipped (logged) instead of 500; `veil_lure_drill` no longer grants redundant bait. |
 | 2026-09-15 | Help Hall training dummy soft-release: always-defend (`defend_chance=1`), no injected magic attacks. |
 | 2026-09-15 | Soft-release: `veil_lure_drill` also counts Help Hall `arena_training_dummy` kills; where-hint covers Arena → Help Hall. |
