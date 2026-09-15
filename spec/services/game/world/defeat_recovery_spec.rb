@@ -18,7 +18,7 @@ RSpec.describe Game::World::DefeatRecovery do
     result = described_class.new(character:).call
 
     expect(result.recovered).to be(true)
-    expect(result.path).to eq(city_building_path("hospital"))
+    expect(result.path).to eq(city_building_path("hospital", defeat_recovered: 1))
     expect(character.reload.current_hp).to eq(character.effective_max_hp)
     expect(position.reload.zone).to eq(city)
   end

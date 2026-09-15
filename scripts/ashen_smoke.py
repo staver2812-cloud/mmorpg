@@ -1557,6 +1557,17 @@ def main() -> int:
             or 'data-character-recovery="world"' in r_char.text,
             f"url={r_char.url}",
         )
+    r_player_miss = s.get(f"{BASE}/player/SmokeMissingNick999", timeout=TIMEOUT, allow_redirects=True)
+    report.add(
+        "player denied recovery",
+        r_player_miss.status_code == 200
+        and 'data-player-denied="1"' in r_player_miss.text
+        and (
+            'data-player-recovery="sheet"' in r_player_miss.text
+            or 'data-player-recovery="world"' in r_player_miss.text
+        ),
+        f"status={r_player_miss.status_code} url={r_player_miss.url}",
+    )
     r_sheet = s.get(f"{BASE}/player/{nick}", timeout=TIMEOUT)
     char_id_match = re.search(r"/characters/(\d+)/stats", r_sheet.text)
     if char_id_match:
@@ -2386,6 +2397,16 @@ def main() -> int:
                         ),
                         f"status={r_fin.status_code} url={r_fin.url}",
                     )
+                    if "/city/buildings/hospital" in r_fin.url or "defeat_recovered=1" in r_fin.url:
+                        report.add(
+                            "help hall defeat hospital recovery chrome",
+                            'data-defeat-recovery="1"' in r_fin.text
+                            and (
+                                'data-defeat-recovery="arena"' in r_fin.text
+                                or 'data-defeat-recovery="world"' in r_fin.text
+                            ),
+                            f"url={r_fin.url}",
+                        )
             else:
                 report.add("help hall NPC accept starts fight", False, "no accept control")
         else:

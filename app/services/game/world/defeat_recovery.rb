@@ -31,7 +31,7 @@ module Game
 
           Result.new(
             recovered: true,
-            path: city_building_path("hospital"),
+            path: city_building_path("hospital", defeat_recovered: 1),
             message: I18n.t("game.flashes.defeat_hospital_recovery")
           )
         end

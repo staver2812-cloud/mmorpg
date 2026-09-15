@@ -993,6 +993,7 @@ en:
       hospital_in_combat: "Finish the fight first."
       hospital_only: "Healing rest is only available in the Infirmary."
       hospital_denied_next: "Infirmary action did not complete — check perks, VM, or stock, then try again or return to the city."
+      defeat_recovery_next: "After defeat you are already in the Infirmary at full HP/MP — return to the Arena (Help Hall) or the city."
       rest_unavailable: "You cannot rest here."
       tavern_aria: "Tavern rest"
       tavern_rest_title: "Coal table"

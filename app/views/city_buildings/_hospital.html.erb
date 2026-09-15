@@ -16,6 +16,15 @@
   <% injury_summary = injuries.summary %>
   <h2><%= t("game.buildings.hospital_hint") %></h2>
   <p><%= t("game.buildings.hospital_rest_lead") %></p>
+  <% if params[:defeat_recovered].to_s == "1" %>
+    <p class="nl-quests-board__meta" data-defeat-recovery="1">
+      <%= t("game.buildings.defeat_recovery_next") %>
+      ·
+      <%= link_to t("arena.nav.arena"), arena_index_path, class: "nl-sheet-link", data: {defeat_recovery: "arena"} %>
+      ·
+      <%= link_to t("arena.nav.city"), world_path, class: "nl-sheet-link", data: {defeat_recovery: "world"} %>
+    </p>
+  <% end %>
   <% if params[:hospital_denied].to_s == "1" %>
     <p class="nl-quests-board__meta" data-hospital-denied="1">
       <%= t("game.buildings.hospital_denied_next") %>
