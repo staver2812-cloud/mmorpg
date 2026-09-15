@@ -1232,6 +1232,7 @@ automated completion results are recorded in
 | 2026-09-15 | Unaffordable buy desk distinguishes short-NV (`data-shop-short-nv`) from other blocks (`data-shop-buy-blocked` → Inventory/City). |
 | 2026-09-15 | Failed Shop buy/sell redirects with `trade_denied=1` recovery chrome (`data-shop-trade-denied`, `data-shop-recovery`). |
 | 2026-09-15 | Out-of-district Shop denials redirect to World with `shop_denied=1` recovery chrome (`data-shop-denied`, `data-shop-recovery`). |
+| 2026-09-15 | Soft-release smoke buys an affordable knives-row item (prefer durable) before Inventory wear. |
 | 2026-09-14 | Doctor onboarding Licenses/City recovery; Infirmary premium short of VM recovers via topup/Bank/City. |
 | 2026-09-14 | Infirmary Traumatologist need-healer state recovers via Perks and City. |
 | 2026-09-14 | Narrow Shop: empty note drops forced 800px min-width; Licenses grid stacks to one column below 520px. |
