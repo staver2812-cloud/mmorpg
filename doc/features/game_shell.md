@@ -1273,6 +1273,7 @@ Before extending Game Shell:
 | 2026-09-15 | Soft-release smoke walks from east gate toward the pond and drinks (`drinking`). |
 | 2026-09-15 | Soft-release smoke waits out the Drink lock, then runs the pond no-bait Fish entry (`fishing`). |
 | 2026-09-15 | Soft-release smoke re-enters City from the east gate after Fish and binds at the Veil Obelisk. |
+| 2026-09-15 | Soft-release smoke leaves Business Quarter after Obelisk bind, then recalls via the World shell chip (−15 NV). |
 | 2026-09-14 | Empty trauma/heal scroll chips recover via Infirmary or City (`data-trauma-recovery` / `data-heal-recovery`). |
 | 2026-09-14 | Alignment/fatigue/quest/obelisk shell chips expose `data-alignment-recovery` / `data-fatigue-recovery` / `data-quest-recovery` / `data-obelisk-recovery` when linking. |
 | 2026-09-14 | City empty bait chip recovers via Souvenir/Shop (`data-bait-recovery`); footer Q/A tools expose `data-shell-recovery`. |

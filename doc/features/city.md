@@ -1160,6 +1160,7 @@ Final rerun results are in the
 - 2026-09-15: Soft-release smoke stores then retrieves one bag stack in the Bank item locker.
 - 2026-09-15: Soft-release smoke returns via east gate after pond Fish and binds at the Veil Obelisk.
 - 2026-09-15: Soft-release smoke posts Infirmary rest after outdoor DefeatRecovery before City return (clears heavy injury movement lock).
+- 2026-09-15: Soft-release smoke recalls to the Obelisk bind via World shell after leaving Business Quarter.
 - 2026-09-15: Soft-release smoke returns from the east-gate pond path and binds at the Veil Obelisk.
 - 2026-09-15: Bank item locker chrome exposes stored item_key via data-bank-item (was empty key).
 - 2026-09-15: Failed outdoor `POST /world/obelisk` recovers on World with `obelisk_denied=1` chrome.
