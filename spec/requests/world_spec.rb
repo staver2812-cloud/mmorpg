@@ -1696,7 +1696,7 @@ RSpec.describe "World", type: :request do
       it "redirects with alert for HTML format" do
         post interact_hotspot_world_path, params: city_action_params(inactive_hotspot)
 
-        expect(response).to redirect_to(world_path)
+        expect(response).to redirect_to(world_path(hotspot_denied: 1))
         follow_redirect!
         expect(response.body).to include("unavailable")
       end
@@ -1723,7 +1723,7 @@ RSpec.describe "World", type: :request do
       it "returns failure when hotspot zone doesn't match character zone" do
         post interact_hotspot_world_path, params: {hotspot_id: other_hotspot.id}
 
-        expect(response).to redirect_to(world_path)
+        expect(response).to redirect_to(world_path(hotspot_denied: 1))
         follow_redirect!
         expect(response.body).to include("not found")
       end
