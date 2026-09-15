@@ -1522,6 +1522,23 @@ def main() -> int:
         and 'data-inventory-recovery="world"' in r_miss.text,
         f"status={r_miss.status_code} url={r_miss.url}",
     )
+    token = csrf_from(r_miss.text) or token
+    r_set = s.post(
+        f"{BASE}/inventory/wear_equipment_set",
+        data={"authenticity_token": token, "set_name": "__missing_ashen_set__"},
+        timeout=TIMEOUT,
+        allow_redirects=True,
+    )
+    report.add(
+        "inventory set denied recovery",
+        r_set.status_code == 200
+        and 'data-inventory-set-denied="1"' in r_set.text
+        and (
+            'data-inventory-recovery="world"' in r_set.text
+            or 'data-inventory-recovery="shop"' in r_set.text
+        ),
+        f"status={r_set.status_code} url={r_set.url}",
+    )
     if 'data-equipment-sets-empty="1"' in r.text:
         report.add(
             "inventory empty equipment-sets recovery",

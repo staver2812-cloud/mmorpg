@@ -116,6 +116,7 @@ en:
       set_nothing_equipped: "No equipped items to save."
       set_saved: "Equipment set saved."
       set_not_found: "Equipment set not found."
+      set_denied_next: "That equipment set is not available."
       set_empty: "Equipment set is empty."
       set_cannot_wear: "Equipment set cannot be worn with current item state."
       set_worn: "Equipment set worn."

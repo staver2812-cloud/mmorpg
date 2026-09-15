@@ -36,6 +36,15 @@
           <%= link_to t("arena.nav.city"), world_path, class: "nl-sheet-link", data: {inventory_recovery: "world"} %>
         </p>
       <% end %>
+      <% if params[:set_denied].to_s == "1" %>
+        <p class="nl-quests-board__meta" data-inventory-set-denied="1">
+          <%= t("game.inventory.set_denied_next") %>
+          ·
+          <%= link_to t("arena.nav.city"), world_path, class: "nl-sheet-link", data: {inventory_recovery: "world"} %>
+          ·
+          <%= link_to t("game.shop.title"), shop_path(mode: "buy"), class: "nl-sheet-link", data: {inventory_recovery: "shop"} %>
+        </p>
+      <% end %>
       <nav class="nl-icon-strip" aria-label="<%= t("game.inventory.categories_aria") %>">
         <% InventoriesHelper::INVENTORY_FAMILY_STRIP.each do |key| %>
           <% label = inventory_category_label(key) %>

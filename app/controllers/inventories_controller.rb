@@ -150,19 +150,19 @@ class InventoriesController < ApplicationController
   def save_equipment_set
     result = Game::Inventory::EquipmentSetService.new(character: current_character).save!(params[:set_name])
 
-    redirect_to inventory_redirect_path, flash_for_result(result)
+    redirect_after_set_mutation(result)
   end
 
   def wear_equipment_set
     result = Game::Inventory::EquipmentSetService.new(character: current_character).wear!(params[:set_name])
 
-    redirect_to inventory_redirect_path, flash_for_result(result)
+    redirect_after_set_mutation(result)
   end
 
   def delete_equipment_set
     result = Game::Inventory::EquipmentSetService.new(character: current_character).delete!(params[:set_name])
 
-    redirect_to inventory_redirect_path, flash_for_result(result)
+    redirect_after_set_mutation(result)
   end
 
   def transfer_item
@@ -280,11 +280,20 @@ class InventoriesController < ApplicationController
     params[:info].presence == "short" ? "short" : "full"
   end
 
-  def inventory_redirect_path
+  def inventory_redirect_path(**extra)
     category = current_category
-    return inventory_path if category == "all"
+    base =
+      if category == "all"
+        {}
+      else
+        {category:, subcategory: current_subcategory, info: current_info_mode}
+      end
+    inventory_path(**base.merge(extra.compact))
+  end
 
-    inventory_path(category:, subcategory: current_subcategory, info: current_info_mode)
+  def redirect_after_set_mutation(result)
+    extra = result.success ? {} : {set_denied: 1}
+    redirect_to inventory_redirect_path(**extra), flash_for_result(result)
   end
 
   def current_character_equipment
