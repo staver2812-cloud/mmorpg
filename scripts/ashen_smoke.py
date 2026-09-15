@@ -714,6 +714,14 @@ def main() -> int:
             or 'data-airship-recovery="world"' in r.text,
             f"url={r.url}",
         )
+    r_air = s.get(f"{BASE}/airship", timeout=TIMEOUT, allow_redirects=True)
+    report.add(
+        "airship denied recovery",
+        r_air.status_code == 200
+        and 'data-airship-denied="1"' in r_air.text
+        and 'data-airship-recovery="world"' in r_air.text,
+        f"status={r_air.status_code} url={r_air.url}",
+    )
 
     r = s.get(f"{BASE}/quests", timeout=TIMEOUT)
     quest_needles = [

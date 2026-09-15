@@ -942,6 +942,7 @@ en:
       disembark_confirm: "You will disembark at the boarding point. Your ticket will not be refunded. Are you sure?"
       map_aria: "%{route} airship map"
       craft_label: "Airship"
+      denied_next: "You are not aboard a flight — return to City or the airship station."
       board: "Buy a ticket and board the flight"
       flight_offer_unavailable: "Flight offer is unavailable."
       flight_route_unavailable: "Flight route or departure is no longer available."

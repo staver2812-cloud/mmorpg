@@ -43,4 +43,11 @@
       <%= link_to t("arena.nav.city"), world_path, class: "nl-sheet-link", data: {player_recovery: "world"} %>
     </p>
   <% end %>
+  <% if params[:airship_denied].to_s == "1" %>
+    <p class="nl-quests-board__meta" data-airship-denied="1">
+      <%= t("game.airship.denied_next") %>
+      ·
+      <%= link_to t("arena.nav.city"), world_path, class: "nl-sheet-link", data: {airship_recovery: "world"} %>
+    </p>
+  <% end %>
 </div>
