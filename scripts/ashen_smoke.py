@@ -1796,6 +1796,23 @@ def main() -> int:
     report.add("return forpost1 after law", ok_back_f1, d_back_f1)
     ok, detail_main = click_hotspot(s, "go_main")
     report.add("return go_main", ok, detail_main)
+    token = csrf_from(s.get(f"{BASE}/world", timeout=TIMEOUT).text) or token
+    r_rest = s.post(
+        f"{BASE}/city/buildings/shop/rest",
+        data={"authenticity_token": token},
+        timeout=TIMEOUT,
+        allow_redirects=True,
+    )
+    report.add(
+        "building action denied recovery",
+        r_rest.status_code == 200
+        and 'data-building-denied="1"' in r_rest.text
+        and (
+            'data-building-recovery="main"' in r_rest.text
+            or 'data-building-recovery="world"' in r_rest.text
+        ),
+        f"status={r_rest.status_code} url={r_rest.url}",
+    )
     r = s.get(f"{BASE}/city/buildings/temple", timeout=TIMEOUT, allow_redirects=True)
     gated = "/world" in r.url or 'data-building-key="temple"' not in r.text
     report.add("temple gated from main square", gated, f"url={r.url}")

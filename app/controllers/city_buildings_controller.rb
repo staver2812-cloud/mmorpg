@@ -69,7 +69,8 @@ class CityBuildingsController < ApplicationController
       result = Game::World::TavernRest.new(character: current_character).call
       target = city_building_path("tavern")
     else
-      redirect_to world_path, alert: I18n.t("game.buildings.rest_unavailable") and return
+      redirect_to world_path(building_denied: 1), alert: I18n.t("game.buildings.rest_unavailable"), status: :see_other
+      return
     end
 
     if result.success
@@ -81,7 +82,8 @@ class CityBuildingsController < ApplicationController
 
   def craft
     unless %w[workshop hospital].include?(@building_key)
-      redirect_to world_path, alert: I18n.t("game.professions.workshop_only") and return
+      redirect_to world_path(building_denied: 1), alert: I18n.t("game.professions.workshop_only"), status: :see_other
+      return
     end
 
     recipe = Game::Professions::Catalog.recipe(params[:recipe_key])
@@ -103,7 +105,8 @@ class CityBuildingsController < ApplicationController
 
   def buy_premium
     unless @building_key == "hospital"
-      redirect_to world_path, alert: I18n.t("game.buildings.hospital_only") and return
+      redirect_to world_path(building_denied: 1), alert: I18n.t("game.buildings.hospital_only"), status: :see_other
+      return
     end
 
     result = Game::Shop::PremiumScrollPurchase.new(
@@ -119,7 +122,8 @@ class CityBuildingsController < ApplicationController
 
   def topup_vm
     unless @building_key == "hospital"
-      redirect_to world_path, alert: I18n.t("game.buildings.hospital_only") and return
+      redirect_to world_path(building_denied: 1), alert: I18n.t("game.buildings.hospital_only"), status: :see_other
+      return
     end
 
     result = Game::Shop::VeilMarksTopUp.new(character: current_character).call
@@ -132,7 +136,8 @@ class CityBuildingsController < ApplicationController
 
   def traumatologist
     unless @building_key == "hospital"
-      redirect_to world_path, alert: I18n.t("game.buildings.hospital_only") and return
+      redirect_to world_path(building_denied: 1), alert: I18n.t("game.buildings.hospital_only"), status: :see_other
+      return
     end
 
     result = Game::Shop::TraumatologistClearance.new(character: current_character).call
@@ -145,7 +150,8 @@ class CityBuildingsController < ApplicationController
 
   def bless
     unless @building_key == "temple"
-      redirect_to world_path, alert: I18n.t("game.buildings.temple_only") and return
+      redirect_to world_path(building_denied: 1), alert: I18n.t("game.buildings.temple_only"), status: :see_other
+      return
     end
 
     result = Game::World::TempleBlessing.new(character: current_character).call
@@ -158,7 +164,8 @@ class CityBuildingsController < ApplicationController
 
   def bank
     unless @building_key == "bank"
-      redirect_to world_path, alert: I18n.t("game.buildings.bank_only") and return
+      redirect_to world_path(building_denied: 1), alert: I18n.t("game.buildings.bank_only"), status: :see_other
+      return
     end
 
     result = Game::World::BankVault.new(
@@ -175,7 +182,8 @@ class CityBuildingsController < ApplicationController
 
   def bank_item
     unless @building_key == "bank"
-      redirect_to world_path, alert: I18n.t("game.buildings.bank_only") and return
+      redirect_to world_path(building_denied: 1), alert: I18n.t("game.buildings.bank_only"), status: :see_other
+      return
     end
 
     result = Game::World::BankItemLocker.new(
@@ -193,7 +201,8 @@ class CityBuildingsController < ApplicationController
 
   def post
     unless @building_key == "post"
-      redirect_to world_path, alert: I18n.t("game.buildings.post_only") and return
+      redirect_to world_path(building_denied: 1), alert: I18n.t("game.buildings.post_only"), status: :see_other
+      return
     end
 
     service = Game::World::PostOfficeNote.new(character: current_character, body: params[:body])
@@ -211,7 +220,8 @@ class CityBuildingsController < ApplicationController
 
   def souvenir
     unless @building_key == "souvenir_shop"
-      redirect_to world_path, alert: I18n.t("game.buildings.souvenir_only") and return
+      redirect_to world_path(building_denied: 1), alert: I18n.t("game.buildings.souvenir_only"), status: :see_other
+      return
     end
 
     result = Game::World::SouvenirPurchase.new(
@@ -227,7 +237,8 @@ class CityBuildingsController < ApplicationController
 
   def obelisk
     unless @building_key == "obelisk"
-      redirect_to world_path, alert: I18n.t("game.buildings.obelisk_only") and return
+      redirect_to world_path(building_denied: 1), alert: I18n.t("game.buildings.obelisk_only"), status: :see_other
+      return
     end
 
     result = Game::World::ObeliskRecall.new(
@@ -247,7 +258,8 @@ class CityBuildingsController < ApplicationController
 
   def law
     unless @building_key == "law_abode"
-      redirect_to world_path, alert: I18n.t("game.buildings.law_only") and return
+      redirect_to world_path(building_denied: 1), alert: I18n.t("game.buildings.law_only"), status: :see_other
+      return
     end
 
     result = Game::World::LawAlignmentPledge.new(
@@ -263,7 +275,8 @@ class CityBuildingsController < ApplicationController
 
   def sell
     unless @building_key == "junk_dealer"
-      redirect_to world_path, alert: I18n.t("game.buildings.junk_only") and return
+      redirect_to world_path(building_denied: 1), alert: I18n.t("game.buildings.junk_only"), status: :see_other
+      return
     end
 
     result = Game::Shop::JunkBuyback.new(
