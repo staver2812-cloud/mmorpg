@@ -1481,6 +1481,20 @@ def main() -> int:
         ("data-inventory-broken=" in r.text) or ("nl-durability-bar" in r.text),
         f"url={r.url}",
     )
+    token = csrf_from(r.text) or token
+    r_miss = s.post(
+        f"{BASE}/inventory/items/999999999",
+        data={"_method": "delete", "authenticity_token": token},
+        timeout=TIMEOUT,
+        allow_redirects=True,
+    )
+    report.add(
+        "inventory item denied recovery",
+        r_miss.status_code == 200
+        and 'data-inventory-item-denied="1"' in r_miss.text
+        and 'data-inventory-recovery="world"' in r_miss.text,
+        f"status={r_miss.status_code} url={r_miss.url}",
+    )
     if 'data-equipment-sets-empty="1"' in r.text:
         report.add(
             "inventory empty equipment-sets recovery",

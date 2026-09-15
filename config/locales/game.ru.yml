@@ -134,6 +134,7 @@ ru:
       nv_transferred: "NV переведены игроку %{name}."
       not_enough_nv: "Недостаточно NV."
       item_not_found: "Предмет не найден."
+      item_denied_next: "Этого предмета уже нет в сумке."
       item_not_equipment: "Этот предмет нельзя надеть."
       item_already_equipped: "Предмет уже надет."
       invalid_equipment_slot: "Некорректный слот экипировки."

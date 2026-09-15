@@ -134,6 +134,7 @@ en:
       nv_transferred: "NV transferred to %{name}."
       not_enough_nv: "Not enough NV."
       item_not_found: "Item not found."
+      item_denied_next: "That item is no longer in your bag."
       item_not_equipment: "Item is not equipment."
       item_already_equipped: "Item is already equipped."
       invalid_equipment_slot: "Invalid equipment slot."
