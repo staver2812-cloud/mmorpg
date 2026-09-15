@@ -35,6 +35,7 @@ en:
     ru: "RU"
     en: "EN"
     switch: "Language"
+    denied_next: "That language is not available. Choose RU or EN."
   errors:
     forbidden: "You do not have access to this action."
     character_limit_reached: "character limit reached"

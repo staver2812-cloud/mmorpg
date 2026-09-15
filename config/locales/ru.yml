@@ -6,6 +6,7 @@ ru:
     ru: "RU"
     en: "EN"
     switch: "Язык"
+    denied_next: "Этот язык недоступен. Выберите RU или EN."
   errors:
     forbidden: "У вас нет доступа к этому действию."
     character_limit_reached: "достигнут лимит персонажей"

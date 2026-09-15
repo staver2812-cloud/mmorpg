@@ -1586,6 +1586,17 @@ def main() -> int:
 
     r = s.get(f"{BASE}/world", timeout=TIMEOUT)
     report.add("locale switcher", ("RU" in r.text and "EN" in r.text) or "/locales" in r.text)
+    r_loc = s.get(f"{BASE}/locale/zz", timeout=TIMEOUT, allow_redirects=True)
+    report.add(
+        "locale denied recovery",
+        r_loc.status_code == 200
+        and 'data-locale-denied="1"' in r_loc.text
+        and (
+            'data-locale-recovery="ru"' in r_loc.text
+            or 'data-locale-recovery="en"' in r_loc.text
+        ),
+        f"status={r_loc.status_code} url={r_loc.url}",
+    )
     report.add(
         "chat tools deferred markers",
         r.status_code == 200
