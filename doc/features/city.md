@@ -1166,6 +1166,7 @@ Final rerun results are in the
 - 2026-09-15: Soft-release smoke opens Black Bell Temple from Business Quarter after Nature Child perk.
 - 2026-09-15: Soft-release smoke opens Clan Hall from Trade Quarter after Temple.
 - 2026-09-15: Soft-release smoke opens Library handbook from Knowledge Quarter after Clan Hall.
+- 2026-09-15: Soft-release smoke opens Military School board from Knowledge Quarter after Library.
 - 2026-09-15: Soft-release smoke returns from the east-gate pond path and binds at the Veil Obelisk.
 - 2026-09-15: Bank item locker chrome exposes stored item_key via data-bank-item (was empty key).
 - 2026-09-15: Failed outdoor `POST /world/obelisk` recovers on World with `obelisk_denied=1` chrome.
