@@ -4792,6 +4792,50 @@ def main() -> int:
             bank_ok,
             f"status={r_bank.status_code} url={r_bank.url}",
         )
+        sr_flags["bank_ok"] = bool(bank_ok)
+
+    if sr_flags.get("bank_ok"):
+        # Souvenir / Relic shop shares Business Quarter with Bank.
+        r_sv = s.get(
+            f"{BASE}/city/buildings/souvenir_shop",
+            timeout=TIMEOUT,
+            allow_redirects=True,
+        )
+        sv_ok = (
+            r_sv.status_code == 200
+            and 'data-building-key="souvenir_shop"' in r_sv.text
+            and 'data-landmark-inside="1"' in r_sv.text
+        )
+        report.add(
+            "soft-release souvenir shop visit",
+            sv_ok,
+            f"status={r_sv.status_code} url={r_sv.url}",
+        )
+        sr_flags["souvenir_ok"] = bool(sv_ok)
+
+    if sr_flags.get("souvenir_ok"):
+        # Prison is Law Quarter (forpost4): Business -> Trade -> Law.
+        click_hotspot(s, "go_main")
+        click_hotspot(s, "go_forpost1")
+        ok_fp4p, d_fp4p = click_hotspot(s, "go_forpost4")
+        if not ok_fp4p:
+            report.add("soft-release prison visit", False, f"no forpost4: {d_fp4p}")
+        else:
+            r_pr = s.get(
+                f"{BASE}/city/buildings/prison",
+                timeout=TIMEOUT,
+                allow_redirects=True,
+            )
+            pr_ok = (
+                r_pr.status_code == 200
+                and 'data-building-key="prison"' in r_pr.text
+                and 'data-landmark-inside="1"' in r_pr.text
+            )
+            report.add(
+                "soft-release prison visit",
+                pr_ok,
+                f"status={r_pr.status_code} url={r_pr.url}",
+            )
 
     failed = report.failed
     print("\n=== SUMMARY ===")

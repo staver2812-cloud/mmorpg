@@ -1180,6 +1180,8 @@ Final rerun results are in the
 - 2026-09-15: Soft-release smoke opens Tavern from Central Square after Arena lobby.
 - 2026-09-15: Soft-release smoke opens Shop from Central Square after Tavern.
 - 2026-09-15: Soft-release smoke opens Pitch Bank vault desk from Business Quarter after Shop.
+- 2026-09-15: Soft-release smoke opens Relic souvenir shop from Business Quarter after Bank.
+- 2026-09-15: Soft-release smoke opens Prison from Law Quarter after souvenir shop.
 - 2026-09-15: Soft-release smoke returns from the east-gate pond path and binds at the Veil Obelisk.
 - 2026-09-15: Bank item locker chrome exposes stored item_key via data-bank-item (was empty key).
 - 2026-09-15: Failed outdoor `POST /world/obelisk` recovers on World with `obelisk_denied=1` chrome.
