@@ -501,6 +501,7 @@ shipped Inventory management routes.
 | 2026-09-15 | Soft-release smoke wears a bag item after knives Shop buy via body `item_id` (rejects `item_denied`/`equip_denied`). |
 | 2026-09-15 | Soft-release smoke unequips a paperdoll slot after wear via body `slot` (rejects `equip_denied`). |
 | 2026-09-15 | Soft-release smoke saves an equipment set while geared, unequips, then wears the set (rejects `set_denied`). |
+| 2026-09-15 | Soft-release smoke deletes the saved equipment set after wear (rejects `set_denied`). |
 | 2026-09-13 | Equipment-set save/wear/delete success and failure alerts use `game.inventory.set_*` i18n. |
 | 2026-09-13 | Direct transfer/gift/NV and deferred player-sale alerts use `game.inventory.*` i18n. |
 | 2026-09-14 | Inventory Sell control explains deferred P2P sales and links to Shop Sell instead of a live form. |

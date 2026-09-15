@@ -2902,6 +2902,33 @@ def main() -> int:
                                                                                                 not in r_wear_set.text,
                                                                                                 f"status={r_wear_set.status_code} url={r_wear_set.url} set={set_name}",
                                                                                             )
+                                                                                            if (
+                                                                                                r_wear_set.status_code == 200
+                                                                                                and "set_denied=1" not in r_wear_set.url
+                                                                                            ):
+                                                                                                token = csrf_from(r_wear_set.text) or token
+                                                                                                r_del_set = s.post(
+                                                                                                    f"{BASE}/inventory/delete_equipment_set",
+                                                                                                    data={
+                                                                                                        "authenticity_token": token,
+                                                                                                        "_method": "delete",
+                                                                                                        "set_name": set_name,
+                                                                                                    },
+                                                                                                    headers={"Accept": "text/html"},
+                                                                                                    timeout=TIMEOUT,
+                                                                                                    allow_redirects=True,
+                                                                                                )
+                                                                                                report.add(
+                                                                                                    "soft-release deletes equipment set",
+                                                                                                    r_del_set.status_code == 200
+                                                                                                    and "set_denied=1" not in r_del_set.url
+                                                                                                    and (
+                                                                                                        set_name not in r_del_set.text
+                                                                                                        or 'data-equipment-sets-empty="1"'
+                                                                                                        in r_del_set.text
+                                                                                                    ),
+                                                                                                    f"status={r_del_set.status_code} url={r_del_set.url} set={set_name}",
+                                                                                                )
                                                                                     else:
                                                                                         report.add(
                                                                                             "soft-release unequips worn item",
