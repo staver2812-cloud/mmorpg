@@ -2818,6 +2818,51 @@ def main() -> int:
                                                                                     not in r_wear.text,
                                                                                     f"status={r_wear.status_code} url={r_wear.url} item_id={wear_item_id}",
                                                                                 )
+                                                                                if (
+                                                                                    r_wear.status_code == 200
+                                                                                    and "equip_denied=1" not in r_wear.url
+                                                                                    and "item_denied=1" not in r_wear.url
+                                                                                ):
+                                                                                    token = csrf_from(r_wear.text) or token
+                                                                                    unequip_m = re.search(
+                                                                                        r'action="(/inventory/unequip\?[^"]*slot=[^"&]+[^"]*)"'
+                                                                                        r'|action="(/inventory/unequip)"[^>]*>[\s\S]{0,400}?'
+                                                                                        r'name="slot"[^>]*value="([^"]+)"',
+                                                                                        r_wear.text,
+                                                                                    )
+                                                                                    unequip_slot = None
+                                                                                    if unequip_m and unequip_m.group(1):
+                                                                                        u_url = html_lib.unescape(unequip_m.group(1))
+                                                                                        u_qs = parse_qs(urlsplit(u_url).query)
+                                                                                        unequip_slot = (u_qs.get("slot") or [None])[0]
+                                                                                    elif unequip_m and unequip_m.group(3):
+                                                                                        unequip_slot = unequip_m.group(3)
+                                                                                    if unequip_slot:
+                                                                                        r_off = s.post(
+                                                                                            f"{BASE}/inventory/unequip",
+                                                                                            data={
+                                                                                                "authenticity_token": token,
+                                                                                                "slot": unequip_slot,
+                                                                                            },
+                                                                                            headers={"Accept": "text/html"},
+                                                                                            timeout=TIMEOUT,
+                                                                                            allow_redirects=True,
+                                                                                        )
+                                                                                        report.add(
+                                                                                            "soft-release unequips worn item",
+                                                                                            r_off.status_code == 200
+                                                                                            and "equip_denied=1" not in r_off.url
+                                                                                            and "item_denied=1" not in r_off.url
+                                                                                            and 'data-inventory-equip-denied="1"'
+                                                                                            not in r_off.text,
+                                                                                            f"status={r_off.status_code} url={r_off.url} slot={unequip_slot}",
+                                                                                        )
+                                                                                    else:
+                                                                                        report.add(
+                                                                                            "soft-release unequips worn item",
+                                                                                            False,
+                                                                                            "no paperdoll unequip control after wear",
+                                                                                        )
                                                                             else:
                                                                                 report.add(
                                                                                     "soft-release equips inventory item",
