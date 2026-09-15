@@ -2584,6 +2584,66 @@ def main() -> int:
                                                 and "quest_denied=1" not in r_band.url,
                                                 f"status={r_band.status_code} url={r_band.url}",
                                             )
+                                            if r_band.status_code == 200 and "quest_denied=1" not in r_band.url:
+                                                token = csrf_from(r_band.text) or token
+                                                r_inf = s.get(
+                                                    f"{BASE}/city/buildings/hospital",
+                                                    timeout=TIMEOUT,
+                                                    allow_redirects=True,
+                                                )
+                                                token = csrf_from(r_inf.text) or token
+                                                if (
+                                                    r_inf.status_code == 200
+                                                    and 'data-building-key="hospital"' in r_inf.text
+                                                    and "healer_bag_light" in r_inf.text
+                                                ):
+                                                    r_bag_craft = s.post(
+                                                        f"{BASE}/city/buildings/hospital/craft",
+                                                        data={
+                                                            "authenticity_token": token,
+                                                            "recipe_key": "healer_bag_light",
+                                                        },
+                                                        headers={"Accept": "text/html"},
+                                                        timeout=TIMEOUT,
+                                                        allow_redirects=True,
+                                                    )
+                                                    token = csrf_from(r_bag_craft.text) or token
+                                                    report.add(
+                                                        "soft-release crafts healer_bag_light",
+                                                        r_bag_craft.status_code == 200
+                                                        and "craft_denied=1" not in r_bag_craft.url,
+                                                        f"status={r_bag_craft.status_code} url={r_bag_craft.url}",
+                                                    )
+                                                r_bag_q = s.get(
+                                                    f"{BASE}/quests",
+                                                    timeout=TIMEOUT,
+                                                    allow_redirects=True,
+                                                )
+                                                token = csrf_from(r_bag_q.text) or token
+                                                bag_m = re.search(
+                                                    r'action="(/quests/ash_healer_first_bag/turn_in)"',
+                                                    r_bag_q.text,
+                                                )
+                                                if bag_m:
+                                                    r_bag = s.post(
+                                                        urljoin(BASE + "/", bag_m.group(1).lstrip("/")),
+                                                        data={"authenticity_token": token},
+                                                        headers={"Accept": "text/html"},
+                                                        timeout=TIMEOUT,
+                                                        allow_redirects=True,
+                                                    )
+                                                    report.add(
+                                                        "soft-release turns in ash_healer_first_bag",
+                                                        r_bag.status_code == 200
+                                                        and "quest_denied=1" not in r_bag.url,
+                                                        f"status={r_bag.status_code} url={r_bag.url}",
+                                                    )
+                                                else:
+                                                    report.add(
+                                                        "soft-release turns in ash_healer_first_bag",
+                                                        False,
+                                                        "no healer bag turn_in control",
+                                                    )
                                         else:
                                             report.add(
                                                 "soft-release turns in tar_smith_first_bandage",
