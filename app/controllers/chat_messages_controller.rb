@@ -3,6 +3,8 @@
 class ChatMessagesController < ApplicationController
   include ActionView::RecordIdentifier
 
+  rescue_from ActiveRecord::RecordNotFound, with: :channel_missing
+
   before_action :set_chat_channel
 
   def create
@@ -57,6 +59,12 @@ class ChatMessagesController < ApplicationController
 
   def chat_message_params
     params.require(:chat_message).permit(:body)
+  end
+
+  def channel_missing
+    redirect_to world_path(chat_denied: 1),
+      alert: I18n.t("game.chat.channel_missing"),
+      status: :see_other
   end
 
   def handle_chat_error(message)

@@ -1711,6 +1711,20 @@ def main() -> int:
         and 'data-chat-recovery="world"' in r_chat.text,
         f"status={r_chat.status_code} url={r_chat.url}",
     )
+    token = csrf_from(r_chat.text) or csrf_from(r.text)
+    r_chat_post = s.post(
+        f"{BASE}/chat_channels/999999999/chat_messages",
+        data={"authenticity_token": token, "chat_message[body]": "stale"},
+        timeout=TIMEOUT,
+        allow_redirects=True,
+    )
+    report.add(
+        "chat message denied recovery",
+        r_chat_post.status_code == 200
+        and 'data-chat-denied="1"' in r_chat_post.text
+        and 'data-chat-recovery="world"' in r_chat_post.text,
+        f"status={r_chat_post.status_code} url={r_chat_post.url}",
+    )
     if 'data-chat-empty="1"' in r.text:
         report.add(
             "compact chat empty recovery",

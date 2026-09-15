@@ -1259,6 +1259,7 @@ Before extending Game Shell:
 | 2026-09-14 | English `social.*` shell chrome mirrors RU (`config/locales/en.yml`). |
 | 2026-09-14 | Nearby-player sort links use `social.sort_az` / `sort_za` / `sort_lvl_*`. |
 | 2026-09-15 | Missing chat channel ids recover to World with `chat_denied=1` chrome. |
+| 2026-09-15 | Posting a message to a missing chat channel recovers to World with `chat_denied=1` chrome. |
 | 2026-09-15 | Unknown `/locale/:locale` falls back to the default locale and shows `locale_denied` recovery chrome (RU/EN). |
 | 2026-09-14 | English `app.*` / `locales.*` / `errors.forbidden` mirrors complete `:en` shell chrome. |
 | 2026-09-14 | English ActiveRecord user attribute/error and date/time format mirrors for signup/account forms. |
