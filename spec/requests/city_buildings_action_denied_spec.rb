@@ -31,4 +31,17 @@ RSpec.describe "City building action denied recovery", type: :request do
     expect(response.body).to include('data-bank-recovery="world"')
     expect(response.body).to include('data-bank-recovery="bank"')
   end
+
+  it "recovers when a post office note save fails" do
+    create(:city_hotspot, :building, zone: city, key: "post", name: "Post",
+      action_params: {"feature" => "post"})
+
+    post city_building_post_path("post"), params: {body: "   "}
+
+    expect(response).to redirect_to(city_building_path("post", post_denied: 1))
+    follow_redirect!
+    expect(response.body).to include('data-post-denied="1"')
+    expect(response.body).to include('data-post-recovery="world"')
+    expect(response.body).to include('data-post-recovery="post"')
+  end
 end

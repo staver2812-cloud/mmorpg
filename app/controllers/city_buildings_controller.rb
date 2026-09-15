@@ -203,11 +203,9 @@ class CityBuildingsController < ApplicationController
     else
       service.save!
     end
-    if result.success
-      redirect_to city_building_path("post"), notice: result.message
-    else
-      redirect_to city_building_path("post"), alert: result.message
-    end
+    extra = result.success ? {} : {post_denied: 1}
+    flash_opts = result.success ? {notice: result.message} : {alert: result.message}
+    redirect_to city_building_path("post", **extra), **flash_opts
   end
 
   def souvenir

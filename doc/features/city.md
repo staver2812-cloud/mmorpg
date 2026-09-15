@@ -1204,6 +1204,7 @@ Final rerun results are in the
 - 2026-09-13: Shared landmark chrome exposes `data-landmark-inside`; Captured shop-shell desks also render landmark exit notes; smoke checks hospital, Coal Tide Tavern, City Hall, Market, Post, Clan Hall, Airship Station, Library, schools, Law Abode, Prison, Gallows, Guard Tower, Workshop, Salt Auction, Dealer House, Temple, Bank, Relic stall, and Obelisk for the marker.
 - 2026-09-13: Market, Ash Buyer, Airship Station, and Numismatics desks also render shared landmark chrome; Market keeps a single landmark after stalls (embedded junk desk does not duplicate it).
 - 2026-09-13: City building access/not-found flashes are localized (`game.flashes.building_not_found` / `building_district_required`).
+- 2026-09-15: Failed Post Office note save/clear redirects with `post_denied=1` recovery chrome (`data-post-denied`, `data-post-recovery`).
 - 2026-09-15: Failed Pitch Bank vault/item locker transfers redirect with `bank_denied=1` recovery chrome (`data-bank-denied`, `data-bank-recovery`).
 - 2026-09-14: Soft-release recovery CTAs across city desks: school spent→World, Clan Hall trauma-scroll→Infirmary, Auction/Market/Numismatics deferred honesty, library/post/fallback landmark next steps, tavern-full/airship-unavailable/mine-lobby loops, hospital rest-full→World, temple/quest-lock/bank-vault empty recovery.
 - 2026-09-14: Airship Station blank route list recovers to City (`data-airship-routes-empty`).

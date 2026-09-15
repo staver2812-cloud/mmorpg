@@ -1101,6 +1101,7 @@ en:
       post_landmark_meta: "Intercity mail later. Edit the note above; exit via City in the header."
       city_hall_landmark_meta: "Treasury and the contract board continue below on this page."
       post_blank: "Enter note text."
+      post_denied_next: "Note was not saved — enter text, clear only when a note exists, or return to the city."
       post_too_long: "Too long (max %{max})."
       souvenir_aria: "Relic stall"
       souvenir_only: "Purchases are only available at the Relic stall."

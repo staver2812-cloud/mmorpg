@@ -657,6 +657,23 @@ def main() -> int:
             'data-building-recovery="world"' in r.text,
             f"url={r.url}",
         )
+        token = csrf_from(r.text)
+        if token:
+            r_post = s.post(
+                f"{BASE}/city/buildings/post/post",
+                data={"authenticity_token": token, "body": "   "},
+                headers={"Accept": "text/html"},
+                timeout=TIMEOUT,
+                allow_redirects=True,
+            )
+            report.add(
+                "post denied recovery",
+                r_post.status_code == 200
+                and 'data-post-denied="1"' in r_post.text
+                and 'data-post-recovery="world"' in r_post.text
+                and 'data-post-recovery="post"' in r_post.text,
+                f"status={r_post.status_code} url={r_post.url}",
+            )
     if r.status_code == 200 and 'data-post-empty="1"' in r.text:
         report.add(
             "post empty recovery CTA",

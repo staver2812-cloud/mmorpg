@@ -1,6 +1,15 @@
 <section class="nl-handbook" aria-label="<%= t("game.buildings.post_aria") %>">
   <h2><%= t("game.buildings.post_title") %></h2>
   <p class="nl-handbook__lead"><%= t("game.buildings.post_lead") %></p>
+  <% if params[:post_denied].to_s == "1" %>
+    <p class="nl-quests-board__meta" data-post-denied="1">
+      <%= t("game.buildings.post_denied_next") %>
+      ·
+      <%= link_to t("arena.nav.city"), world_path, class: "nl-sheet-link", data: {post_recovery: "world"} %>
+      ·
+      <%= link_to t("game.buildings.post_title"), city_building_path("post"), class: "nl-sheet-link", data: {post_recovery: "post"} %>
+    </p>
+  <% end %>
   <% note = local_assigns.fetch(:note, "") %>
   <% max_len = Game::World::PostOfficeNote::MAX_LEN %>
   <% used = note.to_s.length %>
