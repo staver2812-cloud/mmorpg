@@ -1338,6 +1338,14 @@ def main() -> int:
             'data-location-recovery="world"' in r_loc.text,
             f"url={r_loc.url}",
         )
+    r_loc_miss = s.get(f"{BASE}/world/locations/__missing_ashen_location__", timeout=TIMEOUT, allow_redirects=True)
+    report.add(
+        "location missing key recovery",
+        r_loc_miss.status_code == 200
+        and 'data-location-denied="1"' in r_loc_miss.text
+        and 'data-location-recovery="world"' in r_loc_miss.text,
+        f"status={r_loc_miss.status_code} url={r_loc_miss.url}",
+    )
     r = s.get(f"{BASE}/city/buildings/law_abode", timeout=TIMEOUT, allow_redirects=True)
     report.add(
         "GET /city/buildings/law_abode",
