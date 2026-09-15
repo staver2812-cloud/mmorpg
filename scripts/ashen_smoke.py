@@ -5154,6 +5154,174 @@ def main() -> int:
             pay_blocked,
             f"status={r_pay.status_code} url={r_pay.url}",
         )
+        sr_flags["merchant_pay_check_ok"] = True
+
+    if sr_flags.get("merchant_pay_check_ok"):
+        # Infirmary premium VM: sandbox topup → buy scrolls → HUD chips → inventory heal use.
+        click_hotspot(s, "go_main")
+        r_prem = s.get(
+            f"{BASE}/city/buildings/hospital",
+            timeout=TIMEOUT,
+            allow_redirects=True,
+        )
+        token = csrf_from(r_prem.text) or token
+        topup_ready = 'data-hospital-topup-ready="1"' in r_prem.text
+        if topup_ready:
+            r_top = s.post(
+                f"{BASE}/city/buildings/hospital/topup_vm",
+                data={"authenticity_token": token},
+                headers={"Accept": "text/html"},
+                timeout=TIMEOUT,
+                allow_redirects=True,
+            )
+            token = csrf_from(r_top.text) or token
+            top_ok = (
+                r_top.status_code == 200
+                and "hospital_denied=1" not in r_top.url
+                and 'data-hospital-denied="1"' not in r_top.text
+                and (
+                    'data-hospital-topup-ready="0"' in r_top.text
+                    or 'data-hospital-topup-wait="1"' in r_top.text
+                    or re.search(r'data-hospital-vm="([1-9]\d*)"', r_top.text)
+                )
+            )
+            report.add(
+                "soft-release hospital VM topup",
+                top_ok,
+                f"status={r_top.status_code} url={r_top.url}",
+            )
+            r_prem = r_top if top_ok else r_prem
+        else:
+            # Already topped up this hour — desk still shows VM wallet honesty.
+            report.add(
+                "soft-release hospital VM topup",
+                'data-hospital-vm=' in r_prem.text,
+                f"status={r_prem.status_code} url={r_prem.url} already_waiting",
+            )
+
+        token = csrf_from(r_prem.text) or token
+        buy_keys = []
+        for item_key in ("combat_trauma_scroll", "combat_heal_scroll"):
+            affordable = (
+                f'data-hospital-premium-item="{item_key}"' in r_prem.text
+                and re.search(
+                    rf'data-hospital-premium-item="{re.escape(item_key)}"[^>]*data-hospital-premium-affordable="1"'
+                    rf'|data-hospital-premium-affordable="1"[^>]*data-hospital-premium-item="{re.escape(item_key)}"',
+                    r_prem.text,
+                )
+            )
+            if not affordable:
+                # Refresh desk after prior buy may flip affordability.
+                r_prem = s.get(
+                    f"{BASE}/city/buildings/hospital",
+                    timeout=TIMEOUT,
+                    allow_redirects=True,
+                )
+                token = csrf_from(r_prem.text) or token
+                affordable = (
+                    f'data-hospital-premium-item="{item_key}"' in r_prem.text
+                    and re.search(
+                        rf'data-hospital-premium-item="{re.escape(item_key)}"[^>]*data-hospital-premium-affordable="1"'
+                        rf'|data-hospital-premium-affordable="1"[^>]*data-hospital-premium-item="{re.escape(item_key)}"',
+                        r_prem.text,
+                    )
+                )
+            if not affordable:
+                report.add(
+                    f"soft-release hospital buy {item_key}",
+                    False,
+                    f"not affordable url={r_prem.url}",
+                )
+                continue
+            r_buy = s.post(
+                f"{BASE}/city/buildings/hospital/buy_premium",
+                data={"authenticity_token": token, "item_key": item_key},
+                headers={"Accept": "text/html"},
+                timeout=TIMEOUT,
+                allow_redirects=True,
+            )
+            token = csrf_from(r_buy.text) or token
+            buy_ok = (
+                r_buy.status_code == 200
+                and "hospital_denied=1" not in r_buy.url
+                and 'data-hospital-denied="1"' not in r_buy.text
+            )
+            report.add(
+                f"soft-release hospital buy {item_key}",
+                buy_ok,
+                f"status={r_buy.status_code} url={r_buy.url}",
+            )
+            if buy_ok:
+                buy_keys.append(item_key)
+                r_prem = r_buy
+
+        counts_ok = False
+        if buy_keys:
+            assault_m = re.search(r'data-hospital-assault="(\d+)"', r_prem.text)
+            heal_m = re.search(r'data-hospital-heal="(\d+)"', r_prem.text)
+            assault_n = int(assault_m.group(1)) if assault_m else 0
+            heal_n = int(heal_m.group(1)) if heal_m else 0
+            counts_ok = assault_n >= 1 and heal_n >= 1
+            report.add(
+                "soft-release hospital premium bag counts",
+                counts_ok,
+                f"assault={assault_n} heal={heal_n} url={r_prem.url}",
+            )
+        else:
+            report.add(
+                "soft-release hospital premium bag counts",
+                False,
+                "no premium buys",
+            )
+
+        if counts_ok:
+            r_world = s.get(f"{BASE}/world", timeout=TIMEOUT, allow_redirects=True)
+            trauma_m = re.search(r'data-trauma-scrolls="(\d+)"', r_world.text)
+            heal_chip_m = re.search(r'data-heal-scrolls="(\d+)"', r_world.text)
+            trauma_n = int(trauma_m.group(1)) if trauma_m else 0
+            heal_chip_n = int(heal_chip_m.group(1)) if heal_chip_m else 0
+            chips_ok = trauma_n >= 1 and heal_chip_n >= 1
+            report.add(
+                "soft-release premium HUD scroll chips",
+                chips_ok,
+                f"trauma={trauma_n} heal={heal_chip_n} url={r_world.url}",
+            )
+            if chips_ok:
+                r_inv = s.get(f"{BASE}/inventory", timeout=TIMEOUT, allow_redirects=True)
+                token = csrf_from(r_inv.text) or token
+                use_m = re.search(
+                    r'data-item-id="(\d+)"[^>]*data-item-key="combat_heal_scroll"'
+                    r'|data-item-key="combat_heal_scroll"[^>]*data-item-id="(\d+)"',
+                    r_inv.text,
+                )
+                use_item_id = None
+                if use_m:
+                    use_item_id = use_m.group(1) or use_m.group(2)
+                if use_item_id:
+                    r_use = s.post(
+                        f"{BASE}/inventory/use",
+                        data={
+                            "authenticity_token": token,
+                            "item_id": use_item_id,
+                        },
+                        headers={"Accept": "text/html"},
+                        timeout=TIMEOUT,
+                        allow_redirects=True,
+                    )
+                    report.add(
+                        "soft-release uses combat_heal_scroll",
+                        r_use.status_code == 200
+                        and "use_denied=1" not in r_use.url
+                        and "item_denied=1" not in r_use.url
+                        and 'data-inventory-item-denied="1"' not in r_use.text,
+                        f"status={r_use.status_code} url={r_use.url} item_id={use_item_id}",
+                    )
+                else:
+                    report.add(
+                        "soft-release uses combat_heal_scroll",
+                        False,
+                        "no combat_heal_scroll in bag",
+                    )
 
     failed = report.failed
     print("\n=== SUMMARY ===")
