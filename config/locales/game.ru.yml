@@ -1299,6 +1299,7 @@ ru:
       bag_capacity: "Сумка: %{weight}/%{max} массы · %{slots}/%{slot_max} слотов"
       wrong_building: "Этот рецепт крафтится в другом здании."
       workshop_only: "Крафт доступен только в кузнице или лазарете."
+      craft_denied_next: "Крафт не выполнен — проверьте материалы и рецепт, затем повторите или вернитесь в город."
       craft_cta: "Скрафтить"
       crafted: "Скрафчено: %{name}. Навык «%{profession}»: %{skill}."
       min_skill: "мин. навык %{amount}"
