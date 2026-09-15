@@ -25,7 +25,10 @@ auto-accept `veil_lure_drill` once. Contracts use `requires` / `unlocks` so
 later shore and craft jobs stay locked until earlier ones are turned in;
 successful turn-in can auto-accept the next key in `unlocks`. Journal cards show
 where-hints, named item rewards, and locked/available/active/completed status.
-Kill and delivery objectives grant NV, XP, and item rewards.
+Kill and delivery objectives grant NV, XP, and item rewards. Soft-release
+`veil_lure_drill` also accepts a Help Hall `arena_training_dummy` kill so
+level-zero players can complete the first contract without waiting on shore
+ambushes.
 
 ## 3. Server ownership
 

@@ -2454,6 +2454,44 @@ def main() -> int:
                             and "/city/buildings/hospital" not in r_fin.url,
                             f"url={r_fin.url}",
                         )
+                        token = csrf_from(r_fin.text) or token
+                        r_quest = s.get(f"{BASE}/quests", timeout=TIMEOUT, allow_redirects=True)
+                        token = csrf_from(r_quest.text) or token
+                        ready = (
+                            "Готово к сдаче" in r_quest.text
+                            or "Ready to turn in" in r_quest.text
+                            or 'data-quest-ready="1"' in r_quest.text
+                        )
+                        turn_m = re.search(
+                            r'action="(/quests/veil_lure_drill/turn_in)"',
+                            r_quest.text,
+                        )
+                        if turn_m:
+                            r_tin = s.post(
+                                urljoin(BASE + "/", turn_m.group(1).lstrip("/")),
+                                data={"authenticity_token": token},
+                                headers={"Accept": "text/html"},
+                                timeout=TIMEOUT,
+                                allow_redirects=True,
+                            )
+                            report.add(
+                                "help hall win turns in veil_lure_drill",
+                                r_tin.status_code == 200
+                                and "quest_denied=1" not in r_tin.url
+                                and (
+                                    "Хвост Завесы" in r_tin.text
+                                    or "veil_tail" in r_tin.text
+                                    or "В работе" in r_tin.text
+                                    or "completed" in r_tin.text.lower()
+                                ),
+                                f"status={r_tin.status_code} url={r_tin.url}",
+                            )
+                        else:
+                            report.add(
+                                "help hall win turns in veil_lure_drill",
+                                False,
+                                f"ready={ready} no turn_in control",
+                            )
             else:
                 report.add("help hall NPC accept starts fight", False, "no accept control")
         else:

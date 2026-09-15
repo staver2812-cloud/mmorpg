@@ -8,14 +8,14 @@ quests:
   veil_lure_drill:
     title_ru: "Приманка Завесы"
     title_en: "Veil Lure Drill"
-    summary_ru: "Боты сами нападают раз в 5 минут. Чтобы вызвать бой раньше — используйте Приманку Завесы (Осмотр/Вход на клетке с ботом). Победите любого врага берега и доложите."
-    summary_en: "Bots ambush on their own every 5 minutes. To force a fight earlier, use Ashen Bait (Look/Enter on a hostile cell). Defeat any shore foe and report."
-    where_ru: "Западные ворота → Пепельный Берег"
-    where_en: "West Gate → Ashen Shore"
+    summary_ru: "Боты сами нападают раз в 5 минут. Чтобы вызвать бой раньше — используйте Приманку Завесы (Осмотр/Вход на клетке с ботом). Победите врага берега или манекен в Зале Помощи и доложите."
+    summary_en: "Bots ambush on their own every 5 minutes. To force a fight earlier, use Ashen Bait (Look/Enter on a hostile cell). Defeat a shore foe or the Help Hall mannequin and report."
+    where_ru: "Западные ворота → Пепельный Берег · или Арена → Зал Помощи"
+    where_en: "West Gate → Ashen Shore · or Arena → Help Hall"
     giver: "Ратуша Угля"
     objective:
       type: kill_npc
-      npc_keys: [plague_rat, ash_gate_mite, ash_gate_patrol, ash_shore_scout, wilderness_bandit, wilderness_robber, ash_bell_mite]
+      npc_keys: [plague_rat, ash_gate_mite, ash_gate_patrol, ash_shore_scout, wilderness_bandit, wilderness_robber, ash_bell_mite, arena_training_dummy]
       count: 1
     reward:
       experience: 25
