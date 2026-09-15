@@ -2709,33 +2709,40 @@ def main() -> int:
                                                                     and "allocation_denied=1" not in r_alloc_ok.url
                                                                 ):
                                                                     token = csrf_from(r_alloc_ok.text) or token
+                                                                    # Refresh world/shop action offers after arena/quest chain.
+                                                                    s.get(f"{BASE}/world", timeout=TIMEOUT, allow_redirects=True)
                                                                     r_shop_buy = s.get(
                                                                         f"{BASE}/shop?mode=buy",
                                                                         timeout=TIMEOUT,
                                                                         allow_redirects=True,
                                                                     )
                                                                     token = csrf_from(r_shop_buy.text) or token
+                                                                    any_aff = 'data-shop-any-affordable="1"' in r_shop_buy.text
                                                                     offer_m = re.search(
-                                                                        r'data-shop-affordable="1"[\s\S]{0,1200}?'
-                                                                        r'name="item_template_id"[^>]*value="(\d+)"'
-                                                                        r'[\s\S]{0,400}?name="action_key"[^>]*value="([^"]+)"',
+                                                                        r'data-shop-item="(\d+)"[^>]*data-shop-affordable="1"'
+                                                                        r'|data-shop-affordable="1"[^>]*data-shop-item="(\d+)"',
                                                                         r_shop_buy.text,
                                                                     )
-                                                                    if not offer_m:
-                                                                        offer_m = re.search(
-                                                                            r'name="item_template_id"[^>]*value="(\d+)"'
-                                                                            r'[\s\S]{0,400}?name="action_key"[^>]*value="([^"]+)"'
-                                                                            r'[\s\S]{0,400}?data-shop-affordable="1"',
+                                                                    item_id = None
+                                                                    action_key = None
+                                                                    if offer_m:
+                                                                        item_id = offer_m.group(1) or offer_m.group(2)
+                                                                        # Locate the matching buy form for this template id.
+                                                                        form_m = re.search(
+                                                                            rf'name="item_template_id"[^>]*value="{re.escape(item_id)}"'
+                                                                            rf'[\s\S]{{0,500}}?name="action_key"[^>]*value="([^"]+)"',
                                                                             r_shop_buy.text,
                                                                         )
-                                                                    if offer_m:
+                                                                        if form_m:
+                                                                            action_key = form_m.group(1)
+                                                                    if item_id and action_key:
                                                                         r_bought = s.post(
                                                                             f"{BASE}/shop/buy",
                                                                             data={
                                                                                 "authenticity_token": token,
                                                                                 "mode": "buy",
-                                                                                "item_template_id": offer_m.group(1),
-                                                                                "action_key": offer_m.group(2),
+                                                                                "item_template_id": item_id,
+                                                                                "action_key": action_key,
                                                                             },
                                                                             headers={"Accept": "text/html"},
                                                                             timeout=TIMEOUT,
@@ -2746,13 +2753,13 @@ def main() -> int:
                                                                             r_bought.status_code == 200
                                                                             and "trade_denied=1" not in r_bought.url
                                                                             and "shop_denied=1" not in r_bought.url,
-                                                                            f"status={r_bought.status_code} url={r_bought.url} item={offer_m.group(1)}",
+                                                                            f"status={r_bought.status_code} url={r_bought.url} item={item_id}",
                                                                         )
                                                                     else:
                                                                         report.add(
                                                                             "soft-release shop buy affordable item",
                                                                             False,
-                                                                            "no affordable buy offer on shop desk",
+                                                                            f"any_affordable={any_aff} no buy form after world refresh",
                                                                         )
                                                         else:
                                                             report.add(
