@@ -2991,8 +2991,11 @@ def main() -> int:
                                                                                                             d
                                                                                                             for d in dests
                                                                                                             if (d[1], d[2])
-                                                                                                            in {("6", "7"), ("7", "8")}
+                                                                                                            in {("7", "7"), ("6", "7"), ("7", "8")}
                                                                                                         ]
+                                                                                                        preferred.sort(
+                                                                                                            key=lambda d: 0 if (d[1], d[2]) == ("7", "7") else 1
+                                                                                                        )
                                                                                                         step = (preferred or dests or [None])[0]
                                                                                                         if step and bait_qty > 0:
                                                                                                             direction, tx, ty, akey, travel_s = step
@@ -3031,26 +3034,24 @@ def main() -> int:
                                                                                                                 )
                                                                                                                 token = csrf_from(r_land.text) or token
                                                                                                                 look_m = re.search(
-                                                                                                                    r'name="tile_id"[^>]*value="(\d+)"[\s\S]{0,500}?'
-                                                                                                                    r'name="local_action_type"[^>]*value="look"'
-                                                                                                                    r'[\s\S]{0,300}?name="action_key"[^>]*value="([^"]+)"'
-                                                                                                                    r'|name="local_action_type"[^>]*value="look"'
-                                                                                                                    r'[\s\S]{0,500}?name="tile_id"[^>]*value="(\d+)"'
-                                                                                                                    r'[\s\S]{0,300}?name="action_key"[^>]*value="([^"]+)"',
+                                                                                                                    r'data-local-action-type="resource_search"[^>]*data-tile-id="(\d+)"[^>]*data-action-key="([^"]+)"'
+                                                                                                                    r'|data-tile-id="(\d+)"[^>]*data-local-action-type="resource_search"[^>]*data-action-key="([^"]+)"'
+                                                                                                                    r'|value="resource_search"[^>]*name="local_action_type"[\s\S]{0,400}?value="(\d+)"[^>]*name="tile_id"[\s\S]{0,200}?value="([^"]+)"[^>]*name="action_key"'
+                                                                                                                    r'|value="(\d+)"[^>]*name="tile_id"[\s\S]{0,400}?value="resource_search"[^>]*name="local_action_type"[\s\S]{0,200}?value="([^"]+)"[^>]*name="action_key"',
                                                                                                                     r_land.text,
                                                                                                                 )
                                                                                                                 look_tile = None
                                                                                                                 look_key = None
                                                                                                                 if look_m:
-                                                                                                                    look_tile = look_m.group(1) or look_m.group(3)
-                                                                                                                    look_key = look_m.group(2) or look_m.group(4)
+                                                                                                                    look_tile = next((g for g in look_m.groups()[0::2] if g), None)
+                                                                                                                    look_key = next((g for g in look_m.groups()[1::2] if g), None)
                                                                                                                 if look_tile and look_key:
                                                                                                                     r_look = s.post(
                                                                                                                         f"{BASE}/world/perform_local_action",
                                                                                                                         data={
                                                                                                                             "authenticity_token": token,
                                                                                                                             "tile_id": look_tile,
-                                                                                                                            "local_action_type": "look",
+                                                                                                                            "local_action_type": "resource_search",
                                                                                                                             "action_key": look_key,
                                                                                                                         },
                                                                                                                         headers={"Accept": "text/html"},
@@ -3069,7 +3070,7 @@ def main() -> int:
                                                                                                                     report.add(
                                                                                                                         "soft-release outdoor look",
                                                                                                                         False,
-                                                                                                                        f"no look offer at {tx},{ty}",
+                                                                                                                        f"no resource_search offer at {tx},{ty}",
                                                                                                                     )
                                                                                                                 r_bait = s.post(
                                                                                                                     f"{BASE}/world/context",
