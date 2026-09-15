@@ -3030,6 +3030,47 @@ def main() -> int:
                                                                                                                     allow_redirects=True,
                                                                                                                 )
                                                                                                                 token = csrf_from(r_land.text) or token
+                                                                                                                look_m = re.search(
+                                                                                                                    r'name="tile_id"[^>]*value="(\d+)"[\s\S]{0,500}?'
+                                                                                                                    r'name="local_action_type"[^>]*value="look"'
+                                                                                                                    r'[\s\S]{0,300}?name="action_key"[^>]*value="([^"]+)"'
+                                                                                                                    r'|name="local_action_type"[^>]*value="look"'
+                                                                                                                    r'[\s\S]{0,500}?name="tile_id"[^>]*value="(\d+)"'
+                                                                                                                    r'[\s\S]{0,300}?name="action_key"[^>]*value="([^"]+)"',
+                                                                                                                    r_land.text,
+                                                                                                                )
+                                                                                                                look_tile = None
+                                                                                                                look_key = None
+                                                                                                                if look_m:
+                                                                                                                    look_tile = look_m.group(1) or look_m.group(3)
+                                                                                                                    look_key = look_m.group(2) or look_m.group(4)
+                                                                                                                if look_tile and look_key:
+                                                                                                                    r_look = s.post(
+                                                                                                                        f"{BASE}/world/perform_local_action",
+                                                                                                                        data={
+                                                                                                                            "authenticity_token": token,
+                                                                                                                            "tile_id": look_tile,
+                                                                                                                            "local_action_type": "look",
+                                                                                                                            "action_key": look_key,
+                                                                                                                        },
+                                                                                                                        headers={"Accept": "text/html"},
+                                                                                                                        timeout=TIMEOUT,
+                                                                                                                        allow_redirects=True,
+                                                                                                                    )
+                                                                                                                    report.add(
+                                                                                                                        "soft-release outdoor look",
+                                                                                                                        r_look.status_code == 200
+                                                                                                                        and "action_denied=1" not in r_look.url
+                                                                                                                        and 'data-action-denied="1"' not in r_look.text,
+                                                                                                                        f"status={r_look.status_code} url={r_look.url} tile={look_tile} at={tx},{ty}",
+                                                                                                                    )
+                                                                                                                    token = csrf_from(r_look.text) or token
+                                                                                                                else:
+                                                                                                                    report.add(
+                                                                                                                        "soft-release outdoor look",
+                                                                                                                        False,
+                                                                                                                        f"no look offer at {tx},{ty}",
+                                                                                                                    )
                                                                                                                 r_bait = s.post(
                                                                                                                     f"{BASE}/world/context",
                                                                                                                     data={
@@ -3463,66 +3504,6 @@ def main() -> int:
                                                                                                                                                                                             and 'data-chat-denied="1"' not in r_chat_ok.text,
                                                                                                                                                                                             f"status={r_chat_ok.status_code} url={r_chat_ok.url} ctx={context_key}",
                                                                                                                                                                                         )
-                                                                                                                                                                                        if (
-                                                                                                                                                                                            r_chat_ok.status_code == 200
-                                                                                                                                                                                            and "chat_denied=1" not in r_chat_ok.url
-                                                                                                                                                                                            and 'data-chat-denied="1"' not in r_chat_ok.text
-                                                                                                                                                                                        ):
-                                                                                                                                                                                            click_hotspot(s, "go_main")
-                                                                                                                                                                                            ok_wg2, d_wg2 = click_hotspot(s, "west_gate")
-                                                                                                                                                                                            if not ok_wg2:
-                                                                                                                                                                                                report.add(
-                                                                                                                                                                                                    "soft-release outdoor look",
-                                                                                                                                                                                                    False,
-                                                                                                                                                                                                    f"no west_gate: {d_wg2}",
-                                                                                                                                                                                                )
-                                                                                                                                                                                            else:
-                                                                                                                                                                                                r_look_page = s.get(
-                                                                                                                                                                                                    f"{BASE}/world",
-                                                                                                                                                                                                    timeout=TIMEOUT,
-                                                                                                                                                                                                    allow_redirects=True,
-                                                                                                                                                                                                )
-                                                                                                                                                                                                token = csrf_from(r_look_page.text) or token
-                                                                                                                                                                                                look_m = re.search(
-                                                                                                                                                                                                    r'name="tile_id"[^>]*value="(\d+)"[\s\S]{0,500}?'
-                                                                                                                                                                                                    r'name="local_action_type"[^>]*value="look"'
-                                                                                                                                                                                                    r'[\s\S]{0,300}?name="action_key"[^>]*value="([^"]+)"'
-                                                                                                                                                                                                    r'|name="local_action_type"[^>]*value="look"'
-                                                                                                                                                                                                    r'[\s\S]{0,500}?name="tile_id"[^>]*value="(\d+)"'
-                                                                                                                                                                                                    r'[\s\S]{0,300}?name="action_key"[^>]*value="([^"]+)"',
-                                                                                                                                                                                                    r_look_page.text,
-                                                                                                                                                                                                )
-                                                                                                                                                                                                look_tile = None
-                                                                                                                                                                                                look_key = None
-                                                                                                                                                                                                if look_m:
-                                                                                                                                                                                                    look_tile = look_m.group(1) or look_m.group(3)
-                                                                                                                                                                                                    look_key = look_m.group(2) or look_m.group(4)
-                                                                                                                                                                                                if look_tile and look_key:
-                                                                                                                                                                                                    r_look = s.post(
-                                                                                                                                                                                                        f"{BASE}/world/perform_local_action",
-                                                                                                                                                                                                        data={
-                                                                                                                                                                                                            "authenticity_token": token,
-                                                                                                                                                                                                            "tile_id": look_tile,
-                                                                                                                                                                                                            "local_action_type": "look",
-                                                                                                                                                                                                            "action_key": look_key,
-                                                                                                                                                                                                        },
-                                                                                                                                                                                                        headers={"Accept": "text/html"},
-                                                                                                                                                                                                        timeout=TIMEOUT,
-                                                                                                                                                                                                        allow_redirects=True,
-                                                                                                                                                                                                    )
-                                                                                                                                                                                                    report.add(
-                                                                                                                                                                                                        "soft-release outdoor look",
-                                                                                                                                                                                                        r_look.status_code == 200
-                                                                                                                                                                                                        and "action_denied=1" not in r_look.url
-                                                                                                                                                                                                        and 'data-action-denied="1"' not in r_look.text,
-                                                                                                                                                                                                        f"status={r_look.status_code} url={r_look.url} tile={look_tile}",
-                                                                                                                                                                                                    )
-                                                                                                                                                                                                else:
-                                                                                                                                                                                                    report.add(
-                                                                                                                                                                                                        "soft-release outdoor look",
-                                                                                                                                                                                                        False,
-                                                                                                                                                                                                        "no look offer at west gate cell",
-                                                                                                                                                                                                    )
                                                                                                                                                                                     else:
                                                                                                                                                                                         report.add(
                                                                                                                                                                                             "soft-release local chat send",
