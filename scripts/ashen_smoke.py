@@ -776,6 +776,22 @@ def main() -> int:
             locked_ok,
             f"{r_acc.status_code}",
         )
+        r_miss = s.post(
+            f"{BASE}/quests/__missing_ashen_quest__/accept",
+            data={"authenticity_token": csrf_from(r_acc.text) or token},
+            timeout=TIMEOUT,
+            allow_redirects=True,
+        )
+        report.add(
+            "quest denied recovery",
+            r_miss.status_code == 200
+            and 'data-quest-denied="1"' in r_miss.text
+            and (
+                'data-quest-recovery="world"' in r_miss.text
+                or 'data-quest-recovery="city_hall"' in r_miss.text
+            ),
+            f"status={r_miss.status_code} url={r_miss.url}",
+        )
         report.add(
             "quests show rewards",
             ("Опыт:" in r.text) or ("NV:" in r.text) or ("Предмет:" in r.text) or ("XP:" in r.text),

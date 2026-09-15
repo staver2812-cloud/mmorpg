@@ -4,6 +4,17 @@
   <header class="nl-quests__header">
     <h1><%= t("game.quests.title") %></h1>
     <p><%= t("game.quests.hint") %></p>
+    <% if params[:quest_denied].to_s == "1" %>
+      <p class="nl-quests-board__meta" data-quest-denied="1">
+        <%= t("game.quests.denied_next") %>
+        ·
+        <%= link_to t("game.quests.continue_world"), world_path, class: "nl-sheet-link", data: {quest_recovery: "world"} %>
+        <% if Game::World::CityBuildingCatalog.accessible?(character: current_character, building_key: "city_hall") %>
+          ·
+          <%= link_to t("game.quests.board_open_hall"), city_building_path("city_hall"), class: "nl-sheet-link", data: {quest_recovery: "city_hall"} %>
+        <% end %>
+      </p>
+    <% end %>
     <% if Game::World::CityBuildingCatalog.accessible?(character: current_character, building_key: "city_hall") %>
       <p class="nl-quests-board__meta" data-quest-hall-link="1">
         <%= link_to t("game.quests.board_open_hall"), city_building_path("city_hall"), class: "nl-sheet-link", data: {quest_recovery: "city_hall"} %>

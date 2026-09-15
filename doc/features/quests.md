@@ -59,6 +59,7 @@ novice → adept → master bags.
 
 | Date | Change |
 |---|---|
+| 2026-09-15 | Failed accept/turn-in (unknown or rejected) returns to the journal with `quest_denied=1` recovery chrome. |
 | 2026-09-14 | Hall/World journal board link exposes `data-quest-recovery`; smoke asserts it. |
 | 2026-09-14 | Quests journal always links to Coal Hall board (`data-quest-hall-link`); when Hall is out of district the link opens City. Locked contracts recover to World. |
 | 2026-09-14 | Completed quest cards also recover to World (`data-quest-done`). |

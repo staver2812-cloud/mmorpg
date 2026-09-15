@@ -1400,6 +1400,7 @@ en:
       accepted: "Quest accepted: %{title}"
       completed: "Quest turned in: %{title}"
       unknown: "Unknown quest."
+      denied_next: "That contract is not available from here."
       already_done: "Quest already completed."
       already_active: "Quest already active."
       locked: "Complete earlier contracts in the chain first."

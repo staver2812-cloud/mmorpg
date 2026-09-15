@@ -12,15 +12,20 @@ class QuestsController < ApplicationController
 
   def accept
     result = Game::Quests::Journal.new(character: current_character).accept!(params[:id])
-    redirect_to quests_path, status: :see_other, **flash_for(result)
+    redirect_after_mutation(result)
   end
 
   def turn_in
     result = Game::Quests::Journal.new(character: current_character).turn_in!(params[:id])
-    redirect_to quests_path, status: :see_other, **flash_for(result)
+    redirect_after_mutation(result)
   end
 
   private
+
+  def redirect_after_mutation(result)
+    path_opts = result.success ? {} : {quest_denied: 1}
+    redirect_to quests_path(**path_opts), status: :see_other, **flash_for(result)
+  end
 
   def flash_for(result)
     result.success ? {notice: result.message} : {alert: result.message}
