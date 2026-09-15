@@ -4836,6 +4836,54 @@ def main() -> int:
                 pr_ok,
                 f"status={r_pr.status_code} url={r_pr.url}",
             )
+            sr_flags["prison_ok"] = bool(pr_ok)
+
+    if sr_flags.get("prison_ok"):
+        # Law Abode shares Law Quarter with Prison.
+        r_law = s.get(
+            f"{BASE}/city/buildings/law_abode",
+            timeout=TIMEOUT,
+            allow_redirects=True,
+        )
+        law_ok = (
+            r_law.status_code == 200
+            and 'data-building-key="law_abode"' in r_law.text
+            and 'data-landmark-inside="1"' in r_law.text
+        )
+        report.add(
+            "soft-release law abode visit",
+            law_ok,
+            f"status={r_law.status_code} url={r_law.url}",
+        )
+        sr_flags["law_ok"] = bool(law_ok)
+
+    if sr_flags.get("law_ok"):
+        r_inv = s.get(f"{BASE}/inventory", timeout=TIMEOUT, allow_redirects=True)
+        inv_ok = (
+            r_inv.status_code == 200
+            and "nl-inventory" in r_inv.text
+            and ("Вес инвентаря" in r_inv.text or "inventory" in r_inv.text.lower())
+        )
+        report.add(
+            "soft-release inventory visit",
+            inv_ok,
+            f"status={r_inv.status_code} url={r_inv.url}",
+        )
+        sr_flags["inventory_ok"] = bool(inv_ok)
+
+    if sr_flags.get("inventory_ok"):
+        r_lic = s.get(f"{BASE}/character/licenses", timeout=TIMEOUT, allow_redirects=True)
+        lic_ok = r_lic.status_code == 200 and (
+            "лиценз" in r_lic.text.lower()
+            or "license" in r_lic.text.lower()
+            or "nl-licenses" in r_lic.text
+            or "/shop" in r_lic.text
+        )
+        report.add(
+            "soft-release licenses visit",
+            lic_ok,
+            f"status={r_lic.status_code} url={r_lic.url}",
+        )
 
     failed = report.failed
     print("\n=== SUMMARY ===")
