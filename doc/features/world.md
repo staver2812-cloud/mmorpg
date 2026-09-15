@@ -2985,6 +2985,7 @@ Before extending the World feature:
 | 2026-09-15 | Failed `POST /world/assault` (missing/ineligible target) recovers on World with `assault_denied=1` chrome. |
 | 2026-09-15 | Missing/stale city hotspot interacts recover on World with `hotspot_denied=1` chrome. |
 | 2026-09-15 | Failed outdoor local actions recover on World with `action_denied=1` chrome. |
+| 2026-09-15 | Blocked outdoor inventory/progression and unsupported shell context returns also recover with `action_denied=1`. |
 | 2026-09-15 | Missing `POST /world/enter_building` targets recover on World with `building_denied=1` chrome. |
 | 2026-09-15 | Failed enter_building / interact_hotspot / move HTML denials also recover with `building_denied` / `hotspot_denied` / `action_denied` chrome. |
 | 2026-09-13 | Presence/profile Assault CTA only when colocated and legal; disabled state when trauma scroll is missing. |
