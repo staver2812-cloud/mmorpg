@@ -1664,6 +1664,26 @@ def main() -> int:
             'data-building-recovery="world"' in r.text,
             f"url={r.url}",
         )
+        token = csrf_from(r.text)
+        if token:
+            r_law = s.post(
+                f"{BASE}/city/buildings/law_abode/law",
+                data={
+                    "authenticity_token": token,
+                    "alignment": "__bad_ashen_alignment__",
+                },
+                headers={"Accept": "text/html"},
+                timeout=TIMEOUT,
+                allow_redirects=True,
+            )
+            report.add(
+                "law denied recovery",
+                r_law.status_code == 200
+                and 'data-law-denied="1"' in r_law.text
+                and 'data-law-recovery="world"' in r_law.text
+                and 'data-law-recovery="law"' in r_law.text,
+                f"status={r_law.status_code} url={r_law.url}",
+            )
     r = s.get(f"{BASE}/world", timeout=TIMEOUT)
     report.add(
         "alignment chip on Law Quarter",

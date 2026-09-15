@@ -16,6 +16,15 @@
           amount: Game::World::LawAlignmentPledge::CHANGE_COST
         ) %>
   </p>
+  <% if params[:law_denied].to_s == "1" %>
+    <p class="nl-quests-board__meta" data-law-denied="1">
+      <%= t("game.buildings.law_denied_next") %>
+      ·
+      <%= link_to t("arena.nav.city"), world_path, class: "nl-sheet-link", data: {law_recovery: "world"} %>
+      ·
+      <%= link_to t("game.buildings.law_title"), city_building_path("law_abode"), class: "nl-sheet-link", data: {law_recovery: "law"} %>
+    </p>
+  <% end %>
   <p class="nl-quests-board__meta"><%= t("game.buildings.law_wallet", amount: balance.to_i) %></p>
   <p class="nl-quests-board__meta" data-law-pledge-mode="<%= first_pledge ? "free" : "paid" %>">
     <%= first_pledge ? t("game.buildings.law_first_free") : t("game.buildings.law_change_cost", amount: Game::World::LawAlignmentPledge::CHANGE_COST) %>

@@ -96,4 +96,17 @@ RSpec.describe "City building action denied recovery", type: :request do
     expect(response.body).to include('data-obelisk-recovery="world"')
     expect(response.body).to include('data-obelisk-recovery="obelisk"')
   end
+
+  it "recovers when a law alignment pledge fails" do
+    create(:city_hotspot, :building, zone: city, key: "law_abode", name: "Law",
+      action_params: {"feature" => "law_abode"})
+
+    post city_building_law_path("law_abode"), params: {alignment: "__bad_ashen_alignment__"}
+
+    expect(response).to redirect_to(city_building_path("law_abode", law_denied: 1))
+    follow_redirect!
+    expect(response.body).to include('data-law-denied="1"')
+    expect(response.body).to include('data-law-recovery="world"')
+    expect(response.body).to include('data-law-recovery="law"')
+  end
 end

@@ -1157,6 +1157,7 @@ en:
       law_changed: "Alignment changed to %{name} (−%{amount} NV)."
       law_already: "That alignment is already declared."
       law_short: "Need %{amount} NV to change alignment."
+      law_denied_next: "Alignment pledge did not complete — pick a valid path and funds, then try again or return to the city."
       law_bad_alignment: "Unknown alignment."
       law_in_combat: "Finish the fight first."
       law_open_cta: "Open Law Abode"

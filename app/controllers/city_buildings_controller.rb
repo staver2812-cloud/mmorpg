@@ -252,11 +252,9 @@ class CityBuildingsController < ApplicationController
       character: current_character,
       alignment: params[:alignment]
     ).call
-    if result.success
-      redirect_to city_building_path("law_abode"), notice: result.message
-    else
-      redirect_to city_building_path("law_abode"), alert: result.message
-    end
+    extra = result.success ? {} : {law_denied: 1}
+    flash_opts = result.success ? {notice: result.message} : {alert: result.message}
+    redirect_to city_building_path("law_abode", **extra), **flash_opts
   end
 
   def sell

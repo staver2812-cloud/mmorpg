@@ -1204,6 +1204,7 @@ Final rerun results are in the
 - 2026-09-13: Shared landmark chrome exposes `data-landmark-inside`; Captured shop-shell desks also render landmark exit notes; smoke checks hospital, Coal Tide Tavern, City Hall, Market, Post, Clan Hall, Airship Station, Library, schools, Law Abode, Prison, Gallows, Guard Tower, Workshop, Salt Auction, Dealer House, Temple, Bank, Relic stall, and Obelisk for the marker.
 - 2026-09-13: Market, Ash Buyer, Airship Station, and Numismatics desks also render shared landmark chrome; Market keeps a single landmark after stalls (embedded junk desk does not duplicate it).
 - 2026-09-13: City building access/not-found flashes are localized (`game.flashes.building_not_found` / `building_district_required`).
+- 2026-09-15: Failed Law Abode alignment pledges redirect with `law_denied=1` recovery chrome (`data-law-denied`, `data-law-recovery`).
 - 2026-09-15: Failed city Obelisk desk bind/recall redirects with `obelisk_desk_denied=1` recovery chrome (`data-obelisk-desk-denied`, `data-obelisk-recovery`).
 - 2026-09-15: Failed Temple rite redirects with `temple_denied=1` recovery chrome (`data-temple-denied`, `data-temple-recovery`).
 - 2026-09-15: Failed Ash Buyer buyback redirects with `junk_denied=1` recovery chrome (`data-junk-denied`, `data-junk-recovery`).
