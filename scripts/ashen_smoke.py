@@ -134,7 +134,7 @@ def enter_building(session: requests.Session) -> Tuple[bool, str]:
 
 def main() -> int:
     report = Report()
-    sr_flags = {"auction_ok": False, "airship_ok": False, "city_hall_ok": False}
+    sr_flags = {"auction_ok": False, "airship_ok": False, "city_hall_ok": False, "guard_tower_ok": False}
     s = requests.Session()
     s.headers.update({"User-Agent": "ashen-smoke/1.0", "Accept-Language": "ru"})
 
@@ -4685,6 +4685,44 @@ def main() -> int:
                 gt_ok,
                 f"status={r_gt.status_code} url={r_gt.url}",
             )
+            sr_flags["guard_tower_ok"] = bool(gt_ok)
+
+    if sr_flags.get("guard_tower_ok"):
+        # Guard Tower and Pitch Forge share Central Square (main).
+        r_ws = s.get(
+            f"{BASE}/city/buildings/workshop",
+            timeout=TIMEOUT,
+            allow_redirects=True,
+        )
+        ws_ok = (
+            r_ws.status_code == 200
+            and 'data-building-key="workshop"' in r_ws.text
+            and 'data-landmark-inside="1"' in r_ws.text
+        )
+        report.add(
+            "soft-release workshop visit",
+            ws_ok,
+            f"status={r_ws.status_code} url={r_ws.url}",
+        )
+        sr_flags["workshop_ok"] = bool(ws_ok)
+
+    if sr_flags.get("workshop_ok"):
+        # Infirmary also sits on Central Square.
+        r_hosp = s.get(
+            f"{BASE}/city/buildings/hospital",
+            timeout=TIMEOUT,
+            allow_redirects=True,
+        )
+        hosp_ok = (
+            r_hosp.status_code == 200
+            and 'data-building-key="hospital"' in r_hosp.text
+            and 'data-landmark-inside="1"' in r_hosp.text
+        )
+        report.add(
+            "soft-release hospital visit",
+            hosp_ok,
+            f"status={r_hosp.status_code} url={r_hosp.url}",
+        )
 
     failed = report.failed
     print("\n=== SUMMARY ===")
