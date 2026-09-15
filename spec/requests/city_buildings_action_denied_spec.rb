@@ -57,4 +57,17 @@ RSpec.describe "City building action denied recovery", type: :request do
     expect(response.body).to include('data-souvenir-recovery="world"')
     expect(response.body).to include('data-souvenir-recovery="souvenir"')
   end
+
+  it "recovers when a junk buyback fails" do
+    create(:city_hotspot, :building, zone: city, key: "junk_dealer", name: "Junk",
+      action_params: {"feature" => "junk_dealer"})
+
+    post city_building_sell_path("junk_dealer"), params: {item_key: "__missing_ashen_junk__", quantity: 1}
+
+    expect(response).to redirect_to(city_building_path("junk_dealer", junk_denied: 1))
+    follow_redirect!
+    expect(response.body).to include('data-junk-denied="1"')
+    expect(response.body).to include('data-junk-recovery="world"')
+    expect(response.body).to include('data-junk-recovery="junk"')
+  end
 end

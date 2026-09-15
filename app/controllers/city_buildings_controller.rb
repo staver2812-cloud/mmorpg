@@ -272,11 +272,9 @@ class CityBuildingsController < ApplicationController
       item_key: params[:item_key],
       quantity: params[:quantity]
     ).call
-    if result.success
-      redirect_to city_building_path("junk_dealer"), notice: result.message
-    else
-      redirect_to city_building_path("junk_dealer"), alert: result.message
-    end
+    extra = result.success ? {} : {junk_denied: 1}
+    flash_opts = result.success ? {notice: result.message} : {alert: result.message}
+    redirect_to city_building_path("junk_dealer", **extra), **flash_opts
   end
 
   private

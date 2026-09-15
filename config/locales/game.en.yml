@@ -1269,6 +1269,7 @@ en:
       junk_sell_all: "Sell all"
       junk_sold: "Sold %{name} ×%{qty} for %{amount} NV."
       junk_only: "Buyback is only available at the Ash Buyer."
+      junk_denied_next: "Buyback did not complete — check the item or bag, then try again or return to the city."
       junk_not_accepted: "The buyer will not take that item."
       junk_item_missing: "Item not found."
       junk_inventory_empty: "Inventory is empty."

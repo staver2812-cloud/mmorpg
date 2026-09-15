@@ -580,6 +580,27 @@ def main() -> int:
             'data-building-recovery="world"' in r.text,
             f"url={r.url}",
         )
+        token = csrf_from(r.text)
+        if token:
+            r_junk = s.post(
+                f"{BASE}/city/buildings/junk_dealer/sell",
+                data={
+                    "authenticity_token": token,
+                    "item_key": "__missing_ashen_junk__",
+                    "quantity": "1",
+                },
+                headers={"Accept": "text/html"},
+                timeout=TIMEOUT,
+                allow_redirects=True,
+            )
+            report.add(
+                "junk denied recovery",
+                r_junk.status_code == 200
+                and 'data-junk-denied="1"' in r_junk.text
+                and 'data-junk-recovery="world"' in r_junk.text
+                and 'data-junk-recovery="junk"' in r_junk.text,
+                f"status={r_junk.status_code} url={r_junk.url}",
+            )
     r = s.get(f"{BASE}/city/buildings/city_hall", timeout=TIMEOUT, allow_redirects=True)
     report.add(
         "GET /city/buildings/city_hall",
