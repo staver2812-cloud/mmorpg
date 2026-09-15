@@ -1159,6 +1159,7 @@ supplies only authoritative completion/loot facts and stable source keys.
 | 2026-09-14 | Arena chrome Character/Inventory/City links and recent-empty Duels CTA expose `data-arena-recovery`. |
 | 2026-09-14 | Arena room topline Character/Inventory/Lobby/City links expose `data-arena-recovery`. |
 | 2026-09-15 | Missing arena application accept/cancel redirects to the lobby with `arena_denied=1` recovery chrome. |
+| 2026-09-15 | Missing arena room ids redirect to the lobby with `arena_denied=1` recovery chrome. |
 | 2026-09-15 | Missing arena match ids redirect to the lobby with `arena_denied=1` recovery chrome. |
 | 2026-09-15 | Level-gated Arena room GETs redirect to lobby with `arena_denied=1` recovery chrome (`data-arena-denied`). |
 | 2026-09-15 | Missing public fight log renders HTML recovery to Arena/City (`data-fight-log-missing`) instead of bare plain text. |

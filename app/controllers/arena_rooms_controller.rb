@@ -6,6 +6,7 @@ class ArenaRoomsController < ApplicationController
   before_action :require_character
   around_action :with_city_arena_entry
   before_action :set_room, only: :show
+  rescue_from ActiveRecord::RecordNotFound, with: :room_missing
 
   # GET /arena_rooms/:id
   def show
@@ -52,6 +53,12 @@ class ArenaRoomsController < ApplicationController
 
   def set_room
     @room = ArenaRoom.find(params[:id])
+  end
+
+  def room_missing
+    redirect_to arena_index_path(arena_denied: 1),
+      alert: I18n.t("game.flashes.arena_room_missing"),
+      status: :see_other
   end
 
   def require_character
