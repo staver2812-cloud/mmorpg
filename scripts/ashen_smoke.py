@@ -4650,7 +4650,12 @@ def main() -> int:
             r_hall.status_code == 200
             and 'data-building-key="city_hall"' in r_hall.text
             and 'data-landmark-inside="1"' in r_hall.text
-            and ("data-city-hall-quests=" in r_hall.text or "nl-city-hall" in r_hall.text or "Квесты" in r_hall.text or "Quest" in r_hall.text)
+            and (
+                "data-city-hall-wallet=" in r_hall.text
+                or "data-city-hall-quest-ready=" in r_hall.text
+                or "Задания" in r_hall.text
+                or "/quests" in r_hall.text
+            )
         )
         report.add(
             "soft-release city hall visit",
