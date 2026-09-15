@@ -87,6 +87,16 @@
     </button>
   </div>
 
+  <% if params[:match_denied].to_s == "1" %>
+    <p class="nl-quests-board__meta" data-match-denied="1">
+      <%= t("game.fight.match_denied_next") %>
+      ·
+      <%= link_to t("arena.nav.arena"), arena_index_path, class: "nl-sheet-link", data: {match_recovery: "lobby"} %>
+      ·
+      <%= link_to t("arena.nav.city"), world_path, class: "nl-sheet-link", data: {turbo: false, match_recovery: "city"} %>
+    </p>
+  <% end %>
+
   <%# Main combat layout: Player | Actions+Log | Opponent %>
   <div class="arena-fight-layout">
     <%# Left: complete side A roster %>

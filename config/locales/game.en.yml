@@ -695,6 +695,7 @@ en:
     fight:
       log: "Fight log"
       page_title: "Fight #%{id}"
+      match_denied_next: "That fight action did not go through — wait for the round, or return to the lobby / city."
       log_page_title: "Fight log #%{id}"
       statistics: "Statistics"
       no_events: "No fight events recorded."

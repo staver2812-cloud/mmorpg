@@ -75,7 +75,7 @@ class ArenaMatchesController < ApplicationController
         format.json { render json: {success: true, data: result.data} }
         format.turbo_stream { redirect_to @arena_match, notice: message, status: :see_other }
       else
-        format.html { redirect_to @arena_match, alert: result.error, status: :see_other }
+        format.html { redirect_to arena_match_path(@arena_match, match_denied: 1), alert: result.error, status: :see_other }
         format.json { render json: {success: false, error: result.error}, status: :unprocessable_entity }
         format.turbo_stream { head :unprocessable_entity }
       end
@@ -99,7 +99,7 @@ class ArenaMatchesController < ApplicationController
         format.html { redirect_to @arena_match, notice: message, status: :see_other }
         format.json { render json: {success: true, data: result.data} }
       else
-        format.html { redirect_to @arena_match, alert: result.error, status: :see_other }
+        format.html { redirect_to arena_match_path(@arena_match, match_denied: 1), alert: result.error, status: :see_other }
         format.json { render json: {success: false, error: result.error}, status: :unprocessable_entity }
       end
     end
@@ -111,7 +111,7 @@ class ArenaMatchesController < ApplicationController
 
     unless @arena_match.completed?
       respond_to do |format|
-        format.html { redirect_to @arena_match, alert: I18n.t("game.flashes.fight_still_active") }
+        format.html { redirect_to arena_match_path(@arena_match, match_denied: 1), alert: I18n.t("game.flashes.fight_still_active") }
         format.json do
           render json: {error: I18n.t("game.flashes.fight_still_active")}, status: :unprocessable_content
         end

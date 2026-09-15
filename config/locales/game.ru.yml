@@ -695,6 +695,7 @@ ru:
     fight:
       log: "Лог боя"
       page_title: "Бой №%{id}"
+      match_denied_next: "Действие в бою не принято — дождитесь раунда или вернитесь в лобби / город."
       log_page_title: "Лог боя №%{id}"
       statistics: "Статистика"
       no_events: "Событий боя нет."
