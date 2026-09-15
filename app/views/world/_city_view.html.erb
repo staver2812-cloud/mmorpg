@@ -60,6 +60,13 @@
       <%= link_to t("arena.nav.city"), world_path, class: "nl-sheet-link", data: {obelisk_recovery: "world"} %>
     </p>
   <% end %>
+  <% if params[:hotspot_denied].to_s == "1" %>
+    <p class="nl-quests-board__meta" data-hotspot-denied="1">
+      <%= t("game.world.hotspot_denied_next") %>
+      ·
+      <%= link_to t("arena.nav.city"), world_path, class: "nl-sheet-link", data: {hotspot_recovery: "world"} %>
+    </p>
+  <% end %>
   <% if params[:location_denied].to_s == "1" %>
     <p class="nl-quests-board__meta" data-location-denied="1">
       <%= t("game.locations.denied_next") %>

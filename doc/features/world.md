@@ -2983,6 +2983,7 @@ Before extending the World feature:
 | 2026-09-15 | Opening `/airship` without an active journey recovers to World with `airship_denied=1` chrome. |
 | 2026-09-13 | Same-cell player Assault via combat trauma scroll (`POST /world/assault`): Presence Attack control, safe-zone denials, combat-trauma match metadata, and focused service/request coverage. |
 | 2026-09-15 | Failed `POST /world/assault` (missing/ineligible target) recovers on World with `assault_denied=1` chrome. |
+| 2026-09-15 | Missing/stale city hotspot interacts recover on World with `hotspot_denied=1` chrome. |
 | 2026-09-13 | Presence/profile Assault CTA only when colocated and legal; disabled state when trauma scroll is missing. |
 | 2026-09-13 | Outdoor HUD bait count chip; Library/Tavern handbook copy for quest spine, injuries, Assault, and T5 junk. |
 | 2026-09-13 | Look/Enter without bait appends a hostile-cell hint while passive ambush timer remains authoritative. |

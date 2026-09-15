@@ -1419,6 +1419,20 @@ def main() -> int:
         and 'data-obelisk-recovery="world"' in r_obelisk.text,
         f"status={r_obelisk.status_code} url={r_obelisk.url}",
     )
+    token = csrf_from(r_obelisk.text) or token
+    r_hot = s.post(
+        f"{BASE}/world/interact_hotspot",
+        data={"authenticity_token": token, "hotspot_id": "999999999"},
+        timeout=TIMEOUT,
+        allow_redirects=True,
+    )
+    report.add(
+        "hotspot denied recovery",
+        r_hot.status_code == 200
+        and 'data-hotspot-denied="1"' in r_hot.text
+        and 'data-hotspot-recovery="world"' in r_hot.text,
+        f"status={r_hot.status_code} url={r_hot.url}",
+    )
     r_loc = s.get(f"{BASE}/world/locations/podgorny_mine", timeout=TIMEOUT, allow_redirects=True)
     if 'data-location-denied="1"' in r_loc.text:
         report.add(

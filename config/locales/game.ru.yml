@@ -494,6 +494,7 @@ ru:
       assault_target_fighting: "Цель уже в бою."
       assault_target_offline: "Цель не в сети."
       assault_denied_next: "Это нападение недоступно — оставайтесь на клетке или купите свиток травмы."
+      hotspot_denied_next: "Это действие города уже недоступно — выберите актуальный объект на площади."
       quarter_pending: "Этот квартал ещё не готов."
       cell_actions: "Действия на клетке"
       location: "Локация"

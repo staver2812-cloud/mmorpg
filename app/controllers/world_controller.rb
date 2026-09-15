@@ -505,7 +505,7 @@ class WorldController < ApplicationController
 
   def respond_with_city_action_error(message)
     respond_to do |format|
-      format.html { redirect_to world_path, alert: message }
+      format.html { redirect_to world_path(hotspot_denied: 1), alert: message }
       format.turbo_stream { render_error(message) }
       format.json { render json: {success: false, message:}, status: :unprocessable_content }
     end
