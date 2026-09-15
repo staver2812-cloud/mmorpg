@@ -1170,6 +1170,7 @@ Final rerun results are in the
 - 2026-09-15: Soft-release smoke allocates Merchant perk and accepts Market qualification (pay deferred — 1000 NV).
 - 2026-09-15: Soft-release smoke opens General School board from Knowledge Quarter after Merchant accept.
 - 2026-09-15: Soft-release smoke opens Magic School board from Knowledge Quarter after General School.
+- 2026-09-15: Soft-release smoke opens Salt Auction treasury desk from Business Quarter after Magic School (lots deferred).
 - 2026-09-15: Soft-release smoke returns from the east-gate pond path and binds at the Veil Obelisk.
 - 2026-09-15: Bank item locker chrome exposes stored item_key via data-bank-item (was empty key).
 - 2026-09-15: Failed outdoor `POST /world/obelisk` recovers on World with `obelisk_denied=1` chrome.
