@@ -4756,6 +4756,42 @@ def main() -> int:
             tav_ok,
             f"status={r_tav.status_code} url={r_tav.url}",
         )
+        sr_flags["tavern_ok"] = bool(tav_ok)
+
+    if sr_flags.get("tavern_ok"):
+        # Shop shares Central Square with Tavern.
+        r_shop = s.get(f"{BASE}/shop", timeout=TIMEOUT, allow_redirects=True)
+        shop_ok = (
+            r_shop.status_code == 200
+            and ("nl-shop" in r_shop.text or 'data-shop="' in r_shop.text)
+            and ("Лавка" in r_shop.text or "Купить" in r_shop.text or "NV" in r_shop.text)
+        )
+        report.add(
+            "soft-release shop visit",
+            shop_ok,
+            f"status={r_shop.status_code} url={r_shop.url}",
+        )
+        sr_flags["shop_ok"] = bool(shop_ok)
+
+    if sr_flags.get("shop_ok"):
+        # Bank is Business Quarter (forpost3).
+        click_hotspot(s, "go_forpost3")
+        r_bank = s.get(
+            f"{BASE}/city/buildings/bank",
+            timeout=TIMEOUT,
+            allow_redirects=True,
+        )
+        bank_ok = (
+            r_bank.status_code == 200
+            and 'data-building-key="bank"' in r_bank.text
+            and 'data-landmark-inside="1"' in r_bank.text
+            and ("Сейф" in r_bank.text or "vault" in r_bank.text.lower() or "data-bank-" in r_bank.text)
+        )
+        report.add(
+            "soft-release bank visit",
+            bank_ok,
+            f"status={r_bank.status_code} url={r_bank.url}",
+        )
 
     failed = report.failed
     print("\n=== SUMMARY ===")
