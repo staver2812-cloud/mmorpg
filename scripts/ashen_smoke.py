@@ -2824,6 +2824,27 @@ def main() -> int:
                                                                                     and "item_denied=1" not in r_wear.url
                                                                                 ):
                                                                                     token = csrf_from(r_wear.text) or token
+                                                                                    set_name = "AshenSR"
+                                                                                    r_save_set = s.post(
+                                                                                        f"{BASE}/inventory/save_equipment_set",
+                                                                                        data={
+                                                                                            "authenticity_token": token,
+                                                                                            "set_name": set_name,
+                                                                                        },
+                                                                                        headers={"Accept": "text/html"},
+                                                                                        timeout=TIMEOUT,
+                                                                                        allow_redirects=True,
+                                                                                    )
+                                                                                    report.add(
+                                                                                        "soft-release saves equipment set",
+                                                                                        r_save_set.status_code == 200
+                                                                                        and "set_denied=1" not in r_save_set.url
+                                                                                        and 'data-equipment-sets-empty="1"'
+                                                                                        not in r_save_set.text
+                                                                                        and set_name in r_save_set.text,
+                                                                                        f"status={r_save_set.status_code} url={r_save_set.url} set={set_name}",
+                                                                                    )
+                                                                                    token = csrf_from(r_save_set.text) or token
                                                                                     unequip_m = re.search(
                                                                                         r'action="(/inventory/unequip\?[^"]*slot=[^"&]+[^"]*)"'
                                                                                         r'|action="(/inventory/unequip)"[^>]*>[\s\S]{0,400}?'
@@ -2857,6 +2878,30 @@ def main() -> int:
                                                                                             not in r_off.text,
                                                                                             f"status={r_off.status_code} url={r_off.url} slot={unequip_slot}",
                                                                                         )
+                                                                                        if (
+                                                                                            r_off.status_code == 200
+                                                                                            and "equip_denied=1" not in r_off.url
+                                                                                            and "set_denied=1" not in r_save_set.url
+                                                                                        ):
+                                                                                            token = csrf_from(r_off.text) or token
+                                                                                            r_wear_set = s.post(
+                                                                                                f"{BASE}/inventory/wear_equipment_set",
+                                                                                                data={
+                                                                                                    "authenticity_token": token,
+                                                                                                    "set_name": set_name,
+                                                                                                },
+                                                                                                headers={"Accept": "text/html"},
+                                                                                                timeout=TIMEOUT,
+                                                                                                allow_redirects=True,
+                                                                                            )
+                                                                                            report.add(
+                                                                                                "soft-release wears equipment set",
+                                                                                                r_wear_set.status_code == 200
+                                                                                                and "set_denied=1" not in r_wear_set.url
+                                                                                                and 'data-inventory-set-denied="1"'
+                                                                                                not in r_wear_set.text,
+                                                                                                f"status={r_wear_set.status_code} url={r_wear_set.url} set={set_name}",
+                                                                                            )
                                                                                     else:
                                                                                         report.add(
                                                                                             "soft-release unequips worn item",
