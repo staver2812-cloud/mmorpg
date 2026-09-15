@@ -2929,6 +2929,224 @@ def main() -> int:
                                                                                                     ),
                                                                                                     f"status={r_del_set.status_code} url={r_del_set.url} set={set_name}",
                                                                                                 )
+                                                                                                if (
+                                                                                                    r_del_set.status_code == 200
+                                                                                                    and "set_denied=1" not in r_del_set.url
+                                                                                                ):
+                                                                                                    token = csrf_from(r_del_set.text) or token
+                                                                                                    s.get(f"{BASE}/world", timeout=TIMEOUT, allow_redirects=True)
+                                                                                                    ok_wg, d_wg = click_hotspot(s, "west_gate")
+                                                                                                    report.add(
+                                                                                                        "soft-release returns west_gate for shore",
+                                                                                                        ok_wg,
+                                                                                                        d_wg,
+                                                                                                    )
+                                                                                                    if ok_wg:
+                                                                                                        r_out = s.get(
+                                                                                                            f"{BASE}/world",
+                                                                                                            timeout=TIMEOUT,
+                                                                                                            allow_redirects=True,
+                                                                                                        )
+                                                                                                        token = csrf_from(r_out.text) or token
+                                                                                                        bait_qty_m = re.search(
+                                                                                                            r'data-bait-qty="(\d+)"',
+                                                                                                            r_out.text,
+                                                                                                        )
+                                                                                                        bait_qty = int(bait_qty_m.group(1)) if bait_qty_m else 0
+                                                                                                        dests = []
+                                                                                                        for dm in re.finditer(
+                                                                                                            r'data-direction="([^"]+)"[^>]*'
+                                                                                                            r'data-target-x="(-?\d+)"[^>]*'
+                                                                                                            r'data-target-y="(-?\d+)"[^>]*'
+                                                                                                            r'data-action-key="([^"]+)"[^>]*'
+                                                                                                            r'data-travel-seconds="(\d+)"'
+                                                                                                            r'|data-target-x="(-?\d+)"[^>]*'
+                                                                                                            r'data-target-y="(-?\d+)"[^>]*'
+                                                                                                            r'data-direction="([^"]+)"[^>]*'
+                                                                                                            r'data-action-key="([^"]+)"[^>]*'
+                                                                                                            r'data-travel-seconds="(\d+)"',
+                                                                                                            r_out.text,
+                                                                                                        ):
+                                                                                                            if dm.group(1):
+                                                                                                                dests.append(
+                                                                                                                    (
+                                                                                                                        dm.group(1),
+                                                                                                                        dm.group(2),
+                                                                                                                        dm.group(3),
+                                                                                                                        dm.group(4),
+                                                                                                                        int(dm.group(5)),
+                                                                                                                    )
+                                                                                                                )
+                                                                                                            else:
+                                                                                                                dests.append(
+                                                                                                                    (
+                                                                                                                        dm.group(8),
+                                                                                                                        dm.group(6),
+                                                                                                                        dm.group(7),
+                                                                                                                        dm.group(9),
+                                                                                                                        int(dm.group(10)),
+                                                                                                                    )
+                                                                                                                )
+                                                                                                        preferred = [
+                                                                                                            d
+                                                                                                            for d in dests
+                                                                                                            if (d[1], d[2])
+                                                                                                            in {("6", "7"), ("7", "8")}
+                                                                                                        ]
+                                                                                                        step = (preferred or dests or [None])[0]
+                                                                                                        if step and bait_qty > 0:
+                                                                                                            direction, tx, ty, akey, travel_s = step
+                                                                                                            r_step = s.post(
+                                                                                                                f"{BASE}/world/move",
+                                                                                                                data={
+                                                                                                                    "authenticity_token": token,
+                                                                                                                    "direction": direction,
+                                                                                                                    "target_x": tx,
+                                                                                                                    "target_y": ty,
+                                                                                                                    "action_key": akey,
+                                                                                                                },
+                                                                                                                headers={"Accept": "text/html"},
+                                                                                                                timeout=TIMEOUT,
+                                                                                                                allow_redirects=True,
+                                                                                                            )
+                                                                                                            report.add(
+                                                                                                                "soft-release outdoor step toward foe",
+                                                                                                                r_step.status_code == 200
+                                                                                                                and "action_denied=1"
+                                                                                                                not in r_step.url
+                                                                                                                and "/arena_matches/"
+                                                                                                                not in r_step.url,
+                                                                                                                f"status={r_step.status_code} url={r_step.url} to={tx},{ty} travel={travel_s}",
+                                                                                                            )
+                                                                                                            if (
+                                                                                                                r_step.status_code == 200
+                                                                                                                and "action_denied=1"
+                                                                                                                not in r_step.url
+                                                                                                            ):
+                                                                                                                time.sleep(min(travel_s + 3, 45))
+                                                                                                                r_land = s.get(
+                                                                                                                    f"{BASE}/world",
+                                                                                                                    timeout=TIMEOUT,
+                                                                                                                    allow_redirects=True,
+                                                                                                                )
+                                                                                                                token = csrf_from(r_land.text) or token
+                                                                                                                r_bait = s.post(
+                                                                                                                    f"{BASE}/world/context",
+                                                                                                                    data={
+                                                                                                                        "authenticity_token": token,
+                                                                                                                        "context": "inventory",
+                                                                                                                    },
+                                                                                                                    headers={"Accept": "text/html"},
+                                                                                                                    timeout=TIMEOUT,
+                                                                                                                    allow_redirects=True,
+                                                                                                                )
+                                                                                                                bait_fight = (
+                                                                                                                    r_bait.status_code == 200
+                                                                                                                    and "/arena_matches/"
+                                                                                                                    in r_bait.url
+                                                                                                                )
+                                                                                                                report.add(
+                                                                                                                    "soft-release bait fight starts",
+                                                                                                                    bait_fight,
+                                                                                                                    f"status={r_bait.status_code} url={r_bait.url} bait_before={bait_qty}",
+                                                                                                                )
+                                                                                                                if bait_fight:
+                                                                                                                    mid_m = re.search(
+                                                                                                                        r"/arena_matches/(\d+)",
+                                                                                                                        r_bait.url,
+                                                                                                                    )
+                                                                                                                    mid = mid_m.group(1) if mid_m else None
+                                                                                                                    token = csrf_from(r_bait.text) or token
+                                                                                                                    won = False
+                                                                                                                    if mid:
+                                                                                                                        for _ in range(24):
+                                                                                                                            r_state = s.get(
+                                                                                                                                f"{BASE}/arena_matches/{mid}",
+                                                                                                                                timeout=TIMEOUT,
+                                                                                                                                allow_redirects=True,
+                                                                                                                            )
+                                                                                                                            token = csrf_from(r_state.text) or token
+                                                                                                                            npc_down = bool(
+                                                                                                                                re.search(
+                                                                                                                                    r'fighter-card--npc[^"]*fighter-card--defeated'
+                                                                                                                                    r'|fighter-card--defeated[^"]*fighter-card--npc',
+                                                                                                                                    r_state.text,
+                                                                                                                                )
+                                                                                                                            )
+                                                                                                                            player_down = bool(
+                                                                                                                                re.search(
+                                                                                                                                    r'data-current-user="true"[^>]*fighter-card--defeated'
+                                                                                                                                    r'|fighter-card--defeated[^"]*"[^>]*data-current-user="true"',
+                                                                                                                                    r_state.text,
+                                                                                                                                )
+                                                                                                                            )
+                                                                                                                            if npc_down and not player_down:
+                                                                                                                                won = True
+                                                                                                                                break
+                                                                                                                            if 'data-arena-match-status-value="live"' not in r_state.text:
+                                                                                                                                break
+                                                                                                                            tid_m = re.search(
+                                                                                                                                r'data-character-id="(npc-participation-\d+)"[^>]*data-npc="true"'
+                                                                                                                                r'|data-npc="true"[^>]*data-character-id="(npc-participation-\d+)"',
+                                                                                                                                r_state.text,
+                                                                                                                            )
+                                                                                                                            target_id = (
+                                                                                                                                (tid_m.group(1) or tid_m.group(2))
+                                                                                                                                if tid_m
+                                                                                                                                else None
+                                                                                                                            )
+                                                                                                                            if not target_id:
+                                                                                                                                break
+                                                                                                                            r_turn = s.post(
+                                                                                                                                f"{BASE}/arena_matches/{mid}/action",
+                                                                                                                                data={
+                                                                                                                                    "authenticity_token": token,
+                                                                                                                                    "action_type": "turn",
+                                                                                                                                    "target_id": target_id,
+                                                                                                                                    "attacks[0][action_key]": "simple",
+                                                                                                                                    "attacks[0][body_part]": "torso",
+                                                                                                                                    "blocks[0][action_key]": "torso_block",
+                                                                                                                                    "blocks[0][body_parts][0]": "torso",
+                                                                                                                                },
+                                                                                                                                headers={"Accept": "text/html"},
+                                                                                                                                timeout=TIMEOUT,
+                                                                                                                                allow_redirects=True,
+                                                                                                                            )
+                                                                                                                            token = csrf_from(r_turn.text) or token
+                                                                                                                            if "match_denied=1" in r_turn.url:
+                                                                                                                                break
+                                                                                                                            time.sleep(0.35)
+                                                                                                                        if not won:
+                                                                                                                            s.post(
+                                                                                                                                f"{BASE}/arena_matches/{mid}/action",
+                                                                                                                                data={
+                                                                                                                                    "authenticity_token": token,
+                                                                                                                                    "action_type": "surrender",
+                                                                                                                                },
+                                                                                                                                headers={"Accept": "text/html"},
+                                                                                                                                timeout=TIMEOUT,
+                                                                                                                                allow_redirects=True,
+                                                                                                                            )
+                                                                                                                        r_fin = s.post(
+                                                                                                                            f"{BASE}/arena_matches/{mid}/finish",
+                                                                                                                            data={"authenticity_token": token},
+                                                                                                                            headers={"Accept": "text/html"},
+                                                                                                                            timeout=TIMEOUT,
+                                                                                                                            allow_redirects=True,
+                                                                                                                        )
+                                                                                                                        report.add(
+                                                                                                                            "soft-release bait fight finish",
+                                                                                                                            r_fin.status_code == 200
+                                                                                                                            and "match_denied=1"
+                                                                                                                            not in r_fin.url,
+                                                                                                                            f"won={won} status={r_fin.status_code} url={r_fin.url}",
+                                                                                                                        )
+                                                                                                        else:
+                                                                                                            report.add(
+                                                                                                                "soft-release outdoor step toward foe",
+                                                                                                                False,
+                                                                                                                f"bait_qty={bait_qty} dests={len(dests)}",
+                                                                                                            )
                                                                                     else:
                                                                                         report.add(
                                                                                             "soft-release unequips worn item",
