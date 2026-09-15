@@ -74,6 +74,7 @@ modifiers, and profession quests remain unimplemented.
 
 | Date | Change |
 |---|---|
+| 2026-09-15 | Soft-release smoke restocks Relic mats and crafts/turns in `veil_field_kit` / `tar_field_kit_contract`. |
 | 2026-09-14 | Pitch Forge deferred-repair Inventory link exposes `data-workshop-recovery="inventory"` for smoke. |
 | 2026-09-13 | Workshop/Infirmary craft desks expose recipe readiness data markers for smoke. |
 | 2026-09-13 | Pitch Forge states gear repair is deferred and links to Inventory wear/broken clarity. |
