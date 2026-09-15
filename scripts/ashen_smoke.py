@@ -1425,6 +1425,16 @@ def main() -> int:
             f"status={r_app_fail.status_code} url={r_app_fail.url}",
         )
         token = csrf_from(r_app_fail.text) or token
+    open_room = re.search(
+        r'data-arena-room="(\d+)"[^>]*data-arena-room-accessible="1"'
+        r'|data-arena-room-accessible="1"[^>]*data-arena-room="(\d+)"',
+        r.text,
+    )
+    report.add(
+        "arena help hall open for level 0",
+        open_room is not None,
+        "expected data-arena-room-accessible=1 for Help Hall 0-5",
+    )
     room_path = None
     room_m = re.search(
         r'href="(?:https?://[^"/]+)?(/arena_rooms/\d+(?:\?[^"]*)?)"',
@@ -1432,14 +1442,8 @@ def main() -> int:
     )
     if room_m:
         room_path = room_m.group(1)
-    else:
-        open_room = re.search(
-            r'data-arena-room="(\d+)"[^>]*data-arena-room-accessible="1"'
-            r'|data-arena-room-accessible="1"[^>]*data-arena-room="(\d+)"',
-            r.text,
-        )
-        if open_room:
-            room_path = f"/arena_rooms/{open_room.group(1) or open_room.group(2)}"
+    elif open_room:
+        room_path = f"/arena_rooms/{open_room.group(1) or open_room.group(2)}"
     if room_path:
         r_room = s.get(urljoin(BASE + "/", room_path.lstrip("/")), timeout=TIMEOUT, allow_redirects=True)
         report.add(
