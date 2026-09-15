@@ -393,7 +393,7 @@ RSpec.describe "World", type: :request do
           post move_world_path, params: {direction: "north", target_x: 5, target_y: 4, action_key: "bad-key"}
         }.not_to change(ArenaMatch, :count)
 
-        expect(response).to redirect_to(world_path)
+        expect(response).to redirect_to(world_path(action_denied: 1))
         expect(MovementCommand.moving).to be_empty
         expect(position.reload).to have_attributes(x: 5, y: 5)
       end
@@ -405,7 +405,7 @@ RSpec.describe "World", type: :request do
 
         expect { post_offer(command) }.not_to change(ArenaMatch, :count)
 
-        expect(response).to redirect_to(world_path)
+        expect(response).to redirect_to(world_path(action_denied: 1))
         expect(command.reload).to be_offered
         expect(position.reload).to have_attributes(x: 5, y: 5)
       end
@@ -413,7 +413,7 @@ RSpec.describe "World", type: :request do
       it "rejects movement without a valid action key" do
         post move_world_path, params: {direction: "north", target_x: 5, target_y: 4, action_key: "bad-key"}
 
-        expect(response).to redirect_to(world_path)
+        expect(response).to redirect_to(world_path(action_denied: 1))
         expect(MovementCommand.moving).to be_empty
         expect(position.reload.y).to eq(5)
       end
@@ -429,7 +429,7 @@ RSpec.describe "World", type: :request do
             action_key: command.action_key
           }
 
-        expect(response).to redirect_to(world_path)
+        expect(response).to redirect_to(world_path(action_denied: 1))
         expect(MovementCommand.moving).to be_empty
         expect(position.reload.y).to eq(5)
       end
@@ -439,7 +439,7 @@ RSpec.describe "World", type: :request do
 
         post move_world_path, params: {direction: "north"}
 
-        expect(response).to redirect_to(world_path)
+        expect(response).to redirect_to(world_path(action_denied: 1))
         expect(MovementCommand.moving).to be_empty
         expect(position.reload.y).to eq(0)
       end
@@ -1180,7 +1180,7 @@ RSpec.describe "World", type: :request do
       it "returns alert when not at building location" do
         post_building_entry(distant_building)
 
-        expect(response).to redirect_to(world_path)
+        expect(response).to redirect_to(world_path(building_denied: 1))
         follow_redirect!
         expect(response.body).to include(I18n.t("game.world.no_city_entrance"))
       end
@@ -1211,7 +1211,7 @@ RSpec.describe "World", type: :request do
       it "returns alert for inactive building" do
         post_building_entry(inactive_building)
 
-        expect(response).to redirect_to(world_path)
+        expect(response).to redirect_to(world_path(building_denied: 1))
         follow_redirect!
         expect(response.body).to include(I18n.t("game.world.entrance_unavailable"))
       end
@@ -1249,7 +1249,7 @@ RSpec.describe "World", type: :request do
       it "returns alert for inaccessible building" do
         post_building_entry(no_dest_building)
 
-        expect(response).to redirect_to(world_path)
+        expect(response).to redirect_to(world_path(building_denied: 1))
         follow_redirect!
         expect(response.body).to include(I18n.t("game.world.entrance_unavailable"))
       end
@@ -1312,7 +1312,7 @@ RSpec.describe "World", type: :request do
       it "returns alert when building is in different zone" do
         post_building_entry(other_zone_building)
 
-        expect(response).to redirect_to(world_path)
+        expect(response).to redirect_to(world_path(building_denied: 1))
         follow_redirect!
         expect(response.body).to include(I18n.t("game.world.no_city_entrance"))
       end

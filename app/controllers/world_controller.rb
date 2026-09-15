@@ -91,7 +91,7 @@ class WorldController < ApplicationController
     Game::World::StartNpcFight::FightViolationError => e
     respond_to do |format|
       format.turbo_stream { render_movement_error(e.message) }
-      format.html { redirect_to world_path, alert: e.message }
+      format.html { redirect_to world_path(action_denied: 1), alert: e.message }
     end
   end
 
@@ -137,7 +137,7 @@ class WorldController < ApplicationController
       end
     else
       respond_to do |format|
-        format.html { redirect_to world_path, alert: result.message }
+        format.html { redirect_to world_path(hotspot_denied: 1), alert: result.message }
         format.turbo_stream { render_error(result.message) }
       end
     end
@@ -202,7 +202,7 @@ class WorldController < ApplicationController
           redirect_to destination_path, status: :see_other
         end
       else
-        format.html { redirect_to world_path, alert: result.message }
+        format.html { redirect_to world_path(building_denied: 1), alert: result.message }
         format.turbo_stream { render_error(result.message) }
       end
     end

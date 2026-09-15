@@ -1909,6 +1909,26 @@ def main() -> int:
         r = s.get(f"{BASE}/world", timeout=TIMEOUT)
         outdoorish = ("Пепельный Берег" in r.text) or ("nl-world-map" in r.text) or ("available-actions" in r.text)
         report.add("outdoor after west_gate", r.status_code == 200 and outdoorish, f"{r.status_code}")
+        token = csrf_from(r.text) or token
+        r_move = s.post(
+            f"{BASE}/world/move",
+            data={
+                "authenticity_token": token,
+                "direction": "north",
+                "target_x": "0",
+                "target_y": "0",
+                "action_key": "__bad_ashen_move__",
+            },
+            timeout=TIMEOUT,
+            allow_redirects=True,
+        )
+        report.add(
+            "move denied recovery",
+            r_move.status_code == 200
+            and 'data-action-denied="1"' in r_move.text
+            and 'data-action-recovery="world"' in r_move.text,
+            f"status={r_move.status_code} url={r_move.url}",
+        )
         if (
             'data-world-injury-lock="1"' in r.text
             or 'data-world-fatigue-lock="1"' in r.text
