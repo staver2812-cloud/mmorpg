@@ -129,7 +129,83 @@ def enter_building(session: requests.Session) -> Tuple[bool, str]:
         allow_redirects=True,
     )
     keys = sorted(parse_hotspot_forms(r.text))
-    return r.status_code == 200 and bool(keys), f"status={r.status_code} url={r.url} keys={keys[:8]}"
+    # City interiors expose hotspots; linked location lobbies land on /world/locations/:key.
+    landed = r.status_code == 200 and (
+        bool(keys)
+        or "/world/locations/" in (r.url or "")
+        or 'data-location-lobby-deferred="1"' in r.text
+        or 'data-building-key=' in r.text
+    )
+    return landed, f"status={r.status_code} url={r.url} keys={keys[:8]}"
+
+
+def parse_move_dests(html: str) -> List[Tuple[str, int, int, str, int]]:
+    dests: List[Tuple[str, int, int, str, int]] = []
+    for dm in re.finditer(
+        r'data-direction="([^"]+)"[^>]*'
+        r'data-target-x="(-?\d+)"[^>]*'
+        r'data-target-y="(-?\d+)"[^>]*'
+        r'data-action-key="([^"]+)"[^>]*'
+        r'data-travel-seconds="(\d+)"'
+        r'|data-target-x="(-?\d+)"[^>]*'
+        r'data-target-y="(-?\d+)"[^>]*'
+        r'data-direction="([^"]+)"[^>]*'
+        r'data-action-key="([^"]+)"[^>]*'
+        r'data-travel-seconds="(\d+)"',
+        html,
+    ):
+        if dm.group(1):
+            dests.append((dm.group(1), int(dm.group(2)), int(dm.group(3)), dm.group(4), int(dm.group(5))))
+        else:
+            dests.append((dm.group(8), int(dm.group(6)), int(dm.group(7)), dm.group(9), int(dm.group(10))))
+    return dests
+
+
+def walk_toward(
+    session: requests.Session,
+    token: Optional[str],
+    goal_x: int,
+    goal_y: int,
+    *,
+    max_steps: int = 12,
+) -> Tuple[bool, str, Optional[str]]:
+    """Greedy outdoor walk toward (goal_x, goal_y). Stops when the player cell matches."""
+    detail = f"no path toward {goal_x},{goal_y}"
+    for _ in range(max_steps):
+        r = session.get(f"{BASE}/world", timeout=TIMEOUT, allow_redirects=True)
+        token = csrf_from(r.text) or token
+        px_m = re.search(r'data-nl-world-map-player-x-value="(-?\d+)"', r.text)
+        py_m = re.search(r'data-nl-world-map-player-y-value="(-?\d+)"', r.text)
+        if px_m and py_m and int(px_m.group(1)) == goal_x and int(py_m.group(1)) == goal_y:
+            return True, f"at {goal_x},{goal_y} url={r.url}", token
+        dests = parse_move_dests(r.text)
+        if not dests:
+            return False, f"no dests toward {goal_x},{goal_y} pos={px_m and px_m.group(1)},{py_m and py_m.group(1)} url={r.url}", token
+        dests.sort(key=lambda d: abs(d[1] - goal_x) + abs(d[2] - goal_y))
+        direction, tx, ty, akey, secs = dests[0]
+        # Prefer an exact goal step when offered.
+        exact = [d for d in dests if d[1] == goal_x and d[2] == goal_y]
+        if exact:
+            direction, tx, ty, akey, secs = exact[0]
+        r_step = session.post(
+            f"{BASE}/world/move",
+            data={
+                "authenticity_token": token,
+                "direction": direction,
+                "target_x": tx,
+                "target_y": ty,
+                "action_key": akey,
+            },
+            headers={"Accept": "text/html"},
+            timeout=TIMEOUT,
+            allow_redirects=True,
+        )
+        token = csrf_from(r_step.text) or token
+        if r_step.status_code != 200 or "action_denied=1" in r_step.url:
+            return False, f"step fail {r_step.status_code} {r_step.url}", token
+        detail = f"stepped to {tx},{ty}"
+        time.sleep(min(secs + 2, 40))
+    return False, detail, token
 
 
 def main() -> int:
@@ -5322,6 +5398,92 @@ def main() -> int:
                         False,
                         "no combat_heal_scroll in bag",
                     )
+            sr_flags["premium_ok"] = True
+
+    if sr_flags.get("premium_ok"):
+        # West shore honesty: village [4,6] → mine [4,5] → exchange [4,7] lobbies.
+        click_hotspot(s, "go_main")
+        ok_wg, d_wg = click_hotspot(s, "west_gate")
+        report.add("soft-release west_gate for lobbies", ok_wg, d_wg)
+        if ok_wg:
+            walked, walk_detail, token = walk_toward(s, token, 4, 6, max_steps=8)
+            report.add("soft-release walk to frontier village", walked, walk_detail)
+            if walked:
+                ok_ent, d_ent = enter_building(s)
+                # Seeded village lobby key is frontier_village_entrance.
+                r_vil = s.get(
+                    f"{BASE}/world/locations/frontier_village_entrance",
+                    timeout=TIMEOUT,
+                    allow_redirects=True,
+                )
+                village_ok = (
+                    r_vil.status_code == 200
+                    and "frontier_village" in r_vil.url
+                    and 'data-location-lobby-deferred="1"' in r_vil.text
+                    and 'data-location-recovery="world"' in r_vil.text
+                )
+                report.add(
+                    "soft-release frontier village lobby",
+                    village_ok,
+                    f"enter={d_ent} status={r_vil.status_code} url={r_vil.url}",
+                )
+                if village_ok:
+                    # Leave lobby to outdoor cell, then mine [4,5].
+                    s.get(f"{BASE}/world", timeout=TIMEOUT, allow_redirects=True)
+                    walked_m, detail_m, token = walk_toward(s, token, 4, 5, max_steps=6)
+                    report.add("soft-release walk to podgorny mine", walked_m, detail_m)
+                    if walked_m:
+                        ok_m, d_m = enter_building(s)
+                        r_mine = s.get(
+                            f"{BASE}/world/locations/podgorny_mine",
+                            timeout=TIMEOUT,
+                            allow_redirects=True,
+                        )
+                        mine_ok = (
+                            r_mine.status_code == 200
+                            and "/world/locations/podgorny_mine" in r_mine.url
+                            and 'data-location-lobby-deferred="1"' in r_mine.text
+                            and (
+                                'data-location-descend-deferred="1"' in r_mine.text
+                                or 'data-location-buy-deferred="1"' in r_mine.text
+                                or 'data-location-recovery="world"' in r_mine.text
+                            )
+                        )
+                        report.add(
+                            "soft-release podgorny mine lobby",
+                            mine_ok,
+                            f"enter={d_m} status={r_mine.status_code} url={r_mine.url}",
+                        )
+                        if mine_ok:
+                            s.get(f"{BASE}/world", timeout=TIMEOUT, allow_redirects=True)
+                            walked_x, detail_x, token = walk_toward(s, token, 4, 7, max_steps=6)
+                            report.add(
+                                "soft-release walk to resource exchange",
+                                walked_x,
+                                detail_x,
+                            )
+                            if walked_x:
+                                ok_x, d_x = enter_building(s)
+                                r_ex = s.get(
+                                    f"{BASE}/world/locations/forpost_resource_exchange",
+                                    timeout=TIMEOUT,
+                                    allow_redirects=True,
+                                )
+                                ex_ok = (
+                                    r_ex.status_code == 200
+                                    and "/world/locations/forpost_resource_exchange" in r_ex.url
+                                    and 'data-location-lobby-deferred="1"' in r_ex.text
+                                    and (
+                                        'data-location-choose-deferred="1"' in r_ex.text
+                                        or 'data-location-recovery="shop"' in r_ex.text
+                                        or 'data-location-recovery="world"' in r_ex.text
+                                    )
+                                )
+                                report.add(
+                                    "soft-release resource exchange lobby",
+                                    ex_ok,
+                                    f"enter={d_x} status={r_ex.status_code} url={r_ex.url}",
+                                )
 
     failed = report.failed
     print("\n=== SUMMARY ===")
