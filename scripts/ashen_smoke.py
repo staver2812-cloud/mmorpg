@@ -2760,6 +2760,57 @@ def main() -> int:
                                                                             and "shop_denied=1" not in r_bought.url,
                                                                             f"status={r_bought.status_code} url={r_bought.url} item={item_id}",
                                                                         )
+                                                                        if (
+                                                                            r_bought.status_code == 200
+                                                                            and "trade_denied=1" not in r_bought.url
+                                                                        ):
+                                                                            token = csrf_from(r_bought.text) or token
+                                                                            r_inv = s.get(
+                                                                                f"{BASE}/inventory",
+                                                                                timeout=TIMEOUT,
+                                                                                allow_redirects=True,
+                                                                            )
+                                                                            token = csrf_from(r_inv.text) or token
+                                                                            wear_m = re.search(
+                                                                                r'action="(/inventory/equip\?[^"]*item_id=\d+[^"]*)"'
+                                                                                r'|action="(/inventory/equip)"[^>]*>[\s\S]{0,400}?'
+                                                                                r'name="item_id"[^>]*value="(\d+)"',
+                                                                                r_inv.text,
+                                                                            )
+                                                                            if wear_m and wear_m.group(1):
+                                                                                r_wear = s.post(
+                                                                                    urljoin(BASE + "/", wear_m.group(1).lstrip("/")),
+                                                                                    data={"authenticity_token": token},
+                                                                                    headers={"Accept": "text/html"},
+                                                                                    timeout=TIMEOUT,
+                                                                                    allow_redirects=True,
+                                                                                )
+                                                                            elif wear_m and wear_m.group(2):
+                                                                                r_wear = s.post(
+                                                                                    f"{BASE}/inventory/equip",
+                                                                                    data={
+                                                                                        "authenticity_token": token,
+                                                                                        "item_id": wear_m.group(3),
+                                                                                    },
+                                                                                    headers={"Accept": "text/html"},
+                                                                                    timeout=TIMEOUT,
+                                                                                    allow_redirects=True,
+                                                                                )
+                                                                            else:
+                                                                                r_wear = None
+                                                                            if r_wear is not None:
+                                                                                report.add(
+                                                                                    "soft-release equips inventory item",
+                                                                                    r_wear.status_code == 200
+                                                                                    and "equip_denied=1" not in r_wear.url,
+                                                                                    f"status={r_wear.status_code} url={r_wear.url}",
+                                                                                )
+                                                                            else:
+                                                                                report.add(
+                                                                                    "soft-release equips inventory item",
+                                                                                    True,
+                                                                                    "no wearable bag item (buy may be non-equipment)",
+                                                                                )
                                                                     else:
                                                                         report.add(
                                                                             "soft-release shop buy affordable item",
