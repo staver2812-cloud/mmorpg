@@ -37,7 +37,7 @@ module Arena
     # @param room [ArenaRoom] the arena room
     # @return [Result] result with application or errors
     def create_for_room(room:)
-      npc_config = if room.slug == "training"
+      npc_config = if room.slug.to_s.in?(%w[training help])
         Game::World::ArenaNpcConfig.find_npc("arena_training_dummy")
       else
         Game::World::ArenaNpcConfig.sample_npc(room.slug)

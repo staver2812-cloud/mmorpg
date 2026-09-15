@@ -1460,36 +1460,43 @@ def main() -> int:
                 and 'data-arena-recovery="lobby"' in r_room.text,
                 f"url={r_room.url}",
             )
-            room_id = re.search(r"/arena_rooms/(\d+)", r_room.url)
-            if not room_id:
-                report.add("arena application create success Help Hall", False, f"no room id in {r_room.url}")
-            else:
-                token = csrf_from(r_room.text) or token
-                r_app_ok = s.post(
-                    f"{BASE}/arena_rooms/{room_id.group(1)}/arena_applications",
-                    data={
-                        "authenticity_token": token,
-                        "fight_type": "duel",
-                        "fight_kind": "free",
-                        "timeout_seconds": "180",
-                    },
+            # Soft-release Help Hall should expose a training dummy to accept.
+            r_room = s.get(r_room.url, timeout=TIMEOUT, allow_redirects=True)
+            token = csrf_from(r_room.text) or token
+            accept_m = re.search(
+                r'action="(/arena_rooms/\d+/arena_applications/\d+/accept)"',
+                r_room.text,
+            )
+            if not accept_m:
+                accept_m = re.search(
+                    r'href="(/arena_rooms/\d+/arena_applications/\d+/accept)"',
+                    r_room.text,
+                )
+            if accept_m:
+                r_fight = s.post(
+                    urljoin(BASE + "/", accept_m.group(1).lstrip("/")),
+                    data={"authenticity_token": token},
                     headers={"Accept": "text/html"},
                     timeout=TIMEOUT,
                     allow_redirects=True,
                 )
                 report.add(
-                    "arena application create success Help Hall",
-                    r_app_ok.status_code == 200
-                    and "nl-arena-frame" in r_app_ok.text
+                    "help hall NPC accept starts fight",
+                    r_fight.status_code == 200
                     and (
-                        "nl-arena-current-row" in r_app_ok.text
-                        or "Your application" in r_app_ok.text
-                        or "Ваша заявка" in r_app_ok.text
-                        or 'data-arena-has-application="1"' in r_app_ok.text
+                        "arena-match-page" in r_fight.text
+                        or "nl-fight-topline" in r_fight.text
+                        or "/arena_matches/" in r_fight.url
                     ),
-                    f"status={r_app_ok.status_code} url={r_app_ok.url}",
+                    f"status={r_fight.status_code} url={r_fight.url}",
                 )
-                token = csrf_from(r_app_ok.text) or token
+                token = csrf_from(r_fight.text) or token
+            else:
+                report.add(
+                    "help hall NPC accept starts fight",
+                    False,
+                    "no NPC accept control on Help Hall room",
+                )
     locked_m = re.search(
         r'data-arena-room="(\d+)"[^>]*data-arena-room-accessible="0"|data-arena-room-accessible="0"[^>]*data-arena-room="(\d+)"',
         r.text,

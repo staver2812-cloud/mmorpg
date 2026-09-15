@@ -20,4 +20,13 @@ RSpec.describe "Arena Help Hall", type: :request do
     expect(response).to have_http_status(:success)
     expect(response.body).to include("nl-arena-frame")
   end
+
+  it "ensures a training dummy application on Help Hall" do
+    expect {
+      get arena_room_path(help_hall)
+    }.to change { ArenaApplication.open.from_npcs.where(arena_room: help_hall).count }.by(1)
+
+    expect(response).to have_http_status(:success)
+    expect(response.body).to include("nl-arena-row--npc").or include("Пепельный манекен").or include("accept")
+  end
 end

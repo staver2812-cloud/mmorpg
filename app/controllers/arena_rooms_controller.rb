@@ -33,6 +33,8 @@ class ArenaRoomsController < ApplicationController
       .includes(:applicant, :npc_template)
       .order(created_at: :asc)
 
+    ensure_soft_release_npc_application!
+
     # Only show open applications as "my application", not matched ones
     @my_application = current_character.arena_applications.open.first
     @active_matches = @room.arena_matches.active.includes(:arena_participations)
@@ -53,6 +55,17 @@ class ArenaRoomsController < ApplicationController
 
   def set_room
     @room = ArenaRoom.find(params[:id])
+  end
+
+  def ensure_soft_release_npc_application!
+    return unless @room.slug.to_s.in?(%w[help training])
+    return if ArenaApplication.open.from_npcs.where(arena_room: @room).exists?
+
+    Arena::NpcApplicationService.new.create_for_room(room: @room)
+    @applications = @room.arena_applications
+      .open
+      .includes(:applicant, :npc_template)
+      .order(created_at: :asc)
   end
 
   def room_missing
