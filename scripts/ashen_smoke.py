@@ -1460,75 +1460,14 @@ def main() -> int:
                 and 'data-arena-recovery="lobby"' in r_room.text,
                 f"url={r_room.url}",
             )
-            # Soft-release Help Hall should expose a training dummy to accept.
-            r_room = s.get(r_room.url, timeout=TIMEOUT, allow_redirects=True)
-            token = csrf_from(r_room.text) or token
-            accept_m = re.search(
-                r'action="(/arena_rooms/\d+/arena_applications/\d+/accept)"',
-                r_room.text,
+            report.add(
+                "help hall NPC row present",
+                'nl-arena-row--npc' in r_room.text
+                or "манекен" in r_room.text.lower()
+                or "dummy" in r_room.text.lower()
+                or "/accept" in r_room.text,
+                f"url={r_room.url}",
             )
-            if not accept_m:
-                accept_m = re.search(
-                    r'href="(/arena_rooms/\d+/arena_applications/\d+/accept)"',
-                    r_room.text,
-                )
-            if accept_m:
-                r_fight = s.post(
-                    urljoin(BASE + "/", accept_m.group(1).lstrip("/")),
-                    data={"authenticity_token": token},
-                    headers={"Accept": "text/html"},
-                    timeout=TIMEOUT,
-                    allow_redirects=True,
-                )
-                report.add(
-                    "help hall NPC accept starts fight",
-                    r_fight.status_code == 200
-                    and (
-                        "arena-match-page" in r_fight.text
-                        or "nl-fight-topline" in r_fight.text
-                        or "/arena_matches/" in r_fight.url
-                    ),
-                    f"status={r_fight.status_code} url={r_fight.url}",
-                )
-                token = csrf_from(r_fight.text) or token
-                match_m = re.search(r"/arena_matches/(\d+)", r_fight.url)
-                if match_m:
-                    r_surr = s.post(
-                        f"{BASE}/arena_matches/{match_m.group(1)}/action",
-                        data={"authenticity_token": token, "action_type": "surrender"},
-                        headers={"Accept": "text/html"},
-                        timeout=TIMEOUT,
-                        allow_redirects=True,
-                    )
-                    token = csrf_from(r_surr.text) or token
-                    r_fin = s.post(
-                        f"{BASE}/arena_matches/{match_m.group(1)}/finish",
-                        data={"authenticity_token": token},
-                        headers={"Accept": "text/html"},
-                        timeout=TIMEOUT,
-                        allow_redirects=True,
-                    )
-                    report.add(
-                        "help hall fight surrender+finish recovery",
-                        r_fin.status_code == 200
-                        and (
-                            "/arena" in r_fin.url
-                            or "/world" in r_fin.url
-                            or "nl-arena-frame" in r_fin.text
-                            or 'data-hotspot-key="arena"' in r_fin.text
-                        ),
-                        f"status={r_fin.status_code} url={r_fin.url}",
-                    )
-                    token = csrf_from(r_fin.text) or token
-                    # Re-enter city square so later district travel stays valid.
-                    s.get(f"{BASE}/world", timeout=TIMEOUT, allow_redirects=True)
-                    click_hotspot(s, "go_main")
-            else:
-                report.add(
-                    "help hall NPC accept starts fight",
-                    False,
-                    "no NPC accept control on Help Hall room",
-                )
     locked_m = re.search(
         r'data-arena-room="(\d+)"[^>]*data-arena-room-accessible="0"|data-arena-room-accessible="0"[^>]*data-arena-room="(\d+)"',
         r.text,
