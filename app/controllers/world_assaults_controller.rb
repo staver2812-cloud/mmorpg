@@ -15,7 +15,7 @@ class WorldAssaultsController < ApplicationController
     if result.success
       redirect_to arena_match_path(result.match), notice: result.message
     else
-      redirect_back fallback_location: world_path, alert: result.message
+      redirect_to world_path(assault_denied: 1), alert: result.message, status: :see_other
     end
   end
 end

@@ -1374,6 +1374,20 @@ def main() -> int:
         ),
         f"status={r_bldg_miss.status_code} url={r_bldg_miss.url}",
     )
+    token = csrf_from(r_bldg_miss.text) or csrf_from(r_denied.text) or token
+    r_assault = s.post(
+        f"{BASE}/world/assault",
+        data={"authenticity_token": token, "defender_id": "999999999"},
+        timeout=TIMEOUT,
+        allow_redirects=True,
+    )
+    report.add(
+        "assault denied recovery",
+        r_assault.status_code == 200
+        and 'data-assault-denied="1"' in r_assault.text
+        and 'data-assault-recovery="world"' in r_assault.text,
+        f"status={r_assault.status_code} url={r_assault.url}",
+    )
     r_loc = s.get(f"{BASE}/world/locations/podgorny_mine", timeout=TIMEOUT, allow_redirects=True)
     if 'data-location-denied="1"' in r_loc.text:
         report.add(

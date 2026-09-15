@@ -37,6 +37,6 @@ RSpec.describe "World location assaults", type: :request do
       post world_assault_path, params: {defender_id: defender.id}
     }.not_to change(ArenaMatch, :count)
 
-    expect(response).to redirect_to(world_path)
+    expect(response).to redirect_to(world_path(assault_denied: 1))
   end
 end

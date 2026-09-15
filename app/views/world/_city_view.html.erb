@@ -46,6 +46,13 @@
       <% end %>
     </p>
   <% end %>
+  <% if params[:assault_denied].to_s == "1" %>
+    <p class="nl-quests-board__meta" data-assault-denied="1">
+      <%= t("game.world.assault_denied_next") %>
+      ·
+      <%= link_to t("arena.nav.city"), world_path, class: "nl-sheet-link", data: {assault_recovery: "world"} %>
+    </p>
+  <% end %>
   <% if params[:location_denied].to_s == "1" %>
     <p class="nl-quests-board__meta" data-location-denied="1">
       <%= t("game.locations.denied_next") %>

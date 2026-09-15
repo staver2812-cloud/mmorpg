@@ -492,6 +492,7 @@ en:
       assault_target_busy: "Target is traveling."
       assault_target_fighting: "Target is already in combat."
       assault_target_offline: "Target is offline."
+      assault_denied_next: "That assault is not available — stay on this cell or buy a trauma scroll."
       quarter_pending: "This quarter is not ready yet."
       cell_actions: "Current cell actions"
       location: "Location"
