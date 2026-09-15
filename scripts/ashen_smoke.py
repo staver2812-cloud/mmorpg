@@ -3235,13 +3235,17 @@ def main() -> int:
                                                                                                                                 )
                                                                                                                             city_m = re.search(
                                                                                                                                 r'href="(/world[^"]*)"[^>]*data-defeat-recovery="world"'
-                                                                                                                                r'|data-defeat-recovery="world"[^>]*href="(/world[^"]*)"',
+                                                                                                                                r'|data-defeat-recovery="world"[^>]*href="(/world[^"]*)"'
+                                                                                                                                r'|href="(/world[^"]*)"[^>]*data-hospital-recovery="world"'
+                                                                                                                                r'|data-hospital-recovery="world"[^>]*href="(/world[^"]*)"',
                                                                                                                                 r_fin.text,
                                                                                                                             )
-                                                                                                                            if city_m:
-                                                                                                                                city_path = html_lib.unescape(
-                                                                                                                                    city_m.group(1) or city_m.group(2)
-                                                                                                                                )
+                                                                                                                            city_path = (
+                                                                                                                                html_lib.unescape(next(g for g in city_m.groups() if g))
+                                                                                                                                if city_m
+                                                                                                                                else "/world"
+                                                                                                                            )
+                                                                                                                            if True:
                                                                                                                                 r_city = s.get(
                                                                                                                                     urljoin(BASE + "/", city_path.lstrip("/")),
                                                                                                                                     timeout=TIMEOUT,
