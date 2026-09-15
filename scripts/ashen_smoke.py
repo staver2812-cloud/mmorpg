@@ -2369,14 +2369,54 @@ def main() -> int:
                             break
                         time.sleep(1)
                     report.add("help hall fight reaches live", live, f"match={mid}")
-                    r_surr = s.post(
-                        f"{BASE}/arena_matches/{mid}/action",
-                        data={"authenticity_token": token, "action_type": "surrender"},
-                        headers={"Accept": "text/html"},
-                        timeout=TIMEOUT,
-                        allow_redirects=True,
-                    )
-                    token = csrf_from(r_surr.text) or token
+                    won = False
+                    for _ in range(40):
+                        r_state = s.get(f"{BASE}/arena_matches/{mid}", timeout=TIMEOUT, allow_redirects=True)
+                        token = csrf_from(r_state.text) or token
+                        if 'data-arena-match-status-value="completed"' in r_state.text:
+                            won = "fighter-result--victory" in r_state.text or "arena-result-finish" in r_state.text
+                            break
+                        if 'data-arena-match-status-value="live"' not in r_state.text:
+                            break
+                        tid_m = re.search(
+                            r'data-character-id="(npc-participation-\d+)"[^>]*data-npc="true"'
+                            r'|data-npc="true"[^>]*data-character-id="(npc-participation-\d+)"',
+                            r_state.text,
+                        )
+                        target_id = (tid_m.group(1) or tid_m.group(2)) if tid_m else None
+                        if not target_id:
+                            break
+                        r_turn = s.post(
+                            f"{BASE}/arena_matches/{mid}/action",
+                            data={
+                                "authenticity_token": token,
+                                "action_type": "turn",
+                                "target_id": target_id,
+                                "attacks[0][action_key]": "simple",
+                                "attacks[0][body_part]": "torso",
+                                "blocks[0][action_key]": "torso_block",
+                                "blocks[0][body_parts][0]": "torso",
+                            },
+                            headers={"Accept": "text/html"},
+                            timeout=TIMEOUT,
+                            allow_redirects=True,
+                        )
+                        token = csrf_from(r_turn.text) or token
+                        if "match_denied=1" in r_turn.url:
+                            break
+                        time.sleep(0.35)
+                    if not won:
+                        report.add("help hall NPC fight win path", False, f"match={mid} fell back to surrender")
+                        r_surr = s.post(
+                            f"{BASE}/arena_matches/{mid}/action",
+                            data={"authenticity_token": token, "action_type": "surrender"},
+                            headers={"Accept": "text/html"},
+                            timeout=TIMEOUT,
+                            allow_redirects=True,
+                        )
+                        token = csrf_from(r_surr.text) or token
+                    else:
+                        report.add("help hall NPC fight win path", True, f"match={mid}")
                     r_fin = s.post(
                         f"{BASE}/arena_matches/{mid}/finish",
                         data={"authenticity_token": token},
@@ -2384,9 +2424,9 @@ def main() -> int:
                         timeout=TIMEOUT,
                         allow_redirects=True,
                     )
-                    # Surrender loses: DefeatRecovery may send the player to Hospital.
+                    # Win stays in Arena/City; surrender may DefeatRecovery→Hospital.
                     report.add(
-                        "help hall fight surrender+finish recovery",
+                        "help hall fight finish recovery",
                         r_fin.status_code == 200
                         and "match_denied=1" not in r_fin.url
                         and (
@@ -2395,9 +2435,9 @@ def main() -> int:
                             or "/city/" in r_fin.url
                             or "nl-arena-frame" in r_fin.text
                         ),
-                        f"status={r_fin.status_code} url={r_fin.url}",
+                        f"won={won} status={r_fin.status_code} url={r_fin.url}",
                     )
-                    if "/city/buildings/hospital" in r_fin.url or "defeat_recovered=1" in r_fin.url:
+                    if not won and ("/city/buildings/hospital" in r_fin.url or "defeat_recovered=1" in r_fin.url):
                         report.add(
                             "help hall defeat hospital recovery chrome",
                             'data-defeat-recovery="1"' in r_fin.text
@@ -2405,6 +2445,13 @@ def main() -> int:
                                 'data-defeat-recovery="world"' in r_fin.text
                                 or 'data-defeat-recovery="arena_square"' in r_fin.text
                             ),
+                            f"url={r_fin.url}",
+                        )
+                    elif won:
+                        report.add(
+                            "help hall win finish leaves combat",
+                            "defeat_recovered=1" not in r_fin.url
+                            and "/city/buildings/hospital" not in r_fin.url,
                             f"url={r_fin.url}",
                         )
             else:
