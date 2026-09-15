@@ -1006,6 +1006,7 @@ ru:
       temple_need_nv_short: "Нет NV"
       temple_blessed: "Обрядом снято лёгких травм: %{count} (−%{amount} NV)."
       temple_no_light: "Лёгких травм нет — обряд не нужен."
+      temple_denied_next: "Обряд не выполнен — нужны лёгкие травмы и NV, затем повторите или вернитесь в город."
       temple_no_injuries: "Сейчас травм нет — обряд не требуется."
       temple_short: "Нужно %{amount} NV для обряда."
       temple_in_combat: "Сначала закончите бой."
