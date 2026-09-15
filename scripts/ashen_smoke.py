@@ -2718,23 +2718,28 @@ def main() -> int:
                                                                     )
                                                                     token = csrf_from(r_shop_buy.text) or token
                                                                     any_aff = 'data-shop-any-affordable="1"' in r_shop_buy.text
-                                                                    offer_m = re.search(
-                                                                        r'data-shop-item="(\d+)"[^>]*data-shop-affordable="1"'
-                                                                        r'|data-shop-affordable="1"[^>]*data-shop-item="(\d+)"',
-                                                                        r_shop_buy.text,
-                                                                    )
                                                                     item_id = None
                                                                     action_key = None
-                                                                    if offer_m:
-                                                                        item_id = offer_m.group(1) or offer_m.group(2)
-                                                                        # Locate the matching buy form for this template id.
-                                                                        form_m = re.search(
-                                                                            rf'name="item_template_id"[^>]*value="{re.escape(item_id)}"'
-                                                                            rf'[\s\S]{{0,500}}?name="action_key"[^>]*value="([^"]+)"',
-                                                                            r_shop_buy.text,
+                                                                    for row_m in re.finditer(
+                                                                        r'<tr([^>]*)>([\s\S]*?)</tr>',
+                                                                        r_shop_buy.text,
+                                                                    ):
+                                                                        attrs, body = row_m.group(1), row_m.group(2)
+                                                                        if 'data-shop-affordable="1"' not in attrs:
+                                                                            continue
+                                                                        tid_m = re.search(r'data-shop-item="(\d+)"', attrs)
+                                                                        if not tid_m:
+                                                                            continue
+                                                                        ak_m = re.search(
+                                                                            r'name="action_key"[^>]*value="([^"]+)"'
+                                                                            r'|value="([^"]+)"[^>]*name="action_key"',
+                                                                            body,
                                                                         )
-                                                                        if form_m:
-                                                                            action_key = form_m.group(1)
+                                                                        if not ak_m:
+                                                                            continue
+                                                                        item_id = tid_m.group(1)
+                                                                        action_key = ak_m.group(1) or ak_m.group(2)
+                                                                        break
                                                                     if item_id and action_key:
                                                                         r_bought = s.post(
                                                                             f"{BASE}/shop/buy",
