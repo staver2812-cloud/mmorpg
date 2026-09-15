@@ -3232,6 +3232,56 @@ def main() -> int:
                                                                                                                                                 fatigue == 0 and 'data-building-key="tavern"' in r_tav.text,
                                                                                                                                                 f"no rest control fatigue={fatigue}",
                                                                                                                                             )
+                                                                                                                                        token = csrf_from(r_tav.text) or token
+                                                                                                                                        if "r_rest" in dir() and r_rest is not None:
+                                                                                                                                            token = csrf_from(r_rest.text) or token
+                                                                                                                                        r_out = s.post(
+                                                                                                                                            f"{BASE}/users/sign_out",
+                                                                                                                                            data={
+                                                                                                                                                "authenticity_token": token,
+                                                                                                                                                "_method": "delete",
+                                                                                                                                            },
+                                                                                                                                            headers={"Accept": "text/html"},
+                                                                                                                                            timeout=TIMEOUT,
+                                                                                                                                            allow_redirects=True,
+                                                                                                                                        )
+                                                                                                                                        report.add(
+                                                                                                                                            "soft-release logs out",
+                                                                                                                                            r_out.status_code == 200
+                                                                                                                                            and nick not in r_out.text
+                                                                                                                                            and (
+                                                                                                                                                "sign_in" in r_out.url
+                                                                                                                                                or "/users/sign_in" in r_out.text
+                                                                                                                                                or "Войти" in r_out.text
+                                                                                                                                            ),
+                                                                                                                                            f"status={r_out.status_code} url={r_out.url}",
+                                                                                                                                        )
+                                                                                                                                        r_login = s.get(f"{BASE}/users/sign_in", timeout=TIMEOUT, allow_redirects=True)
+                                                                                                                                        token = csrf_from(r_login.text) or token
+                                                                                                                                        r_in = s.post(
+                                                                                                                                            f"{BASE}/users/sign_in",
+                                                                                                                                            data={
+                                                                                                                                                "authenticity_token": token,
+                                                                                                                                                "user[email]": email,
+                                                                                                                                                "user[password]": password,
+                                                                                                                                                "commit": "Войти",
+                                                                                                                                            },
+                                                                                                                                            headers={"Accept": "text/html"},
+                                                                                                                                            timeout=TIMEOUT,
+                                                                                                                                            allow_redirects=True,
+                                                                                                                                        )
+                                                                                                                                        report.add(
+                                                                                                                                            "soft-release logs in and restores",
+                                                                                                                                            r_in.status_code == 200
+                                                                                                                                            and nick in r_in.text
+                                                                                                                                            and (
+                                                                                                                                                "/world" in r_in.url
+                                                                                                                                                or "nl-world" in r_in.text
+                                                                                                                                                or "data-hotspot-key=" in r_in.text
+                                                                                                                                                or 'data-building-key="tavern"' in r_in.text
+                                                                                                                                            ),
+                                                                                                                                            f"status={r_in.status_code} url={r_in.url}",
+                                                                                                                                        )
                                                                                                                             else:
                                                                                                                                 report.add(
                                                                                                                                     "soft-release outdoor defeat returns City",
