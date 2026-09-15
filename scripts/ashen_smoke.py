@@ -3141,6 +3141,59 @@ def main() -> int:
                                                                                                                             not in r_fin.url,
                                                                                                                             f"won={won} status={r_fin.status_code} url={r_fin.url}",
                                                                                                                         )
+                                                                                                                        if (
+                                                                                                                            r_fin.status_code == 200
+                                                                                                                            and (
+                                                                                                                                "defeat_recovered=1"
+                                                                                                                                in r_fin.url
+                                                                                                                                or "/city/buildings/hospital"
+                                                                                                                                in r_fin.url
+                                                                                                                            )
+                                                                                                                        ):
+                                                                                                                            report.add(
+                                                                                                                                "soft-release outdoor defeat hospital chrome",
+                                                                                                                                'data-defeat-recovery="1"'
+                                                                                                                                in r_fin.text
+                                                                                                                                and (
+                                                                                                                                    'data-defeat-recovery="world"'
+                                                                                                                                    in r_fin.text
+                                                                                                                                    or 'data-defeat-recovery="arena_square"'
+                                                                                                                                    in r_fin.text
+                                                                                                                                ),
+                                                                                                                                f"url={r_fin.url}",
+                                                                                                                            )
+                                                                                                                            city_m = re.search(
+                                                                                                                                r'href="(/world[^"]*)"[^>]*data-defeat-recovery="world"'
+                                                                                                                                r'|data-defeat-recovery="world"[^>]*href="(/world[^"]*)"',
+                                                                                                                                r_fin.text,
+                                                                                                                            )
+                                                                                                                            if city_m:
+                                                                                                                                city_path = html_lib.unescape(
+                                                                                                                                    city_m.group(1) or city_m.group(2)
+                                                                                                                                )
+                                                                                                                                r_city = s.get(
+                                                                                                                                    urljoin(BASE + "/", city_path.lstrip("/")),
+                                                                                                                                    timeout=TIMEOUT,
+                                                                                                                                    allow_redirects=True,
+                                                                                                                                )
+                                                                                                                                report.add(
+                                                                                                                                    "soft-release outdoor defeat returns City",
+                                                                                                                                    r_city.status_code == 200
+                                                                                                                                    and (
+                                                                                                                                        "/world" in r_city.url
+                                                                                                                                        or "nl-world"
+                                                                                                                                        in r_city.text
+                                                                                                                                        or "data-hotspot-key="
+                                                                                                                                        in r_city.text
+                                                                                                                                    ),
+                                                                                                                                    f"status={r_city.status_code} url={r_city.url}",
+                                                                                                                                )
+                                                                                                                            else:
+                                                                                                                                report.add(
+                                                                                                                                    "soft-release outdoor defeat returns City",
+                                                                                                                                    False,
+                                                                                                                                    "no City defeat_recovery link",
+                                                                                                                                )
                                                                                                         else:
                                                                                                             report.add(
                                                                                                                 "soft-release outdoor step toward foe",
