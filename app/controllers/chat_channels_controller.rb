@@ -1,6 +1,8 @@
 # frozen_string_literal: true
 
 class ChatChannelsController < ApplicationController
+  rescue_from ActiveRecord::RecordNotFound, with: :channel_missing
+
   def show
     current_user.ensure_social_features!
     @chat_channel = policy_scope(ChatChannel).find(params[:id])
@@ -35,6 +37,12 @@ class ChatChannelsController < ApplicationController
   end
 
   private
+
+  def channel_missing
+    redirect_to world_path(chat_denied: 1),
+      alert: I18n.t("game.chat.channel_missing"),
+      status: :see_other
+  end
 
   # A stale passive read must not follow its old Referer back into a gameplay
   # room. The next poll resolves the fresh audience through normal authority.

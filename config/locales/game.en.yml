@@ -659,6 +659,8 @@ en:
       global: "Global"
       whisper_channel: "Private Whisper"
       arena_channel: "Arena Match #%{id}"
+      channel_missing: "That chat channel was not found."
+      denied_next: "That chat is not available — stay on City chat."
       page_title: "%{name} — Chat"
       types:
         local: "Local"

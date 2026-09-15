@@ -659,6 +659,8 @@ ru:
       global: "Общий"
       whisper_channel: "Личный шёпот"
       arena_channel: "Бой арены #%{id}"
+      channel_missing: "Такой канал чата не найден."
+      denied_next: "Этот чат недоступен — оставайтесь в городском чате."
       page_title: "%{name} — Чат"
       types:
         local: "Локальный"

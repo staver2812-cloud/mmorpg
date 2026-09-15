@@ -1636,6 +1636,14 @@ def main() -> int:
             'data-chat-recovery="world"' in r.text,
             f"url={r.url}",
         )
+    r_chat = s.get(f"{BASE}/chat_channels/999999999", timeout=TIMEOUT, allow_redirects=True)
+    report.add(
+        "chat channel denied recovery",
+        r_chat.status_code == 200
+        and 'data-chat-denied="1"' in r_chat.text
+        and 'data-chat-recovery="world"' in r_chat.text,
+        f"status={r_chat.status_code} url={r_chat.url}",
+    )
     if 'data-chat-empty="1"' in r.text:
         report.add(
             "compact chat empty recovery",
