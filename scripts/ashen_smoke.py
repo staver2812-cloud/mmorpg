@@ -3204,6 +3204,35 @@ def main() -> int:
                                                                                                                                 ),
                                                                                                                                 f"url={r_fin.url}",
                                                                                                                             )
+                                                                                                                            token = csrf_from(r_fin.text) or token
+                                                                                                                            if (
+                                                                                                                                'data-hospital-rest-ready="1"' in r_fin.text
+                                                                                                                                or "/hospital/rest" in r_fin.text
+                                                                                                                                or "city_building_rest" in r_fin.text
+                                                                                                                            ):
+                                                                                                                                r_hrest = s.post(
+                                                                                                                                    f"{BASE}/city/buildings/hospital/rest",
+                                                                                                                                    data={"authenticity_token": token},
+                                                                                                                                    headers={"Accept": "text/html"},
+                                                                                                                                    timeout=TIMEOUT,
+                                                                                                                                    allow_redirects=True,
+                                                                                                                                )
+                                                                                                                                report.add(
+                                                                                                                                    "soft-release hospital rest after defeat",
+                                                                                                                                    r_hrest.status_code == 200
+                                                                                                                                    and "rest_denied=1" not in r_hrest.url
+                                                                                                                                    and 'data-rest-denied="1"' not in r_hrest.text,
+                                                                                                                                    f"status={r_hrest.status_code} url={r_hrest.url}",
+                                                                                                                                )
+                                                                                                                                if r_hrest.status_code == 200:
+                                                                                                                                    r_fin = r_hrest
+                                                                                                                                    token = csrf_from(r_fin.text) or token
+                                                                                                                            else:
+                                                                                                                                report.add(
+                                                                                                                                    "soft-release hospital rest after defeat",
+                                                                                                                                    'data-hospital-rest-blocked=' in r_fin.text or 'data-hospital-rest-ready="0"' in r_fin.text,
+                                                                                                                                    "rest not offered after defeat",
+                                                                                                                                )
                                                                                                                             city_m = re.search(
                                                                                                                                 r'href="(/world[^"]*)"[^>]*data-defeat-recovery="world"'
                                                                                                                                 r'|data-defeat-recovery="world"[^>]*href="(/world[^"]*)"',
