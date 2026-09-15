@@ -1269,6 +1269,7 @@ ru:
       junk_sell_all: "Сдать всё"
       junk_sold: "Скупщик взял %{name} ×%{qty} за %{amount} NV."
       junk_only: "Скупка доступна только у Скупщика Пепла."
+      junk_denied_next: "Скупка не выполнена — проверьте предмет или сумку, затем повторите или вернитесь в город."
       junk_not_accepted: "Скупщик это не берёт."
       junk_item_missing: "Предмет не найден."
       junk_inventory_empty: "Инвентарь пуст."
