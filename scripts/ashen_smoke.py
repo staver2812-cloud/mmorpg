@@ -3188,6 +3188,50 @@ def main() -> int:
                                                                                                                                     ),
                                                                                                                                     f"status={r_city.status_code} url={r_city.url}",
                                                                                                                                 )
+                                                                                                                                if r_city.status_code == 200:
+                                                                                                                                    ok_tav, d_tav = click_hotspot(s, "tavern")
+                                                                                                                                    if not ok_tav:
+                                                                                                                                        # May already be off square; go_main then tavern.
+                                                                                                                                        click_hotspot(s, "go_main")
+                                                                                                                                        ok_tav, d_tav = click_hotspot(s, "tavern")
+                                                                                                                                    report.add(
+                                                                                                                                        "soft-release opens tavern after outdoor",
+                                                                                                                                        ok_tav,
+                                                                                                                                        d_tav,
+                                                                                                                                    )
+                                                                                                                                    if ok_tav:
+                                                                                                                                        r_tav = s.get(
+                                                                                                                                            f"{BASE}/city/buildings/tavern",
+                                                                                                                                            timeout=TIMEOUT,
+                                                                                                                                            allow_redirects=True,
+                                                                                                                                        )
+                                                                                                                                        token = csrf_from(r_tav.text) or token
+                                                                                                                                        fatigue_m = re.search(
+                                                                                                                                            r'data-tavern-fatigue="(\d+)"',
+                                                                                                                                            r_tav.text,
+                                                                                                                                        )
+                                                                                                                                        fatigue = int(fatigue_m.group(1)) if fatigue_m else -1
+                                                                                                                                        if 'action="/city/buildings/tavern/rest"' in r_tav.text or "city_building_rest" in r_tav.text or "/tavern/rest" in r_tav.text:
+                                                                                                                                            r_rest = s.post(
+                                                                                                                                                f"{BASE}/city/buildings/tavern/rest",
+                                                                                                                                                data={"authenticity_token": token},
+                                                                                                                                                headers={"Accept": "text/html"},
+                                                                                                                                                timeout=TIMEOUT,
+                                                                                                                                                allow_redirects=True,
+                                                                                                                                            )
+                                                                                                                                            report.add(
+                                                                                                                                                "soft-release tavern rest after outdoor",
+                                                                                                                                                r_rest.status_code == 200
+                                                                                                                                                and "rest_denied=1" not in r_rest.url
+                                                                                                                                                and 'data-rest-denied="1"' not in r_rest.text,
+                                                                                                                                                f"status={r_rest.status_code} url={r_rest.url} fatigue_before={fatigue}",
+                                                                                                                                            )
+                                                                                                                                        else:
+                                                                                                                                            report.add(
+                                                                                                                                                "soft-release tavern rest after outdoor",
+                                                                                                                                                fatigue == 0 and 'data-building-key="tavern"' in r_tav.text,
+                                                                                                                                                f"no rest control fatigue={fatigue}",
+                                                                                                                                            )
                                                                                                                             else:
                                                                                                                                 report.add(
                                                                                                                                     "soft-release outdoor defeat returns City",
