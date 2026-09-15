@@ -134,6 +134,7 @@ def enter_building(session: requests.Session) -> Tuple[bool, str]:
 
 def main() -> int:
     report = Report()
+    sr_flags = {"auction_ok": False}
     s = requests.Session()
     s.headers.update({"User-Agent": "ashen-smoke/1.0", "Accept-Language": "ru"})
 
@@ -4473,6 +4474,7 @@ def main() -> int:
                                                                                                                                                                                                                                                                                                                                                                                                             auc_ok,
                                                                                                                                                                                                                                                                                                                                                                                                             f"status={r_auc.status_code} url={r_auc.url}",
                                                                                                                                                                                                                                                                                                                                                                                                         )
+                                                                                                                                                                                                                                                                                                                                                                                                        sr_flags["auction_ok"] = bool(auc_ok)
                                                                                                                                                                                                                                             else:
                                                                                                                                                                                                                                                 report.add(
                                                                                                                                                                                                                                                     "soft-release bank item store",
@@ -4611,6 +4613,30 @@ def main() -> int:
             report.add("help hall NPC accept starts fight", False, "no open room at end")
     else:
         report.add("help hall NPC accept starts fight", False, d_arena2)
+
+    # Soft-release follow-ups kept flat (Python indent limit on the nested chain).
+    if sr_flags.get("auction_ok"):
+        click_hotspot(s, "go_main")
+        ok_air, d_air = click_hotspot(s, "go_forpost1")
+        if not ok_air:
+            report.add("soft-release airship station visit", False, f"no forpost1: {d_air}")
+        else:
+            r_air = s.get(
+                f"{BASE}/city/buildings/airship_station",
+                timeout=TIMEOUT,
+                allow_redirects=True,
+            )
+            air_ok = (
+                r_air.status_code == 200
+                and 'data-building-key="airship_station"' in r_air.text
+                and 'data-landmark-inside="1"' in r_air.text
+                and ("data-airship-routes=" in r_air.text or 'data-airship-station="1"' in r_air.text)
+            )
+            report.add(
+                "soft-release airship station visit",
+                air_ok,
+                f"status={r_air.status_code} url={r_air.url}",
+            )
 
     failed = report.failed
     print("\n=== SUMMARY ===")
