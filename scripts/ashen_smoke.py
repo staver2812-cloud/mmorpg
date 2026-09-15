@@ -1540,6 +1540,20 @@ def main() -> int:
         f"status={r_miss.status_code} url={r_miss.url}",
     )
     token = csrf_from(r_miss.text) or token
+    r_equip = s.post(
+        f"{BASE}/inventory/equip",
+        data={"authenticity_token": token, "item_id": "999999999"},
+        timeout=TIMEOUT,
+        allow_redirects=True,
+    )
+    report.add(
+        "inventory equip denied recovery",
+        r_equip.status_code == 200
+        and 'data-inventory-item-denied="1"' in r_equip.text
+        and 'data-inventory-recovery="world"' in r_equip.text,
+        f"status={r_equip.status_code} url={r_equip.url}",
+    )
+    token = csrf_from(r_equip.text) or token
     r_set = s.post(
         f"{BASE}/inventory/wear_equipment_set",
         data={"authenticity_token": token, "set_name": "__missing_ashen_set__"},

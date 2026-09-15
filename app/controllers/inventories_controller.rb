@@ -11,6 +11,7 @@ class InventoriesController < ApplicationController
 
   before_action :ensure_active_character!
   around_action :with_available_outdoor_actions
+  rescue_from ActiveRecord::RecordNotFound, with: :item_missing
 
   # GET /inventory
   def show
@@ -294,6 +295,12 @@ class InventoriesController < ApplicationController
   def redirect_after_set_mutation(result)
     extra = result.success ? {} : {set_denied: 1}
     redirect_to inventory_redirect_path(**extra), flash_for_result(result)
+  end
+
+  def item_missing
+    redirect_to inventory_path(item_denied: 1),
+      alert: I18n.t("game.inventory.item_not_found"),
+      status: :see_other
   end
 
   def current_character_equipment
