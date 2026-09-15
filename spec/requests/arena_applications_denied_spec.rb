@@ -21,4 +21,13 @@ RSpec.describe "Arena applications denied", type: :request do
     expect(response.body).to include('data-arena-denied="1"')
     expect(response.body).to include('data-arena-recovery="city"').or include('data-arena-recovery="duels"')
   end
+
+  it "recovers when creating an application in a missing arena room" do
+    post arena_room_arena_applications_path(999_999_999), params: {fight_type: 1}
+
+    expect(response).to redirect_to(arena_index_path(arena_denied: 1))
+    follow_redirect!
+    expect(response.body).to include('data-arena-denied="1"')
+    expect(response.body).to include('data-arena-recovery="city"').or include('data-arena-recovery="duels"')
+  end
 end

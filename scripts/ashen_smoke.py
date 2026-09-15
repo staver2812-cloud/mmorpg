@@ -1284,6 +1284,23 @@ def main() -> int:
         ),
         f"status={r_app.status_code} url={r_app.url}",
     )
+    token = csrf_from(r_app.text) or token
+    r_app_create = s.post(
+        f"{BASE}/arena_rooms/999999999/arena_applications",
+        data={"authenticity_token": token, "fight_type": "1"},
+        timeout=TIMEOUT,
+        allow_redirects=True,
+    )
+    report.add(
+        "arena application create denied recovery",
+        r_app_create.status_code == 200
+        and 'data-arena-denied="1"' in r_app_create.text
+        and (
+            'data-arena-recovery="city"' in r_app_create.text
+            or 'data-arena-recovery="duels"' in r_app_create.text
+        ),
+        f"status={r_app_create.status_code} url={r_app_create.url}",
+    )
     r_missing = s.get(f"{BASE}/log/999999999", timeout=TIMEOUT, allow_redirects=True)
     report.add(
         "public fight log missing recovery",
