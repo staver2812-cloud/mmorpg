@@ -1116,7 +1116,7 @@ en:
       souvenir_aria: "Relic stall"
       souvenir_only: "Purchases are only available at the Relic stall."
       souvenir_title: "Shore smallwares"
-      souvenir_lead: "Bait, chips, and herbs for NV. No license required."
+      souvenir_lead: "Bait, chips, herbs, and mite tails for NV. No license required."
       souvenir_buy_cta: "Buy (−%{amount} NV)"
       souvenir_owned: "in bag: %{count}"
       souvenir_wallet: "Wallet %{amount} NV"

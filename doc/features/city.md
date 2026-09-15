@@ -1145,6 +1145,8 @@ Final rerun results are in the
 - 2026-09-13: Pitch Bank NV vault deposit/withdraw on character metadata.
 - 2026-09-13: Ashen Post personal note (single metadata memo).
 - 2026-09-13: Relic stall sells bait/chips/herbs for NV without a license.
+- 2026-09-15: Relic stall also sells mite tails (`rat_tail`) so Tar Smith field-kit mats are reachable without invented drops.
+- 2026-09-15: Soft-release smoke restocks Relic mats, crafts `veil_field_kit` (skill ≥3), and turns in `tar_field_kit_contract`.
 - 2026-09-13: Salt Market building notice is localized (`data-market-notice`); stall rent/player lots remain view-only.
 - 2026-09-13: Veil Obelisk bind/recall (`POST .../obelisk`): stores coordinates in character metadata and recalls for 15 NV; desk exposes `data-obelisk-can-bind` / `data-obelisk-can-recall` / unbound marker.
 - 2026-09-13: Outdoor Obelisk recall chip plus Tavern table fatigue clear alongside HP/MP.

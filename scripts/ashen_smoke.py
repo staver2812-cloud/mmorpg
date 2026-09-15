@@ -5401,6 +5401,164 @@ def main() -> int:
             sr_flags["premium_ok"] = True
 
     if sr_flags.get("premium_ok"):
+        # Tar Smith field-kit continuation: restock Relic mats → skill≥3 bandages → kit → turn-in.
+        click_hotspot(s, "go_main")
+        r_fq = s.get(f"{BASE}/quests", timeout=TIMEOUT, allow_redirects=True)
+        token = csrf_from(r_fq.text) or token
+        if 'action="/quests/tar_field_kit_contract/accept"' in r_fq.text:
+            r_acc = s.post(
+                f"{BASE}/quests/tar_field_kit_contract/accept",
+                data={"authenticity_token": token},
+                headers={"Accept": "text/html"},
+                timeout=TIMEOUT,
+                allow_redirects=True,
+            )
+            token = csrf_from(r_acc.text) or token
+            report.add(
+                "soft-release accepts tar_field_kit_contract",
+                r_acc.status_code == 200 and "quest_denied=1" not in r_acc.url,
+                f"status={r_acc.status_code} url={r_acc.url}",
+            )
+        else:
+            report.add(
+                "soft-release accepts tar_field_kit_contract",
+                "tar_field_kit_contract" in r_fq.text
+                or 'action="/quests/tar_field_kit_contract/turn_in"' in r_fq.text,
+                "already active or missing accept",
+            )
+
+        click_hotspot(s, "go_forpost3")
+        ok_sv, _ = click_hotspot(s, "souvenir_shop")
+        if not ok_sv:
+            s.get(f"{BASE}/city/buildings/souvenir_shop", timeout=TIMEOUT, allow_redirects=True)
+        # Two bandage crafts need 4 chips + 2 tails; kit also needs 1 bait.
+        for item_key, times in (("wood_chips", 4), ("rat_tail", 2), ("ashen_bait", 1)):
+            for _buy_i in range(times):
+                r_sv = s.get(
+                    f"{BASE}/city/buildings/souvenir_shop",
+                    timeout=TIMEOUT,
+                    allow_redirects=True,
+                )
+                token = csrf_from(r_sv.text) or token
+                if f'data-souvenir-item="{item_key}"' not in r_sv.text:
+                    break
+                r_buy = s.post(
+                    f"{BASE}/city/buildings/souvenir_shop/souvenir",
+                    data={"authenticity_token": token, "item_key": item_key},
+                    headers={"Accept": "text/html"},
+                    timeout=TIMEOUT,
+                    allow_redirects=True,
+                )
+                token = csrf_from(r_buy.text) or token
+                if r_buy.status_code != 200 or "souvenir_denied=1" in r_buy.url:
+                    break
+        report.add(
+            "soft-release souvenir restock for field kit",
+            True,
+            "bought wood_chips/rat_tail/ashen_bait as available",
+        )
+
+        click_hotspot(s, "go_main")
+        kit_crafted = False
+        for craft_i in range(4):
+            r_forge = s.get(
+                f"{BASE}/city/buildings/workshop",
+                timeout=TIMEOUT,
+                allow_redirects=True,
+            )
+            token = csrf_from(r_forge.text) or token
+            # Prefer field kit when skill gate opens.
+            kit_ready = (
+                'data-workshop-recipe="veil_field_kit"' in r_forge.text
+                and re.search(
+                    r'data-workshop-recipe="veil_field_kit"[^>]*data-workshop-ready="1"'
+                    r'|data-workshop-ready="1"[^>]*data-workshop-recipe="veil_field_kit"',
+                    r_forge.text,
+                )
+            )
+            if kit_ready:
+                r_kit = s.post(
+                    f"{BASE}/city/buildings/workshop/craft",
+                    data={"authenticity_token": token, "recipe_key": "veil_field_kit"},
+                    headers={"Accept": "text/html"},
+                    timeout=TIMEOUT,
+                    allow_redirects=True,
+                )
+                token = csrf_from(r_kit.text) or token
+                kit_crafted = (
+                    r_kit.status_code == 200 and "craft_denied=1" not in r_kit.url
+                )
+                report.add(
+                    "soft-release crafts veil_field_kit",
+                    kit_crafted,
+                    f"status={r_kit.status_code} url={r_kit.url} attempt={craft_i}",
+                )
+                break
+            # Skill/material climb via ashen_bandage.
+            band_ready = (
+                'data-workshop-recipe="ashen_bandage"' in r_forge.text
+                and (
+                    'data-workshop-ready="1"' in r_forge.text
+                    or 'recipe_key" value="ashen_bandage"' in r_forge.text
+                )
+            )
+            if not band_ready:
+                report.add(
+                    "soft-release crafts veil_field_kit",
+                    False,
+                    f"bandage not ready attempt={craft_i} url={r_forge.url}",
+                )
+                break
+            r_band = s.post(
+                f"{BASE}/city/buildings/workshop/craft",
+                data={"authenticity_token": token, "recipe_key": "ashen_bandage"},
+                headers={"Accept": "text/html"},
+                timeout=TIMEOUT,
+                allow_redirects=True,
+            )
+            token = csrf_from(r_band.text) or token
+            report.add(
+                f"soft-release field-kit prep bandage craft {craft_i + 1}",
+                r_band.status_code == 200 and "craft_denied=1" not in r_band.url,
+                f"status={r_band.status_code} url={r_band.url}",
+            )
+            if r_band.status_code != 200 or "craft_denied=1" in r_band.url:
+                break
+        else:
+            if not kit_crafted:
+                report.add(
+                    "soft-release crafts veil_field_kit",
+                    False,
+                    "kit never ready after bandage prep",
+                )
+
+        if kit_crafted:
+            r_kq = s.get(f"{BASE}/quests", timeout=TIMEOUT, allow_redirects=True)
+            token = csrf_from(r_kq.text) or token
+            turn_m = re.search(
+                r'action="(/quests/tar_field_kit_contract/turn_in)"',
+                r_kq.text,
+            )
+            if turn_m:
+                r_tin = s.post(
+                    urljoin(BASE + "/", turn_m.group(1).lstrip("/")),
+                    data={"authenticity_token": token},
+                    headers={"Accept": "text/html"},
+                    timeout=TIMEOUT,
+                    allow_redirects=True,
+                )
+                report.add(
+                    "soft-release turns in tar_field_kit_contract",
+                    r_tin.status_code == 200 and "quest_denied=1" not in r_tin.url,
+                    f"status={r_tin.status_code} url={r_tin.url}",
+                )
+            else:
+                report.add(
+                    "soft-release turns in tar_field_kit_contract",
+                    False,
+                    "no turn_in control",
+                )
+
         # West shore honesty: village [4,6] → mine [4,5] → exchange [4,7] lobbies.
         click_hotspot(s, "go_main")
         ok_wg, d_wg = click_hotspot(s, "west_gate")

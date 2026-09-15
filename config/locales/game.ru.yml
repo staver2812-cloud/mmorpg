@@ -1116,7 +1116,7 @@ ru:
       souvenir_aria: "Лавка Реликвий"
       souvenir_only: "Покупки доступны только в Лавке Реликвий."
       souvenir_title: "Мелочи берега"
-      souvenir_lead: "Приманка, щепа и трава за NV. Лицензия не нужна."
+      souvenir_lead: "Приманка, щепа, трава и хвосты клеща за NV. Лицензия не нужна."
       souvenir_buy_cta: "Купить (−%{amount} NV)"
       souvenir_owned: "в сумке: %{count}"
       souvenir_wallet: "В кармане %{amount} NV"

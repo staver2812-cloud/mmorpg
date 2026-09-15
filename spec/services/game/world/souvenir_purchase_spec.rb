@@ -20,6 +20,16 @@ RSpec.describe Game::World::SouvenirPurchase do
     ).to be >= 1
   end
 
+  it "buys a mite tail for NV" do
+    result = described_class.new(character:, item_key: "rat_tail").call
+
+    expect(result.success).to be(true)
+    expect(character.user.currency_wallet.reload.nv_balance).to eq(35)
+    expect(
+      character.inventory.inventory_items.joins(:item_template).where(item_templates: {key: "rat_tail"}).sum(:quantity)
+    ).to be >= 1
+  end
+
   it "rejects unknown offerings" do
     expect(described_class.new(character:, item_key: "nope").call.success).to be(false)
   end

@@ -8,7 +8,8 @@ module Game
       OFFERINGS = {
         "ashen_bait" => 8,
         "wood_chips" => 3,
-        "ash_herb" => 5
+        "ash_herb" => 5,
+        "rat_tail" => 5
       }.freeze
 
       def initialize(character:, item_key:)
