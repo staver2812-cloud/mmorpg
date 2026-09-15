@@ -1148,9 +1148,10 @@ RSpec.describe "World", type: :request do
       it "returns alert for non-existent building" do
         post enter_building_world_path, params: {building_id: 99999}
 
-        expect(response).to redirect_to(world_path)
+        expect(response).to redirect_to(world_path(building_denied: 1))
         follow_redirect!
         expect(response.body).to include(I18n.t("game.flashes.building_not_found"))
+        expect(response.body).to include('data-building-denied="1"')
       end
 
       it "returns turbo stream error for non-existent building" do

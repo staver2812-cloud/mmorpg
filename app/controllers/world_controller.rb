@@ -152,7 +152,10 @@ class WorldController < ApplicationController
 
     unless building
       return respond_to do |format|
-        format.html { redirect_to world_path, alert: I18n.t("game.flashes.building_not_found") }
+        format.html {
+          redirect_to world_path(building_denied: 1),
+            alert: I18n.t("game.flashes.building_not_found")
+        }
         format.turbo_stream { render_error(I18n.t("game.flashes.building_not_found")) }
       end
     end
