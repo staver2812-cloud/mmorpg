@@ -35,6 +35,16 @@
     </div>
   </div>
 
+  <% if params[:application_denied].to_s == "1" %>
+    <p class="nl-quests-board__meta" data-application-denied="1">
+      <%= t("arena.application_denied_next") %>
+      ·
+      <%= link_to t("arena.nav.arena"), arena_index_path, class: "nl-arena-link", data: {application_recovery: "lobby"} %>
+      ·
+      <%= link_to t("arena.nav.city"), world_path, class: "nl-arena-link", data: {turbo: false, application_recovery: "city"} %>
+    </p>
+  <% end %>
+
   <div class="nl-arena-room-heading">
     <b><%= @room.name %></b>
     <span><%= t("arena.levels", min: @room.level_min, max: @room.level_max) %></span>

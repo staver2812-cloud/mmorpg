@@ -9,6 +9,7 @@ en:
     applications: "Applications"
     apps_empty: "No open applications yet — enter a matching room and create or accept one."
     denied_next: "That room is unavailable right now — return to the lobby or city."
+    application_denied_next: "That arena application did not go through — check trauma scrolls, room rules, then retry from the lobby or city."
     combat_scroll_missing: "Need a Combat Trauma Scroll in inventory (buy at Infirmary for VM)."
     your_level: "your level"
     all: "all"

@@ -37,7 +37,7 @@ class ArenaApplicationsController < ApplicationController
         format.html { redirect_to arena_room_path(@room), notice: I18n.t("game.flashes.application_submitted") }
         format.json { render json: {success: true, application: result.application}, status: :created }
       else
-        format.html { redirect_to arena_room_path(@room), alert: result.errors.join(", ") }
+        format.html { redirect_to arena_room_path(@room, application_denied: 1), alert: result.errors.join(", ") }
         format.json { render json: {success: false, errors: result.errors}, status: :unprocessable_entity }
       end
     end
@@ -64,7 +64,10 @@ class ArenaApplicationsController < ApplicationController
           }
         end
       else
-        format.html { redirect_back fallback_location: arena_index_path, alert: result.errors.join(", ") }
+        format.html do
+          redirect_to arena_room_path(@application.arena_room, application_denied: 1),
+            alert: result.errors.join(", ")
+        end
         format.json { render json: {success: false, errors: result.errors}, status: :unprocessable_entity }
       end
     end
@@ -88,7 +91,10 @@ class ArenaApplicationsController < ApplicationController
         format.html { redirect_to arena_room_path(@application.arena_room), notice: I18n.t("game.flashes.application_canceled") }
         format.json { render json: {success: true} }
       else
-        format.html { redirect_back fallback_location: arena_index_path, alert: result.errors.join(", ") }
+        format.html do
+          redirect_to arena_room_path(@application.arena_room, application_denied: 1),
+            alert: result.errors.join(", ")
+        end
         format.json { render json: {success: false, errors: result.errors}, status: :unprocessable_entity }
       end
     end
