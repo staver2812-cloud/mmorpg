@@ -2373,8 +2373,23 @@ def main() -> int:
                     for _ in range(40):
                         r_state = s.get(f"{BASE}/arena_matches/{mid}", timeout=TIMEOUT, allow_redirects=True)
                         token = csrf_from(r_state.text) or token
-                        if 'data-arena-match-status-value="completed"' in r_state.text:
-                            won = "fighter-result--victory" in r_state.text or "arena-result-finish" in r_state.text
+                        completed = 'data-arena-match-status-value="completed"' in r_state.text
+                        if completed:
+                            npc_down = bool(
+                                re.search(
+                                    r'class="[^"]*fighter-card--npc[^"]*fighter-card--defeated'
+                                    r'|class="[^"]*fighter-card--defeated[^"]*fighter-card--npc',
+                                    r_state.text,
+                                )
+                            )
+                            player_down = bool(
+                                re.search(
+                                    r'class="[^"]*fighter-card--defeated[^"]*"[^>]*data-current-user="true"'
+                                    r'|data-current-user="true"[^>]*class="[^"]*fighter-card--defeated',
+                                    r_state.text,
+                                )
+                            )
+                            won = npc_down and not player_down
                             break
                         if 'data-arena-match-status-value="live"' not in r_state.text:
                             break

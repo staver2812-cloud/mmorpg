@@ -62,6 +62,8 @@ novice → adept → master bags.
 
 | Date | Change |
 |---|---|
+| 2026-09-15 | Help Hall training dummy soft-release: always-defend (`defend_chance=1`), no injected magic attacks. |
+| 2026-09-15 | Soft-release: `veil_lure_drill` also counts Help Hall `arena_training_dummy` kills; where-hint covers Arena → Help Hall. |
 | 2026-09-15 | Failed accept/turn-in (unknown or rejected) returns to the journal with `quest_denied=1` recovery chrome. |
 | 2026-09-14 | Hall/World journal board link exposes `data-quest-recovery`; smoke asserts it. |
 | 2026-09-14 | Quests journal always links to Coal Hall board (`data-quest-hall-link`); when Hall is out of district the link opens City. Locked contracts recover to World. |
