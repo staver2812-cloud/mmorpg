@@ -751,6 +751,7 @@ Before extending Character Progression:
 | 2026-09-15 | Missing/foreign character progression redirects to World with `character_denied=1` recovery chrome. |
 | 2026-09-15 | Failed stat/skill/perk allocation redirects with `allocation_denied=1` recovery chrome on the same surface. |
 | 2026-09-15 | Soft-release smoke spends one combat skill point (`unarmed_combat`) after Law Abode pledge. |
+| 2026-09-15 | Soft-release smoke spends the starter perk point on Nature Child (`nature_child`). |
 | 2026-09-15 | Missing public player profiles recover via World (`player_denied`) when signed in, or a public missing page when anonymous. |
 | 2026-09-13 | Owner sheet shows private Veil Marks balance (`data-sheet-vm`) with Infirmary link when colocated; NV wallet also exposes `data-sheet-nv`; locker occupancy uses `data-sheet-locker`; vault NV uses `data-sheet-vault`. |
 | 2026-09-14 | Level-up service rejects non-integer/negative XP via `errors.experience_non_negative`. |
