@@ -1460,32 +1460,36 @@ def main() -> int:
                 and 'data-arena-recovery="lobby"' in r_room.text,
                 f"url={r_room.url}",
             )
-            token = csrf_from(r_room.text) or token
-            r_app_ok = s.post(
-                f"{BASE}/arena_rooms/{re.search(r'/arena_rooms/(\\d+)', r_room.url).group(1)}/arena_applications",
-                data={
-                    "authenticity_token": token,
-                    "fight_type": "duel",
-                    "fight_kind": "free",
-                    "timeout_seconds": "180",
-                },
-                headers={"Accept": "text/html"},
-                timeout=TIMEOUT,
-                allow_redirects=True,
-            )
-            report.add(
-                "arena application create success Help Hall",
-                r_app_ok.status_code == 200
-                and "nl-arena-frame" in r_app_ok.text
-                and (
-                    "nl-arena-current-row" in r_app_ok.text
-                    or "Your application" in r_app_ok.text
-                    or "Ваша заявка" in r_app_ok.text
-                    or 'data-arena-has-application="1"' in r_app_ok.text
-                ),
-                f"status={r_app_ok.status_code} url={r_app_ok.url}",
-            )
-            token = csrf_from(r_app_ok.text) or token
+            room_id = re.search(r"/arena_rooms/(\d+)", r_room.url)
+            if not room_id:
+                report.add("arena application create success Help Hall", False, f"no room id in {r_room.url}")
+            else:
+                token = csrf_from(r_room.text) or token
+                r_app_ok = s.post(
+                    f"{BASE}/arena_rooms/{room_id.group(1)}/arena_applications",
+                    data={
+                        "authenticity_token": token,
+                        "fight_type": "duel",
+                        "fight_kind": "free",
+                        "timeout_seconds": "180",
+                    },
+                    headers={"Accept": "text/html"},
+                    timeout=TIMEOUT,
+                    allow_redirects=True,
+                )
+                report.add(
+                    "arena application create success Help Hall",
+                    r_app_ok.status_code == 200
+                    and "nl-arena-frame" in r_app_ok.text
+                    and (
+                        "nl-arena-current-row" in r_app_ok.text
+                        or "Your application" in r_app_ok.text
+                        or "Ваша заявка" in r_app_ok.text
+                        or 'data-arena-has-application="1"' in r_app_ok.text
+                    ),
+                    f"status={r_app_ok.status_code} url={r_app_ok.url}",
+                )
+                token = csrf_from(r_app_ok.text) or token
     locked_m = re.search(
         r'data-arena-room="(\d+)"[^>]*data-arena-room-accessible="0"|data-arena-room-accessible="0"[^>]*data-arena-room="(\d+)"',
         r.text,
