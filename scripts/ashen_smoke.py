@@ -208,6 +208,36 @@ def walk_toward(
     return False, detail, token
 
 
+def discard_item_keys(
+    session: requests.Session,
+    token: Optional[str],
+    keys: Tuple[str, ...],
+    times_each: int = 8,
+) -> Optional[str]:
+    """Drop inventory stacks by data-item-key so souvenir buys / crafts can fit."""
+    for free_key in keys:
+        for _ in range(times_each):
+            r_inv = session.get(f"{BASE}/inventory", timeout=TIMEOUT, allow_redirects=True)
+            token = csrf_from(r_inv.text) or token
+            free_m = re.search(
+                rf'data-item-id="(\d+)"[^>]*data-item-key="{re.escape(free_key)}"'
+                rf'|data-item-key="{re.escape(free_key)}"[^>]*data-item-id="(\d+)"',
+                r_inv.text,
+            )
+            if not free_m:
+                break
+            free_id = free_m.group(1) or free_m.group(2)
+            r_del = session.post(
+                f"{BASE}/inventory/items/{free_id}",
+                data={"authenticity_token": token, "_method": "delete"},
+                headers={"Accept": "text/html"},
+                timeout=TIMEOUT,
+                allow_redirects=True,
+            )
+            token = csrf_from(r_del.text) or token
+    return token
+
+
 def main() -> int:
     report = Report()
     sr_flags = {"auction_ok": False, "airship_ok": False, "city_hall_ok": False, "guard_tower_ok": False}
@@ -5690,10 +5720,17 @@ def main() -> int:
                                         )
                                     click_hotspot(s, "go_forpost3")
                                     click_hotspot(s, "souvenir_shop")
+                                    # Drop bait/kits so the adept mat buy wave fits level-0 mass.
+                                    token = discard_item_keys(
+                                        s,
+                                        token,
+                                        ("ashen_bait", "healer_bag_light", "veil_field_kit"),
+                                        times_each=4,
+                                    )
                                     for item_key, times in (
                                         ("wood_chips", 10),
+                                        ("rat_tail", 6),
                                         ("ash_herb", 8),
-                                        ("rat_tail", 5),
                                     ):
                                         for _ in range(times):
                                             r_sv = s.get(
@@ -5719,7 +5756,11 @@ def main() -> int:
                                             ):
                                                 break
                                     heavy_ok = False
-                                    for prep_i in range(10):
+                                    # First-bag quest already grants skill 1; climb with a few
+                                    # light crafts then STOP so bandages accumulate for heavy.
+                                    adept_light_crafts = 0
+                                    adept_light_budget = 3
+                                    for prep_i in range(18):
                                         click_hotspot(s, "go_main")
                                         r_hosp = s.get(
                                             f"{BASE}/city/buildings/hospital",
@@ -5760,7 +5801,6 @@ def main() -> int:
                                                 f"status={r_heavy.status_code} url={r_heavy.url} attempt={prep_i}",
                                             )
                                             break
-                                        # Climb ash_healer skill via light bags when possible.
                                         light_ready = (
                                             'data-hospital-recipe="healer_bag_light"'
                                             in r_hosp.text
@@ -5772,7 +5812,9 @@ def main() -> int:
                                                 r_hosp.text,
                                             )
                                         )
-                                        if light_ready:
+                                        # Skill climb only — burning light bags after skill≥3
+                                        # consumes bandages needed for healer_bag_heavy.
+                                        if light_ready and adept_light_crafts < adept_light_budget:
                                             r_light = s.post(
                                                 f"{BASE}/city/buildings/hospital/craft",
                                                 data={
@@ -5784,12 +5826,25 @@ def main() -> int:
                                                 allow_redirects=True,
                                             )
                                             token = csrf_from(r_light.text) or token
+                                            light_ok = (
+                                                r_light.status_code == 200
+                                                and "craft_denied=1" not in r_light.url
+                                            )
+                                            if light_ok:
+                                                adept_light_crafts += 1
                                             report.add(
                                                 f"soft-release adept prep light bag {prep_i + 1}",
-                                                r_light.status_code == 200
-                                                and "craft_denied=1" not in r_light.url,
-                                                f"status={r_light.status_code} url={r_light.url}",
+                                                light_ok,
+                                                f"status={r_light.status_code} url={r_light.url} "
+                                                f"skill_crafts={adept_light_crafts}",
                                             )
+                                            if light_ok:
+                                                token = discard_item_keys(
+                                                    s,
+                                                    token,
+                                                    ("healer_bag_light",),
+                                                    times_each=3,
+                                                )
                                             continue
                                         r_forge2 = s.get(
                                             f"{BASE}/city/buildings/workshop",
@@ -5827,14 +5882,25 @@ def main() -> int:
                                                 f"status={r_band2.status_code} url={r_band2.url}",
                                             )
                                             continue
-                                        # Restock once when prep is stuck on mats.
+                                        # Free bait/surplus mats so souvenir buys fit, then restock.
+                                        token = discard_item_keys(
+                                            s,
+                                            token,
+                                            (
+                                                "ashen_bait",
+                                                "healer_bag_light",
+                                                "veil_field_kit",
+                                            ),
+                                            times_each=4,
+                                        )
                                         click_hotspot(s, "go_forpost3")
                                         click_hotspot(s, "souvenir_shop")
                                         restocked = False
+                                        # Heavy needs 2 bandages (4 chips+2 tails) + 3 herb + 1 tail.
                                         for item_key, times in (
-                                            ("wood_chips", 4),
-                                            ("ash_herb", 4),
-                                            ("rat_tail", 2),
+                                            ("wood_chips", 6),
+                                            ("rat_tail", 4),
+                                            ("ash_herb", 5),
                                         ):
                                             for _ in range(times):
                                                 r_sv = s.get(
@@ -5864,8 +5930,58 @@ def main() -> int:
                                         report.add(
                                             f"soft-release adept mid restock {prep_i + 1}",
                                             restocked,
-                                            f"prep={prep_i}",
+                                            f"prep={prep_i} light_crafts={adept_light_crafts}",
                                         )
+                                        if not restocked:
+                                            # Last ditch: dump surplus mats and retry one buy wave.
+                                            token = discard_item_keys(
+                                                s,
+                                                token,
+                                                (
+                                                    "ashen_bait",
+                                                    "healer_bag_light",
+                                                    "wood_chips",
+                                                    "ash_herb",
+                                                    "rat_tail",
+                                                ),
+                                                times_each=6,
+                                            )
+                                            for item_key, times in (
+                                                ("wood_chips", 6),
+                                                ("rat_tail", 4),
+                                                ("ash_herb", 5),
+                                            ):
+                                                for _ in range(times):
+                                                    r_sv = s.get(
+                                                        f"{BASE}/city/buildings/souvenir_shop",
+                                                        timeout=TIMEOUT,
+                                                        allow_redirects=True,
+                                                    )
+                                                    token = csrf_from(r_sv.text) or token
+                                                    r_buy = s.post(
+                                                        f"{BASE}/city/buildings/souvenir_shop/souvenir",
+                                                        data={
+                                                            "authenticity_token": token,
+                                                            "item_key": item_key,
+                                                        },
+                                                        headers={"Accept": "text/html"},
+                                                        timeout=TIMEOUT,
+                                                        allow_redirects=True,
+                                                    )
+                                                    token = csrf_from(r_buy.text) or token
+                                                    if (
+                                                        r_buy.status_code == 200
+                                                        and "souvenir_denied=1"
+                                                        not in r_buy.url
+                                                    ):
+                                                        restocked = True
+                                                    else:
+                                                        break
+                                            report.add(
+                                                f"soft-release adept mid restock retry {prep_i + 1}",
+                                                restocked,
+                                                f"prep={prep_i}",
+                                            )
                                         if not restocked:
                                             report.add(
                                                 "soft-release crafts healer_bag_heavy",
