@@ -226,6 +226,19 @@ RSpec.describe TileNpc, type: :model do
         expect(npc.respawns_at).to eq(2.hours.from_now)
       end
     end
+
+    it "lazy-respawns when the authored timer has elapsed" do
+      npc.npc_template.update!(metadata: {"respawn_seconds" => 45, "respawn_variance_seconds" => 0})
+
+      travel_to Time.zone.local(2026, 5, 21, 12, 0, 0) do
+        expect(npc.defeat!(character)).to be true
+      end
+
+      travel_to Time.zone.local(2026, 5, 21, 12, 1, 0) do
+        expect(npc.alive?).to be true
+        expect(npc.reload).to have_attributes(defeated_at: nil, current_hp: npc.max_hp)
+      end
+    end
   end
 
   describe "#respawn!" do
