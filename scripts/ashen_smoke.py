@@ -5827,12 +5827,53 @@ def main() -> int:
                                                 f"status={r_band2.status_code} url={r_band2.url}",
                                             )
                                             continue
+                                        # Restock once when prep is stuck on mats.
+                                        click_hotspot(s, "go_forpost3")
+                                        click_hotspot(s, "souvenir_shop")
+                                        restocked = False
+                                        for item_key, times in (
+                                            ("wood_chips", 4),
+                                            ("ash_herb", 4),
+                                            ("rat_tail", 2),
+                                        ):
+                                            for _ in range(times):
+                                                r_sv = s.get(
+                                                    f"{BASE}/city/buildings/souvenir_shop",
+                                                    timeout=TIMEOUT,
+                                                    allow_redirects=True,
+                                                )
+                                                token = csrf_from(r_sv.text) or token
+                                                r_buy = s.post(
+                                                    f"{BASE}/city/buildings/souvenir_shop/souvenir",
+                                                    data={
+                                                        "authenticity_token": token,
+                                                        "item_key": item_key,
+                                                    },
+                                                    headers={"Accept": "text/html"},
+                                                    timeout=TIMEOUT,
+                                                    allow_redirects=True,
+                                                )
+                                                token = csrf_from(r_buy.text) or token
+                                                if (
+                                                    r_buy.status_code == 200
+                                                    and "souvenir_denied=1" not in r_buy.url
+                                                ):
+                                                    restocked = True
+                                                else:
+                                                    break
                                         report.add(
-                                            "soft-release crafts healer_bag_heavy",
-                                            False,
-                                            f"stuck prep={prep_i} url={r_hosp.url}",
+                                            f"soft-release adept mid restock {prep_i + 1}",
+                                            restocked,
+                                            f"prep={prep_i}",
                                         )
-                                        break
+                                        if not restocked:
+                                            report.add(
+                                                "soft-release crafts healer_bag_heavy",
+                                                False,
+                                                f"stuck prep={prep_i} url={r_hosp.url}",
+                                            )
+                                            break
+                                        continue
                                     else:
                                         if not heavy_ok:
                                             report.add(
