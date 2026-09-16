@@ -44,8 +44,10 @@ class TileNpc < ApplicationRecord
   scope :needs_respawn, -> { where("respawns_at IS NOT NULL AND respawns_at <= ?", Time.current).where.not(defeated_at: nil) }
   scope :hostile, -> { where(npc_role: "hostile") }
 
-  # Check if NPC is alive and interactable
+  # Check if NPC is alive and interactable.
+  # Lazy-respawn when the authored timer elapsed so patrol loops work without a worker.
   def alive?
+    maybe_respawn_if_due!
     active? && defeated_at.nil? && (respawns_at.nil? || respawns_at <= Time.current)
   end
 
@@ -62,11 +64,13 @@ class TileNpc < ApplicationRecord
 
   # Check if NPC is defeated and waiting for respawn
   def defeated?
+    maybe_respawn_if_due!
     defeated_at.present?
   end
 
   # Time until respawn (for display)
   def time_until_respawn
+    maybe_respawn_if_due!
     return 0 if alive?
     return 0 if respawns_at.nil?
 
@@ -100,6 +104,13 @@ class TileNpc < ApplicationRecord
       defeated_by: nil
     )
     true
+  end
+
+  def maybe_respawn_if_due!
+    return false unless defeated_at.present?
+    return false if respawns_at.nil? || respawns_at > Time.current
+
+    respawn!
   end
 
   # Get display name
