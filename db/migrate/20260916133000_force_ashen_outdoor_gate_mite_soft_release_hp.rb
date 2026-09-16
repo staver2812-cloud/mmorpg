@@ -1,8 +1,7 @@
 # frozen_string_literal: true
 
-# Soft-release: reseed gate mite and force live HP so patrol fights are winnable.
-# outdoor_npcs seed updates max_hp but keeps existing current_hp; encounters read current_hp first.
-class ReseedAshenOutdoorGateMiteSoftRelease < ActiveRecord::Migration[8.1]
+# Soft-release follow-up: force gate mite live HP after the prior reseed left current_hp stale.
+class ForceAshenOutdoorGateMiteSoftReleaseHp < ActiveRecord::Migration[8.1]
   def up
     path = Rails.root.join("db/seeds/outdoor_npcs.rb")
     load path if File.exist?(path)
