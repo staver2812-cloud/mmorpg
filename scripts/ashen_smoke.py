@@ -77,14 +77,40 @@ def parse_hotspot_forms(html: str) -> dict:
     return out
 
 
+def request_with_retry(
+    session: requests.Session,
+    method: str,
+    url: str,
+    *,
+    attempts: int = 4,
+    **kwargs,
+):
+    """Retry transient Railway 502/503/504 and read timeouts."""
+    last = None
+    for attempt in range(attempts):
+        try:
+            last = session.request(method, url, **kwargs)
+            if last.status_code not in (502, 503, 504):
+                return last
+        except (requests.exceptions.Timeout, requests.exceptions.ConnectionError) as exc:
+            last = exc
+        if attempt + 1 < attempts:
+            time.sleep(min(2 ** attempt, 8))
+    if isinstance(last, Exception):
+        raise last
+    return last
+
+
 def click_hotspot(session: requests.Session, key: str) -> Tuple[bool, str]:
-    r = session.get(f"{BASE}/world", timeout=TIMEOUT)
+    r = request_with_retry(session, "GET", f"{BASE}/world", timeout=TIMEOUT)
     forms = parse_hotspot_forms(r.text)
     if key not in forms:
         return False, f"hotspot {key} missing; have={sorted(forms)[:12]}"
     hotspot_id, action_key, form_token = forms[key]
     token = form_token or csrf_from(r.text)
-    r = session.post(
+    r = request_with_retry(
+        session,
+        "POST",
         f"{BASE}/world/interact_hotspot",
         data={
             "authenticity_token": token,
@@ -98,7 +124,7 @@ def click_hotspot(session: requests.Session, key: str) -> Tuple[bool, str]:
 
 
 def enter_building(session: requests.Session) -> Tuple[bool, str]:
-    r = session.get(f"{BASE}/world", timeout=TIMEOUT)
+    r = request_with_retry(session, "GET", f"{BASE}/world", timeout=TIMEOUT)
     m = re.search(
         r'<form[^>]*action="/world/enter_building"[^>]*>(.*?)</form>',
         r.text,
@@ -118,7 +144,9 @@ def enter_building(session: requests.Session) -> Tuple[bool, str]:
     building_id = bid.group(1) or bid.group(2)
     action_key = akey.group(1) or akey.group(2)
     authenticity = tok.group(1) or tok.group(2)
-    r = session.post(
+    r = request_with_retry(
+        session,
+        "POST",
         f"{BASE}/world/enter_building",
         data={
             "authenticity_token": authenticity,
