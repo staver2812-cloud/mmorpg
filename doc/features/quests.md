@@ -62,6 +62,7 @@ novice → adept → master bags.
 
 | Date | Change |
 |---|---|
+| 2026-09-15 | Soft-release smoke crafts `healer_bag_heavy` and turns in `ash_healer_adept_bag` after lure pack. |
 | 2026-09-15 | Soft-release smoke crafts `tar_lure_pack` and turns in `tar_lure_pack_contract` (5 bait) after field kit. |
 | 2026-09-15 | Soft-release smoke restocks Relic mats (incl. `rat_tail`), crafts `veil_field_kit`, and turns in `tar_field_kit_contract`. |
 | 2026-09-15 | Soft-release smoke chain: Help Hall win → `veil_lure_drill` → `veil_tail_delivery` → forge bandage → Infirmary healer bag turn-ins. |

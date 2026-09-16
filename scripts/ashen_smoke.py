@@ -5657,6 +5657,223 @@ def main() -> int:
                                     and "quest_denied=1" not in r_ltin.url,
                                     f"status={r_ltin.status_code} url={r_ltin.url}",
                                 )
+                                if r_ltin.status_code == 200 and "quest_denied=1" not in r_ltin.url:
+                                    token = csrf_from(r_ltin.text) or token
+                                    r_aq = s.get(
+                                        f"{BASE}/quests",
+                                        timeout=TIMEOUT,
+                                        allow_redirects=True,
+                                    )
+                                    token = csrf_from(r_aq.text) or token
+                                    if 'action="/quests/ash_healer_adept_bag/accept"' in r_aq.text:
+                                        r_aacc = s.post(
+                                            f"{BASE}/quests/ash_healer_adept_bag/accept",
+                                            data={"authenticity_token": token},
+                                            headers={"Accept": "text/html"},
+                                            timeout=TIMEOUT,
+                                            allow_redirects=True,
+                                        )
+                                        token = csrf_from(r_aacc.text) or token
+                                        report.add(
+                                            "soft-release accepts ash_healer_adept_bag",
+                                            r_aacc.status_code == 200
+                                            and "quest_denied=1" not in r_aacc.url,
+                                            f"status={r_aacc.status_code} url={r_aacc.url}",
+                                        )
+                                    else:
+                                        report.add(
+                                            "soft-release accepts ash_healer_adept_bag",
+                                            "ash_healer_adept_bag" in r_aq.text
+                                            or 'action="/quests/ash_healer_adept_bag/turn_in"'
+                                            in r_aq.text,
+                                            "already active or missing accept",
+                                        )
+                                    click_hotspot(s, "go_forpost3")
+                                    click_hotspot(s, "souvenir_shop")
+                                    for item_key, times in (
+                                        ("wood_chips", 10),
+                                        ("ash_herb", 8),
+                                        ("rat_tail", 5),
+                                    ):
+                                        for _ in range(times):
+                                            r_sv = s.get(
+                                                f"{BASE}/city/buildings/souvenir_shop",
+                                                timeout=TIMEOUT,
+                                                allow_redirects=True,
+                                            )
+                                            token = csrf_from(r_sv.text) or token
+                                            r_buy = s.post(
+                                                f"{BASE}/city/buildings/souvenir_shop/souvenir",
+                                                data={
+                                                    "authenticity_token": token,
+                                                    "item_key": item_key,
+                                                },
+                                                headers={"Accept": "text/html"},
+                                                timeout=TIMEOUT,
+                                                allow_redirects=True,
+                                            )
+                                            token = csrf_from(r_buy.text) or token
+                                            if (
+                                                r_buy.status_code != 200
+                                                or "souvenir_denied=1" in r_buy.url
+                                            ):
+                                                break
+                                    heavy_ok = False
+                                    for prep_i in range(10):
+                                        click_hotspot(s, "go_main")
+                                        r_hosp = s.get(
+                                            f"{BASE}/city/buildings/hospital",
+                                            timeout=TIMEOUT,
+                                            allow_redirects=True,
+                                        )
+                                        token = csrf_from(r_hosp.text) or token
+                                        heavy_ready = (
+                                            'data-hospital-recipe="healer_bag_heavy"'
+                                            in r_hosp.text
+                                            and re.search(
+                                                r'data-hospital-recipe="healer_bag_heavy"[^>]*'
+                                                r'data-hospital-craft-ready="1"'
+                                                r'|data-hospital-craft-ready="1"[^>]*'
+                                                r'data-hospital-recipe="healer_bag_heavy"',
+                                                r_hosp.text,
+                                            )
+                                        )
+                                        if heavy_ready:
+                                            r_heavy = s.post(
+                                                f"{BASE}/city/buildings/hospital/craft",
+                                                data={
+                                                    "authenticity_token": token,
+                                                    "recipe_key": "healer_bag_heavy",
+                                                },
+                                                headers={"Accept": "text/html"},
+                                                timeout=TIMEOUT,
+                                                allow_redirects=True,
+                                            )
+                                            token = csrf_from(r_heavy.text) or token
+                                            heavy_ok = (
+                                                r_heavy.status_code == 200
+                                                and "craft_denied=1" not in r_heavy.url
+                                            )
+                                            report.add(
+                                                "soft-release crafts healer_bag_heavy",
+                                                heavy_ok,
+                                                f"status={r_heavy.status_code} url={r_heavy.url} attempt={prep_i}",
+                                            )
+                                            break
+                                        # Climb ash_healer skill via light bags when possible.
+                                        light_ready = (
+                                            'data-hospital-recipe="healer_bag_light"'
+                                            in r_hosp.text
+                                            and re.search(
+                                                r'data-hospital-recipe="healer_bag_light"[^>]*'
+                                                r'data-hospital-craft-ready="1"'
+                                                r'|data-hospital-craft-ready="1"[^>]*'
+                                                r'data-hospital-recipe="healer_bag_light"',
+                                                r_hosp.text,
+                                            )
+                                        )
+                                        if light_ready:
+                                            r_light = s.post(
+                                                f"{BASE}/city/buildings/hospital/craft",
+                                                data={
+                                                    "authenticity_token": token,
+                                                    "recipe_key": "healer_bag_light",
+                                                },
+                                                headers={"Accept": "text/html"},
+                                                timeout=TIMEOUT,
+                                                allow_redirects=True,
+                                            )
+                                            token = csrf_from(r_light.text) or token
+                                            report.add(
+                                                f"soft-release adept prep light bag {prep_i + 1}",
+                                                r_light.status_code == 200
+                                                and "craft_denied=1" not in r_light.url,
+                                                f"status={r_light.status_code} url={r_light.url}",
+                                            )
+                                            continue
+                                        r_forge2 = s.get(
+                                            f"{BASE}/city/buildings/workshop",
+                                            timeout=TIMEOUT,
+                                            allow_redirects=True,
+                                        )
+                                        token = csrf_from(r_forge2.text) or token
+                                        band_ready = (
+                                            'data-workshop-recipe="ashen_bandage"'
+                                            in r_forge2.text
+                                            and re.search(
+                                                r'data-workshop-recipe="ashen_bandage"[^>]*'
+                                                r'data-workshop-ready="1"'
+                                                r'|data-workshop-ready="1"[^>]*'
+                                                r'data-workshop-recipe="ashen_bandage"',
+                                                r_forge2.text,
+                                            )
+                                        )
+                                        if band_ready:
+                                            r_band2 = s.post(
+                                                f"{BASE}/city/buildings/workshop/craft",
+                                                data={
+                                                    "authenticity_token": token,
+                                                    "recipe_key": "ashen_bandage",
+                                                },
+                                                headers={"Accept": "text/html"},
+                                                timeout=TIMEOUT,
+                                                allow_redirects=True,
+                                            )
+                                            token = csrf_from(r_band2.text) or token
+                                            report.add(
+                                                f"soft-release adept prep bandage {prep_i + 1}",
+                                                r_band2.status_code == 200
+                                                and "craft_denied=1" not in r_band2.url,
+                                                f"status={r_band2.status_code} url={r_band2.url}",
+                                            )
+                                            continue
+                                        report.add(
+                                            "soft-release crafts healer_bag_heavy",
+                                            False,
+                                            f"stuck prep={prep_i} url={r_hosp.url}",
+                                        )
+                                        break
+                                    else:
+                                        if not heavy_ok:
+                                            report.add(
+                                                "soft-release crafts healer_bag_heavy",
+                                                False,
+                                                "never ready",
+                                            )
+                                    if heavy_ok:
+                                        r_aq2 = s.get(
+                                            f"{BASE}/quests",
+                                            timeout=TIMEOUT,
+                                            allow_redirects=True,
+                                        )
+                                        token = csrf_from(r_aq2.text) or token
+                                        adept_turn = re.search(
+                                            r'action="(/quests/ash_healer_adept_bag/turn_in)"',
+                                            r_aq2.text,
+                                        )
+                                        if adept_turn:
+                                            r_atin = s.post(
+                                                urljoin(
+                                                    BASE + "/",
+                                                    adept_turn.group(1).lstrip("/"),
+                                                ),
+                                                data={"authenticity_token": token},
+                                                headers={"Accept": "text/html"},
+                                                timeout=TIMEOUT,
+                                                allow_redirects=True,
+                                            )
+                                            report.add(
+                                                "soft-release turns in ash_healer_adept_bag",
+                                                r_atin.status_code == 200
+                                                and "quest_denied=1" not in r_atin.url,
+                                                f"status={r_atin.status_code} url={r_atin.url}",
+                                            )
+                                        else:
+                                            report.add(
+                                                "soft-release turns in ash_healer_adept_bag",
+                                                False,
+                                                "no turn_in control",
+                                            )
                             else:
                                 report.add(
                                     "soft-release turns in tar_lure_pack_contract",
