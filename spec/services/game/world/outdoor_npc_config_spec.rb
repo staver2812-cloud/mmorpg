@@ -27,6 +27,20 @@ RSpec.describe Game::World::OutdoorNpcConfig do
       )
     end
 
+    it "returns the soft-release gate mite at its mapped local coordinate" do
+      npc = described_class.source_npc_for_tile("Пепельный Берег", 6, 7)
+
+      expect(npc[:key]).to eq("ash_gate_mite")
+      expect(npc[:name]).to eq("Клещ у ворот")
+      expect(npc[:level]).to eq(2)
+      expect(npc[:hp]).to eq(45)
+      expect(npc[:damage]).to eq(3)
+      expect(npc.dig(:metadata, :max_attacks_per_turn)).to eq(1)
+      expect(npc.dig(:metadata, :source_observation)).to eq(
+        "ashen_sandbox_gate_mite_soft_release_2026-09-16"
+      )
+    end
+
     it "keeps author-controlled starter loot chance for Пепельный клещ" do
       npc = described_class.source_npc_for_tile("Пепельный Берег", 7, 7)
       loot_entry = npc.fetch(:loot).first

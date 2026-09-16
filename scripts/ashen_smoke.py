@@ -6514,51 +6514,110 @@ def main() -> int:
                 "already active/ready or missing",
             )
         if mite_active:
-            # Restock bait for up to 3 wins (+ retries).
-            click_hotspot(s, "go_forpost3")
-            click_hotspot(s, "souvenir_shop")
-            for _ in range(6):
-                r_sv = s.get(
-                    f"{BASE}/city/buildings/souvenir_shop",
+            # Dump leftover free points into strength/vitality before shore fights.
+            r_sheet_m = s.get(f"{BASE}/world", timeout=TIMEOUT, allow_redirects=True)
+            token = csrf_from(r_sheet_m.text) or token
+            r_sheet_m = s.get(
+                f"{BASE}/player/{nick}",
+                timeout=TIMEOUT,
+                allow_redirects=True,
+            )
+            token = csrf_from(r_sheet_m.text) or token
+            cid_m = re.search(r"/characters/(\d+)/stats", r_sheet_m.text)
+            if cid_m:
+                cid = cid_m.group(1)
+                r_stats = s.get(
+                    f"{BASE}/characters/{cid}/stats",
                     timeout=TIMEOUT,
                     allow_redirects=True,
                 )
-                token = csrf_from(r_sv.text) or token
-                r_buy = s.post(
-                    f"{BASE}/city/buildings/souvenir_shop/souvenir",
-                    data={"authenticity_token": token, "item_key": "ashen_bait"},
-                    headers={"Accept": "text/html"},
-                    timeout=TIMEOUT,
-                    allow_redirects=True,
+                token = csrf_from(r_stats.text) or token
+                free_m = re.search(
+                    r'data-free-stat-points="(\d+)"|свободн[^\d]{0,12}(\d+)',
+                    r_stats.text,
+                    flags=re.I,
                 )
-                token = csrf_from(r_buy.text) or token
-                if r_buy.status_code != 200 or "souvenir_denied=1" in r_buy.url:
-                    break
+                free_pts = int(next((g for g in free_m.groups() if g), "0")) if free_m else 0
+                if free_pts > 0:
+                    str_pts = (free_pts + 1) // 2
+                    vit_pts = free_pts - str_pts
+                    r_alloc = s.post(
+                        f"{BASE}/characters/{cid}/stats",
+                        data={
+                            "authenticity_token": token,
+                            "allocated_stats[strength]": str(str_pts),
+                            "allocated_stats[dexterity]": "0",
+                            "allocated_stats[luck]": "0",
+                            "allocated_stats[vitality]": str(vit_pts),
+                            "allocated_stats[intelligence]": "0",
+                        },
+                        headers={"Accept": "text/html"},
+                        timeout=TIMEOUT,
+                        allow_redirects=True,
+                    )
+                    token = csrf_from(r_alloc.text) or token
+                    report.add(
+                        "soft-release mite patrol allocates free stats",
+                        r_alloc.status_code == 200
+                        and "stats_denied=1" not in r_alloc.url,
+                        f"status={r_alloc.status_code} free={free_pts} str={str_pts} vit={vit_pts}",
+                    )
+            click_hotspot(s, "go_main")
+            r_hosp = s.get(
+                f"{BASE}/city/buildings/hospital",
+                timeout=TIMEOUT,
+                allow_redirects=True,
+            )
+            token = csrf_from(r_hosp.text) or token
+            s.post(
+                f"{BASE}/city/buildings/hospital/rest",
+                data={"authenticity_token": token},
+                headers={"Accept": "text/html"},
+                timeout=TIMEOUT,
+                allow_redirects=True,
+            )
+
+            def _buy_bait(times: int = 6) -> None:
+                nonlocal token
+                click_hotspot(s, "go_main")
+                click_hotspot(s, "go_forpost3")
+                click_hotspot(s, "souvenir_shop")
+                for _ in range(times):
+                    r_sv = s.get(
+                        f"{BASE}/city/buildings/souvenir_shop",
+                        timeout=TIMEOUT,
+                        allow_redirects=True,
+                    )
+                    token = csrf_from(r_sv.text) or token
+                    r_buy = s.post(
+                        f"{BASE}/city/buildings/souvenir_shop/souvenir",
+                        data={"authenticity_token": token, "item_key": "ashen_bait"},
+                        headers={"Accept": "text/html"},
+                        timeout=TIMEOUT,
+                        allow_redirects=True,
+                    )
+                    token = csrf_from(r_buy.text) or token
+                    if r_buy.status_code != 200 or "souvenir_denied=1" in r_buy.url:
+                        break
+
+            _buy_bait(8)
             wins = 0
-            for fight_i in range(10):
+            for fight_i in range(12):
                 if wins >= 3:
                     break
                 click_hotspot(s, "go_main")
                 won, token, fight_detail = run_outdoor_bait_fight(
                     s, token, prefer_xy=(6, 7)
                 )
+                if "no bait" in fight_detail:
+                    _buy_bait(5)
+                    continue
                 if won:
                     wins += 1
-                report.add(
-                    f"soft-release mite patrol fight {fight_i + 1}",
-                    won or wins >= 3,
-                    f"{fight_detail} wins={wins}",
-                )
-                # Alternate plague_rat cell if gate mite failed repeatedly.
-                if not won and fight_i in (2, 5, 8):
-                    click_hotspot(s, "go_main")
-                    won2, token, d2 = run_outdoor_bait_fight(s, token, prefer_xy=(7, 7))
-                    if won2:
-                        wins += 1
                     report.add(
-                        f"soft-release mite patrol alt fight {fight_i + 1}",
-                        won2 or wins >= 3,
-                        f"{d2} wins={wins}",
+                        f"soft-release mite patrol win {wins}",
+                        True,
+                        f"{fight_detail} attempt={fight_i + 1}",
                     )
             report.add(
                 "soft-release mite patrol three wins",

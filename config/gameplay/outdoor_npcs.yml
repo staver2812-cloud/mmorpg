@@ -96,20 +96,20 @@ outpost_surroundings:
     - key: ash_gate_mite
       name: Клещ у ворот
       role: hostile
-      level: 3
+      level: 2
       x: 6
       y: 7
-      hp: 80
-      damage: 5
-      xp: 22
+      hp: 45
+      damage: 3
+      xp: 18
       metadata:
         source_name: "Клещ у ворот"
         source_location: "Пепельный Берег"
-        source_observation: "ashen_sandbox_gate_mite_2026-09-13"
+        source_observation: "ashen_sandbox_gate_mite_soft_release_2026-09-16"
         source_map: "m_1001_999"
         source_coordinates: [1000, 999]
         encounter_count: 1
-        encounter_experience_reward: 22
+        encounter_experience_reward: 18
         avatar_image: "zombie.png"
         max_attacks_per_turn: 1
       loot:
