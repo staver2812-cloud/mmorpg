@@ -102,6 +102,7 @@ outpost_surroundings:
       hp: 45
       damage: 3
       xp: 18
+      respawn_seconds: 45
       metadata:
         source_name: "Клещ у ворот"
         source_location: "Пепельный Берег"
@@ -112,6 +113,7 @@ outpost_surroundings:
         encounter_experience_reward: 18
         avatar_image: "zombie.png"
         max_attacks_per_turn: 1
+        respawn_seconds: 45
       loot:
         - kind: item
           item: rat_tail
