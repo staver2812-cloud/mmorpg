@@ -5817,6 +5817,32 @@ def main() -> int:
             f"nick={nick2}",
         )
         if gift_ready:
+            # Free peer bag mass — starter kit fills level-0 capacity and blocks gifts.
+            token2 = csrf_from(r_reg2.text) if token2 else None
+            for free_key in ("wood_chips", "ash_herb", "rat_tail", "ashen_bait", "ashen_bandage"):
+                for _free_i in range(5):
+                    r_peer_inv = s2.get(
+                        f"{BASE}/inventory",
+                        timeout=TIMEOUT,
+                        allow_redirects=True,
+                    )
+                    token2 = csrf_from(r_peer_inv.text) or token2
+                    free_m = re.search(
+                        rf'data-item-id="(\d+)"[^>]*data-item-key="{free_key}"'
+                        rf'|data-item-key="{free_key}"[^>]*data-item-id="(\d+)"',
+                        r_peer_inv.text,
+                    )
+                    if not free_m:
+                        break
+                    free_id = free_m.group(1) or free_m.group(2)
+                    r_del = s2.post(
+                        f"{BASE}/inventory/items/{free_id}",
+                        data={"authenticity_token": token2, "_method": "delete"},
+                        headers={"Accept": "text/html"},
+                        timeout=TIMEOUT,
+                        allow_redirects=True,
+                    )
+                    token2 = csrf_from(r_del.text) or token2
             # Ensure donor has a free craft mat to gift.
             click_hotspot(s, "go_main")
             click_hotspot(s, "go_forpost3")
