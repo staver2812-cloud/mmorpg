@@ -266,6 +266,149 @@ def discard_item_keys(
     return token
 
 
+def run_outdoor_bait_fight(
+    session: requests.Session,
+    token: Optional[str],
+    *,
+    prefer_xy: Tuple[int, int] = (6, 7),
+) -> Tuple[bool, Optional[str], str]:
+    """One west-shore bait ambush. Prefer gate mite cell (6,7). Returns won, token, detail."""
+    px, py = prefer_xy
+    ok_wg, d_wg = click_hotspot(session, "west_gate")
+    if not ok_wg:
+        # Already outdoors or wrong square — try walking from current world page.
+        r_chk = request_with_retry(session, "GET", f"{BASE}/world", timeout=TIMEOUT)
+        token = csrf_from(r_chk.text) or token
+        if 'data-nl-world-map-player-x-value=' not in r_chk.text and "west_gate" not in parse_hotspot_forms(
+            r_chk.text
+        ):
+            return False, token, f"west_gate fail: {d_wg}"
+    walked, walk_detail, token = walk_toward(session, token, px, py, max_steps=12)
+    r_here = request_with_retry(session, "GET", f"{BASE}/world", timeout=TIMEOUT)
+    token = csrf_from(r_here.text) or token
+    bait_qty_m = re.search(r'data-bait-qty="(\d+)"', r_here.text)
+    bait_qty = int(bait_qty_m.group(1)) if bait_qty_m else 0
+    if bait_qty <= 0:
+        return False, token, f"no bait walked={walked} {walk_detail}"
+    look_m = re.search(
+        r'data-local-action-type="resource_search"[^>]*data-tile-id="(\d+)"[^>]*data-action-key="([^"]+)"'
+        r'|data-tile-id="(\d+)"[^>]*data-local-action-type="resource_search"[^>]*data-action-key="([^"]+)"',
+        r_here.text,
+    )
+    if look_m:
+        look_tile = look_m.group(1) or look_m.group(3)
+        look_key = look_m.group(2) or look_m.group(4)
+        r_look = session.post(
+            f"{BASE}/world/perform_local_action",
+            data={
+                "authenticity_token": token,
+                "tile_id": look_tile,
+                "local_action_type": "resource_search",
+                "action_key": look_key,
+            },
+            headers={"Accept": "text/html"},
+            timeout=TIMEOUT,
+            allow_redirects=True,
+        )
+        token = csrf_from(r_look.text) or token
+    r_bait = session.post(
+        f"{BASE}/world/context",
+        data={"authenticity_token": token, "context": "inventory"},
+        headers={"Accept": "text/html"},
+        timeout=TIMEOUT,
+        allow_redirects=True,
+    )
+    token = csrf_from(r_bait.text) or token
+    if r_bait.status_code != 200 or "/arena_matches/" not in (r_bait.url or ""):
+        return False, token, f"no fight status={r_bait.status_code} url={r_bait.url}"
+    mid_m = re.search(r"/arena_matches/(\d+)", r_bait.url)
+    if not mid_m:
+        return False, token, f"no match id url={r_bait.url}"
+    mid = mid_m.group(1)
+    won = False
+    for _ in range(28):
+        r_state = session.get(f"{BASE}/arena_matches/{mid}", timeout=TIMEOUT, allow_redirects=True)
+        token = csrf_from(r_state.text) or token
+        npc_down = bool(
+            re.search(
+                r'fighter-card--npc[^"]*fighter-card--defeated'
+                r'|fighter-card--defeated[^"]*fighter-card--npc',
+                r_state.text,
+            )
+        )
+        player_down = bool(
+            re.search(
+                r'data-current-user="true"[^>]*fighter-card--defeated'
+                r'|fighter-card--defeated[^"]*"[^>]*data-current-user="true"',
+                r_state.text,
+            )
+        )
+        if npc_down and not player_down:
+            won = True
+            break
+        if 'data-arena-match-status-value="live"' not in r_state.text:
+            break
+        tid_m = re.search(
+            r'data-character-id="(npc-participation-\d+)"[^>]*data-npc="true"'
+            r'|data-npc="true"[^>]*data-character-id="(npc-participation-\d+)"',
+            r_state.text,
+        )
+        target_id = (tid_m.group(1) or tid_m.group(2)) if tid_m else None
+        if not target_id:
+            break
+        r_turn = session.post(
+            f"{BASE}/arena_matches/{mid}/action",
+            data={
+                "authenticity_token": token,
+                "action_type": "turn",
+                "target_id": target_id,
+                "attacks[0][action_key]": "simple",
+                "attacks[0][body_part]": "torso",
+                "blocks[0][action_key]": "torso_block",
+                "blocks[0][body_parts][0]": "torso",
+            },
+            headers={"Accept": "text/html"},
+            timeout=TIMEOUT,
+            allow_redirects=True,
+        )
+        token = csrf_from(r_turn.text) or token
+        if "match_denied=1" in r_turn.url:
+            break
+        time.sleep(0.35)
+    if not won:
+        session.post(
+            f"{BASE}/arena_matches/{mid}/action",
+            data={"authenticity_token": token, "action_type": "surrender"},
+            headers={"Accept": "text/html"},
+            timeout=TIMEOUT,
+            allow_redirects=True,
+        )
+    r_fin = session.post(
+        f"{BASE}/arena_matches/{mid}/finish",
+        data={"authenticity_token": token},
+        headers={"Accept": "text/html"},
+        timeout=TIMEOUT,
+        allow_redirects=True,
+    )
+    token = csrf_from(r_fin.text) or token
+    # Defeat lands in hospital — rest so later fights can leave.
+    if not won and "/city/buildings/hospital" in (r_fin.url or ""):
+        rest_m = re.search(
+            r'action="(/city/buildings/hospital/rest)"|hospital/rest',
+            r_fin.text,
+        )
+        if rest_m or "hospital" in (r_fin.url or ""):
+            session.post(
+                f"{BASE}/city/buildings/hospital/rest",
+                data={"authenticity_token": token},
+                headers={"Accept": "text/html"},
+                timeout=TIMEOUT,
+                allow_redirects=True,
+            )
+            click_hotspot(session, "go_main")
+    return won, token, f"match={mid} won={won} url={r_fin.url} walked={walked}"
+
+
 def main() -> int:
     report = Report()
     sr_flags = {"auction_ok": False, "airship_ok": False, "city_hall_ok": False, "guard_tower_ok": False}
@@ -6335,6 +6478,120 @@ def main() -> int:
                     False,
                     "no wood_chips in donor bag",
                 )
+        sr_flags["gift_ok"] = True
+
+    # RX: ash_mite_patrol — auto-unlocked after first healer bag; farm gate mites.
+    if sr_flags.get("gift_ok") or sr_flags.get("west_lobbies_ok") or sr_flags.get("premium_ok"):
+        click_hotspot(s, "go_main")
+        r_mq = s.get(f"{BASE}/quests", timeout=TIMEOUT, allow_redirects=True)
+        token = csrf_from(r_mq.text) or token
+        mite_active = (
+            "ash_mite_patrol" in r_mq.text
+            or "Пепельный дозор" in r_mq.text
+            or 'action="/quests/ash_mite_patrol/turn_in"' in r_mq.text
+        )
+        if 'action="/quests/ash_mite_patrol/accept"' in r_mq.text:
+            r_macc = s.post(
+                f"{BASE}/quests/ash_mite_patrol/accept",
+                data={"authenticity_token": token},
+                headers={"Accept": "text/html"},
+                timeout=TIMEOUT,
+                allow_redirects=True,
+            )
+            token = csrf_from(r_macc.text) or token
+            mite_active = (
+                r_macc.status_code == 200 and "quest_denied=1" not in r_macc.url
+            ) or mite_active
+            report.add(
+                "soft-release accepts ash_mite_patrol",
+                mite_active,
+                f"status={r_macc.status_code} url={r_macc.url}",
+            )
+        else:
+            report.add(
+                "soft-release accepts ash_mite_patrol",
+                mite_active,
+                "already active/ready or missing",
+            )
+        if mite_active:
+            # Restock bait for up to 3 wins (+ retries).
+            click_hotspot(s, "go_forpost3")
+            click_hotspot(s, "souvenir_shop")
+            for _ in range(6):
+                r_sv = s.get(
+                    f"{BASE}/city/buildings/souvenir_shop",
+                    timeout=TIMEOUT,
+                    allow_redirects=True,
+                )
+                token = csrf_from(r_sv.text) or token
+                r_buy = s.post(
+                    f"{BASE}/city/buildings/souvenir_shop/souvenir",
+                    data={"authenticity_token": token, "item_key": "ashen_bait"},
+                    headers={"Accept": "text/html"},
+                    timeout=TIMEOUT,
+                    allow_redirects=True,
+                )
+                token = csrf_from(r_buy.text) or token
+                if r_buy.status_code != 200 or "souvenir_denied=1" in r_buy.url:
+                    break
+            wins = 0
+            for fight_i in range(10):
+                if wins >= 3:
+                    break
+                click_hotspot(s, "go_main")
+                won, token, fight_detail = run_outdoor_bait_fight(
+                    s, token, prefer_xy=(6, 7)
+                )
+                if won:
+                    wins += 1
+                report.add(
+                    f"soft-release mite patrol fight {fight_i + 1}",
+                    won or wins >= 3,
+                    f"{fight_detail} wins={wins}",
+                )
+                # Alternate plague_rat cell if gate mite failed repeatedly.
+                if not won and fight_i in (2, 5, 8):
+                    click_hotspot(s, "go_main")
+                    won2, token, d2 = run_outdoor_bait_fight(s, token, prefer_xy=(7, 7))
+                    if won2:
+                        wins += 1
+                    report.add(
+                        f"soft-release mite patrol alt fight {fight_i + 1}",
+                        won2 or wins >= 3,
+                        f"{d2} wins={wins}",
+                    )
+            report.add(
+                "soft-release mite patrol three wins",
+                wins >= 3,
+                f"wins={wins}",
+            )
+            if wins >= 3:
+                r_mq2 = s.get(f"{BASE}/quests", timeout=TIMEOUT, allow_redirects=True)
+                token = csrf_from(r_mq2.text) or token
+                turn_m = re.search(
+                    r'action="(/quests/ash_mite_patrol/turn_in)"',
+                    r_mq2.text,
+                )
+                if turn_m:
+                    r_mtin = s.post(
+                        urljoin(BASE + "/", turn_m.group(1).lstrip("/")),
+                        data={"authenticity_token": token},
+                        headers={"Accept": "text/html"},
+                        timeout=TIMEOUT,
+                        allow_redirects=True,
+                    )
+                    report.add(
+                        "soft-release turns in ash_mite_patrol",
+                        r_mtin.status_code == 200
+                        and "quest_denied=1" not in r_mtin.url,
+                        f"status={r_mtin.status_code} url={r_mtin.url}",
+                    )
+                else:
+                    report.add(
+                        "soft-release turns in ash_mite_patrol",
+                        False,
+                        "no turn_in control",
+                    )
 
     failed = report.failed
     print("\n=== SUMMARY ===")

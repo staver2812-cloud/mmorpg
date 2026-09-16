@@ -62,6 +62,7 @@ novice → adept → master bags.
 
 | Date | Change |
 |---|---|
+| 2026-09-16 | Soft-release adept prep caps light-bag skill climb so bandages accumulate for `healer_bag_heavy` (343/343). |
 | 2026-09-15 | Soft-release smoke crafts `healer_bag_heavy` and turns in `ash_healer_adept_bag` after lure pack. |
 | 2026-09-15 | Soft-release smoke crafts `tar_lure_pack` and turns in `tar_lure_pack_contract` (5 bait) after field kit. |
 | 2026-09-15 | Soft-release smoke restocks Relic mats (incl. `rat_tail`), crafts `veil_field_kit`, and turns in `tar_field_kit_contract`. |
