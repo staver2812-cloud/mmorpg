@@ -6605,23 +6605,51 @@ def main() -> int:
             for fight_i in range(14):
                 if wins >= 3:
                     break
-                prefer = (6, 7) if fight_i % 2 == 0 else (7, 7)
+                click_hotspot(s, "go_main")
+                # Full vitals before each shore ambush — wins leave the bag injured.
+                r_hosp = s.get(
+                    f"{BASE}/city/buildings/hospital",
+                    timeout=TIMEOUT,
+                    allow_redirects=True,
+                )
+                token = csrf_from(r_hosp.text) or token
+                s.post(
+                    f"{BASE}/city/buildings/hospital/rest",
+                    data={"authenticity_token": token},
+                    headers={"Accept": "text/html"},
+                    timeout=TIMEOUT,
+                    allow_redirects=True,
+                )
                 click_hotspot(s, "go_main")
                 won, token, fight_detail = run_outdoor_bait_fight(
-                    s, token, prefer_xy=prefer
+                    s, token, prefer_xy=(6, 7)
                 )
-                if "no bait" in fight_detail:
-                    _buy_bait(5)
+                if "no bait" in fight_detail or "no fight" in fight_detail:
+                    report.add(
+                        f"soft-release mite patrol attempt {fight_i + 1}",
+                        True,
+                        fight_detail,
+                    )
+                    if "no bait" in fight_detail:
+                        _buy_bait(5)
+                    elif wins > 0:
+                        time.sleep(50)
                     continue
                 if won:
                     wins += 1
                     report.add(
                         f"soft-release mite patrol win {wins}",
                         True,
-                        f"{fight_detail} attempt={fight_i + 1} cell={prefer}",
+                        f"{fight_detail} attempt={fight_i + 1}",
                     )
                     if wins < 3:
                         time.sleep(50)
+                else:
+                    report.add(
+                        f"soft-release mite patrol attempt {fight_i + 1}",
+                        True,
+                        fight_detail,
+                    )
             report.add(
                 "soft-release mite patrol three wins",
                 wins >= 3,
