@@ -6602,12 +6602,13 @@ def main() -> int:
 
             _buy_bait(8)
             wins = 0
-            for fight_i in range(12):
+            for fight_i in range(14):
                 if wins >= 3:
                     break
+                prefer = (6, 7) if fight_i % 2 == 0 else (7, 7)
                 click_hotspot(s, "go_main")
                 won, token, fight_detail = run_outdoor_bait_fight(
-                    s, token, prefer_xy=(6, 7)
+                    s, token, prefer_xy=prefer
                 )
                 if "no bait" in fight_detail:
                     _buy_bait(5)
@@ -6617,8 +6618,10 @@ def main() -> int:
                     report.add(
                         f"soft-release mite patrol win {wins}",
                         True,
-                        f"{fight_detail} attempt={fight_i + 1}",
+                        f"{fight_detail} attempt={fight_i + 1} cell={prefer}",
                     )
+                    if wins < 3:
+                        time.sleep(50)
             report.add(
                 "soft-release mite patrol three wins",
                 wins >= 3,
