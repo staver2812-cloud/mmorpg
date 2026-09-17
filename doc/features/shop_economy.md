@@ -1214,6 +1214,7 @@ automated completion results are recorded in
 |---|---|
 | 2026-09-13 | Purchase/Sale success and rejection alerts use `game.shop.*` i18n (ru/en); English copy preserves prior trade vocabulary for specs. |
 | 2026-09-14 | Shop Sell Junk link exposes `data-shop-recovery="junk"`; empty Sell recovers via Inventory; doctor perk step exposes `data-doctor-recovery="perks"`. |
+| 2026-09-17 | Ashen Veil catalog goods activate into Shop by rarity tiers 1–23 with stock rows; catalog row cap raised to 1200. |
 | 2026-09-15 | Soft-release smoke claims Infirmary sandbox VM topup, buys trauma/heal scrolls, asserts HUD chips, and uses `combat_heal_scroll`. |
 | 2026-09-15 | Soft-release smoke accepts Merchant at Market then asserts Shop pay stays blocked under starter NV (<1000). |
 | 2026-09-15 | Soft-release smoke allocates Merchant perk and accepts Market qualification (`data-merchant-status` accepted/collect-shop; pay remains 1000 NV). |

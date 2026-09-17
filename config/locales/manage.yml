@@ -307,6 +307,9 @@ ru:
       armed: "Тикер вооружён"
       disarmed: "Тикер обезоружен"
       ran: "Прогон: %{ran}, ошибок: %{errors}"
+    catalog_activation:
+      run: "Активировать каталоги Ashen Veil"
+      done: "Каталоги предметов/мобов активированы (shop + loot)"
     npc_key_referenced: "нельзя менять, пока ключ используется в столкновениях клеток"
     npc_template_roster_referenced: "Нельзя удалить шаблон NPC, на который ссылаются составы столкновений"
     equipment_slot_invalid: "должен быть допустимым слотом экипировки"
@@ -706,6 +709,9 @@ en:
       armed: "Ticker armed"
       disarmed: "Ticker disarmed"
       ran: "Run: %{ran}, errors: %{errors}"
+    catalog_activation:
+      run: "Activate Ashen Veil catalogs"
+      done: "Item/enemy catalogs activated (shop + loot)"
     npc_key_referenced: "cannot change while referenced by cell encounters"
     npc_template_roster_referenced: "Cannot delete an NPC template referenced by cell encounter rosters"
     equipment_slot_invalid: "must be a valid equipment slot for equipment items"

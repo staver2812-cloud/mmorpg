@@ -13,6 +13,7 @@ Rails.application.routes.draw do
       post :disarm
       post :run_once
     end
+    resource :catalog_activation, only: :create, controller: "catalog_activations"
   end
 
   # Already implemented MVP Neverlands-based game-design routes.
