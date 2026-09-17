@@ -296,13 +296,14 @@ as a movement block.
 
 Before an offered wilderness entrance or local action completes, World checks the
 authoritative current cell for its live hostile encounter. Forced interruption
-requires Ashen Bait (`ashen_bait`): one unit is consumed and the shared fight
-opens. Without bait, Look / Enter / Character / Inventory continue normally.
-Offered wilderness movement away from the cell never starts a fight (escape).
-The persistent shell's **Character** and **Inventory** actions pass through the
-same bait-gated check. After an explicit fight result step, the player returns
-to the saved allowlisted destination. Arbitrary submitted URLs are never
-accepted as return targets.
+requires Ashen Bait (`ashen_bait`): one unit is consumed and the personal-instance
+fight opens immediately (Ashen placements use `respawn_seconds: 0` so the cell
+never waits on a shared defeat lock). Without bait, Look / Enter / Character /
+Inventory continue normally. Offered wilderness movement away from the cell
+never starts a fight (escape). The persistent shell's **Character** and
+**Inventory** actions pass through the same bait-gated check. After an explicit
+fight result step, the player returns to the saved allowlisted destination.
+Arbitrary submitted URLs are never accepted as return targets.
 
 The outdoor shell immediately asks the same server owner for encounter state.
 When an alive hostile exists on the exact authoritative cell, the server
@@ -310,9 +311,11 @@ creates or reuses a persisted due time (~5 minutes / 300 seconds for Ashen) and
 returns its remaining milliseconds.
 The browser schedules only that response and asks again when due. A positive
 response stops the timer and replaces the current page with the existing or
-newly created shared fight; a failed check uses a bounded local retry. Reloading
-cannot reroll or accelerate the persisted due time. Moving to another cell,
-entering a city, or losing the live hostile invalidates the old schedule.
+newly created fight against a random alive bot of that outdoor location
+(personal instance; off-cell AFK ambushes are allowed). A failed check uses a
+bounded local retry. Reloading cannot reroll or accelerate the persisted due
+time. Moving to another cell, entering a city, or losing the live hostile
+invalidates the old schedule.
 
 ### 4.4 Players here
 
