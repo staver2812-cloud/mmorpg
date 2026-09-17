@@ -743,7 +743,7 @@ module Arena
         end_match if should_end?
       end
 
-      track_damage!(attacker_participation, target_participation, applied_damage)
+      track_damage!(attacker_participation, target_participation, applied_damage, critical:, body_part:)
 
       success(**attack_result_payload(resolution, attack_type:, body_part:, target_hp: target.current_hp))
     end
@@ -809,7 +809,7 @@ module Arena
         end_match if should_end?
       end
 
-      track_damage!(attacker_participation, npc_participation, applied_damage)
+      track_damage!(attacker_participation, npc_participation, applied_damage, critical:, body_part:)
 
       success(**attack_result_payload(resolution, attack_type:, body_part:, target_hp: new_hp))
     end
@@ -1026,7 +1026,7 @@ module Arena
       }
     end
 
-    def track_damage!(attacker_participation, defender_participation, damage)
+    def track_damage!(attacker_participation, defender_participation, damage, critical: false, body_part: nil)
       return if damage.to_i <= 0
 
       if attacker_participation
@@ -1041,6 +1041,16 @@ module Arena
         defender_participation.reload
         defender_participation.metadata ||= {}
         defender_participation.metadata["damage_taken"] = defender_participation.metadata["damage_taken"].to_i + damage.to_i
+        if critical
+          defender_participation.metadata["critical_hits_taken"] =
+            defender_participation.metadata["critical_hits_taken"].to_i + 1
+          defender_participation.metadata["critical_damage_taken"] =
+            defender_participation.metadata["critical_damage_taken"].to_i + damage.to_i
+        end
+        if body_part.to_s == "head"
+          defender_participation.metadata["head_hits_taken"] =
+            defender_participation.metadata["head_hits_taken"].to_i + 1
+        end
         defender_participation.save!
       end
     end
@@ -1697,7 +1707,7 @@ module Arena
 
       broadcaster.broadcast_vitals_update(target)
       broadcast_npc_action(npc, "attack", target, damage, critical: critical, body_part: body_part)
-      track_damage!(npc_participation, target_participation, applied_damage)
+      track_damage!(npc_participation, target_participation, applied_damage, critical:, body_part:)
 
       # Check for player defeat
       if target.current_hp <= 0

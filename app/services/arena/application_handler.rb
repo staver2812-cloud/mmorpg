@@ -233,6 +233,10 @@ module Arena
       return I18n.t("game.fight.app_already_has_application") if character_has_active_application?(acceptor)
       return I18n.t("game.fight.app_applicant_in_fight") if character_has_active_match?(application.applicant)
       return I18n.t("game.fight.app_room_full") unless room.has_capacity?
+      if Game::Combat::InquisitionImmunity.blocked?(attacker: acceptor, defender: application.applicant) ||
+          Game::Combat::InquisitionImmunity.blocked?(attacker: application.applicant, defender: acceptor)
+        return I18n.t("game.world.inquisition_immune")
+      end
 
       nil
     end

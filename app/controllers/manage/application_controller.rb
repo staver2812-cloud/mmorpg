@@ -25,6 +25,7 @@ module Manage
         {key: :cities, label: I18n.t("manage.sections.cities"), path: manage_cities_path},
         {key: :city_hotspots, label: I18n.t("manage.sections.city_hotspots"), path: manage_city_hotspots_path},
         {key: :idle_ticks, label: I18n.t("manage.sections.idle_ticks"), path: manage_idle_tick_path},
+        {key: :characters, label: I18n.t("manage.sections.characters"), path: manage_characters_path},
         {key: :audit_events, label: I18n.t("manage.sections.audit_events"), path: manage_audit_events_path}
       ]
     end

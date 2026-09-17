@@ -239,6 +239,7 @@ en:
         belt_3: "Belt Item"
     shop:
       title: "Shop"
+      stub_iap_disabled: "Free premium stubs are disabled. Buy VM/seals only through the protected Shop gateway."
       modes:
         buy: "Buy"
         licenses: "Licenses"
@@ -497,6 +498,7 @@ en:
       assault_self: "You cannot attack yourself."
       assault_not_nearby: "Target is not on this cell."
       assault_safe_zone: "Assault is blocked here (infirmary, temple, shop, arena)."
+      inquisition_immune: "Inquisition Order (INQ) members cannot be assaulted."
       assault_target_busy: "Target is traveling."
       assault_target_fighting: "Target is already in combat."
       assault_target_offline: "Target is offline."
@@ -1497,3 +1499,13 @@ en:
         daily_instances: "Instance launches"
         daily_arena: "Arena fights"
         daily_ticks: "Server ticks"
+    dress:
+      title: "Item list"
+      aria: "Equipment set encyclopedia"
+      lead: "Ashen Veil thematic set catalog. Stats and requirements come from server templates."
+      sets_nav: "Sets"
+      focus: "Focus: %{focus}"
+      tier: "Tier %{tier}"
+      empty_tier: "No pieces for this tier."
+      slot: "Slot %{slot}"
+      req_level: "Lv. %{level}"

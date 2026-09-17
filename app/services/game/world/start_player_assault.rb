@@ -22,6 +22,7 @@ module Game
       def self.offerable?(attacker:, defender:)
         return false unless attacker && defender
         return false if attacker.id == defender.id
+        return false if Game::Combat::InquisitionImmunity.blocked?(attacker:, defender:)
         return false if attacker.active_airship_journey || defender.active_airship_journey
         return false if MovementCommand.moving.where(character: [attacker, defender]).exists?
         return false if active_match_for?(attacker) || active_match_for?(defender)
@@ -94,6 +95,9 @@ module Game
       def validate!(defender)
         raise AssaultViolationError, I18n.t("game.world.assault_missing_target") unless defender
         raise AssaultViolationError, I18n.t("game.world.assault_self") if defender.id == attacker.id
+        if Game::Combat::InquisitionImmunity.blocked?(attacker:, defender:)
+          raise AssaultViolationError, I18n.t("game.world.inquisition_immune")
+        end
         raise AssaultViolationError, I18n.t("game.flashes.disembark_first") if attacker.active_airship_journey
         raise AssaultViolationError, I18n.t("game.world.assault_target_busy") if defender.active_airship_journey
         if MovementCommand.moving.where(character: [attacker, defender]).exists?

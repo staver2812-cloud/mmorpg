@@ -3,6 +3,14 @@
 require "rails_helper"
 
 RSpec.describe Game::Shop::VeilMarksTopUp do
+  around do |example|
+    previous = ENV["ALLOW_STUB_IAP"]
+    ENV["ALLOW_STUB_IAP"] = "true"
+    example.run
+  ensure
+    ENV["ALLOW_STUB_IAP"] = previous
+  end
+
   it "grants sandbox VM and enforces the cooldown" do
     character = create(:character)
     wallet = character.user.currency_wallet || character.user.create_currency_wallet!(nv_balance: 0)

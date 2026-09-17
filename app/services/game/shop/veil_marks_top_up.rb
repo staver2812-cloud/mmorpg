@@ -2,8 +2,7 @@
 
 module Game
   module Shop
-    # Sandbox-only free Veil Marks claim at the Infirmary desk.
-    # Keeps combat trauma/heal scroll testing playable without a payment processor.
+    # Free Veil Marks claim — blocked unless ALLOW_STUB_IAP=true.
     class VeilMarksTopUp
       Result = Struct.new(:success, :message, keyword_init: true)
       AMOUNT = 50
@@ -17,6 +16,7 @@ module Game
       end
 
       def call
+        PremiumGateway.assert_stub_allowed!
         character.with_lock do
           character.reload
           if (wait = seconds_until_ready).positive?
@@ -38,16 +38,24 @@ module Game
             message: I18n.t("game.buildings.premium_topup_ok", amount: AMOUNT)
           )
         end
+      rescue PremiumGateway::StubDisabled => error
+        failure(error.message)
       end
 
       def seconds_until_ready
+        return COOLDOWN.to_i unless PremiumGateway.stub_iap_allowed?
+
         stamp = character.metadata.to_h[METADATA_KEY]
         return 0 if stamp.blank?
 
         ready_at = Time.iso8601(stamp.to_s) + COOLDOWN
-        [ (ready_at - clock.call).ceil, 0 ].max
+        [(ready_at - clock.call).ceil, 0].max
       rescue ArgumentError, TypeError
         0
+      end
+
+      def available?
+        PremiumGateway.stub_iap_allowed? && seconds_until_ready <= 0
       end
 
       private

@@ -15,6 +15,13 @@ Rails.application.routes.draw do
     end
     resource :catalog_activation, only: :create, controller: "catalog_activations"
     resource :world_population, only: :create, controller: "world_populations"
+    resources :characters, only: [:index, :show] do
+      member do
+        post :inject_level
+        post :grant_kit
+        post :toggle_inq
+      end
+    end
   end
 
   # Already implemented MVP Neverlands-based game-design routes.
@@ -23,6 +30,7 @@ Rails.application.routes.draw do
   root "world#show"
 
   get "player/:name", to: "players#show", as: :player
+  get "dress", to: "dress#show", as: :dress
 
   resources :characters, only: [] do
     member do

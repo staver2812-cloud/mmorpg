@@ -196,21 +196,29 @@
     <%= t("game.world.heal_scroll_chip", count: heal_owned) %>
   </p>
   <p id="hospital-premium-topup">
-    <% if topup_ready %>
-      <%= button_to t("game.buildings.premium_topup_cta", amount: Game::Shop::VeilMarksTopUp::AMOUNT),
-            city_building_topup_vm_path("hospital"),
-            method: :post,
-            class: "lbut",
-            form: {data: {turbo: false}},
-            title: t("game.buildings.premium_topup_hint") %>
+    <% if Game::Shop::PremiumGateway.stub_iap_allowed? %>
+      <% if topup_ready %>
+        <%= button_to t("game.buildings.premium_topup_cta", amount: Game::Shop::VeilMarksTopUp::AMOUNT),
+              city_building_topup_vm_path("hospital"),
+              method: :post,
+              class: "lbut",
+              form: {data: {turbo: false}},
+              title: t("game.buildings.premium_topup_hint") %>
+      <% else %>
+        <% wait_hint = t("game.buildings.premium_topup_wait", minutes: (topup_wait / 60.0).ceil) %>
+        <button type="button" class="lbut" disabled title="<%= wait_hint %>"><%= t("game.buildings.premium_topup_cta", amount: Game::Shop::VeilMarksTopUp::AMOUNT) %></button>
+        <span class="nl-quests-board__meta" data-hospital-topup-wait="1">
+          <%= wait_hint %>
+          ·
+          <%= link_to t("arena.nav.city"), world_path, data: {turbo: false, hospital_recovery: "world"} %>
+        </span>
+      <% end %>
     <% else %>
-      <% wait_hint = t("game.buildings.premium_topup_wait", minutes: (topup_wait / 60.0).ceil) %>
-      <button type="button" class="lbut" disabled title="<%= wait_hint %>"><%= t("game.buildings.premium_topup_cta", amount: Game::Shop::VeilMarksTopUp::AMOUNT) %></button>
-      <span class="nl-quests-board__meta" data-hospital-topup-wait="1">
-        <%= wait_hint %>
+      <p class="nl-quests-board__meta" data-hospital-stub-iap="0">
+        <%= t("game.shop.stub_iap_disabled") %>
         ·
-        <%= link_to t("arena.nav.city"), world_path, data: {turbo: false, hospital_recovery: "world"} %>
-      </span>
+        <%= link_to t("game.shop.title"), shop_path, class: "nl-sheet-link", data: {hospital_recovery: "shop"} %>
+      </p>
     <% end %>
   </p>
   <div class="nl-handbook__grid">

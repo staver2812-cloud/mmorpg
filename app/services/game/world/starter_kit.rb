@@ -36,7 +36,7 @@ module Game
           grant_bandage!
           grant_herbs!
           grant_starter_nv!
-          grant_starter_veil_marks!
+          grant_starter_veil_marks! if Game::Shop::PremiumGateway.stub_iap_allowed?
           mark_granted!
         end
 

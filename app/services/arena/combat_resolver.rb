@@ -202,10 +202,14 @@ module Arena
     def damage_amount(attacker, defender, action_key, body_part, critical:)
       attack = attack_power(attacker) + rng.rand(1..5)
       attack *= Game::Combat::ActionCatalog.attack_damage_multiplier(action_key)
-      attack *= BODY_PART_DAMAGE_MULTIPLIERS.fetch(body_part, 1.0)
+      attack *= Game::Combat::ActionCatalog.body_part_multiplier(body_part)
 
       damage = attack.round - (defense_power(defender) / DEFENSE_DIVISOR)
-      damage = (damage * CRITICAL_MULTIPLIER).round if critical[:critical]
+      if critical[:critical]
+        # Crit strength scales with body-part vulnerability (head hits hurt more).
+        part_scale = Game::Combat::ActionCatalog.body_part_multiplier(body_part)
+        damage = (damage * CRITICAL_MULTIPLIER * part_scale).round
+      end
       [damage, MIN_DAMAGE].max
     end
 
