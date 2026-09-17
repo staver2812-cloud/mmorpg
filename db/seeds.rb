@@ -17,6 +17,7 @@ require_relative "seeds/world_content_support"
   ashen_veil_item_labels
   ashen_veil_thematic_sets
   ashen_veil_item_catalog
+  ashen_veil_enemy_catalog
   starter_wallets
   arena_rooms
   world_locations
