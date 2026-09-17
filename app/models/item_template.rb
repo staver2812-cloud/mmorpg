@@ -27,11 +27,13 @@ class ItemTemplate < ApplicationRecord
     "weapon_shield" => "off_hand",
     "armor" => "chest",
     "helmet" => "head",
+    "helm" => "head",
     "boots" => "feet",
     "gloves" => "hands",
     "pants" => "legs",
     "necklace" => "amulet",
     "neck" => "amulet",
+    "earring" => "amulet",
     "belt_item" => "belt_1",
     "pocket_item" => "pocket_1"
   }.freeze
