@@ -11,10 +11,7 @@ RSpec.describe Game::Combat::InjuryResolver do
   end
 
   it "applies a heavy injury on a high-trauma defeat" do
-    rng = instance_double(Random)
-    expect(rng).to receive(:rand).with(100).and_return(10)
-
-    results = described_class.new(match:, rng:).call
+    results = described_class.new(match:, rng: Random.new(1)).call
 
     expect(results.first.severity).to eq("heavy")
     expect(Game::Combat::InjuryState.new(character: character.reload).blocks_movement?).to be(true)
