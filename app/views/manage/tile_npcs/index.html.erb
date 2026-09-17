@@ -1,6 +1,10 @@
 <% content_for :title, t("manage.views.page_title", section: t("manage.views.cell_npcs_title"), manage: t("manage.title")) %>
 <%= render "manage/shared/page_header", title: t("manage.views.cell_npcs_title"), description: t("manage.views.cell_npcs_hint"), new_path: new_manage_tile_npc_path, new_label: t("manage.views.create_cell_npc") %>
 
+<p class="nl-manage-actions">
+  <%= button_to t("manage.world_population.run"), manage_world_population_path, method: :post, class: "lbut" %>
+</p>
+
 <%= form_with url: manage_tile_npcs_path, method: :get, class: "nl-manage-filter", local: true do |form| %>
   <%= form.label :zone, t("manage.views.outdoor_zone") %><%= form.select :zone, options_from_collection_for_select(@zones, :name, :name, params[:zone]), include_blank: t("manage.views.all_zones") %>
   <%= form.submit t("manage.filter"), class: "lbut" %><%= link_to t("manage.clear"), manage_tile_npcs_path, class: "lbut" %>

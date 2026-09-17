@@ -240,6 +240,8 @@ ru:
       attr_x: "X"
       attr_y: "Y"
       attr_metadata: "Метаданные"
+      respawn_seconds: "Респаун (сек)"
+      drop_chance_multiplier: "Множитель шанса дропа"
       help_city_data_html: "Стабильные ключи — в <code>city_key</code> и <code>city_node_key</code>. Сцена — в <code>city_presentation</code>: смещение изображения, фокус и опциональные ориентиры."
       help_building_metadata_html: "Городские ворота используют зону/x/y назначения. Деревни — проверенный объект <code>location</code> с размером сцены и полигонами. Входы в шахты можно ставить, но держите их неактивными, пока интерьеры не зафиксированы и не реализованы."
       help_hotspot_params_html: "<code>enter_zone</code> использует destination_x/y и необязательное направление. <code>open_feature</code> — allowlisted ключ: arena, shop, market, airship_station или hospital."
@@ -310,6 +312,9 @@ ru:
     catalog_activation:
       run: "Активировать каталоги Ashen Veil"
       done: "Каталоги предметов/мобов активированы (shop + loot)"
+    world_population:
+      run: "Заселить мир (99 мобов / 23 тира)"
+      done: "Заселение: +%{placed}, обновлено %{updated}, пропущено %{skipped}"
     npc_key_referenced: "нельзя менять, пока ключ используется в столкновениях клеток"
     npc_template_roster_referenced: "Нельзя удалить шаблон NPC, на который ссылаются составы столкновений"
     equipment_slot_invalid: "должен быть допустимым слотом экипировки"
@@ -642,6 +647,8 @@ en:
       attr_x: "X"
       attr_y: "Y"
       attr_metadata: "Metadata"
+      respawn_seconds: "Respawn (sec)"
+      drop_chance_multiplier: "Drop chance multiplier"
       help_city_data_html: "Stable keys live in <code>city_key</code> and <code>city_node_key</code>. Scene presentation uses <code>city_presentation</code> with image offset, focus, and optional landmarks."
       help_building_metadata_html: "City gates use destination zone/x/y. Villages use a validated <code>location</code> object with scene size and feature polygons. Mine entrances can be placed now but must remain inactive until their interiors are observed and implemented."
       help_hotspot_params_html: "<code>enter_zone</code> uses destination_x/y and optional direction. <code>open_feature</code> uses an allowlisted feature key such as arena, shop, market, airship_station, or hospital."
@@ -712,6 +719,9 @@ en:
     catalog_activation:
       run: "Activate Ashen Veil catalogs"
       done: "Item/enemy catalogs activated (shop + loot)"
+    world_population:
+      run: "Populate world (99 mobs / 23 tiers)"
+      done: "Population: +%{placed}, updated %{updated}, skipped %{skipped}"
     npc_key_referenced: "cannot change while referenced by cell encounters"
     npc_template_roster_referenced: "Cannot delete an NPC template referenced by cell encounter rosters"
     equipment_slot_invalid: "must be a valid equipment slot for equipment items"

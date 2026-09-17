@@ -55,7 +55,14 @@ class Character < ApplicationRecord
     "intelligence" => :intelligence,
     "knowledge" => :intelligence,
     "vitality" => :vitality,
-    "health" => :vitality
+    "health" => :vitality,
+    "hp" => :vitality,
+    "attack" => :strength,
+    "armor_class" => :vitality,
+    "armor" => :vitality,
+    "magic_power" => :intelligence,
+    "speed" => :dexterity,
+    "resist" => :luck
   }.freeze
   EQUIPMENT_SKILL_ALIASES = {
     "unarmed_skill" => :unarmed_combat,
@@ -725,11 +732,13 @@ class Character < ApplicationRecord
   def equipment_attack_bonus
     return 0 unless inventory
 
-    inventory.inventory_items.equipped.includes(:item_template).sum do |item|
+    item_bonus = inventory.inventory_items.equipped.includes(:item_template).sum do |item|
       next 0 if item.broken?
 
       equipment_combat_component(item, "attack")
     end
+    set_bonus = Game::Equipment::SetBonuses.new(character: self).call.modifiers["attack"].to_i
+    item_bonus + set_bonus
   end
 
   # Get defense bonus from equipped items
@@ -738,11 +747,13 @@ class Character < ApplicationRecord
   def equipment_defense_bonus
     return 0 unless inventory
 
-    inventory.inventory_items.equipped.includes(:item_template).sum do |item|
+    item_bonus = inventory.inventory_items.equipped.includes(:item_template).sum do |item|
       next 0 if item.broken?
 
       equipment_combat_component(item, "defense")
     end
+    set_mods = Game::Equipment::SetBonuses.new(character: self).call.modifiers
+    item_bonus + set_mods["armor_class"].to_i + set_mods["armor"].to_i
   end
 
   def equipment_combat_component(item, stat_key)
@@ -829,14 +840,24 @@ class Character < ApplicationRecord
   def equipment_stat_modifiers
     return {} unless inventory
 
-    inventory.inventory_items.equipped.includes(:item_template).each_with_object(Hash.new(0)) do |item, totals|
+    totals = inventory.inventory_items.equipped.includes(:item_template).each_with_object(Hash.new(0)) do |item, acc|
       next if item.broken?
 
       item.effect_modifiers.each do |key, value|
         stat_key = EQUIPMENT_STAT_ALIASES[normalize_equipment_effect_key(key)]
-        totals[stat_key] += numeric_equipment_effect(value) if stat_key
+        acc[stat_key] += numeric_equipment_effect(value) if stat_key
       end
     end
+
+    Game::Equipment::SetBonuses.new(character: self).call.modifiers.each do |key, value|
+      stat_key = EQUIPMENT_STAT_ALIASES[normalize_equipment_effect_key(key)]
+      totals[stat_key] += value.to_i if stat_key
+    end
+    totals
+  end
+
+  def set_bonus_summary
+    Game::Equipment::SetBonuses.new(character: self).call.active
   end
 
   def combat_component_base(stats, stat_key)

@@ -34,6 +34,10 @@ ItemTemplate.where("enhancement_rules -> 'ashen_veil' IS NOT NULL").find_each do
   rules["inventory_family"] ||= %w[rune elixir scroll].include?(source_slot) ? "things" : "equipment"
   rules["shop"] = Game::Catalog::ShopTiering.shop_entry(rarity:, position: shopped + 1)
   rules["shop_stock"] ||= {"current" => 40, "max" => 120}
+  if key.start_with?("set-") && (match = key.match(/\Aset-(blood|demiurge|distortion|judge|swamp)-/))
+    rules["set_key"] = "set-#{match[1]}"
+    rules["set_name"] ||= match[1]
+  end
   req = item.requirements.to_h.merge("level" => [tier, item.requirements.to_h["level"].to_i].max)
 
   item.assign_attributes(

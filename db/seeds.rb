@@ -26,6 +26,7 @@ require_relative "seeds/world_content_support"
   shop_accounts
   ashen_veil_runtime_activation
   outdoor_npcs
+  ashen_veil_world_population
 ].each do |phase|
   load Rails.root.join("db/seeds", "#{phase}.rb")
 end

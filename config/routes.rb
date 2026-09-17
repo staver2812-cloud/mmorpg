@@ -14,6 +14,7 @@ Rails.application.routes.draw do
       post :run_once
     end
     resource :catalog_activation, only: :create, controller: "catalog_activations"
+    resource :world_population, only: :create, controller: "world_populations"
   end
 
   # Already implemented MVP Neverlands-based game-design routes.

@@ -15,8 +15,16 @@
     <div class="nl-manage-field"><%= form.label :max_hp, t("manage.views.attr_max_hp") %><%= form.number_field :max_hp, min: 0 %></div>
     <div class="nl-manage-field"><%= form.label :defeated_at, t("manage.views.defeated_at") %><%= form.datetime_local_field :defeated_at %></div>
     <div class="nl-manage-field"><%= form.label :respawns_at, t("manage.views.respawns_at") %><%= form.datetime_local_field :respawns_at %></div>
+    <div class="nl-manage-field">
+      <%= label_tag "tile_npc_respawn_seconds", t("manage.views.respawn_seconds") %>
+      <%= number_field_tag "tile_npc[respawn_seconds]", tile_npc.metadata.to_h["respawn_seconds"], id: "tile_npc_respawn_seconds", min: 30, max: 86_400 %>
+    </div>
+    <div class="nl-manage-field">
+      <%= label_tag "tile_npc_drop_chance_multiplier", t("manage.views.drop_chance_multiplier") %>
+      <%= number_field_tag "tile_npc[drop_chance_multiplier]", tile_npc.metadata.to_h["drop_chance_multiplier"] || 1.0, id: "tile_npc_drop_chance_multiplier", min: 0.1, max: 5, step: 0.1 %>
+    </div>
     <div class="nl-manage-field nl-manage-field--wide">
-      <%= form.label :metadata, t("manage.views.attr_metadata") %><%= form.text_area :metadata, value: pretty_json(tile_npc.metadata.to_h.except("active", "encounter_count", "encounter_rosters")), spellcheck: false %>
+      <%= form.label :metadata, t("manage.views.attr_metadata") %><%= form.text_area :metadata, value: pretty_json(tile_npc.metadata.to_h.except("active", "encounter_count", "encounter_rosters", "respawn_seconds", "drop_chance_multiplier")), spellcheck: false %>
       <small class="nl-manage-help"><%= t("manage.views.help_tile_npc_metadata") %></small>
     </div>
   </div>

@@ -136,7 +136,18 @@ module Arena
     end
 
     def roll_succeeds?(loot_entry)
-      rng.rand(100) < loot_entry.chance_percent
+      chance = loot_entry.chance_percent * drop_chance_multiplier
+      rng.rand(100) < chance
+    end
+
+    def drop_chance_multiplier
+      template_raw = npc_participation.npc_template&.metadata.to_h["drop_chance_multiplier"]
+      tile_raw = match.metadata.to_h["drop_chance_multiplier"]
+      raw = tile_raw.presence || template_raw
+      value = Float(raw, exception: false)
+      return 1.0 unless value
+
+      value.clamp(0.1, 5.0)
     end
 
     def award_entry(entry, entry_index)
