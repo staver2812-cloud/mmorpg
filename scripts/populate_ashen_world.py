@@ -120,12 +120,12 @@ def main() -> None:
         keys = [f"set-{set_id}-{suffix}-t{set_tier}" for suffix in PIECE_SUFFIXES]
         present = [k for k in keys if k in item_stats] or keys
 
-        attack = int(meta.get("base_damage") or (meta.get("stats") or {}).get("attack") or 4)
-        defense = int(meta.get("base_defense") or (meta.get("stats") or {}).get("defense") or 0)
-        hp = int(meta.get("health") or (meta.get("stats") or {}).get("hp") or 50)
-        agility = int((meta.get("stats") or {}).get("agility") or 0)
-        accuracy = int((meta.get("stats") or {}).get("accuracy") or 0)
-        luck = int((meta.get("stats") or {}).get("luck") or 0)
+        attack = max(int(level), 1)
+        defense = max(int(level) // 2, 0)
+        hp = 20 + (int(level) * 8)
+        agility = int(level) // 3
+        accuracy = int(level) // 3
+        luck = int(level) // 5
         for key in present:
             st = item_stats.get(key)
             if not st:
