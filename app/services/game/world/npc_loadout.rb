@@ -76,13 +76,16 @@ module Game
       end
 
       def derive_stats(templates)
-        base = npc_template.combat_stats.to_h.symbolize_keys
-        attack = base[:attack].to_i
-        defense = base[:defense].to_i
-        hp = base[:hp].to_i
-        agility = base[:agility].to_i
-        accuracy = base[:accuracy].to_i
-        luck = base[:luck].to_i
+        # Gear is the authority. Keep only a thin level floor so naked templates
+        # still fight; do not re-add catalog combat_stats (would double-count
+        # after AshenPopulation bakes loadout into metadata).
+        level = npc_template.level.to_i.clamp(1, 100)
+        attack = level
+        defense = [level / 2, 0].max
+        hp = 20 + (level * 8)
+        agility = level / 3
+        accuracy = level / 3
+        luck = level / 5
 
         templates.each do |template|
           mods = template.stat_modifiers.to_h
@@ -106,8 +109,8 @@ module Game
           "agility" => [agility, 0].max,
           "accuracy" => [accuracy, 0].max,
           "luck" => [luck, 0].max,
-          "crit_chance" => base[:crit_chance].to_i,
-          "dodge_chance" => base[:dodge_chance].to_i
+          "crit_chance" => 0,
+          "dodge_chance" => 0
         }
       end
     end
