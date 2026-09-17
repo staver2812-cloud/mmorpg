@@ -256,8 +256,9 @@ RSpec.describe "Arena match transition and reconciliation", type: :system do
 
       # Fill out application form
       select "Free", from: "fight_kind"
-      select I18n.t("arena.form.min", count: 3), from: "timeout_seconds"
-      select I18n.t("arena.form.trauma_medium"), from: "trauma_percent"
+      select I18n.t("arena.form.sec", count: 60), from: "turn_seconds"
+      select I18n.t("arena.form.min", count: 5), from: "wait_minutes"
+      select I18n.t("arena.form.trauma_normal"), from: "trauma_percent"
 
       click_button "Submit Application"
 
@@ -272,8 +273,9 @@ RSpec.describe "Arena match transition and reconciliation", type: :system do
       visit arena_room_path(arena_room)
 
       select "Free", from: "fight_kind"
-      select I18n.t("arena.form.min", count: 3), from: "timeout_seconds"
-      select I18n.t("arena.form.trauma_medium"), from: "trauma_percent"
+      select I18n.t("arena.form.sec", count: 60), from: "turn_seconds"
+      select I18n.t("arena.form.min", count: 5), from: "wait_minutes"
+      select I18n.t("arena.form.trauma_normal"), from: "trauma_percent"
 
       expect {
         click_button "Submit Application"

@@ -98,13 +98,25 @@
             {},
             class: "nl-arena-select",
             required: true %>
-        <%= f.select :timeout_seconds,
+        <%= f.select :turn_seconds,
             [
-              [t("arena.form.timeout"), ""],
-              [t("arena.form.min", count: 2), 120],
-              [t("arena.form.min", count: 3), 180],
-              [t("arena.form.min", count: 4), 240],
-              [t("arena.form.min", count: 5), 300]
+              [t("arena.form.turn_seconds"), ""],
+              [t("arena.form.sec", count: 30), 30],
+              [t("arena.form.sec", count: 60), 60],
+              [t("arena.form.sec", count: 90), 90]
+            ],
+            {},
+            class: "nl-arena-select",
+            required: true %>
+        <%= f.hidden_field :timeout_seconds, value: 180 %>
+        <%= f.select :wait_minutes,
+            [
+              [t("arena.form.wait"), ""],
+              [t("arena.form.min", count: 2), 2],
+              [t("arena.form.min", count: 5), 5],
+              [t("arena.form.min", count: 10), 10],
+              [t("arena.form.min", count: 15), 15],
+              [t("arena.form.min", count: 30), 30]
             ],
             {},
             class: "nl-arena-select",
@@ -112,10 +124,9 @@
         <%= f.select :trauma_percent,
             [
               [t("arena.form.trauma"), ""],
-              [t("arena.form.trauma_low"), 10],
-              [t("arena.form.trauma_medium"), 30],
-              [t("arena.form.trauma_high"), 50],
-              [t("arena.form.trauma_very_high"), 80]
+              [t("arena.form.trauma_peaceful"), 0],
+              [t("arena.form.trauma_normal"), 30],
+              [t("arena.form.trauma_bloody"), 100]
             ],
             {},
             class: "nl-arena-select",
@@ -142,28 +153,15 @@
         <% end %>
 
         <% if active_tab != "1" %>
-          <%= f.select :wait_minutes,
-              [
-                [t("arena.form.wait"), ""],
-                [t("arena.form.min", count: 5), 5],
-                [t("arena.form.min", count: 10), 10],
-                [t("arena.form.min", count: 15), 15],
-                [t("arena.form.min", count: 30), 30],
-                [t("arena.form.min", count: 45), 45],
-                [t("arena.form.min", count: 60), 60]
-              ],
-              {},
-              class: "nl-arena-select",
-              required: true %>
           <span class="nl-arena-team-limits">
             <%= t("arena.form.own_team") %>:
-            <%= f.number_field :team_count, min: 1, max: 10, value: 1, class: "nl-arena-mini-input" %>
+            <%= f.number_field :team_count, min: 1, max: 5, value: 1, class: "nl-arena-mini-input" %>
             <%= t("arena.form.levels_short") %>
             <%= f.number_field :team_level_min, min: 0, max: 33, value: [current_character.level - 1, 0].max, class: "nl-arena-mini-input" %>
             -
             <%= f.number_field :team_level_max, min: 0, max: 33, value: current_character.level + 1, class: "nl-arena-mini-input" %>
             <%= t("arena.form.vs") %>:
-            <%= f.number_field :enemy_count, min: 1, max: 10, value: 1, class: "nl-arena-mini-input" %>
+            <%= f.number_field :enemy_count, min: 1, max: 5, value: 1, class: "nl-arena-mini-input" %>
             <%= t("arena.form.levels_short") %>
             <%= f.number_field :enemy_level_min, min: 0, max: 33, value: [current_character.level - 1, 0].max, class: "nl-arena-mini-input" %>
             -

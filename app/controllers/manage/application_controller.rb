@@ -24,6 +24,7 @@ module Manage
         {key: :tile_npcs, label: I18n.t("manage.sections.tile_npcs"), path: manage_tile_npcs_path},
         {key: :cities, label: I18n.t("manage.sections.cities"), path: manage_cities_path},
         {key: :city_hotspots, label: I18n.t("manage.sections.city_hotspots"), path: manage_city_hotspots_path},
+        {key: :idle_ticks, label: I18n.t("manage.sections.idle_ticks"), path: manage_idle_tick_path},
         {key: :audit_events, label: I18n.t("manage.sections.audit_events"), path: manage_audit_events_path}
       ]
     end

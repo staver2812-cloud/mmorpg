@@ -44,6 +44,8 @@ ru:
     exit: "Выход"
     abilities: "Способности"
     quests: "Задания"
+    instances: "Подземелья"
+    activity: "Контракты"
   social:
     chat_players: "Чат и игроки рядом"
     sort: "Сорт:"

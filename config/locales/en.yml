@@ -74,6 +74,8 @@ en:
     exit: "Exit"
     abilities: "Abilities"
     quests: "Quests"
+    instances: "Dungeons"
+    activity: "Contracts"
   social:
     chat_players: "Chat and nearby players"
     sort: "Sort:"

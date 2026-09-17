@@ -389,6 +389,8 @@
           <span class="nl-chat-tool nl-chat-tool--abilities nl-chat-tool--disabled" aria-disabled="true" title="<%= t("game.fight.inventory_locked") %>">A</span>
         <% else %>
           <%= link_to "Q", quests_path, class: "nl-chat-tool nl-chat-tool--quests", aria: {label: t("nav.quests")}, title: t("nav.quests"), data: {turbo_frame: "_top", shell_recovery: "quests"} %>
+          <%= link_to "D", instances_path, class: "nl-chat-tool nl-chat-tool--quests", aria: {label: t("nav.instances")}, title: t("nav.instances"), data: {turbo_frame: "_top", shell_recovery: "instances"} %>
+          <%= link_to "C", activity_path, class: "nl-chat-tool nl-chat-tool--quests", aria: {label: t("nav.activity")}, title: t("nav.activity"), data: {turbo_frame: "_top", shell_recovery: "activity"} %>
           <%= link_to "A", character_licenses_path, class: "nl-chat-tool nl-chat-tool--abilities", aria: {label: t("nav.abilities")}, title: t("nav.abilities"), data: {turbo_frame: "_top", shell_recovery: "licenses"} %>
         <% end %>
       <% end %>

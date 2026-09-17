@@ -1192,7 +1192,9 @@ module Arena
         .filter_map { |participation| participation.npc_template&.npc_key.presence }
       defeated_keys.each do |npc_key|
         Game::Quests::Journal.new(character: winner).record_npc_kill!(npc_key:)
+        Game::Activity::Tracker.new(character: winner).record!(kind: "kill_npc", amount: 1, meta: {"npc_key" => npc_key})
       end
+      Game::Activity::Tracker.new(character: winner).record!(kind: "arena_fight", amount: 1)
     end
 
     def log_entry(entry_type, actor, description)

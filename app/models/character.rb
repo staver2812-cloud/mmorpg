@@ -87,6 +87,8 @@ class Character < ApplicationRecord
   has_one :inventory, dependent: :destroy
   has_many :character_licenses, dependent: :destroy
   has_many :arena_applications, foreign_key: :applicant_id, dependent: :destroy
+  has_many :activity_achievements, dependent: :destroy
+  has_many :daily_activity_contracts, dependent: :destroy
   has_many :arena_participations, dependent: :destroy
 
   has_many :movement_commands, dependent: :destroy

@@ -10,6 +10,7 @@ module Manage
         tile_npcs: TileNpc.count,
         cities: Zone.where(location_type: "city").count,
         city_hotspots: CityHotspot.count,
+        idle_ticks: IdleTickControl.count,
         audit_events: ManagementAuditEvent.count
       }
     end

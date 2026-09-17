@@ -80,7 +80,9 @@ module Game
           stock.update!(current: stock.current - 1)
         end
 
-        Result.new(success: true, message: I18n.t("game.shop.bought", name: item_template.name), item: item_template)
+        Result.new(success: true, message: I18n.t("game.shop.bought", name: item_template.name), item: item_template).tap do
+          Game::Activity::Tracker.new(character:).record!(kind: "shop_purchase", amount: 1, meta: {"item_key" => item_template.key})
+        end
       rescue TradeOffers::Unavailable, Game::Inventory::Manager::CapacityExceededError => e
         failure(e.message)
       rescue Economy::WalletService::InsufficientFundsError

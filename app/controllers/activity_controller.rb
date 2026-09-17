@@ -1,0 +1,23 @@
+# frozen_string_literal: true
+
+class ActivityController < ApplicationController
+  include CurrentCharacterContext
+
+  before_action :ensure_active_character!
+  layout "game"
+
+  def show
+    tracker = Game::Activity::Tracker.new(character: current_character)
+    tracker.ensure_daily_contracts!
+    day = Time.current.utc.strftime("%Y-%m-%d")
+    @contracts = DailyActivityContract.where(character: current_character, day_key: day).order(:id)
+    @achievements = ActivityAchievement.where(character: current_character).order(Arel.sql("completed_at NULLS LAST"), :id)
+  end
+
+  def claim
+    kind = params[:kind].to_s
+    id = params[:id].to_i
+    result = Game::Activity::ClaimReward.new(character: current_character, kind:, id:).call
+    redirect_to activity_path, status: :see_other, **(result.success? ? {notice: result.message} : {alert: result.message})
+  end
+end

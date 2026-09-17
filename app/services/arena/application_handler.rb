@@ -39,10 +39,14 @@ module Arena
         if (error = application_creation_error(character, room))
           Result.new(success?: false, errors: [error])
         else
-          combat_trauma = combat_trauma_requested?(params)
+          combat_trauma = combat_trauma_requested?(params) || params[:trauma_percent].to_i >= 100
           if combat_trauma && (scroll_error = consume_combat_trauma_scroll!(character))
             next Result.new(success?: false, errors: [scroll_error])
           end
+
+          trauma = combat_trauma ? 100 : (params[:trauma_percent] || 30).to_i
+          turn = (params[:turn_seconds] || params[:timeout_seconds] || 60).to_i
+          turn = 60 unless ArenaApplication::VALID_TURN_SECONDS.include?(turn)
 
           application = ArenaApplication.new(
             arena_room: room,
@@ -50,7 +54,8 @@ module Arena
             fight_type: params[:fight_type] || :duel,
             fight_kind: params[:fight_kind] || :free,
             timeout_seconds: params[:timeout_seconds] || 180,
-            trauma_percent: combat_trauma ? 100 : (params[:trauma_percent] || 30),
+            turn_seconds: turn,
+            trauma_percent: trauma,
             team_count: params[:team_count],
             team_level_min: params[:team_level_min],
             team_level_max: params[:team_level_max],
@@ -110,6 +115,7 @@ module Arena
             fight_type: application.fight_type,
             fight_kind: application.fight_kind,
             timeout_seconds: application.timeout_seconds,
+            turn_seconds: application.try(:turn_seconds) || 60,
             trauma_percent: application.trauma_percent,
             status: :matched,
             matched_with: application,
@@ -255,7 +261,7 @@ module Arena
         arena_room: application.arena_room,
         match_type: application.fight_type,
         status: :pending,
-        turn_timeout_seconds: application.timeout_seconds,
+        turn_timeout_seconds: application.try(:turn_seconds).presence || application.timeout_seconds,
         trauma_percent: application.trauma_percent,
         metadata: {
           fight_kind: application.fight_kind,
@@ -299,7 +305,7 @@ module Arena
         arena_room: application.arena_room,
         match_type: application.fight_type,
         status: :pending,
-        turn_timeout_seconds: application.timeout_seconds,
+        turn_timeout_seconds: application.try(:turn_seconds).presence || application.timeout_seconds,
         trauma_percent: application.trauma_percent,
         metadata: match_metadata
       )

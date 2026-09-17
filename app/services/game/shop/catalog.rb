@@ -16,7 +16,7 @@ module Game
       CATEGORIES = CATEGORY_KEYS.map { |key| [key, key] }.freeze
       VALID_MODES = MODE_KEYS.freeze
       VALID_CATEGORIES = CATEGORY_KEYS.freeze
-      MAX_CATALOG_ROWS = 200
+      MAX_CATALOG_ROWS = 1_200
       FILTER_DEFAULTS = {min_level: 0, max_level: 33, min_price: 0, max_price: 1_000_000}.freeze
 
       attr_reader :character, :shop_account, :params

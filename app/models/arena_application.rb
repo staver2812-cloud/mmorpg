@@ -40,7 +40,9 @@ class ArenaApplication < ApplicationRecord
   }.freeze
 
   VALID_TIMEOUTS = [120, 180, 240, 300].freeze
-  VALID_TRAUMA_PERCENTS = [10, 30, 50, 80].freeze
+  VALID_TURN_SECONDS = [30, 60, 90].freeze
+  VALID_TRAUMA_PERCENTS = [0, 10, 30, 50, 80, 100].freeze
+  VALID_TEAM_SIZES = (1..5).freeze
   MIN_HP_PERCENT_FOR_ARENA = 50 # Minimum HP% required to accept fights
 
   enum :fight_type, FIGHT_TYPES
@@ -54,6 +56,7 @@ class ArenaApplication < ApplicationRecord
   belongs_to :arena_match, optional: true
 
   validate :timeout_seconds_allowed
+  validate :turn_seconds_allowed
   validate :trauma_percent_allowed
   validate :applicant_can_access_room, on: :create, unless: :npc_application?
   validate :npc_can_appear_in_room, on: :create, if: :npc_application?
@@ -222,6 +225,12 @@ class ArenaApplication < ApplicationRecord
     errors.add(:base, I18n.t("game.fight.app_timeout_invalid"))
   end
 
+  def turn_seconds_allowed
+    return if turn_seconds.blank? || VALID_TURN_SECONDS.include?(turn_seconds)
+
+    errors.add(:base, I18n.t("game.fight.app_turn_invalid"))
+  end
+
   def trauma_percent_allowed
     return if VALID_TRAUMA_PERCENTS.include?(trauma_percent)
 
@@ -237,10 +246,10 @@ class ArenaApplication < ApplicationRecord
   end
 
   def group_params_valid
-    if team_count.nil? || team_count < 1
+    if team_count.nil? || !VALID_TEAM_SIZES.cover?(team_count)
       errors.add(:team_count, I18n.t("arena.validations.group_team_count_required"))
     end
-    if enemy_count.nil? || enemy_count < 1
+    if enemy_count.nil? || !VALID_TEAM_SIZES.cover?(enemy_count)
       errors.add(:enemy_count, I18n.t("arena.validations.group_enemy_count_required"))
     end
   end

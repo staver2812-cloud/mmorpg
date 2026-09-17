@@ -7,7 +7,7 @@
 module AirshipContext
   extend ActiveSupport::Concern
 
-  GROUND_CONTROLLERS = %w[world world_locations city_buildings shop arena arena_rooms].freeze
+  GROUND_CONTROLLERS = %w[world world_locations city_buildings shop arena arena_rooms instances activity].freeze
 
   private
 

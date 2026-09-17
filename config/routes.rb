@@ -8,6 +8,11 @@ Rails.application.routes.draw do
     resources :cities
     resources :city_hotspots
     resources :audit_events, only: [:index, :show]
+    resource :idle_tick, only: :show, controller: "idle_ticks" do
+      post :arm
+      post :disarm
+      post :run_once
+    end
   end
 
   # Already implemented MVP Neverlands-based game-design routes.
@@ -88,6 +93,11 @@ Rails.application.routes.draw do
       post :accept
       post :turn_in
     end
+  end
+  get "instances", to: "instances#index", as: :instances
+  post "instances/:kind/:id/launch", to: "instances#launch", as: :launch_instance
+  resource :activity, only: [:show], controller: "activity" do
+    post :claim
   end
   resource :airship, only: %i[show create] do
     post :disembark
