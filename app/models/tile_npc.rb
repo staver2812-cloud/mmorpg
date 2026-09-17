@@ -11,7 +11,7 @@
 #
 class TileNpc < ApplicationRecord
   NPC_ROLES = %w[hostile].freeze
-  MAX_ENCOUNTER_SIZE = 10
+  MAX_ENCOUNTER_SIZE = 20
   MAX_ROSTER_SAMPLES = 64
   MAX_ROSTER_WEIGHT = 10_000
   MAX_AUTHORED_LEVEL = 1_000
@@ -44,9 +44,20 @@ class TileNpc < ApplicationRecord
   scope :needs_respawn, -> { where("respawns_at IS NOT NULL AND respawns_at <= ?", Time.current).where.not(defeated_at: nil) }
   scope :hostile, -> { where(npc_role: "hostile") }
 
+  # Personal grinding instances never share a defeat lock — every player may
+  # start a fight while the authored placement stays active.
+  def personal_instance?
+    value = metadata.to_h["personal_instance"]
+    return true if value == true || value.to_s == "true"
+
+    metadata.to_h.key?("respawn_seconds") && metadata.to_h["respawn_seconds"].to_i.zero?
+  end
+
   # Check if NPC is alive and interactable.
   # Lazy-respawn when the authored timer elapsed so patrol loops work without a worker.
   def alive?
+    return active? if personal_instance?
+
     maybe_respawn_if_due!
     active? && defeated_at.nil? && (respawns_at.nil? || respawns_at <= Time.current)
   end
@@ -77,8 +88,9 @@ class TileNpc < ApplicationRecord
     [(respawns_at - Time.current).to_i, 0].max
   end
 
-  # Defeat the NPC, start respawn timer
+  # Defeat the NPC, start respawn timer. Personal instances never lock the cell.
   def defeat!(character)
+    return false if personal_instance?
     return false unless alive?
 
     respawn_time = calculate_respawn_time
@@ -90,7 +102,7 @@ class TileNpc < ApplicationRecord
       current_hp: 0
     )
 
-    TileNpcRespawnJob.set(wait: respawn_time).perform_later(id) if respawn_time
+    TileNpcRespawnJob.set(wait: respawn_time).perform_later(id) if respawn_time&.positive?
 
     true
   end
@@ -148,8 +160,9 @@ class TileNpc < ApplicationRecord
   # A sampled cell represents a repeatable Neverlands encounter source, not
   # one killable NPC instance. Completing one sampled roster therefore leaves
   # the cell eligible to schedule another independently selected encounter.
+  # Personal instances are always repeatable for concurrent farm.
   def repeatable_encounter_source?
-    encounter_roster_samples.any?
+    personal_instance? || encounter_roster_samples.any?
   end
 
   # HP percentage for display
@@ -324,16 +337,22 @@ class TileNpc < ApplicationRecord
   end
 
   def calculate_respawn_time
-    return unless template_respawn_seconds
+    seconds = template_respawn_seconds
+    return if seconds.nil? || seconds <= 0
 
     variance_seconds = template_respawn_variance_seconds
     variance = variance_seconds.to_i.positive? ? rand(-variance_seconds..variance_seconds) : 0
-    base = template_respawn_seconds + variance
+    base = seconds + variance
 
     base.clamp(1, 24.hours.to_i)
   end
 
   def template_respawn_seconds
+    if metadata.to_h.key?("respawn_seconds")
+      value = Integer(metadata["respawn_seconds"], exception: false)
+      return value if value && value >= 0
+    end
+
     metadata_respawn_seconds ||
       npc_template&.respawn_seconds
   end

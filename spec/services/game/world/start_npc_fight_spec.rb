@@ -297,14 +297,27 @@ RSpec.describe Game::World::StartNpcFight do
     }.to raise_error(described_class::FightViolationError, I18n.t("manage.roster_combat_params_not_documented"))
   end
 
-  it "rejects eleven persisted opponents without creating a partial fight" do
-    tile_npc.update_columns(metadata: {"encounter_count" => 11})
+  it "rejects twenty-one persisted opponents without creating a partial fight" do
+    tile_npc.update_columns(metadata: {"encounter_count" => 21})
 
     expect {
       described_class.new(character:, tile_npc:).call
     }.to raise_error(described_class::FightViolationError, I18n.t("manage.roster_size_unsupported"))
     expect(ArenaMatch.count).to eq(0)
     expect(ArenaParticipation.count).to eq(0)
+  end
+
+  it "uses personal instance pack size for grinding cells" do
+    tile_npc.update!(metadata: {"encounter_count" => 1, "personal_instance" => true, "respawn_seconds" => 0})
+    character.update!(level: 4)
+    rng = Random.new(42)
+
+    match = described_class.new(character:, tile_npc:, rng:).call
+
+    expect(match.metadata["personal_instance"]).to eq(true)
+    expect(match.metadata["encounter_count"]).to be_between(1, 3)
+    expect(match.arena_participations.npcs.count).to eq(match.metadata["encounter_count"])
+    expect(tile_npc.reload.defeated_at).to be_nil
   end
 
   it "rolls back when a captured roster references a missing template" do

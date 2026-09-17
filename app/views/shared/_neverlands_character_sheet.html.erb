@@ -183,6 +183,27 @@
       </tbody>
     </table>
 
+    <% active_sets = character.set_bonus_summary %>
+    <% if active_sets.present? %>
+      <div class="nl-sheet-sets" aria-label="<%= t("game.sheet.sets_aria") %>">
+        <p class="nl-sheet-sets-title"><%= t("game.sheet.sets_title") %></p>
+        <ul class="nl-sheet-sets-list">
+          <% active_sets.each do |row| %>
+            <% meta = Game::Equipment::SetBonuses::SET_META[row[:set_id]] %>
+            <% name = I18n.locale.to_s.start_with?("ru") ? meta&.dig(:name_ru) : meta&.dig(:name_en) %>
+            <% name ||= row[:set_id].to_s %>
+            <% labels = Array(row[:labels]).map { |label| label[I18n.locale.to_s] || label["ru-RU"] || label["en-US"] }.compact %>
+            <li class="nl-sheet-sets-item">
+              <span class="nl-sheet-sets-name"><%= name %> · <%= row[:pieces] %>/6</span>
+              <% if labels.any? %>
+                <span class="nl-sheet-sets-bonus"><%= labels.last %></span>
+              <% end %>
+            </li>
+          <% end %>
+        </ul>
+      </div>
+    <% end %>
+
     <p class="nl-sheet-effects"><%= t("game.sheet.total_effects") %>: <%= metadata.fetch("active_effects", []).size %> / 99</p>
     <% post_note = Game::World::PostOfficeNote.current_for(character) %>
     <% if post_note.present? %>

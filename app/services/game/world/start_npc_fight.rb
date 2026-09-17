@@ -4,6 +4,10 @@ module Game
   module World
     # Starts the shared combat flow for a hostile NPC materialized on the
     # character's current outdoor cell.
+    #
+    # Ashen personal instances: the tile stays available for every player
+    # (no shared respawn lock). Pack size follows AggroPackSize; bot stats and
+    # scarce set-piece loot come from NpcLoadout attached to participations.
     class StartNpcFight
       class FightViolationError < StandardError; end
 
@@ -12,13 +16,15 @@ module Game
         tile_npc:,
         return_context: "world",
         rng: Random.new,
-        roster_selector_class: EncounterRosterSelector
+        roster_selector_class: EncounterRosterSelector,
+        allow_off_cell: false
       )
         @character = character
         @tile_npc = tile_npc
         @return_context = return_context
         @rng = rng
         @roster_selector_class = roster_selector_class
+        @allow_off_cell = allow_off_cell
       end
 
       def call
@@ -31,12 +37,20 @@ module Game
             match = active_match
 
             unless match
-              tile_npc.with_lock do
+              if tile_npc.personal_instance?
                 tile_npc.reload
                 validate!
                 match = create_match!
                 create_participations!(match)
                 Arena::CombatProcessor.new(match).start_match
+              else
+                tile_npc.with_lock do
+                  tile_npc.reload
+                  validate!
+                  match = create_match!
+                  create_participations!(match)
+                  Arena::CombatProcessor.new(match).start_match
+                end
               end
             end
             WorldActionOffer.timed_local_actions.where(character:).update_all(
@@ -51,7 +65,7 @@ module Game
 
       private
 
-      attr_reader :character, :tile_npc, :return_context, :rng, :roster_selector_class
+      attr_reader :character, :tile_npc, :return_context, :rng, :roster_selector_class, :allow_off_cell
 
       def validate!
         raise FightViolationError, I18n.t("game.flashes.disembark_first") if character.active_airship_journey
@@ -61,7 +75,7 @@ module Game
         end
         raise FightViolationError, I18n.t("game.quests.npc_unavailable") unless tile_npc&.alive?
         raise FightViolationError, I18n.t("game.quests.npc_not_hostile") unless tile_npc.hostile?
-        raise FightViolationError, I18n.t("game.quests.npc_wrong_cell") unless npc_matches_position?
+        raise FightViolationError, I18n.t("game.quests.npc_wrong_cell") unless allow_off_cell || npc_matches_position?
         encounter_selection
       rescue EncounterRosterSelector::InvalidRosterError => error
         raise FightViolationError, error.message
@@ -85,7 +99,11 @@ module Game
       end
 
       def encounter_selection
-        @encounter_selection ||= roster_selector_class.new(tile_npc:, rng:).call
+        @encounter_selection ||= roster_selector_class.new(
+          tile_npc:,
+          character:,
+          rng:
+        ).call
       end
 
       def normalized_return_context
@@ -98,6 +116,7 @@ module Game
           "source" => "world_npc",
           "fight_kind" => "free",
           "is_npc_fight" => true,
+          "personal_instance" => tile_npc.personal_instance?,
           "tile_npc_id" => tile_npc.id,
           "npc_template_id" => tile_npc.npc_template_id,
           "npc_name" => tile_npc.npc_template.name,
@@ -120,6 +139,7 @@ module Game
         source_metadata = tile_npc.metadata.to_h
         metadata["combat_profile"] = source_metadata[:combat_profile] if source_metadata[:combat_profile].present?
         metadata["combat_profile"] ||= source_metadata["combat_profile"] if source_metadata["combat_profile"].present?
+        metadata["drop_chance_multiplier"] = source_metadata["drop_chance_multiplier"] if source_metadata["drop_chance_multiplier"].present?
 
         ArenaMatch.create!(
           zone: character.position.zone,
@@ -141,21 +161,39 @@ module Game
         )
 
         encounter_selection.members.each_with_index do |member, index|
+          loadout = member_loadout(member)
+          max_hp = loadout ? loadout.combat_stats["hp"].to_i : member.max_hp
+          max_hp = member.max_hp if max_hp <= 0
+          participation_metadata = member.metadata.merge(
+            "current_hp" => max_hp,
+            "max_hp" => max_hp,
+            "level" => member.level,
+            "tile_npc_id" => tile_npc.id,
+            "encounter_slot" => index + 1,
+            "encounter_roster_sample" => encounter_selection.sample_key
+          )
+          if loadout
+            participation_metadata["equipped_set_keys"] = loadout.item_keys
+            participation_metadata["equipped_set_id"] = loadout.set_id
+            participation_metadata["equipped_set_tier"] = loadout.set_tier
+            participation_metadata["combat_stats"] = loadout.combat_stats
+          end
+
           ArenaParticipation.create!(
             arena_match: match,
             npc_template: member.npc_template,
             team: "b",
             joined_at: Time.current,
-            metadata: member.metadata.merge(
-              "current_hp" => member.max_hp,
-              "max_hp" => member.max_hp,
-              "level" => member.level,
-              "tile_npc_id" => tile_npc.id,
-              "encounter_slot" => index + 1,
-              "encounter_roster_sample" => encounter_selection.sample_key
-            )
+            metadata: participation_metadata
           )
         end
+      end
+
+      def member_loadout(member)
+        return unless tile_npc.personal_instance? || member.npc_template.metadata.to_h["world_tier"].present?
+
+        tier = tile_npc.metadata.to_h["world_tier"] || member.npc_template.metadata.to_h["world_tier"] || 1
+        NpcLoadout.new(npc_template: member.npc_template, world_tier: tier, rng:).call
       end
     end
   end

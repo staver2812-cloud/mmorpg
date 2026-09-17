@@ -44,10 +44,12 @@ module Game
 
         SET_META.each_key do |set_id|
           n = counts.fetch(set_id, 0)
+          next if n < 1
+
+          row = n >= 2 ? ladder_bonus(set_id, n) : {bonus: {}, labels: incomplete_label(set_id, n)}
+          active << {set_id:, pieces: n, labels: row[:labels]} if n >= 1
           next if n < 2
 
-          row = ladder_bonus(set_id, n)
-          active << {set_id:, pieces: n, labels: row[:labels]}
           row[:bonus].each do |key, value|
             mapped = BONUS_ALIASES[key.to_s]
             modifiers[mapped] += value.to_i if mapped
@@ -118,6 +120,14 @@ module Game
         end
 
         {bonus:, labels:}
+      end
+
+      def incomplete_label(set_id, n)
+        meta = SET_META.fetch(set_id)
+        [{
+          "ru-RU" => "#{meta.fetch(:name_ru)}: #{n}/6 (бонус с 2)",
+          "en-US" => "#{meta.fetch(:name_en)}: #{n}/6 (bonus from 2)"
+        }]
       end
     end
   end

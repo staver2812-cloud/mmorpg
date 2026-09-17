@@ -235,6 +235,11 @@ module Arena
     end
 
     def npc_stats(participation)
+      override = participation.metadata.to_h["combat_stats"]
+      if override.is_a?(Hash) && override.present?
+        return override.with_indifferent_access
+      end
+
       npc = participation.npc_template
       config = Game::World::ArenaNpcConfig.find_npc(npc&.npc_key)
       stats = if config

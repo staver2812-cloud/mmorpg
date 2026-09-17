@@ -453,11 +453,15 @@ encounter probability/cooldown/delay distribution, or its internal bot-storage
 model. The local captured-sample replay must not be presented as those unknown
 source rules.
 
-The official NPC article establishes capacity for groups up to ten. The shared
-`TileNpc`/config/selector limit is therefore `1..10`; the fight-start boundary
-creates ten distinct opponent slots and rejects eleven without a partial
-match. This does not enlarge any captured seeded roster or determine its
-members, levels, rewards, probabilities, or selection formula.
+The official NPC article establishes capacity for groups up to ten. Ashen
+personal-instance grinding raises the shared `TileNpc`/config/selector limit to
+`1..20` so level-based aggro packs can scale toward high tiers; authored
+Neverlands sample rosters remain evidence-gated. Fight-start rejects packs above
+twenty without a partial match. Ashen outdoor placements use
+`personal_instance` / `respawn_seconds: 0`: every player may start an isolated
+fight on the same cell immediately, bots wear a tier set whose stats drive
+combat, and gear loot is a scarce single piece from that worn set (never a full
+set dump).
 
 ## 7. Authoritative data and presentation model
 
@@ -1157,6 +1161,7 @@ supplies only authoritative completion/loot facts and stable source keys.
 | 2026-09-14 | Coarse-pointer Arena tabs/buttons and fight selects target ~44×44 CSS px (`UI-ADAPT-005`). |
 | 2026-09-14 | Coarse-pointer public fight-log pagination/mode links also target ~44×44 CSS px. |
 | 2026-09-14 | Arena statistics tab and empty recent-fights recover to Duels/City; empty public fight logs link Arena/City. |
+| 2026-09-17 | Ashen grinding rewrite: personal instances (no shared respawn), level-based aggro packs (`AggroPackSize`), set-equipped bot stats (`NpcLoadout`), scarce single `set_piece` loot, AFK 5-minute random-location ambush with off-cell personal fights, character-sheet set hints. |
 | 2026-09-14 | Arena chrome Character/Inventory/City links and recent-empty Duels CTA expose `data-arena-recovery`. |
 | 2026-09-14 | Arena room topline Character/Inventory/Lobby/City links expose `data-arena-recovery`. |
 | 2026-09-15 | Help Hall training dummy soft-release posture: always defend, no injected magic attack keys. |

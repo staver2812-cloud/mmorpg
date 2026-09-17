@@ -61,20 +61,20 @@ RSpec.describe TileNpc, type: :model do
       expect(build(:tile_npc, :single_npc_encounter)).to be_valid
     end
 
-    it "accepts the source maximum of ten members for fixed counts and roster samples" do
+    it "accepts the source maximum of twenty members for fixed counts and roster samples" do
       npc = build(:tile_npc, metadata: {
-        "encounter_count" => 10,
+        "encounter_count" => 20,
         "encounter_rosters" => [
-          {"key" => "capacity-boundary", "members" => Array.new(10) { {"npc_key" => "rat"} }}
+          {"key" => "capacity-boundary", "members" => Array.new(20) { {"npc_key" => "rat"} }}
         ]
       })
 
       expect(npc).to be_valid
-      expect(npc.encounter_size).to eq(10)
+      expect(npc.encounter_size).to eq(20)
     end
 
     it "rejects null, zero, and oversized encounter counts" do
-      [nil, 0, 11].each do |count|
+      [nil, 0, 21].each do |count|
         npc = build(:tile_npc, metadata: {"encounter_count" => count})
 
         expect(npc).not_to be_valid
@@ -108,7 +108,7 @@ RSpec.describe TileNpc, type: :model do
         nil,
         [],
         [{"key" => "empty", "members" => []}],
-        [{"key" => "large", "members" => Array.new(11) { {"npc_key" => "rat"} }}],
+        [{"key" => "large", "members" => Array.new(21) { {"npc_key" => "rat"} }}],
         [
           {"key" => "duplicate", "members" => [{"npc_key" => "rat"}]},
           {"key" => "duplicate", "members" => [{"npc_key" => "rat"}]}

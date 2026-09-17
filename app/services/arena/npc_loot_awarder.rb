@@ -115,13 +115,21 @@ module Arena
     def process_loot_table
       awards = []
       failures = []
+      item_awarded = false
 
       Array(npc_participation.npc_template.loot_table).each_with_index do |raw_entry, entry_index|
         loot_entry = Game::LootEntry.new(raw_entry)
         entry = loot_entry.attributes
         next unless roll_succeeds?(loot_entry)
 
-        awards << award_entry(entry, entry_index)
+        # Hard law: at most one gear piece per NPC kill.
+        if item_drop_kind?(entry) && item_awarded
+          next
+        end
+
+        award = award_entry(entry, entry_index)
+        awards << award
+        item_awarded = true if award.item?
       rescue Game::Inventory::Manager::CapacityExceededError,
         Game::LootEntry::InvalidError,
         InvalidEntryError => e
@@ -137,7 +145,7 @@ module Arena
 
     def roll_succeeds?(loot_entry)
       chance = loot_entry.chance_percent * drop_chance_multiplier
-      rng.rand(100) < chance
+      rng.rand < (chance / 100.0)
     end
 
     def drop_chance_multiplier
@@ -154,6 +162,8 @@ module Arena
       case loot_kind(entry)
       when "item"
         award_item(entry, entry_index)
+      when "set_piece"
+        award_set_piece(entry, entry_index)
       when "currency"
         award_currency(entry, entry_index)
       else
@@ -161,8 +171,23 @@ module Arena
       end
     end
 
+    def item_drop_kind?(entry)
+      %w[item set_piece].include?(loot_kind(entry))
+    end
+
     def loot_kind(entry)
       (entry[:kind].presence || "item").to_s
+    end
+
+    def award_set_piece(entry, entry_index)
+      keys = Array(entry[:item_keys]).presence ||
+        Array(npc_participation.metadata.to_h["equipped_set_keys"]).presence ||
+        Array(npc_participation.npc_template.metadata.to_h["equipped_set_keys"])
+      keys = keys.map(&:to_s).reject(&:blank?)
+      raise InvalidEntryError, I18n.t("arena.validations.loot_item_missing", identity: "set_piece") if keys.empty?
+
+      chosen_key = keys.fetch(rng.rand(keys.length))
+      award_item(entry.merge(item_key: chosen_key, kind: "item"), entry_index)
     end
 
     def award_item(entry, entry_index)

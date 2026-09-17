@@ -468,6 +468,8 @@ en:
       crushing: "Crushing"
       fortitude: "Fortitude"
       armor_pierce: "Armor pierce"
+      sets_title: "Sets"
+      sets_aria: "Active equipment sets"
     world:
       managed_content_changed: "Managed world content changed."
       action_in_progress: "Action in progress"

@@ -24,8 +24,9 @@ module Game
         keyword_init: true
       )
 
-      def initialize(tile_npc:, rng: Random.new)
+      def initialize(tile_npc:, character: nil, rng: Random.new)
         @tile_npc = tile_npc
+        @character = character
         @rng = rng
       end
 
@@ -38,7 +39,7 @@ module Game
 
       private
 
-      attr_reader :tile_npc, :rng
+      attr_reader :tile_npc, :character, :rng
 
       def sample_index(samples)
         unless samples.size.between?(1, TileNpc::MAX_ROSTER_SAMPLES)
@@ -100,7 +101,7 @@ module Game
       end
 
       def fixed_selection
-        count = tile_npc.encounter_size
+        count = encounter_member_count
         validate_member_count!(count)
         health = [tile_npc.current_hp.to_i, tile_npc.npc_template.health.to_i].find(&:positive?)
         members = Array.new(count) do
@@ -119,6 +120,14 @@ module Game
           experience_reward: fixed_experience_reward,
           trauma_percent: optional_percent(tile_npc.metadata.to_h, "trauma_percent") || 30
         )
+      end
+
+      def encounter_member_count
+        if character && tile_npc.personal_instance?
+          AggroPackSize.new(level: character.level, rng:).call
+        else
+          tile_npc.encounter_size
+        end
       end
 
       def fixed_experience_reward
