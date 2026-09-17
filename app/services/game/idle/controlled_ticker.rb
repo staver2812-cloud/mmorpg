@@ -45,7 +45,7 @@ module Game
         limit = (batch || ctrl.batch_size).to_i.clamp(1, 200)
         ran = 0
         errors = 0
-        Character.order(:id).limit(limit).find_each do |character|
+        Character.order(:id).limit(limit).each do |character|
           Game::Activity::Tracker.new(character:).ensure_daily_contracts!
           Game::Activity::Tracker.new(character:).record!(kind: "idle_tick", amount: 1)
           ran += 1

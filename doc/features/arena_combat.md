@@ -1146,6 +1146,7 @@ supplies only authoritative completion/loot facts and stable source keys.
 | 2026-09-14 | Arena lobby room-map and fight-type tab request specs assert via `arena.room_map` / `arena.tabs.*` (RU-safe). |
 | 2026-09-14 | Arena application timeout/trauma allowlist rejects add base i18n errors without English attribute prefixes. |
 | 2026-09-14 | Fight match-bar timeout unit uses `game.fight.min`; arena form select system specs assert via `arena.form.*` (RU-safe). |
+| 2026-09-17 | Custom PvP lobby: turn 30/60/90s, lobby wait, trauma Peaceful/Normal/Bloody (0/30/100), team sizes 1–5; match turn timer uses `turn_seconds` when set. |
 | 2026-09-14 | Fight result duration formatting uses `game.fight.duration_*` units (RU-safe). |
 | 2026-09-14 | Fight AP/HP/MP chrome and shell player-sort links use fight/social i18n. |
 | 2026-09-14 | Empty Arena application lists recover to City (`data-arena-apps-empty`); locked rooms show level-gate hint and City recovery (`data-arena-room-locked`). |

@@ -1,8 +1,7 @@
 # frozen_string_literal: true
 
-# Registers Ashen Veil dungeon/raid/progression catalogs as config payloads.
-# Runtime entry/UI intentionally deferred — catalogs are available for later wiring
-# without changing Neverlands shell or combat button locks.
+# Confirms Ashen Veil dungeon/raid/progression catalog JSON is present.
+# Player entry UI is InstancesController; this seed only validates files load.
 return unless defined?(Rails)
 
 %w[
