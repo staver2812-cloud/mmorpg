@@ -2,7 +2,7 @@
 
 module Manage
   # Admin tools: inject level (honest progression + combat rating) and grant
-  # thematic set kits with automatic equip.
+  # thematic set kits into the backpack only (no auto-equip).
   class CharacterTools
     Result = Struct.new(:success, :message, :character, keyword_init: true)
 
