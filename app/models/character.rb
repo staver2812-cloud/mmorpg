@@ -856,9 +856,14 @@ class Character < ApplicationRecord
     totals
   end
 
+  # Sheet UI reads active set thresholds; must stay public for views.
+  public
+
   def set_bonus_summary
     Game::Equipment::SetBonuses.new(character: self).call.active
   end
+
+  private
 
   def combat_component_base(stats, stat_key)
     case stat_key.to_s
