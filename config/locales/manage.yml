@@ -331,7 +331,7 @@ ru:
       level_injected: "Уровень %{from}→%{to}, combat rating %{rating}"
       unknown_set: "Неизвестный сет"
       set_pieces_missing: "Куски сета не найдены в каталоге"
-      kit_granted: "Выдано %{granted}, надето %{equipped} (%{set} T%{tier})"
+      kit_granted: "Выдано %{granted} в рюкзак (%{set} T%{tier}) — без автонадевания"
       inq_on: "INQ-иммунитет включён"
       inq_off: "INQ-иммунитет снят"
     catalog_activation:
@@ -763,7 +763,7 @@ en:
       level_injected: "Level %{from}→%{to}, combat rating %{rating}"
       unknown_set: "Unknown set"
       set_pieces_missing: "Set pieces missing from catalog"
-      kit_granted: "Granted %{granted}, equipped %{equipped} (%{set} T%{tier})"
+      kit_granted: "Granted %{granted} into backpack (%{set} T%{tier}) — no auto-equip"
       inq_on: "INQ immunity enabled"
       inq_off: "INQ immunity removed"
     catalog_activation:

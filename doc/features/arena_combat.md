@@ -1161,6 +1161,7 @@ supplies only authoritative completion/loot facts and stable source keys.
 | 2026-09-14 | Coarse-pointer Arena tabs/buttons and fight selects target ~44×44 CSS px (`UI-ADAPT-005`). |
 | 2026-09-14 | Coarse-pointer public fight-log pagination/mode links also target ~44×44 CSS px. |
 | 2026-09-14 | Arena statistics tab and empty recent-fights recover to Duels/City; empty public fight logs link Arena/City. |
+| 2026-09-18 | Phase 4: PvP trauma owned by assault scrolls (Peaceful/Normal/Bloody); Bloody guarantees heavy on loss; PvE defeat rolls light/medium only; Protection scroll joins live fights as helper A/B; Character inventory scrolls panel for buy/use. |
 | 2026-09-17 | Ashen grinding rewrite: personal instances (no shared respawn), level-based aggro packs (`AggroPackSize`), set-equipped bot stats (`NpcLoadout`), scarce single `set_piece` loot, AFK 5-minute random-location ambush with off-cell personal fights, character-sheet set hints. |
 | 2026-09-14 | Arena chrome Character/Inventory/City links and recent-empty Duels CTA expose `data-arena-recovery`. |
 | 2026-09-14 | Arena room topline Character/Inventory/Lobby/City links expose `data-arena-recovery`. |

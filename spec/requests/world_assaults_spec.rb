@@ -20,12 +20,13 @@ RSpec.describe "World location assaults", type: :request do
 
   it "starts a same-cell world PvP match through the assault route" do
     expect {
-      post world_assault_path, params: {defender_id: defender.id}
+      post world_assault_path, params: {defender_id: defender.id, assault_scroll_kind: "bloody"}
     }.to change(ArenaMatch, :count).by(1)
 
     match = ArenaMatch.last
     expect(response).to redirect_to(arena_match_path(match))
     expect(match.metadata["source"]).to eq("world_pvp")
+    expect(match.metadata["assault_scroll_kind"]).to eq("bloody")
     expect(match.metadata["combat_trauma"]).to eq(true)
   end
 

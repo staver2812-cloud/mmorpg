@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-# Starts an Ashen same-cell PvP assault that consumes a combat trauma scroll.
+# Starts an Ashen same-cell PvP assault that consumes an assault scroll.
 class WorldAssaultsController < ApplicationController
   include CurrentCharacterContext
 
@@ -9,7 +9,8 @@ class WorldAssaultsController < ApplicationController
   def create
     result = Game::World::StartPlayerAssault.new(
       attacker: current_character,
-      defender_id: params[:defender_id]
+      defender_id: params[:defender_id],
+      assault_scroll_kind: params[:assault_scroll_kind]
     ).call
 
     if result.success

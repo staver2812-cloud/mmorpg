@@ -121,21 +121,17 @@
             {},
             class: "nl-arena-select",
             required: true %>
-        <%= f.select :trauma_percent,
+        <%= f.select :assault_scroll_kind,
             [
-              [t("arena.form.trauma"), ""],
-              [t("arena.form.trauma_peaceful"), 0],
-              [t("arena.form.trauma_normal"), 30],
-              [t("arena.form.trauma_bloody"), 100]
+              [t("arena.form.assault_scroll"), ""],
+              [t("arena.form.assault_peaceful"), "peaceful"],
+              [t("arena.form.assault_normal"), "normal"],
+              [t("arena.form.assault_bloody"), "bloody"]
             ],
             {},
             class: "nl-arena-select",
             required: true %>
-        <label class="nl-arena-combat-trauma">
-          <%= f.check_box :combat_trauma, {}, "1", "0" %>
-          <%= t("arena.form.combat_trauma") %>
-        </label>
-        <p class="nl-arena-hint"><%= t("arena.form.combat_trauma_hint") %></p>
+        <p class="nl-arena-hint"><%= t("arena.form.assault_scroll_hint") %></p>
         <% scroll_qty = Game::World::StartPlayerAssault.trauma_scroll_quantity(current_character) %>
         <% if scroll_qty <= 0 %>
           <p class="nl-quests-board__meta" data-arena-need-scroll="1">
@@ -149,6 +145,8 @@
             <% else %>
               <%= link_to t("arena.nav.city"), world_path, class: "nl-sheet-link", data: {turbo: false, arena_recovery: "city"} %>
             <% end %>
+            ·
+            <%= link_to t("game.inventory.scrolls_block_title"), inventory_path(category: "things", subcategory: "scrolls"), class: "nl-sheet-link" %>
           </p>
         <% end %>
 

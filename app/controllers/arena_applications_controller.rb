@@ -149,6 +149,7 @@ class ArenaApplicationsController < ApplicationController
   def application_params
     params.require(:arena_application).permit(
       :fight_type, :fight_kind, :timeout_seconds, :turn_seconds, :trauma_percent, :combat_trauma,
+      :assault_scroll_kind,
       :team_count, :team_level_min, :team_level_max,
       :enemy_count, :enemy_level_min, :enemy_level_max,
       :wait_minutes
@@ -156,6 +157,7 @@ class ArenaApplicationsController < ApplicationController
   rescue ActionController::ParameterMissing
     params.permit(
       :fight_type, :fight_kind, :timeout_seconds, :turn_seconds, :trauma_percent, :combat_trauma,
+      :assault_scroll_kind,
       :team_count, :team_level_min, :team_level_max,
       :enemy_count, :enemy_level_min, :enemy_level_max,
       :wait_minutes

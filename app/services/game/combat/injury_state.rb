@@ -2,13 +2,13 @@
 
 module Game
   module Combat
-    # Ashen sandbox injury state on character.metadata.
-    # Severities: light < heavy < combat.
-    # Combat trauma only comes from PvP matches that consumed a combat scroll.
+    # Ashen injury state on character.metadata.
+    # Severities: light < medium < heavy < combat.
+    # PvP heavy/combat come from assault scrolls; PvE never applies heavy+.
     class InjuryState
       METADATA_KEY = "ashen_injuries"
-      SEVERITIES = %w[light heavy combat].freeze
-      RANK = {"light" => 1, "heavy" => 2, "combat" => 3}.freeze
+      SEVERITIES = %w[light medium heavy combat].freeze
+      RANK = {"light" => 1, "medium" => 2, "heavy" => 3, "combat" => 4}.freeze
 
       def initialize(character:, clock: -> { Time.current })
         @character = character
@@ -25,11 +25,11 @@ module Game
       end
 
       def blocks_movement?
-        active.any? { |row| %w[heavy combat].include?(row["severity"].to_s) }
+        active.any? { |row| %w[medium heavy combat].include?(row["severity"].to_s) }
       end
 
       def combat_trauma?
-        active.any? { |row| row["severity"].to_s == "combat" }
+        active.any? { |row| %w[heavy combat].include?(row["severity"].to_s) }
       end
 
       def apply!(severity:, duration:, source_match_id: nil)

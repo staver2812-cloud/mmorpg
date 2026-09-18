@@ -127,6 +127,10 @@
         </nav>
       <% end %>
 
+      <% if inventory_equipment_family?(@category) || @category == "all" || @subcategory == "scrolls" %>
+        <%= render "inventories/scrolls_panel" %>
+      <% end %>
+
       <% bag_slots = @inventory.inventory_items.where(equipped: false).count %>
       <% bag_slot_cap = @inventory.slot_capacity.to_i %>
       <div class="nl-inventory-mass"

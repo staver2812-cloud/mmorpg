@@ -1652,13 +1652,15 @@ otherwise the Ashen fallback `300..300` seconds (five minutes). The same
 character/anchor locks make concurrent due checks or retry delivery reuse the
 active match rather than creating another fight.
 
-### 8.6.1 Same-cell player assault (combat trauma scroll)
+### 8.6.1 Same-cell player assault (assault scrolls)
 
 `POST /world/assault` starts a player-versus-player duel against another
 playable character who shares the attacker's exact Presence cell/room. The
-attacker must hold and lose one `combat_trauma_scroll`. The created match is a
-live Arena duel with `metadata.source = world_pvp` and
-`metadata.combat_trauma = true`, so defeat applies combat trauma. Assault is
+attacker must hold and lose one assault scroll (Peaceful / Normal / Bloody, or
+legacy `combat_trauma_scroll` as Bloody). The created match is a live Arena
+duel with `metadata.source = world_pvp` and `metadata.assault_scroll_kind`.
+`InjuryResolver` applies loser trauma from that scroll only — never from crit
+intensity. Bloody guarantees heavy trauma. Assault is
 blocked in hospital, temple, shop, and arena-room contexts, and when either
 side is offline, moving, aboard, or already in an active match. The presence
 list exposes an Attack control for other nearby players; World owns the
@@ -1677,7 +1679,8 @@ mutation, Arena Combat owns the fight after start.
 | `POST /world/perform_local_action` | Execute an offered implemented cell action | Observation result or hostile fight transition | Offer fails; no reward/state invention. |
 | `POST /world/context` | Open Character or Inventory from the wilderness shell | Allowlisted destination or hostile fight transition with saved return context | Unsupported context returns to World; no arbitrary URL is followed. |
 | `POST /world/encounter_check` | Check the persisted outdoor cell for its hidden hostile without a manual action | JSON redirect to the existing/new shared fight, or `{interrupted: false}` | Authentication failure; bounded `422` on startup error with no partial match. |
-| `POST /world/assault` | Same-cell PvP assault consuming a combat trauma scroll | Redirect into the live Arena duel with `combat_trauma` metadata | Missing scroll, not co-located, safe zone, offline/busy target; no match created. |
+| `POST /world/assault` | Same-cell PvP assault consuming an assault scroll (Peaceful/Normal/Bloody) | Redirect into the live Arena duel with `assault_scroll_kind` metadata | Missing scroll, not co-located, safe zone, offline/busy target; no match created. |
+| `GET/POST /combat_interventions` | Protection scroll: list live fights / join as helper on team A or B | Redirect into the joined live match | Missing scroll, fight not live, already fighting; no join. |
 | `POST /world/interact_hotspot` | Shared city hotspot action | See `doc/features/city.md` | See city contract. |
 | `POST /arena_matches/:id/finish` | Finish a completed wilderness result | Marks the participant result viewed, exits combat, and returns to saved World/Character/Inventory context | Reject active fight or non-participant; malformed context falls back to World. |
 | `GET/POST/PATCH/DELETE /manage/world_cells`, `/manage/tile_buildings`, `/manage/npc_templates`, `/manage/tile_npcs` | Admin-only persisted content CRUD | Atomically changes the existing resolver owners and records an audit event | Anonymous redirects to sign-in; non-admin is denied; invalid/dependent changes preserve state. |
@@ -2987,6 +2990,7 @@ Before extending the World feature:
 | 2026-09-15 | Soft-release smoke walks west gate → Frontier Village square (Trading Post) plus Podgorny Mine / Resource Exchange deferred lobbies. |
 | 2026-09-15 | Soft-release smoke re-drinks at the eastern pond after Nature Child perk allocation. |
 | 2026-09-15 | Opening `/airship` without an active journey recovers to World with `airship_denied=1` chrome. |
+| 2026-09-18 | Phase 4 assault scrolls (Peaceful/Normal/Bloody) own PvP trauma; Protection scroll joins live fights; Character inventory scrolls panel. |
 | 2026-09-13 | Same-cell player Assault via combat trauma scroll (`POST /world/assault`): Presence Attack control, safe-zone denials, combat-trauma match metadata, and focused service/request coverage. |
 | 2026-09-15 | Failed `POST /world/assault` (missing/ineligible target) recovers on World with `assault_denied=1` chrome. |
 | 2026-09-15 | Missing/stale city hotspot interacts recover on World with `hotspot_denied=1` chrome. |

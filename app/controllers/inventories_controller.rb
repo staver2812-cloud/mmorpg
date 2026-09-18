@@ -103,16 +103,21 @@ class InventoriesController < ApplicationController
 
     respond_to do |format|
       if result[:success]
-        format.turbo_stream do
-          @inventory = current_character.inventory.reload
+        if result[:redirect].present?
+          format.html { redirect_to result[:redirect], notice: result[:message] }
+          format.turbo_stream { redirect_to result[:redirect], notice: result[:message] }
+        else
+          format.turbo_stream do
+            @inventory = current_character.inventory.reload
 
-          render turbo_stream: [
-            inventory_grid_stream,
-            character_sheet_stream,
-            turbo_stream.update("flash", partial: "shared/flash", locals: {type: "notice", message: result[:message]})
-          ]
+            render turbo_stream: [
+              inventory_grid_stream,
+              character_sheet_stream,
+              turbo_stream.update("flash", partial: "shared/flash", locals: {type: "notice", message: result[:message]})
+            ]
+          end
+          format.html { redirect_to inventory_redirect_path, notice: result[:message] }
         end
-        format.html { redirect_to inventory_redirect_path, notice: result[:message] }
       else
         format.turbo_stream do
           render turbo_stream: turbo_stream.update(
@@ -124,6 +129,16 @@ class InventoriesController < ApplicationController
         format.html { redirect_to inventory_redirect_path(use_denied: 1), alert: result[:error] }
       end
     end
+  end
+
+  # POST /inventory/buy_scroll
+  def buy_scroll
+    result = Game::Shop::PremiumScrollPurchase.new(
+      character: current_character,
+      item_key: params[:item_key]
+    ).call
+
+    redirect_to inventory_redirect_path, flash_for_result(result)
   end
 
   # DELETE /inventory/:id

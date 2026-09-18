@@ -2,22 +2,21 @@
 
 module Game
   module Shop
-    # Buys Ashen premium scrolls for Veil Marks at the hospital desk.
+    # Buys Ashen premium scrolls for Veil Marks (hospital desk / inventory panel).
     class PremiumScrollPurchase
       Result = Struct.new(:success, :message, keyword_init: true)
       OFFERINGS = {
-        "combat_trauma_scroll" => 15,
-        "combat_heal_scroll" => 20
+        "assault_scroll_peaceful" => 8,
+        "assault_scroll_normal" => 15,
+        "assault_scroll_bloody" => 35,
+        "protection_scroll" => 25,
+        "combat_heal_scroll" => 20,
+        # Legacy key kept buyable as Bloody alias for older UI/tests.
+        "combat_trauma_scroll" => 35
       }.freeze
 
       def self.owned_quantity(character, item_key)
-        return 0 unless character&.inventory
-
-        Game::Professions::Templates.ensure_craft_items!
-        template = ItemTemplate.find_by(key: item_key.to_s)
-        return 0 unless template
-
-        character.inventory.inventory_items.where(item_template: template, equipped: false).sum(:quantity)
+        Game::Combat::AssaultScrolls.quantity(character, item_key)
       end
 
       def initialize(character:, item_key:)

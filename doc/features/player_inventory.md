@@ -493,6 +493,7 @@ shipped Inventory management routes.
 | 2026-08-23 | Documented the successful NPC item-loot handoff to Arena's item-found feedback, distinguished Economy-owned NV loot from Inventory state, and kept inventory validation on the shared flash surface after removal of the legacy toast path; equip/unequip Turbo failures now return 422 without mutating equipment. |
 | 2026-08-25 | Made the shared multi-unit item-add contract explicitly atomic: an Inventory lock plus nested savepoint rolls back partial stack and carried-mass writes before a caller records a capacity failure. |
 | 2026-08-26 | Clarified the Combat-owned Careful Fighter wear handoff and recorded repair as a deferred workshop/profession transaction rather than an inventory durability reset. |
+| 2026-09-18 | Character inventory scrolls panel (`data-inventory-scrolls`): buy/use assault, protection, and heal scrolls without Infirmary trip; Protection use opens combat interventions. |
 | 2026-09-15 | Missing inventory row on equip/use/transfer recovers on Inventory with `item_denied=1` chrome. |
 | 2026-09-15 | Failed equip/unequip recovers on Inventory with `equip_denied=1` chrome; failed use/discard with `use_denied=1`. |
 | 2026-09-15 | Failed item/NV transfer/gift recovers on Inventory with `transfer_denied=1` chrome. |

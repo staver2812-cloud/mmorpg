@@ -17,13 +17,14 @@ RSpec.describe Game::World::StartPlayerAssault do
     Game::Inventory::Manager.new(inventory: attacker.inventory).add_item!(item_template: template, quantity: 1)
   end
 
-  it "consumes the trauma scroll and starts a combat-trauma duel on the same cell" do
-    result = described_class.new(attacker:, defender_id: defender.id).call
+  it "consumes an assault scroll and starts a world PvP duel with scroll trauma metadata" do
+    result = described_class.new(attacker:, defender_id: defender.id, assault_scroll_kind: "bloody").call
 
     expect(result.success).to be(true)
     expect(result.match).to be_live
     expect(result.match.metadata).to include(
       "source" => "world_pvp",
+      "assault_scroll_kind" => "bloody",
       "combat_trauma" => true,
       "attacker_id" => attacker.id,
       "defender_id" => defender.id

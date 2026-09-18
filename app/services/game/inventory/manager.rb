@@ -35,7 +35,7 @@ module Game
         result = apply_item_effect(character, inventory_item)
         return result unless result[:success]
 
-        consume_item_unit!(inventory_item)
+        consume_item_unit!(inventory_item) unless result[:defer_consume]
         result
       end
 
@@ -99,6 +99,29 @@ module Game
         stats = inventory_item.effect_modifiers
         notes = []
 
+        if truthy_effect?(stats["join_as_protector"]) || template.key.to_s == Game::Combat::AssaultScrolls::PROTECTION_KEY
+          return {
+            success: true,
+            defer_consume: true,
+            redirect: Rails.application.routes.url_helpers.combat_interventions_path,
+            message: I18n.t("game.combat.protector_choose_fight")
+          }
+        end
+
+        if stats["assault_scroll_kind"].present? || truthy_effect?(template.enhancement_rules.to_h["assault_scroll"])
+          kind = Game::Combat::AssaultScrolls.normalize_kind(
+            stats["assault_scroll_kind"].presence || preferred_kind_from_key(template.key)
+          )
+          character.update!(
+            metadata: character.metadata.to_h.merge("preferred_assault_scroll_kind" => kind)
+          )
+          return {
+            success: true,
+            defer_consume: true,
+            message: I18n.t("game.combat.assault_scroll_armed", kind: I18n.t("game.combat.assault_kind.#{kind}"))
+          }
+        end
+
         if truthy_effect?(stats["clear_light_injury"])
           removed = Game::Combat::InjuryState.new(character:).clear_light!
           notes << I18n.t("game.injuries.cleared_light", count: removed) if removed.positive?
@@ -154,6 +177,14 @@ module Game
         value == true || value.to_s == "true" || value.to_i == 1
       end
 
+      def self.preferred_kind_from_key(key)
+        case key.to_s
+        when "assault_scroll_peaceful" then "peaceful"
+        when "assault_scroll_bloody", "combat_trauma_scroll" then "bloody"
+        else "normal"
+        end
+      end
+
       def self.allocated_stat_points(character)
         character.allocated_stats.to_h.values.sum(&:to_i)
       end
@@ -164,7 +195,7 @@ module Game
         end
       end
 
-      private_class_method :truthy_effect?, :allocated_stat_points, :allocated_skill_points
+      private_class_method :truthy_effect?, :preferred_kind_from_key, :allocated_stat_points, :allocated_skill_points
 
       def initialize(inventory:)
         @inventory = inventory

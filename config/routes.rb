@@ -63,11 +63,14 @@ Rails.application.routes.draw do
   post "world/assault", to: "world_assaults#create", as: :world_assault
   post "world/obelisk", to: "world_obelisks#create", as: :world_obelisk
 
+  resources :combat_interventions, only: %i[index create]
+
   resource :inventory, only: [:show] do
     post :equip
     post :unequip
     post :unequip_all
     post :use
+    post :buy_scroll
     post :sort
     post :save_equipment_set
     post :wear_equipment_set

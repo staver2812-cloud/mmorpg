@@ -248,6 +248,12 @@ RSpec.describe "Arena match transition and reconciliation", type: :system do
   # ===========================================================================
 
   describe "application form submission" do
+    before do
+      Game::Professions::Templates.ensure_craft_items!
+      template = ItemTemplate.find_by!(key: "assault_scroll_normal")
+      Game::Inventory::Manager.new(inventory: character_a.inventory).add_item!(item_template: template, quantity: 2)
+    end
+
     it "submits application successfully" do
       login_as user_a, scope: :user
       enter_arena_from_city!(character_a)
@@ -258,7 +264,7 @@ RSpec.describe "Arena match transition and reconciliation", type: :system do
       select "Free", from: "fight_kind"
       select I18n.t("arena.form.sec", count: 60), from: "turn_seconds"
       select I18n.t("arena.form.min", count: 5), from: "wait_minutes"
-      select I18n.t("arena.form.trauma_normal"), from: "trauma_percent"
+      select I18n.t("arena.form.assault_normal"), from: "assault_scroll_kind"
 
       click_button "Submit Application"
 
@@ -275,7 +281,7 @@ RSpec.describe "Arena match transition and reconciliation", type: :system do
       select "Free", from: "fight_kind"
       select I18n.t("arena.form.sec", count: 60), from: "turn_seconds"
       select I18n.t("arena.form.min", count: 5), from: "wait_minutes"
-      select I18n.t("arena.form.trauma_normal"), from: "trauma_percent"
+      select I18n.t("arena.form.assault_normal"), from: "assault_scroll_kind"
 
       expect {
         click_button "Submit Application"

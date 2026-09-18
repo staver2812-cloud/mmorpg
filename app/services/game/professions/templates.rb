@@ -135,22 +135,99 @@ module Game
           }
         )
         ensure_item!(
-          key: "combat_trauma_scroll",
-          name: "Свиток боевой травмы",
+          key: "assault_scroll_peaceful",
+          name: "Свиток нападения (Мирный)",
           item_type: "consumable",
           slot: "none",
           weight: 1,
           stack_limit: 20,
           base_price: 0,
-          stat_modifiers: {},
+          stat_modifiers: {"assault_scroll_kind" => "peaceful"},
+          enhancement_rules: {
+            "inventory_family" => "things",
+            "subcategory" => "scrolls",
+            "source_name" => "Свиток нападения (Мирный)",
+            "description" => "PvP без гарантированной травмы. Списывается при «Напасть» или заявке арены.",
+            "premium_currency" => "veil_marks",
+            "premium_price" => 8,
+            "assault_scroll" => true
+          }
+        )
+        ensure_item!(
+          key: "assault_scroll_normal",
+          name: "Свиток нападения (Обычный)",
+          item_type: "consumable",
+          slot: "none",
+          weight: 1,
+          stack_limit: 20,
+          base_price: 0,
+          stat_modifiers: {"assault_scroll_kind" => "normal"},
+          enhancement_rules: {
+            "inventory_family" => "things",
+            "subcategory" => "scrolls",
+            "source_name" => "Свиток нападения (Обычный)",
+            "description" => "Стандартная PvP-травматичность (лёгкая/средняя). Списывается при нападении.",
+            "premium_currency" => "veil_marks",
+            "premium_price" => 15,
+            "assault_scroll" => true
+          }
+        )
+        ensure_item!(
+          key: "assault_scroll_bloody",
+          name: "Свиток нападения (Кровавый)",
+          item_type: "consumable",
+          slot: "none",
+          weight: 1,
+          stack_limit: 20,
+          base_price: 0,
+          stat_modifiers: {"assault_scroll_kind" => "bloody"},
+          enhancement_rules: {
+            "inventory_family" => "things",
+            "subcategory" => "scrolls",
+            "source_name" => "Свиток нападения (Кровавый)",
+            "description" => "Гарантирует тяжёлую травму проигравшему. Списывается при нападении.",
+            "premium_currency" => "veil_marks",
+            "premium_price" => 35,
+            "assault_scroll" => true
+          }
+        )
+        ensure_item!(
+          key: "combat_trauma_scroll",
+          name: "Свиток боевой травмы (наследие)",
+          item_type: "consumable",
+          slot: "none",
+          weight: 1,
+          stack_limit: 20,
+          base_price: 0,
+          stat_modifiers: {"assault_scroll_kind" => "bloody"},
           enhancement_rules: {
             "inventory_family" => "things",
             "subcategory" => "scrolls",
             "source_name" => "Свиток боевой травмы",
-            "description" => "При заявке на арену включает боевую травму. Покупается за Veil Marks.",
+            "description" => "Устаревший ключ: работает как Кровавый свиток нападения.",
             "premium_currency" => "veil_marks",
-            "premium_price" => 15,
-            "not_inventory_use" => true
+            "premium_price" => 35,
+            "assault_scroll" => true,
+            "legacy_bloody" => true
+          }
+        )
+        ensure_item!(
+          key: "protection_scroll",
+          name: "Свиток защиты",
+          item_type: "consumable",
+          slot: "none",
+          weight: 1,
+          stack_limit: 20,
+          base_price: 0,
+          stat_modifiers: {"join_as_protector" => true},
+          enhancement_rules: {
+            "inventory_family" => "things",
+            "subcategory" => "scrolls",
+            "source_name" => "Свиток защиты",
+            "description" => "Позволяет войти в любой идущий бой защитником стороны А или Б.",
+            "premium_currency" => "veil_marks",
+            "premium_price" => 25,
+            "protection_scroll" => true
           }
         )
         ensure_item!(
@@ -166,7 +243,7 @@ module Game
             "inventory_family" => "things",
             "subcategory" => "scrolls",
             "source_name" => "Свиток снятия боевой травмы",
-            "description" => "Снимает боевые травмы. Покупается за Veil Marks.",
+            "description" => "Снимает тяжёлые и боевые травмы. Покупается за Veil Marks.",
             "premium_currency" => "veil_marks",
             "premium_price" => 20
           }

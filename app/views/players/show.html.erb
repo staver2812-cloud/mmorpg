@@ -26,13 +26,21 @@
       <% if !@own_profile && @viewer_character.present? && Game::World::StartPlayerAssault.offerable?(attacker: @viewer_character, defender: @character) %>
         <div class="nl-profile-assault">
           <% if Game::World::StartPlayerAssault.has_trauma_scroll?(@viewer_character) %>
-            <%= button_to t("game.world.assault_cta"),
-                  world_assault_path,
-                  method: :post,
-                  params: {defender_id: @character.id},
-                  class: "nl-assault-btn",
-                  form: {class: "nl-assault-form", data: {turbo: false}},
-                  title: t("game.world.assault_hint") %>
+            <% preferred = @viewer_character.metadata.to_h["preferred_assault_scroll_kind"].presence || "normal" %>
+            <div class="nl-assault-kinds" data-assault-kinds="1">
+              <% %w[peaceful normal bloody].each do |kind| %>
+                <% qty = Game::Combat::AssaultScrolls.quantity(@viewer_character, Game::Combat::AssaultScrolls.item_key_for(kind)) %>
+                <% qty += Game::Combat::AssaultScrolls.quantity(@viewer_character, Game::Combat::AssaultScrolls::LEGACY_BLOODY_KEY) if kind == "bloody" %>
+                <% next if qty <= 0 %>
+                <%= button_to t("game.combat.assault_kind.#{kind}"),
+                      world_assault_path,
+                      method: :post,
+                      params: {defender_id: @character.id, assault_scroll_kind: kind},
+                      class: "nl-assault-btn#{' nl-assault-btn--preferred' if kind == preferred}",
+                      form: {class: "nl-assault-form", data: {turbo: false}},
+                      title: t("game.world.assault_hint_kind", kind: t("game.combat.assault_kind.#{kind}")) %>
+              <% end %>
+            </div>
             <p class="nl-quests-board__meta"><%= t("game.world.assault_hint") %></p>
           <% else %>
             <button type="button" class="nl-assault-btn nl-assault-btn--blocked" disabled title="<%= t("game.world.assault_need_scroll") %>">
@@ -40,9 +48,12 @@
             </button>
             <p class="nl-quests-board__meta" data-assault-need-scroll="1">
               <%= t("game.world.assault_need_scroll") %>
+              <%= link_to t("game.inventory.scrolls_block_title"), inventory_path(category: "things", subcategory: "scrolls"), class: "nl-sheet-link", data: {assault_recovery: "inventory"} %>
               <% if Game::World::CityBuildingCatalog.accessible?(character: @viewer_character, building_key: "hospital") %>
+                ·
                 <%= link_to t("game.buildings.hospital_title_short"), city_building_path("hospital"), class: "nl-sheet-link", data: {assault_recovery: "hospital"} %>
               <% else %>
+                ·
                 <%= link_to t("game.common.city"), world_path, class: "nl-sheet-link", data: {assault_recovery: "city"} %>
               <% end %>
             </p>

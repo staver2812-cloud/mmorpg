@@ -51,23 +51,15 @@ module Manage
       return failure(I18n.t("manage.characters.set_pieces_missing")) if templates.empty?
 
       inventory = character.inventory || character.create_inventory!
-      equipped = 0
       granted = 0
       ActiveRecord::Base.transaction do
         templates.each do |template|
-          item = Game::Inventory::Manager.new(inventory:).add_item!(item_template: template, quantity: 1)
+          Game::Inventory::Manager.new(inventory:).add_item!(item_template: template, quantity: 1)
           granted += 1
-          next unless template.equippable?
-
-          result = Game::Inventory::EquipmentService.new(character:, item: item.reload).equip!
-          equipped += 1 if result[:success]
         end
-        recompute_combat_rating!
-        character.assign_base_vitals_from_stats
-        character.save!
       end
 
-      success(I18n.t("manage.characters.kit_granted", granted:, equipped:, set: set_id, tier:))
+      success(I18n.t("manage.characters.kit_granted", granted:, set: set_id, tier:))
     end
 
     def set_inquisition!(enabled:)

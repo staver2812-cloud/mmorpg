@@ -14,8 +14,12 @@ RSpec.describe Game::Combat::InquisitionImmunity do
 end
 
 RSpec.describe Game::Combat::InjuryResolver do
-  it "raises severity when critical head hits were recorded" do
-    match = create(:arena_match, trauma_percent: 30, metadata: {"combat_trauma" => false})
+  it "applies heavy trauma from a bloody assault scroll, not crit intensity" do
+    match = create(
+      :arena_match,
+      trauma_percent: 100,
+      metadata: {"assault_scroll_kind" => "bloody", "combat_trauma" => true}
+    )
     loser = create(:character)
     create(
       :arena_participation,
@@ -25,9 +29,9 @@ RSpec.describe Game::Combat::InjuryResolver do
       team: "a",
       result: "defeat",
       metadata: {
-        "critical_hits_taken" => 3,
-        "critical_damage_taken" => 200,
-        "head_hits_taken" => 2
+        "critical_hits_taken" => 0,
+        "critical_damage_taken" => 0,
+        "head_hits_taken" => 0
       }
     )
     winner = create(:character)

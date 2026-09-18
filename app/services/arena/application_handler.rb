@@ -39,12 +39,18 @@ module Arena
         if (error = application_creation_error(character, room))
           Result.new(success?: false, errors: [error])
         else
-          combat_trauma = combat_trauma_requested?(params) || params[:trauma_percent].to_i >= 100
-          if combat_trauma && (scroll_error = consume_combat_trauma_scroll!(character))
+          assault_kind = resolve_assault_scroll_kind(params)
+          scroll_required = assault_scroll_required?(params, assault_kind)
+          if scroll_required && (scroll_error = consume_assault_scroll!(character, assault_kind))
             next Result.new(success?: false, errors: [scroll_error])
           end
 
-          trauma = combat_trauma ? 100 : (params[:trauma_percent] || 30).to_i
+          trauma =
+            if scroll_required
+              Game::Combat::AssaultScrolls.trauma_percent_for(assault_kind)
+            else
+              (params[:trauma_percent] || 30).to_i
+            end
           turn = (params[:turn_seconds] || params[:timeout_seconds] || 60).to_i
           turn = 60 unless ArenaApplication::VALID_TURN_SECONDS.include?(turn)
 
@@ -63,7 +69,11 @@ module Arena
             enemy_level_min: params[:enemy_level_min],
             enemy_level_max: params[:enemy_level_max],
             wait_minutes: params[:wait_minutes] || 10,
-            metadata: combat_trauma ? {"combat_trauma" => true} : {}
+            metadata: {
+              "assault_scroll_kind" => assault_kind,
+              "combat_trauma" => Game::Combat::AssaultScrolls.bloody?(assault_kind),
+              "assault_scroll_consumed" => scroll_required
+            }
           )
 
           if application.save
@@ -259,8 +269,10 @@ module Arena
     end
 
     def create_match_from_applications(application, acceptor)
-      combat_trauma = application.metadata.to_h["combat_trauma"] == true ||
-        application.metadata.to_h["combat_trauma"].to_s == "true"
+      meta = application.metadata.to_h
+      assault_kind = Game::Combat::AssaultScrolls.normalize_kind(
+        meta["assault_scroll_kind"].presence || (truthy_meta?(meta["combat_trauma"]) ? "bloody" : "normal")
+      )
       match = ArenaMatch.create!(
         arena_room: application.arena_room,
         match_type: application.fight_type,
@@ -269,7 +281,8 @@ module Arena
         trauma_percent: application.trauma_percent,
         metadata: {
           fight_kind: application.fight_kind,
-          "combat_trauma" => combat_trauma
+          "assault_scroll_kind" => assault_kind,
+          "combat_trauma" => Game::Combat::AssaultScrolls.bloody?(assault_kind)
         }.compact
       )
 
@@ -420,7 +433,11 @@ module Arena
         trauma_percent: application.trauma_percent,
         expires_at: application.expires_at&.iso8601,
         expires_in: application.time_until_expiration,
-        combat_trauma: application.metadata.to_h["combat_trauma"] == true
+        combat_trauma: Game::Combat::AssaultScrolls.bloody?(
+          application.metadata.to_h["assault_scroll_kind"].presence ||
+            (application.metadata.to_h["combat_trauma"] ? "bloody" : "normal")
+        ),
+        assault_scroll_kind: application.metadata.to_h["assault_scroll_kind"]
       }
 
       # Add NPC-specific fields
@@ -434,14 +451,41 @@ module Arena
       payload
     end
 
+    def resolve_assault_scroll_kind(params)
+      if params[:assault_scroll_kind].present?
+        return Game::Combat::AssaultScrolls.normalize_kind(params[:assault_scroll_kind])
+      end
+
+      if combat_trauma_requested?(params) || params[:trauma_percent].to_i >= 100
+        return "bloody"
+      end
+
+      case params[:trauma_percent].to_i
+      when 0 then "peaceful"
+      when 100 then "bloody"
+      else "normal"
+      end
+    end
+
+    def assault_scroll_required?(params, assault_kind)
+      params[:assault_scroll_kind].present? ||
+        combat_trauma_requested?(params) ||
+        Game::Combat::AssaultScrolls.bloody?(assault_kind)
+    end
+
     def combat_trauma_requested?(params)
       value = params[:combat_trauma]
       value == true || value.to_s.in?(%w[1 true on yes])
     end
 
-    def consume_combat_trauma_scroll!(character)
+    def truthy_meta?(value)
+      value == true || value.to_s == "true" || value.to_i == 1
+    end
+
+    def consume_assault_scroll!(character, kind)
       Game::Professions::Templates.ensure_craft_items!
-      template = ItemTemplate.find_by(key: "combat_trauma_scroll")
+      item_key = Game::Combat::AssaultScrolls.resolve_owned_key(character, kind)
+      template = ItemTemplate.find_by(key: item_key)
       return I18n.t("arena.combat_scroll_missing") unless template
 
       inventory = character.inventory

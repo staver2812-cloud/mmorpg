@@ -2,19 +2,18 @@
 
 module Game
   module World
-    # Starts an Ashen location PvP duel against another playable character who
-    # shares the attacker's exact Presence cell/room. Requires and consumes a
-    # combat trauma scroll so the fight applies combat injuries on defeat.
+    # Starts a same-cell PvP duel. Trauma severity is owned by the assault scroll
+    # kind consumed from the attacker's bag (peaceful / normal / bloody).
     class StartPlayerAssault
       class AssaultViolationError < StandardError; end
-      SCROLL_KEY = "combat_trauma_scroll"
       SAFE_BUILDINGS = %w[hospital temple].freeze
 
       Result = Struct.new(:success, :match, :message, keyword_init: true)
 
-      def initialize(attacker:, defender_id:)
+      def initialize(attacker:, defender_id:, assault_scroll_kind: nil)
         @attacker = attacker
         @defender_id = defender_id.to_i
+        @assault_scroll_kind = resolve_kind(assault_scroll_kind)
       end
 
       # UI/discovery predicate: same Presence cell/room and not blocked by
@@ -38,7 +37,7 @@ module Game
       end
 
       def self.trauma_scroll_quantity(character)
-        Game::Shop::PremiumScrollPurchase.owned_quantity(character, SCROLL_KEY)
+        Game::Combat::AssaultScrolls.total_assault_quantity(character)
       end
 
       def self.co_located?(attacker, defender)
@@ -90,7 +89,16 @@ module Game
 
       private
 
-      attr_reader :attacker, :defender_id
+      attr_reader :attacker, :defender_id, :assault_scroll_kind
+
+      def resolve_kind(raw)
+        explicit = raw.presence || attacker.metadata.to_h["preferred_assault_scroll_kind"].presence
+        if explicit.present?
+          return Game::Combat::AssaultScrolls.normalize_kind(explicit)
+        end
+
+        Game::Combat::AssaultScrolls.preferred_owned_kind(attacker) || "normal"
+      end
 
       def validate!(defender)
         raise AssaultViolationError, I18n.t("game.world.assault_missing_target") unless defender
@@ -114,7 +122,8 @@ module Game
 
       def consume_scroll!
         Game::Professions::Templates.ensure_craft_items!
-        template = ItemTemplate.find_by(key: SCROLL_KEY)
+        item_key = Game::Combat::AssaultScrolls.resolve_owned_key(attacker, assault_scroll_kind)
+        template = ItemTemplate.find_by(key: item_key)
         raise AssaultViolationError, I18n.t("arena.combat_scroll_missing") unless template
 
         inventory = attacker.inventory
@@ -132,16 +141,18 @@ module Game
 
       def create_match!(defender)
         position = attacker.position
+        trauma = Game::Combat::AssaultScrolls.trauma_percent_for(assault_scroll_kind)
         ArenaMatch.create!(
           zone: position.zone,
           match_type: :duel,
           status: :pending,
           turn_timeout_seconds: ArenaMatch::DEFAULT_TURN_TIMEOUT,
-          trauma_percent: 100,
+          trauma_percent: trauma,
           metadata: {
             "source" => "world_pvp",
             "fight_kind" => "free",
-            "combat_trauma" => true,
+            "assault_scroll_kind" => assault_scroll_kind,
+            "combat_trauma" => Game::Combat::AssaultScrolls.bloody?(assault_scroll_kind),
             "return_context" => "world",
             "zone" => position.zone.name,
             "x" => position.x,
