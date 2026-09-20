@@ -9,6 +9,7 @@ class ActivityController < ApplicationController
   def show
     tracker = Game::Activity::Tracker.new(character: current_character)
     tracker.ensure_daily_contracts!
+    tracker.ensure_achievement_rows!
     day = Time.current.utc.strftime("%Y-%m-%d")
     @contracts = DailyActivityContract.where(character: current_character, day_key: day).order(:id)
     @achievements = ActivityAchievement.where(character: current_character).order(Arel.sql("completed_at NULLS LAST"), :id)

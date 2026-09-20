@@ -13,13 +13,15 @@ module Game
       end
 
       def call
-        case kind
-        when "contract"
-          claim_contract!
-        when "achievement"
-          claim_achievement!
-        else
-          Result.new(success?: false, message: I18n.t("game.activity.unknown_kind"))
+        ApplicationRecord.transaction do
+          case kind
+          when "contract"
+            claim_contract!
+          when "achievement"
+            claim_achievement!
+          else
+            Result.new(success?: false, message: I18n.t("game.activity.unknown_kind"))
+          end
         end
       end
 

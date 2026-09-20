@@ -16,6 +16,9 @@ module Game
       def call
         recipe = Catalog.recipe(recipe_key)
         return failure(I18n.t("game.professions.recipe_missing")) unless recipe
+        if blood_iii_recipe?(recipe) && !Game::Clans::Laboratory.unlocked?(character)
+          return failure(I18n.t("game.professions.laboratory_required"))
+        end
 
         profession = Catalog.professions.fetch(recipe.fetch("profession"))
         skill_key = profession.fetch("skill_key")
@@ -80,6 +83,11 @@ module Game
 
       def profession_skill(skill_key)
         character.metadata.to_h.dig(SKILLS_KEY, skill_key.to_s).to_i
+      end
+
+      def blood_iii_recipe?(recipe)
+        potion = PotionCatalog.fetch(recipe.dig("output", "item_key"))
+        potion && potion.fetch(:blood).to_i == 3
       end
 
       def bump_skill!(skill_key, gain)

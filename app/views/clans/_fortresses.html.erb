@@ -1,0 +1,27 @@
+<h2><%= t("game.clans.tab_fortresses") %></h2>
+<% if @clan.blank? %>
+  <p class="nl-quests-board__meta"><%= t("game.clans.need_clan") %></p>
+<% elsif @fortresses.any? %>
+  <% @fortresses.each do |fort| %>
+    <article class="nl-clan-fort">
+      <h3><%= fort.name %> (<%= fort.x %>,<%= fort.y %>)</h3>
+      <% fort.ensure_default_buildings! %>
+      <ul>
+        <% fort.fortress_buildings.order(:building_key).each do |building| %>
+          <li>
+            <%= building.name %> — <%= t("game.clans.level", level: building.level) %>
+            <% if @membership&.role.in?(%w[leader deputy]) %>
+              <%= button_to t("game.clans.upgrade"),
+                    upgrade_building_clan_path,
+                    method: :post,
+                    params: {fortress_id: fort.id, building_id: building.id},
+                    class: "lbut" %>
+            <% end %>
+          </li>
+        <% end %>
+      </ul>
+    </article>
+  <% end %>
+<% else %>
+  <p><%= t("game.clans.no_fortresses") %></p>
+<% end %>

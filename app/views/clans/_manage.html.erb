@@ -1,0 +1,46 @@
+<% if @clan.blank? %>
+  <p class="nl-quests-board__meta"><%= t("game.clans.manage_need_clan") %></p>
+<% elsif !@clan.can_manage?(current_character) && @membership&.role != "treasurer" %>
+  <p class="nl-quests-board__meta"><%= t("game.clans.manage_denied") %></p>
+<% else %>
+  <h2><%= t("game.clans.tab_manage") %></h2>
+  <p class="nl-quests-board__meta"><%= t("game.clans.manage_lead") %></p>
+
+  <% if @clan.can_invite?(current_character) %>
+    <h3><%= t("game.clans.invite_title") %></h3>
+    <%= form_with url: invite_clan_path, method: :post, local: true, class: "nl-clan-form" do |f| %>
+      <%= f.text_field :target_name, placeholder: t("game.clans.invite_placeholder"), required: true, class: "LogintextBox4" %>
+      <%= f.submit t("game.clans.invite_cta"), class: "lbut" %>
+    <% end %>
+  <% end %>
+
+  <% if @clan.can_lock_treasury?(current_character) %>
+    <h3><%= t("game.clans.treasury_lock_title") %></h3>
+    <p>
+      <%= t(@clan.treasury_locked? ? "game.clans.treasury_status_locked" : "game.clans.treasury_status_open") %>
+    </p>
+    <% if @clan.treasury_locked? %>
+      <%= button_to t("game.clans.treasury_unlock_cta"),
+            treasury_lock_clan_path,
+            method: :post,
+            params: {locked: false},
+            class: "lbut" %>
+    <% else %>
+      <%= button_to t("game.clans.treasury_lock_cta"),
+            treasury_lock_clan_path,
+            method: :post,
+            params: {locked: true},
+            class: "lbut" %>
+    <% end %>
+  <% end %>
+
+  <% if @membership&.role == "leader" %>
+    <h3><%= t("game.clans.dissolve_title") %></h3>
+    <p class="nl-quests-board__meta"><%= t("game.clans.dissolve_lead") %></p>
+    <%= button_to t("game.clans.dissolve_cta"),
+          dissolve_clan_path,
+          method: :post,
+          class: "lbut",
+          form: {data: {turbo_confirm: t("game.clans.dissolve_confirm")}} %>
+  <% end %>
+<% end %>

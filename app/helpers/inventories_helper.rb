@@ -264,6 +264,7 @@ module InventoriesHelper
     "luck" => "Удача",
     "intelligence" => "Знания"
   }.freeze
+  CRAFT_GEAR_PREFIXES = %w[ash_ranger_ ash_warden_ ash_battle_ ash_forager_].freeze
 
   def equipment_slot_icon(slot)
     SLOT_ICONS[slot.to_sym] || "[ ]"
@@ -394,6 +395,7 @@ module InventoriesHelper
     end
 
     lines << [I18n.t("game.details.description"), template.description] if template.description.present?
+    lines.concat(equipment_comparison_rows(template))
 
     lines.presence || [[I18n.t("game.details.description"), inventory_item_type_label(template.item_type)]]
   end
@@ -450,8 +452,22 @@ module InventoriesHelper
 
     durability = inventory_item_durability(item)
     lines << "#{I18n.t("game.details.durability")}: #{durability}" if durability
+    equipment_comparison_rows(template).each { |label, value| lines << "#{label}: #{value}" }
 
     lines.join("\n")
+  end
+
+  def equipment_comparison_rows(template)
+    rules = template.enhancement_rules.to_h
+    marked = CRAFT_GEAR_PREFIXES.any? { |prefix| template.key.to_s.start_with?(prefix) } ||
+      rules["craft"].present? || rules["premium"].present? || rules["source"].to_s.in?(%w[craft premium])
+    return [] unless marked && %w[equipment weapon armor accessory].include?(template.item_type.to_s)
+
+    [
+      [I18n.t("game.details.compare_shop", default: "Лавка"), I18n.t("game.details.compare_shop_value", default: "≈60% характеристик")],
+      [I18n.t("game.details.compare_craft", default: "Крафт"), "#{template.base_price.to_i} NV · 100%"],
+      [I18n.t("game.details.compare_premium", default: "Прем"), I18n.t("game.details.compare_premium_value", default: "выше крафта")]
+    ]
   end
 
   def inventory_item_durability_percent(item)

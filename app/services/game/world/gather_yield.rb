@@ -76,6 +76,7 @@ module Game
         "ember_trout" => 15.minutes.to_i,
         "cinder_pike" => 15.minutes.to_i
       }.freeze
+      NIGHT_HERBS = %w[moon_orchid mist_leaf glow_lichen].freeze
 
       Result = Struct.new(:item_key, :quantity, :label, :group_key, :respawn_seconds, :depleted, keyword_init: true)
 
@@ -111,7 +112,7 @@ module Game
         available = matching.reject { |group| depleted?(group) }
         return Result.new(depleted: true) if available.empty?
 
-        group = available.sample(random: rng)
+        group = weighted_groups(available, map:).sample(random: rng)
         key = map[group["key"].to_s] || map[group["kind"].to_s] || fallback
         qty = quantity_for(key)
         Result.new(
@@ -129,6 +130,22 @@ module Game
         expires_at.present? && expires_at > clock.call
       rescue ArgumentError, TypeError
         false
+      end
+
+      def weighted_groups(groups, map:)
+        return groups unless night?
+
+        # Ashen's night window is evaluated in the server time zone. Duplicating
+        # nocturnal entries changes only seeded selection weight, not authority.
+        groups.flat_map do |group|
+          key = map[group["key"].to_s] || map[group["kind"].to_s]
+          NIGHT_HERBS.include?(key) ? [group, group] : [group]
+        end
+      end
+
+      def night?
+        hour = clock.call.in_time_zone.hour
+        hour >= 20 || hour <= 5
       end
 
       def quantity_for(key)

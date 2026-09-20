@@ -13,6 +13,7 @@ class CityBuildingsController < ApplicationController
     )
     @building = Game::World::CityBuildingCatalog.fetch(@building_key, zone: @position.zone)
     if @building_key == "airship_station"
+      Game::World::AshenAirshipStations.ensure!
       @airship_routes = Game::World::AirshipTravel.new(character: current_character).station_routes!
     end
     if @building_key == "workshop"
@@ -29,7 +30,9 @@ class CityBuildingsController < ApplicationController
       @injury_summary = Game::Combat::InjuryState.new(character: current_character).summary
       @profession_recipes = Game::Professions::Catalog.recipes_for_building("hospital")
       @ash_healer_skill = current_character.metadata.to_h.dig("profession_skills", "ash_healer").to_i
-      @veil_marks = (current_user.currency_wallet || current_user.create_currency_wallet!(nv_balance: 0)).veil_marks.to_i
+      wallet = current_user.currency_wallet || current_user.create_currency_wallet!(nv_balance: 0)
+      @veil_marks = wallet.veil_marks.to_i
+      @wallet_nv = wallet.nv_balance.to_i
       @premium_offers = Game::Shop::PremiumScrollPurchase::OFFERINGS
     end
     if @building_key == "bank"
@@ -47,6 +50,16 @@ class CityBuildingsController < ApplicationController
     end
     if @building_key == "post"
       @post_note = Game::World::PostOfficeNote.current_for(current_character)
+      @post_inbox = Game::World::PostOfficeMail.inbox_for(current_character)
+    end
+    if @building_key == "auction"
+      Game::Professions::Templates.ensure_craft_items!
+      @auction_listings = AuctionListing.open.craft_goods.includes(:seller_character, :item_template).order(created_at: :desc).limit(50)
+      auction_items = current_character.inventory&.inventory_items&.where(equipped: false)&.includes(:item_template)&.order(:id)&.limit(100) || []
+      @auction_listable = auction_items.select { |row| AuctionListing.listable_template?(row.item_template) }.first(40)
+    end
+    if @building_key == "clan_hall"
+      @sector_war_rows = Game::World::SectorWarBoard.new.call
     end
     if @building_key == "souvenir_shop"
       Game::Professions::Templates.ensure_craft_items!
@@ -180,15 +193,89 @@ class CityBuildingsController < ApplicationController
       return
     end
 
-    service = Game::World::PostOfficeNote.new(character: current_character, body: params[:body])
-    result = if params[:post_action].to_s == "clear"
-      service.clear!
+    result = case params[:post_action].to_s
+    when "clear"
+      Game::World::PostOfficeNote.new(character: current_character).clear!
+    when "send_mail"
+      Game::World::PostOfficeMail.new(
+        character: current_character,
+        body: params[:body],
+        recipient_name: params[:recipient_name]
+      ).send!
+    when "clear_inbox"
+      Game::World::PostOfficeMail.new(character: current_character).clear_inbox!
     else
-      service.save!
+      Game::World::PostOfficeNote.new(character: current_character, body: params[:body]).save!
     end
     extra = result.success ? {} : {post_denied: 1}
     flash_opts = result.success ? {notice: result.message} : {alert: result.message}
     redirect_to city_building_path("post", **extra), **flash_opts
+  end
+
+  def list_auction
+    unless @building_key == "auction"
+      redirect_to world_path(building_denied: 1), alert: I18n.t("game.buildings.auction_only"), status: :see_other
+      return
+    end
+
+    item = current_character.inventory&.inventory_items&.find_by(id: params[:inventory_item_id], equipped: false)
+    price = params[:price_nv].to_d
+    qty = [params[:quantity].to_i, 1].max
+    return redirect_to(city_building_path("auction"), alert: I18n.t("game.trade_hub.auction_missing_item")) unless item
+    unless AuctionListing.listable_template?(item.item_template)
+      return redirect_to(city_building_path("auction"), alert: I18n.t("game.trade_hub.auction_craft_only"))
+    end
+    return redirect_to(city_building_path("auction"), alert: I18n.t("game.trade_hub.auction_bad_price")) unless price.positive?
+    return redirect_to(city_building_path("auction"), alert: I18n.t("game.trade_hub.auction_bad_qty")) if qty > item.quantity
+
+    ActiveRecord::Base.transaction do
+      Game::Inventory::Manager.new(inventory: current_character.inventory).remove_item!(
+        item_template: item.item_template,
+        quantity: qty
+      )
+      AuctionListing.create!(
+        seller_character: current_character,
+        item_template: item.item_template,
+        quantity: qty,
+        price_nv: price,
+        status: "open",
+        metadata: {"listed_from" => "city_auction", "listed_from_item_id" => item.id}
+      )
+    end
+
+    redirect_to city_building_path("auction"), notice: I18n.t("game.trade_hub.auction_listed"), status: :see_other
+  rescue Game::Inventory::Manager::InventoryUnderflowError => e
+    redirect_to city_building_path("auction"), alert: e.message, status: :see_other
+  end
+
+  def buy_auction
+    unless @building_key == "auction"
+      redirect_to world_path(building_denied: 1), alert: I18n.t("game.buildings.auction_only"), status: :see_other
+      return
+    end
+
+    listing = AuctionListing.lock.find_by(id: params[:listing_id], status: "open")
+    return redirect_to(city_building_path("auction"), alert: I18n.t("game.trade_hub.auction_gone")) unless listing
+    if listing.seller_character_id == current_character.id
+      return redirect_to(city_building_path("auction"), alert: I18n.t("game.trade_hub.auction_own"))
+    end
+
+    buyer_wallet = current_character.user.currency_wallet
+    seller_wallet = listing.seller_character.user.currency_wallet
+    price = listing.price_nv.to_d
+    if buyer_wallet.nv_balance.to_d < price
+      return redirect_to(city_building_path("auction"), alert: I18n.t("game.shop.not_enough_nv"))
+    end
+
+    ActiveRecord::Base.transaction do
+      buyer_wallet.adjust!(amount: -price, reason: "city.auction_buy", metadata: {"listing_id" => listing.id})
+      seller_wallet.adjust!(amount: price, reason: "city.auction_sell", metadata: {"listing_id" => listing.id})
+      inventory = current_character.inventory || current_character.create_inventory!
+      Game::Inventory::Manager.new(inventory:).add_item!(item_template: listing.item_template, quantity: listing.quantity)
+      listing.update!(status: "sold", buyer_character: current_character)
+    end
+
+    redirect_to city_building_path("auction"), notice: I18n.t("game.trade_hub.auction_bought"), status: :see_other
   end
 
   def souvenir

@@ -33,21 +33,40 @@
     <% if @achievements.empty? %>
       <p class="nl-quests-board__meta"><%= t("game.activity.achievements_empty") %></p>
     <% else %>
-      <% @achievements.each do |row| %>
-        <% ready = row.completed_at.present? && row.claimed_at.blank? %>
-        <% title = I18n.locale.to_s.start_with?("ru") ? row.metadata["name_ru"] : row.metadata["name_en"] %>
-        <article class="nl-quests__card" data-achievement-key="<%= row.achievement_key %>">
-          <div class="nl-quests__card-top">
-            <h2><%= title.presence || row.achievement_key %></h2>
-            <span class="nl-quests__badge"><%= row.progress %> / <%= row.required %></span>
-          </div>
-          <% if ready %>
-            <%= button_to t("game.activity.claim"),
-                  claim_activity_path(kind: "achievement", id: row.id),
-                  method: :post,
-                  class: "nl-arena-small-button" %>
-          <% end %>
-        </article>
+      <%
+        by_chain = @achievements.group_by { |row| row.metadata.to_h["id"].presence || row.achievement_key.to_s.split(":").first }
+      %>
+      <% by_chain.each do |_chain_id, rows| %>
+        <% rows.sort_by { |r| r.metadata.to_h["step"].to_i }.each do |row| %>
+          <% step = row.metadata.to_h["step"].to_i %>
+          <% prior = rows.find { |r| r.metadata.to_h["step"].to_i == step - 1 } if step.positive? %>
+          <% unlocked = step.zero? || prior&.completed_at.present? %>
+          <% next unless unlocked || row.progress.to_i.positive? || row.completed_at.present? %>
+          <% ready = row.completed_at.present? && row.claimed_at.blank? %>
+          <% title = I18n.locale.to_s.start_with?("ru") ? row.metadata["name_ru"] : row.metadata["name_en"] %>
+          <% tier = row.metadata.to_h["tier"].to_s %>
+          <article class="nl-quests__card nl-quests__card--<%= ready ? "ready" : (row.claimed_at ? "completed" : (unlocked ? "active" : "locked")) %>"
+                   data-achievement-key="<%= row.achievement_key %>"
+                   data-achievement-tier="<%= tier %>">
+            <div class="nl-quests__card-top">
+              <h2><%= title.presence || row.achievement_key %></h2>
+              <span class="nl-quests__badge"><%= row.progress %> / <%= row.required %></span>
+            </div>
+            <% if tier == "legendary" %>
+              <p class="nl-quests-board__meta"><%= t("game.activity.tier_legendary") %></p>
+            <% end %>
+            <% if ready %>
+              <%= button_to t("game.activity.claim"),
+                    claim_activity_path(kind: "achievement", id: row.id),
+                    method: :post,
+                    class: "nl-arena-small-button" %>
+            <% elsif row.claimed_at.present? %>
+              <p class="nl-quests-board__meta"><%= t("game.activity.claimed_label") %></p>
+            <% elsif !unlocked %>
+              <p class="nl-quests-board__meta"><%= t("game.activity.tier_locked") %></p>
+            <% end %>
+          </article>
+        <% end %>
       <% end %>
     <% end %>
   </div>

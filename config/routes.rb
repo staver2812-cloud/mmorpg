@@ -2,6 +2,7 @@ Rails.application.routes.draw do
   namespace :manage do
     root "dashboard#index"
     resources :world_cells
+    resource :world_atlas, only: :show
     resources :tile_buildings
     resources :npc_templates
     resources :tile_npcs
@@ -19,9 +20,16 @@ Rails.application.routes.draw do
       member do
         post :inject_level
         post :grant_kit
+        post :grant_item
+        post :grant_currency
+        post :grant_bot_kit
+        post :remove_item
         post :toggle_inq
       end
     end
+    resource :playable_region, only: :create, controller: "playable_regions"
+    resources :unique_items, only: [:new, :create]
+    resources :world_fortresses, only: [:index, :edit, :update]
   end
 
   # Already implemented MVP Neverlands-based game-design routes.
@@ -58,6 +66,27 @@ Rails.application.routes.draw do
     post :interact_hotspot
   end
 
+  resource :world_map, only: :show, controller: "world_maps"
+  post "world/claim_fortress", to: "world_landmarks#claim_fortress", as: :world_claim_fortress
+  post "world/enter_dungeon", to: "world_landmarks#enter_dungeon", as: :world_enter_dungeon
+  post "world/siege_battle", to: "world_siege_battles#create", as: :world_siege_battle
+  post "world/party_invite", to: "world_parties#invite", as: :world_party_invite
+  post "world/party_accept", to: "world_parties#accept", as: :world_party_accept
+  post "world/party_leave", to: "world_parties#leave", as: :world_party_leave
+
+  resource :clan, only: [:show, :create] do
+    post :upgrade_building
+    post :invite
+    post :respond_invitation
+    post :set_role
+    post :membership
+    post :treasury_lock
+    post :treasury_transfer
+    post :transfer_leadership
+    post :dissolve
+  end
+  get "character/timers", to: "character_timers#show", as: :character_timers
+
   get "world/locations/:key", to: "world_locations#show", as: :world_location
   post "world/locations/:key/features", to: "world_locations#open_feature", as: :world_location_feature
   post "world/encounter_check", to: "world_encounter_checks#create", as: :world_encounter_check
@@ -65,6 +94,15 @@ Rails.application.routes.draw do
   post "world/obelisk", to: "world_obelisks#create", as: :world_obelisk
 
   resources :combat_interventions, only: %i[index create]
+
+  resource :trade_hub, only: [:show], controller: "trade_hub" do
+    post :buy_supply
+    post :buy_scroll
+    post :list_auction
+    post :buy_auction
+    post :create_exchange
+    post :fill_exchange
+  end
 
   resource :inventory, only: [:show] do
     post :equip
@@ -99,6 +137,8 @@ Rails.application.routes.draw do
   post "city/buildings/:building_key/bank", to: "city_buildings#bank", as: :city_building_bank
   post "city/buildings/:building_key/bank_item", to: "city_buildings#bank_item", as: :city_building_bank_item
   post "city/buildings/:building_key/post", to: "city_buildings#post", as: :city_building_post
+  post "city/buildings/:building_key/list_auction", to: "city_buildings#list_auction", as: :city_building_list_auction
+  post "city/buildings/:building_key/buy_auction", to: "city_buildings#buy_auction", as: :city_building_buy_auction
   post "city/buildings/:building_key/souvenir", to: "city_buildings#souvenir", as: :city_building_souvenir
   post "city/buildings/:building_key/obelisk", to: "city_buildings#obelisk", as: :city_building_obelisk
   post "city/buildings/:building_key/law", to: "city_buildings#law", as: :city_building_law
