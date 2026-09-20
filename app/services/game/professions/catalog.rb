@@ -48,6 +48,8 @@ module Game
           raise InvalidConfigurationError, "professions missing" unless professions.is_a?(Hash)
           raise InvalidConfigurationError, "recipes missing" unless recipes.is_a?(Hash)
 
+          recipes = recipes.merge(PotionCatalog.recipe_entries)
+
           recipes.each do |key, recipe|
             raise InvalidConfigurationError, "#{key} inputs missing" unless recipe["inputs"].is_a?(Hash)
             raise InvalidConfigurationError, "#{key} output missing" unless recipe.dig("output", "item_key").present?

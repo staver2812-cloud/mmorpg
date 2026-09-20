@@ -12,19 +12,25 @@
   <% end %>
   <% wallet = current_user.currency_wallet || current_user.create_currency_wallet!(nv_balance: 0) %>
   <% balance = wallet.nv_balance.to_d %>
-  <% any_affordable = Game::World::SouvenirPurchase::OFFERINGS.any? { |_key, price| balance >= price.to_d } %>
+  <% offerings = Game::World::SouvenirPurchase.offerings %>
+  <% any_affordable = offerings.any? { |_key, price| balance >= price.to_d } %>
   <p class="nl-quests-board__meta" data-souvenir-wallet="<%= balance.to_i %>" data-souvenir-any-affordable="<%= any_affordable ? "1" : "0" %>">
     <%= t("game.buildings.souvenir_wallet", amount: balance.to_i) %>
   </p>
   <div class="nl-handbook__grid">
-    <% Game::World::SouvenirPurchase::OFFERINGS.each do |item_key, price| %>
+    <% offerings.each do |item_key, price| %>
       <% template = ItemTemplate.find_by(key: item_key) %>
       <% owned = template ? current_character.inventory&.inventory_items&.where(item_template: template, equipped: false)&.sum(:quantity).to_i : 0 %>
       <% affordable = balance >= price.to_d %>
       <article class="nl-handbook__card"
                data-souvenir-item="<%= item_key %>"
                data-souvenir-affordable="<%= affordable ? "1" : "0" %>">
-        <h3><%= template&.display_name || item_key %></h3>
+        <h3>
+          <%= template&.display_name || item_key %>
+          <% if template&.enhancement_rules.to_h["description"].present? %>
+            <%= nl_info_tip(template.enhancement_rules.to_h["description"]) %>
+          <% end %>
+        </h3>
         <p class="nl-quests-board__meta">
           <%= price %> NV
           · <%= t("game.buildings.souvenir_owned", count: owned) %>

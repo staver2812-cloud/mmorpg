@@ -5,12 +5,32 @@ module Game
     # Souvenir counter: buy small Ashen materials for NV without a trading license.
     class SouvenirPurchase
       Result = Struct.new(:success, :message, keyword_init: true)
-      OFFERINGS = {
+      BASE_OFFERINGS = {
         "ashen_bait" => 8,
         "wood_chips" => 3,
         "ash_herb" => 5,
-        "rat_tail" => 5
+        "rat_tail" => 5,
+        "ashen_hatchet" => 45,
+        "ashen_sickle" => 40,
+        "ashen_fishing_rod" => 55,
+        "ashen_rod_ash" => 120,
+        "ashen_rod_salt" => 220,
+        "ashen_rod_veil" => 400,
+        "hook_worm" => 3,
+        "hook_bloodworm" => 5,
+        "hook_dough" => 4,
+        "hook_ember_fly" => 7,
+        "hook_crumb" => 2
       }.freeze
+
+      def self.offerings
+        potions = Game::Professions::PotionCatalog::POTIONS.keys.index_with do |key|
+          Game::Professions::PotionCatalog.shop_price(key)
+        end
+        BASE_OFFERINGS.merge(potions)
+      end
+
+      OFFERINGS = BASE_OFFERINGS # legacy constant; prefer offerings
 
       def initialize(character:, item_key:)
         @character = character
@@ -18,12 +38,13 @@ module Game
       end
 
       def call
-        price = OFFERINGS[item_key]
+        price = self.class.offerings[item_key]
         return failure(I18n.t("game.buildings.souvenir_unknown")) unless price
 
         character.with_lock do
           character.reload
           Game::Professions::Templates.ensure_craft_items!
+          Game::World::FishingCatalog.ensure_templates!
           template = ItemTemplate.find_by(key: item_key)
           return failure(I18n.t("game.buildings.souvenir_unknown")) unless template
 

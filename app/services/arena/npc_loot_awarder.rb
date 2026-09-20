@@ -149,13 +149,17 @@ module Arena
     end
 
     def drop_chance_multiplier
+      meta = match.metadata.to_h
       template_raw = npc_participation.npc_template&.metadata.to_h["drop_chance_multiplier"]
-      tile_raw = match.metadata.to_h["drop_chance_multiplier"]
-      raw = tile_raw.presence || template_raw
+      tile_raw = meta["drop_chance_multiplier"]
+      dungeon_raw = meta["loot_bonus_chance"] if meta["dungeon_loot_bonus"]
+      raw = tile_raw.presence || dungeon_raw.presence || template_raw
       value = Float(raw, exception: false)
       return 1.0 unless value
 
-      value.clamp(0.1, 5.0)
+      # Values below 1.0 are treated as an additive bonus (0.5 → ×1.5).
+      multiplier = value < 1.0 ? (1.0 + value) : value
+      multiplier.clamp(0.1, 5.0)
     end
 
     def award_entry(entry, entry_index)
@@ -217,14 +221,26 @@ module Arena
       currency = entry.fetch(:currency, "NV").to_s.upcase
       raise InvalidEntryError, I18n.t("arena.validations.loot_currency_unsupported", currency: currency) unless currency == "NV"
 
+      nv_mult = Float(match.metadata.to_h["loot_bonus_nv_mult"], exception: false) if match.metadata.to_h["dungeon_loot_bonus"]
+      amount = (amount * nv_mult).round.clamp(1, 1_000_000) if nv_mult&.positive?
+
+      recipients = loot_recipients
+      share = [(amount / recipients.size.to_f).floor, 1].max
       event_key = event_key_for(entry_index)
-      wallet = character.user.currency_wallet || character.user.create_currency_wallet!(nv_balance: 0)
-      wallet.adjust!(
-        amount:,
-        reason: "combat.npc_loot",
-        metadata: source_payload(entry_index).merge("event_key" => event_key)
-      )
-      transaction = wallet.currency_transactions.order(:id).last!
+      last_txn = nil
+      recipients.each do |recipient|
+        wallet = recipient.user.currency_wallet || recipient.user.create_currency_wallet!(nv_balance: 0)
+        wallet.adjust!(
+          amount: share,
+          reason: "combat.npc_loot",
+          metadata: source_payload(entry_index).merge(
+            "event_key" => event_key,
+            "loot_split" => recipients.size > 1,
+            "share_of" => amount
+          )
+        )
+        last_txn = wallet.currency_transactions.order(:id).last!
+      end
 
       Award.new(
         kind: "currency",
@@ -233,9 +249,17 @@ module Arena
         item_template: nil,
         quantity: nil,
         currency:,
-        amount:,
-        currency_transaction_id: transaction.id
+        amount: share * recipients.size,
+        currency_transaction_id: last_txn.id
       )
+    end
+
+    def loot_recipients
+      ids = Array(match.metadata.to_h["party_character_ids"]).map(&:to_i)
+      return [character] if ids.blank? || !match.metadata.to_h["loot_split"]
+
+      members = Character.where(id: ids).to_a
+      members.presence || [character]
     end
 
     def find_item_template!(entry)

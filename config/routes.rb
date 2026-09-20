@@ -29,6 +29,7 @@ Rails.application.routes.draw do
   # into doc/design.
   root "world#show"
 
+  get "players/find", to: "players#find", as: :find_player
   get "player/:name", to: "players#show", as: :player
   get "dress", to: "dress#show", as: :dress
 

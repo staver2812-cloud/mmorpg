@@ -204,7 +204,39 @@
       </div>
     <% end %>
 
-    <p class="nl-sheet-effects"><%= t("game.sheet.total_effects") %>: <%= metadata.fetch("active_effects", []).size %> / 99</p>
+    <% active_buffs = Game::Characters::TimedBuffs.new(character:).active %>
+    <p class="nl-sheet-effects" data-sheet-buffs="<%= active_buffs.size %>">
+      <%= t("game.sheet.total_effects") %>: <%= active_buffs.size %> / 99
+    </p>
+    <% if active_buffs.any? %>
+      <div class="nl-sheet-buff-icons" data-sheet-buff-list="1" aria-label="<%= t("game.sheet.active_buffs") %>">
+        <% active_buffs.each do |buff| %>
+          <% tip = Game::Professions::PotionCatalog.tooltip_for(buff) %>
+          <% blood = Game::Professions::PotionCatalog.fetch(buff["key"])&.dig(:blood) || 1 %>
+          <span class="nl-buff-icon nl-buff-icon--blood<%= blood %>"
+                title="<%= tip %>"
+                data-buff-key="<%= buff["key"] %>"
+                tabindex="0"
+                role="img"
+                aria-label="<%= tip.tr("\n", ". ") %>">⚗</span>
+        <% end %>
+      </div>
+      <ul class="nl-sheet-buff-list">
+        <% active_buffs.each do |buff| %>
+          <% expires = begin
+               Time.zone.parse(buff["expires_at"].to_s)
+             rescue ArgumentError, TypeError
+               nil
+             end %>
+          <li title="<%= Game::Professions::PotionCatalog.tooltip_for(buff) %>">
+            <%= buff["label"] %>
+            <% if expires %>
+              · <%= t("game.sheet.buff_until", time: expires.strftime("%H:%M")) %>
+            <% end %>
+          </li>
+        <% end %>
+      </ul>
+    <% end %>
     <% post_note = Game::World::PostOfficeNote.current_for(character) %>
     <% if post_note.present? %>
       <p class="nl-sheet-effects" title="<%= t("game.sheet.post_note_hint") %>">

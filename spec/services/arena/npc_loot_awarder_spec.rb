@@ -244,15 +244,13 @@ RSpec.describe Arena::NpcLootAwarder do
       character.inventory.update!(slot_capacity: 1, current_weight: 8)
     end
 
-    it "records one failed resolution without retaining the portion that initially fit" do
+    it "still awards the overflowing stack without a hard slot failure" do
       result = award_loot
 
-      expect(result.awards).to be_empty
-      expect(result.failures.map(&:message)).to contain_exactly(I18n.t("game.inventory.no_free_slots"))
-      expect(existing_stack.reload.quantity).to eq(8)
-      expect(character.inventory.reload.current_weight).to eq(8)
-      expect(GameEvent.where(event_type: :item_found, recipient: user)).to be_empty
-      expect(npc_participation.reload.metadata.dig("loot_resolution", "failures")).to be_present
+      expect(result.failures).to be_empty
+      expect(result.awards).not_to be_empty
+      expect(character.inventory.inventory_items.where(item_template: existing_stack.item_template).sum(:quantity)).to eq(13)
+      expect(character.inventory.reload.current_weight).to eq(13)
     end
   end
 

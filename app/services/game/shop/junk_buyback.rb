@@ -8,10 +8,38 @@ module Game
 
       PRICES = {
         "wood_chips" => 1,
-        "rat_tail" => 2,
+        "rat_tail" => 3,
         "ashen_bait" => 2,
-        "ashen_bandage" => 4,
-        "ash_herb" => 2
+        "ashen_bandage" => 8,
+        "ash_herb" => 3,
+        "ash_perch" => 9,
+        "mist_roach" => 6,
+        "veil_eel" => 16,
+        "salt_carp" => 12,
+        "ember_trout" => 22,
+        "cinder_pike" => 18,
+        "drift_smelt" => 5,
+        "grilled_ash_perch" => 18,
+        "veil_fish_stew" => 48,
+        "smoked_cinder_pike" => 36,
+        "mist_roach_cakes" => 16,
+        "pike_broth" => 28,
+        "salt_elixir" => 32,
+        "ember_salve" => 30,
+        "ash_tonic" => 12,
+        "healer_bag_light" => 22,
+        "veil_field_kit" => 45,
+        "hook_worm" => 1,
+        "hook_bloodworm" => 2,
+        "hook_dough" => 1,
+        "hook_ember_fly" => 2,
+        "hook_crumb" => 1,
+        "pine_resin" => 3,
+        "ember_fern" => 3,
+        "dust_moss" => 2,
+        "salt_sage" => 3,
+        "veil_willow_bark" => 2,
+        "cinder_root" => 3
       }.freeze
 
       T5_SET_PRICE = 8

@@ -250,7 +250,20 @@ module InventoriesHelper
 
   ITEM_EFFECT_SKIP_KEYS = %w[
     damage_min damage_max heal_hp restore_mp reset_allocation family weapon_family
+    buff buff_duration_seconds blood_tier
   ].freeze
+
+  BUFF_MOD_LABELS = {
+    "attack" => "Атака",
+    "defense" => "Защита",
+    "accuracy" => "Точность",
+    "dodge" => "Уклон",
+    "max_hp" => "Макс. HP",
+    "gather_speed" => "Скорость сбора %",
+    "fishing_skill" => "Рыбалка",
+    "luck" => "Удача",
+    "intelligence" => "Знания"
+  }.freeze
 
   def equipment_slot_icon(slot)
     SLOT_ICONS[slot.to_sym] || "[ ]"
@@ -344,7 +357,28 @@ module InventoriesHelper
     lines << [I18n.t("game.details.durability"), inventory_item_durability(item)] if inventory_item_durability(item)
     lines << [I18n.t("game.details.damage"), "#{template.stat_modifiers["damage_min"]}-#{template.stat_modifiers["damage_max"]}"] if template.stat_modifiers["damage_min"] && template.stat_modifiers["damage_max"]
 
-    template.stat_modifiers.to_h.each do |stat, value|
+    stats = template.stat_modifiers.to_h
+    if stats["heal_hp"].present?
+      lines << [I18n.t("game.details.heal_hp", default: "HP"), "+#{stats["heal_hp"].to_i}"]
+    end
+    if stats["restore_mp"].present?
+      lines << [I18n.t("game.details.restore_mp", default: "MP"), "+#{stats["restore_mp"].to_i}"]
+    end
+    if stats["buff"].is_a?(Hash)
+      blood = stats["blood_tier"].presence || template.enhancement_rules.to_h["blood_tier"]
+      if blood.present?
+        lines << [I18n.t("game.details.blood_tier", default: "Кровь"), Game::Professions::PotionCatalog.roman(blood)]
+      end
+      duration_min = (stats["buff_duration_seconds"].presence || 3600).to_i / 60
+      lines << [I18n.t("game.details.buff_duration", default: "Длительность"), "#{duration_min} мин."]
+      stats["buff"].each do |mod_key, value|
+        label = BUFF_MOD_LABELS[mod_key.to_s] || mod_key.to_s
+        signed = value.to_i.positive? ? "+#{value.to_i}" : value.to_i.to_s
+        lines << [label, signed]
+      end
+    end
+
+    stats.each do |stat, value|
       next if value.blank?
       next if ITEM_EFFECT_SKIP_KEYS.include?(normalize_item_detail_key(stat))
 

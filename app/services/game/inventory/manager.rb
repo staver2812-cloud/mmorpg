@@ -133,7 +133,28 @@ module Game
           notes << I18n.t("game.injuries.cleared_tier", tier: I18n.t("game.injuries.severity.#{tier}", default: tier), count: removed) if removed.positive?
         end
 
-        if stats["heal_hp"]
+        buff_mods = stats["buff"].is_a?(Hash) ? stats["buff"] : {}
+        buff_duration = stats["buff_duration_seconds"].to_i
+        if buff_mods.present? || buff_duration.positive?
+          buff_mods = stats.except(
+            "buff", "buff_duration_seconds", "heal_hp", "restore_mp",
+            "clear_light_injury", "clear_injury_tier"
+          ) if buff_mods.blank?
+          Game::Characters::TimedBuffs.new(character:).apply!(
+            key: template.key,
+            label: template.display_name,
+            mods: buff_mods,
+            duration_seconds: buff_duration.positive? ? buff_duration : 1.hour.to_i
+          )
+          minutes = (buff_duration.positive? ? buff_duration : 1.hour.to_i) / 60
+          notes << I18n.t(
+            "game.inventory.buff_applied",
+            name: template.display_name,
+            minutes: minutes
+          )
+        end
+
+        if stats["heal_hp"] && buff_mods.blank? && !buff_duration.positive?
           amount = stats["heal_hp"].to_i
           actual_healed = Characters::VitalsService.new(character).apply_healing(amount, source: template.name)
           notes << I18n.t("game.inventory.restored_hp", amount: actual_healed)
@@ -239,6 +260,21 @@ module Game
 
       attr_reader :inventory
 
+      def find_or_build_stack(item_template:)
+        stack = inventory.inventory_items.where(item_template:, equipped: false).order(:created_at).detect do |existing|
+          existing.quantity < item_template.stack_limit
+        end
+        return stack if stack
+
+        # Ashen soft capacity: stack count is unlimited. Mass may exceed
+        # carrying_capacity (overweight slows travel); money/NV gates Shop buys.
+        inventory.inventory_items.build(
+          item_template:,
+          quantity: 0,
+          weight: item_template.weight
+        )
+      end
+
       def persist_item_stacks!(item_template:, quantity:)
         remaining = quantity
         last_stack = nil
@@ -249,14 +285,11 @@ module Game
           raise CapacityExceededError, I18n.t("game.inventory.stack_limit_exceeded") if capacity <= 0
 
           to_add = [remaining, capacity].min
-          ensure_weight_capacity!(item_template.weight * to_add)
 
           if stack.new_record?
-            # New stack - set quantity directly and save
             stack.quantity = to_add
             stack.save!
           else
-            # Existing stack - increment
             stack.increment!(:quantity, to_add)
           end
           increment_weight!(item_template.weight * to_add)
@@ -265,31 +298,6 @@ module Game
         end
 
         last_stack
-      end
-
-      def find_or_build_stack(item_template:)
-        stack = inventory.inventory_items.where(item_template:, equipped: false).order(:created_at).detect do |existing|
-          existing.quantity < item_template.stack_limit
-        end
-        return stack if stack
-
-        ensure_slot_capacity!
-        # Build (don't save yet) - caller will set quantity and save
-        inventory.inventory_items.build(
-          item_template:,
-          quantity: 0,
-          weight: item_template.weight
-        )
-      end
-
-      def ensure_slot_capacity!
-        used_slots = inventory.inventory_items.count
-        raise CapacityExceededError, I18n.t("game.inventory.no_free_slots") if used_slots >= inventory.slot_capacity
-      end
-
-      def ensure_weight_capacity!(delta)
-        projected = inventory.current_weight + delta
-        raise CapacityExceededError, I18n.t("game.inventory.inventory_overloaded") if projected > inventory.max_weight
       end
 
       def increment_weight!(delta)

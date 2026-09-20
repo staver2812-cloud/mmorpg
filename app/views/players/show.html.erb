@@ -1,19 +1,38 @@
 <% content_for :title, t("game.profile.character_title", name: @character.name) %>
+<% online = @character_online %>
 
 <%#
   Player profile.
 
   For the owner this renders inside the game shell, whose header already
-  carries the name, level, and vitals, so the sheet starts directly with the
-  paper doll as in the live capture. A visitor gets that identity line here
-  instead, because the public layout has no shell header.
+  carries the name, level, and vitals, so the sheet starts with identity +
+  presence above the paper doll. A visitor gets the same identity band.
 %>
 <section class="nl-character-page">
-  <% unless @own_profile %>
-    <header class="nl-profile-identity">
-      <h1><%= @character.name %> [<%= @character.level %>]</h1>
-    </header>
-  <% end %>
+  <header class="nl-profile-identity"
+          data-profile-online="<%= online ? 1 : 0 %>"
+          data-profile-name="<%= @character.name %>">
+    <h1>
+      <span class="nl-profile-nick"><%= @character.name %> [<%= @character.level %>]</span>
+      <span class="nl-presence-badge <%= online ? "nl-presence-badge--online" : "nl-presence-badge--offline" %>"
+            data-presence-status="<%= online ? "online" : "offline" %>">
+        <%= online ? t("game.profile.online") : t("game.profile.offline") %>
+      </span>
+    </h1>
+
+    <%= form_with url: find_player_path, method: :get, local: true, class: "nl-profile-lookup", data: {profile_lookup: "1"} do %>
+      <label class="nl-profile-lookup__label" for="profile-lookup-name"><%= t("game.profile.lookup_label") %></label>
+      <input id="profile-lookup-name"
+             class="nl-profile-lookup__input"
+             type="text"
+             name="name"
+             maxlength="<%= Character::MAX_NAME_LENGTH %>"
+             autocomplete="off"
+             placeholder="<%= t("game.profile.lookup_placeholder") %>"
+             aria-label="<%= t("game.profile.lookup_label") %>">
+      <button type="submit" class="lbut nl-profile-lookup__submit"><%= t("game.profile.lookup_submit") %></button>
+    <% end %>
+  </header>
 
   <div class="nl-character-page-grid">
     <aside class="nl-character-page-aside">

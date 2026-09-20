@@ -5,7 +5,7 @@ class PlayersController < ApplicationController
 
   skip_before_action :authenticate_user!
   skip_before_action :ensure_device_identifier
-  before_action :set_character
+  before_action :set_character, only: :show
   around_action :with_available_outdoor_actions, if: :own_html_profile?
 
   def show
@@ -13,6 +13,7 @@ class PlayersController < ApplicationController
     @own_profile = @viewer_character.present? && @viewer_character.id == @character.id
     @character = @viewer_character if @own_profile
     @equipment = equipped_items_for(@character)
+    @character_online = @character.online?
 
     if @own_profile
       @stats_data = build_stats_data
@@ -25,10 +26,27 @@ class PlayersController < ApplicationController
     end
   end
 
+  # GET /players/find?name=Nick — open another character sheet in the same surface.
+  def find
+    name = params[:name].to_s.strip
+    if name.blank?
+      redirect_back fallback_location: root_path, alert: I18n.t("game.flashes.player_missing")
+      return
+    end
+
+    target = Character.find_by("LOWER(characters.name) = ?", name.downcase)
+    unless target
+      redirect_back fallback_location: root_path, alert: I18n.t("game.flashes.player_missing")
+      return
+    end
+
+    redirect_to player_path(name: target.name), status: :see_other
+  end
+
   private
 
   def own_html_profile?
-    request.format.html? && current_character&.id == @character.id
+    request.format.html? && @character.present? && current_character&.id == @character.id
   end
 
   def build_stats_data
@@ -77,6 +95,7 @@ class PlayersController < ApplicationController
         id: @character.id,
         name: @character.name,
         level: @character.level,
+        online: @character.online?,
         experience: @character.experience,
         experience_to_next_level: @character.experience_to_next_level,
         location: location_payload,
