@@ -552,7 +552,7 @@ class Character < ApplicationRecord
   end
 
   def timed_buffs
-    Game::Characters::TimedBuffs.new(character: self)
+    Characters::TimedBuffs.new(character: self)
   end
 
   # Calculate critical hit chance

@@ -204,7 +204,7 @@
       </div>
     <% end %>
 
-    <% active_buffs = Game::Characters::TimedBuffs.new(character:).active %>
+    <% active_buffs = Characters::TimedBuffs.new(character:).active %>
     <p class="nl-sheet-effects" data-sheet-buffs="<%= active_buffs.size %>">
       <%= t("game.sheet.total_effects") %>: <%= active_buffs.size %> / 99
     </p>

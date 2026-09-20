@@ -114,7 +114,7 @@ module Game
         else
           base
         end
-        speed_percent = Game::Characters::TimedBuffs.new(character:).modifier("gather_speed")
+        speed_percent = Characters::TimedBuffs.new(character:).modifier("gather_speed")
         [duration * (1.0 - (speed_percent / 100.0)), 5].max.round
       end
 

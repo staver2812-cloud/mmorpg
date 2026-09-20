@@ -140,7 +140,7 @@ module Game
             "buff", "buff_duration_seconds", "heal_hp", "restore_mp",
             "clear_light_injury", "clear_injury_tier"
           ) if buff_mods.blank?
-          Game::Characters::TimedBuffs.new(character:).apply!(
+          Characters::TimedBuffs.new(character:).apply!(
             key: template.key,
             label: template.display_name,
             mods: buff_mods,

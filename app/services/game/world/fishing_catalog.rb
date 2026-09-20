@@ -112,7 +112,7 @@ module Game
         base = raw_skill(character)
         key = rod_key.presence || best_rod(character)&.key
         base + RODS.dig(key.to_s, :skill_bonus).to_i +
-          Game::Characters::TimedBuffs.new(character:).modifier("fishing_skill").to_i
+          Characters::TimedBuffs.new(character:).modifier("fishing_skill").to_i
       end
 
       def self.duration_seconds(base:, character:, rod_key: nil)
