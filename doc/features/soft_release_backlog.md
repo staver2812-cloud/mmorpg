@@ -1,6 +1,6 @@
 # Soft-release backlog — Ashen Veil gap closure
 
-Updated: 2026-09-20. Gather contracts/timers, craft auction, potion sets, clan laboratory, gear comparison.
+Updated: 2026-09-20. Live regrowth countdown, Manage region status, global click smoke, art queue.
 
 ## Shipped this pass
 
@@ -10,11 +10,15 @@ Updated: 2026-09-20. Gather contracts/timers, craft auction, potion sets, clan l
 - **Gather**: per-group regrowth, tool durability, herbalist recipes, rare craft gear
 - **Soft-release loop**: cell regrowth timers, herb/fish dailies, night herb weights, craft-only auction
 - **Progression**: Blood I triad, Blood III anti-stack + clan laboratory gate, compact gear comparison
-- **Smoke**: `scripts/smoke_click.mjs` (Playwright)
+- **Live countdown**: Stimulus `nl-regrowth-timer` ticks server-projected remaining seconds on map cells
+- **Manage region**: PlayableRegionStatus cache + dashboard last-build confirmation (boot + CTA)
+- **Smoke**: `scripts/smoke_click.mjs` (+ `SMOKE_GLOBAL=1` full route walk)
+- **Art**: markers done; `scripts/art_queue/fetch_cc0.py` + potion/herb/fish procedural queue
 
 ## Remaining / ideas
 
-1. Deploy/boot PlayableRegionBuilder confirmation on Railway
-2. Hotspot re-authoring on new city arts
-3. Forpost→Oktal still fare-only `[EVIDENCE]`
-4. Future: richer live countdown enhancement and broader profession-contract rotation
+1. Hotspot re-authoring on new city arts
+2. Forpost→Oktal still fare-only `[EVIDENCE]`
+3. Broader profession-contract rotation
+4. Wire procedural potion/herb icons into inventory/buff CSS when crops look good
+5. GitHub push (auth still local-only; Railway via `railway up`)

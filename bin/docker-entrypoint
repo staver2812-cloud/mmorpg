@@ -8,8 +8,12 @@ if [ "${SANDBOX_OPEN_AUTH}" = "1" ]; then
   ./bin/rails db:seed || echo "WARNING: db:seed exited non-zero; continuing boot"
   # Soft-release outdoor landmarks/approaches/gather nodes (idempotent).
   # Railway SSH often hangs; boot-time rebuild is the reliable apply path.
-  ./bin/rails runner "puts Game::World::PlayableRegionBuilder.new.call.inspect" \
-    || echo "WARNING: PlayableRegionBuilder exited non-zero; continuing boot"
+  # Status is cached for Manage confirmation (no SSH needed).
+  ./bin/rails runner '
+    result = Game::World::PlayableRegionBuilder.new.call
+    status = Game::World::PlayableRegionStatus.record!(result: result, source: "boot")
+    puts "PlayableRegionBuilder boot: #{status.inspect}"
+  ' || echo "WARNING: PlayableRegionBuilder exited non-zero; continuing boot"
 fi
 
 exec "$@"

@@ -62,10 +62,15 @@
     </div>
   <% end %>
   <% if Array(tile_meta["resource_regrowth"]).any? %>
-    <div class="nl-tile-resource-regrowth">
+    <div class="nl-tile-resource-regrowth"
+         data-controller="nl-regrowth-timer">
       <% Array(tile_meta["resource_regrowth"]).each do |growth| %>
         <% seconds = growth["remaining_seconds"].to_i.clamp(0, 86_399) %>
-        <span><%= t("game.world.resource_regrowth", resource: growth["label"], time: format("%d:%02d", seconds / 60, seconds % 60)) %></span>
+        <% ends_at_ms = ((Time.current.to_f + seconds) * 1000).to_i %>
+        <span data-nl-regrowth-timer-target="item"
+              data-resource-label="<%= growth["label"] %>"
+              data-ends-at-ms="<%= ends_at_ms %>"
+              data-template="<%= t("game.world.resource_regrowth", resource: "%{resource}", time: "%{time}") %>"><%= t("game.world.resource_regrowth", resource: growth["label"], time: format("%d:%02d", seconds / 60, seconds % 60)) %></span>
       <% end %>
     </div>
   <% end %>

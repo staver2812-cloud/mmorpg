@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+require "rails_helper"
+
 RSpec.describe Game::Quests::Journal do
   let(:user) { create(:user) }
   let(:character) { create(:character, user:) }
@@ -50,6 +52,33 @@ RSpec.describe Game::Quests::Journal do
     state = character.reload.metadata.dig("ashen_quests", "ash_healer_first_bag")
     expect(state["status"]).to eq("active")
     expect(Game::Quests::Catalog.find("ash_healer_first_bag").dig("objective", "item_key")).to eq("healer_bag_light")
+  end
+
+  it "turns in the Ash Healer first bag and grants ash_herb reward" do
+    Game::Professions::Templates.ensure_craft_items!
+    complete!("veil_lure_drill")
+    complete!("veil_tail_delivery")
+    complete!("tar_smith_first_bandage")
+    journal.accept!("ash_healer_first_bag")
+    Game::Inventory::Manager.new(inventory: character.inventory).add_item!(
+      item_template: ItemTemplate.find_by!(key: "healer_bag_light"),
+      quantity: 1
+    )
+    wallet = character.user.currency_wallet || character.user.create_currency_wallet!(nv_balance: 0)
+    before_nv = wallet.nv_balance.to_i
+    before_herb = character.inventory.inventory_items.joins(:item_template)
+      .where(item_templates: {key: "ash_herb"}, equipped: false).sum(:quantity)
+
+    result = journal.turn_in!("ash_healer_first_bag")
+
+    expect(result.success).to eq(true)
+    state = character.reload.metadata.dig("ashen_quests", "ash_healer_first_bag")
+    expect(state["status"]).to eq("completed")
+    expect(wallet.reload.nv_balance.to_i).to eq(before_nv + 30)
+    expect(character.inventory.inventory_items.joins(:item_template)
+      .where(item_templates: {key: "healer_bag_light"}, equipped: false).sum(:quantity)).to eq(0)
+    expect(character.inventory.inventory_items.joins(:item_template)
+      .where(item_templates: {key: "ash_herb"}, equipped: false).sum(:quantity)).to eq(before_herb + 1)
   end
 
   it "auto-unlocks the next contract on turn-in" do

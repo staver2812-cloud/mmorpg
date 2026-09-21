@@ -213,12 +213,14 @@
         <% active_buffs.each do |buff| %>
           <% tip = Game::Professions::PotionCatalog.tooltip_for(buff) %>
           <% blood = Game::Professions::PotionCatalog.fetch(buff["key"])&.dig(:blood) || 1 %>
+          <% icon_path = "cc0/icons/potion_blood_#{{1 => "i", 2 => "ii", 3 => "iii"}[blood] || "i"}.png" %>
+          <% has_icon = Rails.root.join("app/assets/images", icon_path).exist? %>
           <span class="nl-buff-icon nl-buff-icon--blood<%= blood %>"
                 title="<%= tip %>"
                 data-buff-key="<%= buff["key"] %>"
                 tabindex="0"
                 role="img"
-                aria-label="<%= tip.tr("\n", ". ") %>">⚗</span>
+                aria-label="<%= tip.tr("\n", ". ") %>"><% if has_icon %><%= image_tag icon_path, alt: "", class: "nl-buff-icon-img", width: 16, height: 16 %><% else %>⚗<% end %></span>
         <% end %>
       </div>
       <ul class="nl-sheet-buff-list">

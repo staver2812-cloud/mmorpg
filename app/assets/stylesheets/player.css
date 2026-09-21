@@ -72,6 +72,13 @@
 .nl-buff-icon--blood2 { color: #8a4b12; background: #f6dfc0; }
 .nl-buff-icon--blood3 { color: #7a1020; background: #f0d0d4; border-color: #a04050; }
 
+.nl-buff-icon-img {
+  display: block;
+  width: 16px;
+  height: 16px;
+  image-rendering: pixelated;
+}
+
 .nl-sheet-buff-list {
   margin: 0 0 6px;
   padding-left: 16px;

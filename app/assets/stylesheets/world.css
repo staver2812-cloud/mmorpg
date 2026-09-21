@@ -806,6 +806,11 @@ button.nl-tile-clickable--available:disabled {
   display: block;
 }
 
+.nl-tile-resource-regrowth span.is-ready {
+  color: #1f6b2e;
+  font-weight: 700;
+}
+
 /* Painted landmarks retain their accessible entity label without overlaying
    the legacy village shapes, gate marker, or generic entity badge. */
 .nl-tile-entity.nl-tile-building--painted {
