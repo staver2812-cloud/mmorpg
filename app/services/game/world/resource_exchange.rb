@@ -92,7 +92,8 @@ module Game
         return nil unless base
 
         mult = Game::Seasons::Catalog.demand_multiplier(item_key)
-        (base * mult).round
+        craft = Game::Economy::MistCurve.craft_sell_bonus(item_key)
+        (base * mult * craft).round
       end
 
       def self.buy_price(item_key)

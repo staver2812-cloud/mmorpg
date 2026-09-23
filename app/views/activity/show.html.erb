@@ -18,7 +18,13 @@
       <%= t("game.season.countdown", days: season_snap[:days_left], xp: season_snap[:xp]) %>
       · <%= link_to t("game.season.nav"), season_path, class: "nl-sheet-link", data: {turbo_frame: "_top"} %>
     </p>
+    <p class="nl-quests-board__meta" data-mist-craft-hint="1"><%= t("game.economy.combat_needs_crafter") %></p>
   <% end %>
+  <p class="nl-quests-board__meta" data-social-cta="1">
+    <%= t("game.activity.social_cta") %>
+    · <%= link_to t("game.clans.alliance_title"), clan_path, class: "nl-sheet-link", data: {turbo_frame: "_top"} %>
+    · <%= link_to t("game.world.party_invite_cta"), world_path, class: "nl-sheet-link", data: {turbo_frame: "_top"} %>
+  </p>
   <% if @claim_streak.to_i.positive? %>
     <p class="nl-quests-board__meta" data-claim-streak="<%= @claim_streak %>">
       <%= t("game.activity.streak_label", count: @claim_streak) %>

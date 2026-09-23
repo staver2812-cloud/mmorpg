@@ -2182,6 +2182,7 @@ en:
       claimed_streak: "Claimed! Streak %{streak} (+%{bonus} NV)"
       claimed_label: "Already claimed"
       streak_label: "Claim streak: %{count} day(s)"
+      social_cta: "Faster together: clan alliances and party invites from the action panel."
       claim_ready: "%{count} reward(s) ready"
       tier_locked: "Unlocks after the previous tier"
       tier_legendary: "Legendary"
@@ -2413,4 +2414,7 @@ en:
       claimed: "Level %{level} reward claimed"
       bad_xp: "Invalid XP"
       nav: "Season"
+
+    economy:
+      combat_needs_crafter: "Combat without craft costs more this season: resin, herbs, and coal sell higher — buy from gatherers or craft bandages yourself."
 

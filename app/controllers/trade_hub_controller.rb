@@ -22,13 +22,15 @@ class TradeHubController < ApplicationController
       @scroll_keys = Game::Shop::PremiumScrollPurchase::OFFERINGS.keys.reject { |k| k == "combat_trauma_scroll" }
       @preferred = current_character.metadata.to_h["preferred_assault_scroll_kind"].presence || "normal"
     when "auction"
-      @listings = AuctionListing.open.craft_goods.includes(:seller_character, :item_template).order(created_at: :desc).limit(50)
+      @listings = AuctionListing.open.not_expired.craft_goods.includes(:seller_character, :item_template).order(created_at: :desc).limit(50)
       inventory_items = current_character.inventory&.inventory_items&.where(equipped: false)&.includes(:item_template)&.order(:id)&.limit(100) || []
       @listable_items = inventory_items.select { |row| AuctionListing.listable_template?(row.item_template) }.first(40)
     when "exchange"
       @offers = CurrencyExchangeOffer.open.includes(:seller).order(created_at: :desc).limit(50)
     when "premium"
       @premium_offers = Game::Shop::PremiumScrollPurchase::OFFERINGS
+      @premium_plans = Game::Shop::PremiumPass.plans
+      @premium_perks = Game::Shop::PremiumPass.perks_for(current_user)
     end
   end
 
@@ -81,8 +83,23 @@ class TradeHubController < ApplicationController
     end
     return redirect_to(trade_hub_path(tab: "auction"), alert: I18n.t("game.trade_hub.auction_bad_price")) unless price.positive?
     return redirect_to(trade_hub_path(tab: "auction"), alert: I18n.t("game.trade_hub.auction_bad_qty")) if qty > item.quantity
+    if AuctionListing.slots_full?(current_character)
+      limit = AuctionListing.open_slot_limit_for(current_character)
+      return redirect_to(trade_hub_path(tab: "auction"), alert: I18n.t("game.trade_hub.auction_slots_full", limit:))
+    end
+
+    fee = AuctionListing::LISTING_FEE_NV
+    wallet = current_character.user.currency_wallet
+    if wallet.nv_balance.to_d < fee
+      return redirect_to(trade_hub_path(tab: "auction"), alert: I18n.t("game.trade_hub.auction_need_fee", fee: fee.to_i))
+    end
 
     ActiveRecord::Base.transaction do
+      wallet.adjust!(
+        amount: -fee,
+        reason: "trade_hub.auction_fee",
+        metadata: {"item_template_id" => item.item_template_id}
+      )
       Game::Inventory::Manager.new(inventory: current_character.inventory).remove_item!(
         item_template: item.item_template,
         quantity: qty
@@ -102,9 +119,31 @@ class TradeHubController < ApplicationController
     redirect_to trade_hub_path(tab: "auction"), alert: e.message, status: :see_other
   end
 
+  def cancel_auction
+    listing = AuctionListing.lock.find_by(id: params[:listing_id], status: "open")
+    return redirect_to(trade_hub_path(tab: "auction"), alert: I18n.t("game.trade_hub.auction_gone")) unless listing
+
+    ActiveRecord::Base.transaction do
+      listing.cancel_by!(current_character)
+      inventory = current_character.inventory || current_character.create_inventory!
+      Game::Inventory::Manager.new(inventory:).add_item!(
+        item_template: listing.item_template,
+        quantity: listing.quantity
+      )
+    end
+
+    redirect_to trade_hub_path(tab: "auction"), notice: I18n.t("game.trade_hub.auction_cancelled"), status: :see_other
+  rescue ArgumentError => e
+    redirect_to trade_hub_path(tab: "auction"), alert: e.message, status: :see_other
+  end
+
   def buy_auction
     listing = AuctionListing.lock.find_by(id: params[:listing_id], status: "open")
     return redirect_to(trade_hub_path(tab: "auction"), alert: I18n.t("game.trade_hub.auction_gone")) unless listing
+    if listing.expired?
+      listing.update!(status: "cancelled")
+      return redirect_to(trade_hub_path(tab: "auction"), alert: I18n.t("game.trade_hub.auction_expired"))
+    end
     if listing.seller_character_id == current_character.id
       return redirect_to(trade_hub_path(tab: "auction"), alert: I18n.t("game.trade_hub.auction_own"))
     end
@@ -154,7 +193,7 @@ class TradeHubController < ApplicationController
       if give == "nv"
         wallet.adjust!(amount: -give_amount, reason: "trade_hub.exchange_hold", metadata: {"side" => "give"})
       else
-        wallet.update!(veil_marks: wallet.veil_marks.to_d - give_amount)
+        wallet.adjust_veil_marks!(amount: -give_amount, reason: "trade_hub.exchange_hold", metadata: {"side" => "give"})
       end
       offer.save!
     end
@@ -186,24 +225,44 @@ class TradeHubController < ApplicationController
     redirect_to trade_hub_path(tab: "exchange"), notice: I18n.t("game.trade_hub.exchange_filled"), status: :see_other
   end
 
+  def buy_premium_pass
+    result = Game::Shop::PremiumPass.new(user: current_user).purchase!(plan_key: params[:plan_key])
+    redirect_to trade_hub_path(tab: "premium"),
+      status: :see_other,
+      **(result.success ? {notice: result.message} : {alert: result.message})
+  end
+
+  def claim_premium_stipend
+    result = Game::Shop::PremiumPass.new(user: current_user).claim_daily_stipend!
+    redirect_to trade_hub_path(tab: "premium"),
+      status: :see_other,
+      **(result.success ? {notice: result.message} : {alert: result.message})
+  end
+
   private
 
   def supply_offers
+    bandage_price = 18
+    if Game::Seasons::Catalog.active?
+      # Soft convenience sink: combat players without craft pay more for bandages.
+      bandage_price = (bandage_price * 1.2).ceil
+    end
+
     {
-      "ashen_bait" => {price: 5, quantity: 5},
-      "ashen_bandage" => {price: 15, quantity: 1},
-      "ash_herb" => {price: 8, quantity: 2},
-      "ashen_hatchet" => {price: 45, quantity: 1},
-      "ashen_sickle" => {price: 40, quantity: 1},
-      "ashen_fishing_rod" => {price: 55, quantity: 1},
-      "ashen_rod_ash" => {price: 120, quantity: 1},
-      "ashen_rod_salt" => {price: 220, quantity: 1},
-      "ashen_rod_veil" => {price: 400, quantity: 1},
-      "hook_worm" => {price: 4, quantity: 10},
-      "hook_bloodworm" => {price: 6, quantity: 10},
-      "hook_dough" => {price: 5, quantity: 10},
-      "hook_ember_fly" => {price: 8, quantity: 10},
-      "hook_crumb" => {price: 3, quantity: 10}
+      "ashen_bait" => {price: 8, quantity: 5},
+      "ashen_bandage" => {price: bandage_price, quantity: 1},
+      "ash_herb" => {price: 10, quantity: 2},
+      "ashen_hatchet" => {price: 55, quantity: 1},
+      "ashen_sickle" => {price: 50, quantity: 1},
+      "ashen_fishing_rod" => {price: 70, quantity: 1},
+      "ashen_rod_ash" => {price: 150, quantity: 1},
+      "ashen_rod_salt" => {price: 280, quantity: 1},
+      "ashen_rod_veil" => {price: 480, quantity: 1},
+      "hook_worm" => {price: 5, quantity: 10},
+      "hook_bloodworm" => {price: 8, quantity: 10},
+      "hook_dough" => {price: 6, quantity: 10},
+      "hook_ember_fly" => {price: 10, quantity: 10},
+      "hook_crumb" => {price: 4, quantity: 10}
     }
   end
 
@@ -211,7 +270,7 @@ class TradeHubController < ApplicationController
     if currency == "nv"
       wallet.adjust!(amount: -amount, reason:, metadata: {})
     else
-      wallet.update!(veil_marks: wallet.veil_marks.to_d - amount)
+      wallet.adjust_veil_marks!(amount: -amount, reason:, metadata: {})
     end
   end
 
@@ -219,7 +278,7 @@ class TradeHubController < ApplicationController
     if currency == "nv"
       wallet.adjust!(amount: amount, reason:, metadata: {})
     else
-      wallet.update!(veil_marks: wallet.veil_marks.to_d + amount)
+      wallet.adjust_veil_marks!(amount: amount, reason:, metadata: {})
     end
   end
 end

@@ -25,6 +25,9 @@
     </p>
   <% elsif @building.location_kind == "exchange" %>
     <p class="nl-mine-gallery-vignette" data-location-lobby-live="1"><%= t("game.locations.exchange_live") %></p>
+    <% if Game::Seasons::Catalog.active? %>
+      <p class="nl-quests-board__meta" data-mist-craft-hint="1"><%= Game::Economy::MistCurve.combat_needs_crafter_hint %></p>
+    <% end %>
     <p class="nl-quests-board__meta" data-location-lobby-next="1">
       <%= t("game.locations.lobby_next") %>
       ·
@@ -35,6 +38,8 @@
       <%= link_to t("arena.nav.city"), world_path, data: {turbo: false, location_recovery: "world"} %>
       ·
       <%= link_to t("game.shop.title"), shop_path, data: {turbo: false, location_recovery: "shop"} %>
+      ·
+      <%= link_to t("game.season.nav"), season_path, data: {turbo: false, location_recovery: "season"} %>
     </p>
   <% end %>
 
