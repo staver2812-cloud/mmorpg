@@ -1,6 +1,9 @@
 <% content_for :title, t("game.activity.title") %>
 
 <section class="nl-quests" data-activity-board="1">
+  <p class="nl-handbook__banner" data-activity-banner="1">
+    <%= image_tag "cc0/ui/activity-daily-banner.png", alt: "", class: "nl-handbook__banner-img", width: 960, height: 540 %>
+  </p>
   <header class="nl-quests__header">
     <h1><%= t("game.activity.title") %></h1>
     <p><%= t("game.activity.hint") %></p>
