@@ -1,5 +1,8 @@
 <% content_for :title, t("game.wars.title") %>
 <section class="nl-handbook" data-wars-board="1" data-wars-sieges="<%= @sieges.size %>">
+  <p class="nl-handbook__banner" data-wars-banner="1">
+    <%= image_tag "cc0/ui/wars-siege-emblem.png", alt: "", class: "nl-handbook__banner-img nl-handbook__banner-img--emblem", width: 256, height: 256 %>
+  </p>
   <h1><%= t("game.wars.title") %></h1>
   <p class="nl-handbook__lead"><%= t("game.wars.lead") %></p>
   <p class="nl-quests-board__meta">

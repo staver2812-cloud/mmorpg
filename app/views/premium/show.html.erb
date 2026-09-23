@@ -22,9 +22,9 @@
       <%= t("game.premium_pass.features_line",
             gather: @premium_perks[:gather_bonus],
             xp: @premium_perks[:xp_bonus_percent],
-            auto_gather: @premium_perks[:auto_gather] ? t("game.common.yes") : t("game.common.no"),
-            auto_combat: @premium_perks[:auto_combat] ? t("game.common.yes") : t("game.common.no"),
-            junk: @premium_perks[:junk_remote] ? t("game.common.yes") : t("game.common.no")) %>
+            auto_gather: @premium_perks[:auto_gather] ? t("game.common.yes", default: "да") : t("game.common.no", default: "нет"),
+            auto_combat: @premium_perks[:auto_combat] ? t("game.common.yes", default: "да") : t("game.common.no", default: "нет"),
+            junk: @premium_perks[:junk_remote] ? t("game.common.yes", default: "да") : t("game.common.no", default: "нет")) %>
     </p>
     <%= button_to t("game.premium_pass.claim_stipend"),
           claim_stipend_premium_path,

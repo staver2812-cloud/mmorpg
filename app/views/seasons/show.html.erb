@@ -1,5 +1,8 @@
 <% content_for :title, t("game.season.title") %>
 <section class="nl-handbook" data-season-board="1" data-season-active="<%= @season[:active] ? "1" : "0" %>">
+  <p class="nl-handbook__banner" data-season-banner="1">
+    <%= image_tag "cc0/ui/season-veil-banner.png", alt: "", class: "nl-handbook__banner-img", width: 960, height: 540 %>
+  </p>
   <h1><%= @season[:title_ru].presence || t("game.season.title") %></h1>
   <p class="nl-handbook__lead"><%= t("game.season.lead") %></p>
   <p class="nl-quests-board__meta">

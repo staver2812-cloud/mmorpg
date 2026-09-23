@@ -277,15 +277,21 @@ module InventoriesHelper
     ITEM_TYPE_ICONS[item_template.item_type] || "IT"
   end
 
-  def item_artwork_path(item_template)
+  def item_artwork_path(item_template, inventory_item: nil)
+    custom = inventory_item&.properties.to_h["custom_icon"].presence
+    return custom if custom.present?
+
     explicit = item_template.enhancement_rules.to_h["icon"].presence
     path = explicit.presence || ITEM_ARTWORK_PATHS[item_template.key.to_s]
     return if path.blank?
 
-    # Public /ashen/... URLs must stay absolute so image_tag does not treat them
-    # as Propshaft digest assets.
     path = path.to_s
-    path.start_with?("/") ? path : "/#{path}"
+    # Absolute CDN / public ashen paths stay absolute for image_tag.
+    # Authored Propshaft assets under items/ must NOT get a leading slash, or
+    # the browser requests /items/*.png outside the digested asset pipeline (404).
+    return path if path.start_with?("http://", "https://", "/ashen/")
+
+    path.delete_prefix("/")
   end
 
   def inventory_category_options
@@ -457,6 +463,21 @@ module InventoriesHelper
     lines.join("\n")
   end
 
+  # Mist-War-style public hover: identity + requirements + durability, no raw
+  # primary-stat dump (Ashen adaptation of the dense but quiet alt text).
+  def mist_paperdoll_slot_tooltip(item, label)
+    template = item.item_template
+    lines = [template&.display_name.presence || template&.name.presence || label]
+    lines << "#{I18n.t("game.dossier.equip_slot")}: #{label}"
+    req = template&.requirements.to_h
+    level = req["level"].to_i
+    lines << "#{I18n.t("game.dossier.equip_req_level")}: #{level}" if level.positive?
+    durability = inventory_item_durability(item)
+    lines << "#{I18n.t("game.details.durability")}: #{durability}" if durability
+    lines << I18n.t("game.dossier.equip_no_stats")
+    lines.join("\n")
+  end
+
   def equipment_comparison_rows(template)
     rules = template.enhancement_rules.to_h
     marked = CRAFT_GEAR_PREFIXES.any? { |prefix| template.key.to_s.start_with?(prefix) } ||
@@ -542,8 +563,8 @@ module InventoriesHelper
   end
 
   def formatted_item_value(value, signed: true)
-    return I18n.t("game.common.yes") if value == true
-    return I18n.t("game.common.no") if value == false
+    return I18n.t("game.common.yes", default: "да") if value == true
+    return I18n.t("game.common.no", default: "нет") if value == false
     return value.to_json if value.is_a?(Array) || value.is_a?(Hash)
     return value unless signed
 
