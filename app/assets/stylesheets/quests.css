@@ -203,6 +203,24 @@
   font: 12px Verdana, Tahoma, sans-serif;
 }
 
+.nl-handbook__banner {
+  margin: 0 0 10px;
+}
+
+.nl-handbook__banner-img {
+  display: block;
+  width: 100%;
+  max-width: 520px;
+  height: auto;
+  border: 1px solid #3a2a1a;
+  object-fit: cover;
+}
+
+.nl-handbook__banner-img--emblem {
+  max-width: 96px;
+  margin: 0 auto;
+}
+
 .nl-handbook__grid {
   display: grid;
   gap: 8px;
