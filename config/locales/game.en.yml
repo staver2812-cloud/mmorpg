@@ -1974,6 +1974,7 @@ en:
       board_open: "Open quest journal"
       board_meta: "Ashen City Hall contracts · progress stored on the character"
       summary_aria: "Quest summary"
+      filter_all: "All"
       objective_label: "Objective"
       objective_kill_npc: "Defeat NPC"
       objective_deliver_item: "Deliver item"
