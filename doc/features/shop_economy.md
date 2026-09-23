@@ -1213,6 +1213,7 @@ automated completion results are recorded in
 
 | Date | Change |
 |---|---|
+| 2026-09-23 | Mist retention depth: seasonal half-tax on stall demand mats; Activity live Pulse + siege board; Pulse `season_fair` biweekly cadence; tournament scores grant season XP. |
 | 2026-09-23 | Mist craft↔combat soft loop: seasonal `MistCurve` craft demand stacks on Resource Exchange sell prices; Trade Hub bandage soft premium while season active; Activity/Exchange social+crafter FOMO CTAs. |
 | 2026-09-23 | Resource Exchange lobby live: gov-price sell/buy/storage (`Game::World::ResourceExchange`); Numismatics commodity book sells at the same rates; Sale failure coverage for shop_no_nv / shop_full / license. |
 | 2026-09-22 | Auction open-slot limit = 3 + Premium bonus; Infirmary VM desk packs 50/100/250/500 under ALLOW_STUB_IAP; Paid Services live IAP still `[EVIDENCE]`. |
