@@ -53,6 +53,30 @@
           <h3><%= t("game.buildings.library_fatigue_title") %></h3>
           <p><%= t("game.buildings.library_fatigue_body") %></p>
         </article>
+        <article class="nl-handbook__card" data-library-gather="1">
+          <h3><%= t("game.buildings.library_gather_title") %></h3>
+          <p><%= t("game.buildings.library_gather_body") %></p>
+        </article>
+        <article class="nl-handbook__card" data-library-magic="1">
+          <h3><%= t("game.buildings.library_magic_title") %></h3>
+          <p><%= t("game.buildings.library_magic_body") %></p>
+        </article>
+        <article class="nl-handbook__card" data-library-mail="1">
+          <h3><%= t("game.buildings.library_mail_title") %></h3>
+          <p><%= t("game.buildings.library_mail_body") %></p>
+        </article>
+        <article class="nl-handbook__card" data-library-sector="1">
+          <h3><%= t("game.buildings.library_sector_title") %></h3>
+          <p><%= t("game.buildings.library_sector_body") %></p>
+        </article>
+        <article class="nl-handbook__card" data-library-airship="1">
+          <h3><%= t("game.buildings.library_airship_title") %></h3>
+          <p><%= t("game.buildings.library_airship_body") %></p>
+        </article>
+        <article class="nl-handbook__card" data-library-tips="1">
+          <h3><%= t("game.buildings.library_tips_title") %></h3>
+          <p><%= t("game.buildings.library_tips_body") %></p>
+        </article>
       </div>
       <p class="nl-quests-board__meta" data-library-next="1">
         <%= t("game.buildings.library_next") %>
@@ -247,10 +271,49 @@
     </p>
   <% when "clan_hall" %>
     <section class="nl-handbook" aria-label="<%= t("game.buildings.clan_hall_short") %>">
+      <p class="nl-handbook__banner" data-clan-hall-banner="1">
+        <%= image_tag "cc0/ui/clan-hall-banner.png", alt: "", class: "nl-handbook__banner-img", width: 960, height: 540 %>
+      </p>
       <h2><%= t("game.buildings.clan_hall_title") %></h2>
       <p class="nl-handbook__lead">
         <%= t("game.buildings.clan_hall_lead") %>
       </p>
+
+      <% if current_character.clan %>
+        <p>
+          <%= link_to t("game.clans.open_hub"), clan_path(tab: "roster"), class: "lbut", data: {turbo_frame: "_top", clan_hall_recovery: "clan"} %>
+        </p>
+      <% else %>
+        <h3><%= t("game.clans.create_here_title") %></h3>
+        <p class="nl-quests-board__meta"><%= t("game.clans.create_here_lead") %></p>
+        <%= form_with url: clan_path, method: :post, local: true, multipart: true, class: "nl-clan-form" do |f| %>
+          <p>
+            <%= f.label :name, t("game.clans.name_placeholder") %>
+            <%= f.text_field :name, required: true, class: "LogintextBox4 nl-manage-wide-input" %>
+          </p>
+          <p>
+            <%= f.label :tag, t("game.clans.tag_placeholder") %>
+            <%= f.text_field :tag, required: true, maxlength: 6, class: "LogintextBox4" %>
+          </p>
+          <p>
+            <%= f.label :alignment, t("game.clans.alignment_label") %>
+            <%= f.select :alignment, [
+              [t("game.buildings.law_alignment.light"), "light"],
+              [t("game.buildings.law_alignment.dark"), "dark"]
+            ], {}, class: "LogintextBox4" %>
+          </p>
+          <p>
+            <%= f.label :icon, t("game.clans.icon_label") %>
+            <%= f.file_field :icon, accept: "image/png,image/jpeg,image/webp,image/gif" %>
+            <span class="nl-quests-board__meta"><%= t("game.clans.icon_hint") %></span>
+          </p>
+          <%= f.submit t("game.clans.create_cta"), class: "lbut" %>
+        <% end %>
+        <p>
+          <%= link_to t("game.clans.tab_invites"), clan_path(tab: "invites"), class: "lbut", data: {turbo_frame: "_top"} %>
+        </p>
+      <% end %>
+
       <p>
         <%= link_to t("game.quests.board_open"), quests_path, class: "lbut", data: {clan_hall_recovery: "quests"} %>
         <% if Game::World::CityBuildingCatalog.accessible?(character: current_character, building_key: "city_hall") %>
@@ -281,6 +344,35 @@
             <%= link_to t("arena.nav.city"), world_path, data: {turbo: false, clan_hall_recovery: "world"} %>
           <% end %>
         </p>
+      <% end %>
+      <h3><%= t("game.buildings.clan_hall_wars_title") %></h3>
+      <p class="nl-quests-board__meta"><%= t("game.buildings.clan_hall_wars_lead") %></p>
+      <% war_rows = @sector_war_rows || Game::World::SectorWarBoard.new.call %>
+      <% if war_rows.blank? %>
+        <p class="nl-quests-board__meta" data-sector-wars-empty="1"><%= t("game.buildings.clan_hall_wars_empty") %></p>
+      <% else %>
+        <ul class="nl-trade-hub__list" data-sector-wars="<%= war_rows.size %>">
+          <% war_rows.each do |row| %>
+            <li data-sector-war-key="<%= row.key %>" data-sector-war-siege="<%= row.under_siege ? "1" : "0" %>">
+              <strong><%= row.name %></strong>
+              <%= nl_info_tip(row.flavor.to_s) %>
+              (<%= row.x %>,<%= row.y %>)
+              —
+              <% if row.owner_name.present? %>
+                <%= t("game.buildings.clan_hall_wars_owner", name: row.owner_name) %>
+              <% else %>
+                <%= t("game.buildings.clan_hall_wars_free") %>
+              <% end %>
+              <% if row.under_siege %>
+                · <em><%= t("game.buildings.clan_hall_wars_siege") %></em>
+                · <%= t("game.buildings.clan_hall_wars_score", attack: row.attack_score, defense: row.defense_score) %>
+                <% if row.siege_ends_at.present? %>
+                  · <%= t("game.buildings.clan_hall_wars_ends", time: l(row.siege_ends_at, format: "%H:%M")) %>
+                <% end %>
+              <% end %>
+            </li>
+          <% end %>
+        </ul>
       <% end %>
       <h3><%= t("game.buildings.clan_hall_presence_title") %></h3>
       <p class="nl-quests-board__meta"><%= t("game.buildings.clan_hall_presence_lead") %></p>
@@ -315,44 +407,9 @@
       </p>
     </section>
   <% when "post" %>
-    <p class="nl-quests-board__meta" data-post-landmark="1">
-      <%= t("game.buildings.post_landmark_meta") %>
-    </p>
-    <p>
-      <%= link_to t("arena.nav.city"), world_path, class: "lbut", data: {turbo: false, post_recovery: "world"} %>
-      <% if Game::World::CityBuildingCatalog.accessible?(character: current_character, building_key: "city_hall") %>
-        <%= link_to t("game.buildings.city_hall_short"), city_building_path("city_hall"), class: "lbut", data: {post_recovery: "city_hall"} %>
-      <% end %>
-    </p>
+    <%# Post UI is rendered by city_buildings/post; landmark stub removed. %>
   <% when "auction" %>
-    <section class="nl-handbook" aria-label="<%= t("game.buildings.auction_aria") %>">
-      <h2><%= t("game.buildings.auction_title") %></h2>
-      <p class="nl-handbook__lead"><%= t("game.buildings.auction_lead") %></p>
-      <% wallet = current_user.currency_wallet || current_user.create_currency_wallet!(nv_balance: 0) %>
-      <% vault = Game::World::BankVault.balance_for(current_character) %>
-      <p class="nl-quests-board__meta"
-         data-auction-wallet="<%= wallet.nv_balance.to_i %>"
-         data-auction-vault="<%= vault %>"
-         data-auction-vm="<%= wallet.veil_marks.to_i %>"
-         data-auction-lots="deferred"
-         data-auction-can-list="0"
-         data-auction-can-bid="0">
-        <%= t("game.buildings.auction_treasury",
-              wallet: wallet.nv_balance.to_i,
-              vault: vault,
-              marks: wallet.veil_marks.to_i) %>
-      </p>
-      <p class="nl-quests-board__meta" data-auction-lots-deferred="1">
-        <%= t("game.buildings.auction_lots_deferred") %>
-      </p>
-      <p>
-        <%= link_to t("game.shop.title"), shop_path, class: "lbut", data: {auction_recovery: "shop"} %>
-        <%= link_to t("game.buildings.junk_dealer_link"), city_building_path("junk_dealer"), class: "lbut", data: {auction_recovery: "junk"} %>
-        <% if Game::World::CityBuildingCatalog.accessible?(character: current_character, building_key: "bank") %>
-          <%= link_to t("game.sheet.vault_open_cta"), city_building_path("bank"), class: "lbut", data: {auction_recovery: "bank"} %>
-        <% end %>
-      </p>
-    </section>
+    <%# Auction UI is rendered by city_buildings/auction; landmark stub removed. %>
   <% when "prison", "gallows" %>
     <%= render "city_buildings/law_quarter", building: building, building_key: local_assigns[:building_key] %>
 
