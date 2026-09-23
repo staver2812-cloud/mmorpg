@@ -2,6 +2,9 @@
 
 <section class="nl-trade-hub" data-trade-hub="1" data-trade-hub-tab="<%= @tab %>">
   <header class="nl-trade-hub__header">
+    <p class="nl-handbook__banner" data-trade-hub-banner="1">
+      <%= image_tag "cc0/ui/trade-hub-banner.png", alt: "", class: "nl-handbook__banner-img", width: 960, height: 540 %>
+    </p>
     <p class="nl-trade-hub__back">
       <%= link_to t("nav.return"), world_path, class: "nl-sheet-link", data: {turbo_frame: "_top"} %>
     </p>

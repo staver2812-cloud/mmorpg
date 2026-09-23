@@ -2,7 +2,7 @@
 
 | Path | Source | Notes |
 |------|--------|-------|
-| `ui/season-veil-banner.png`, `ui/wars-siege-emblem.png`, `ui/season-offer-*.png` | Generated Ashen (2026-09-23) | Season board, wars board, season shop icons |
+| `ui/season-veil-banner.png`, `ui/wars-siege-emblem.png`, `ui/wars-clan-crest.png`, `ui/activity-daily-banner.png`, `ui/premium-veil-banner.png`, `ui/trade-hub-banner.png`, `ui/season-offer-*.png` | Generated Ashen (2026-09-23) | Season/wars/activity/premium/trade chrome + season shop icons |
 | `markers/*.png` | Generated Ashen map pins (2026-09-20 art-complete) | Project-owned |
 | `icons/potion_blood_*.png`, `herb_moon_orchid.png`, `fish_ashen_trout.png` | Generated Ashen | Project-owned |
 | `portraits/bot_*.png` | Generated Ashen | Project-owned |
