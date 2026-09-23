@@ -130,6 +130,10 @@
             <%= f.label :price_nv, t("game.trade_hub.auction_price") %>
             <%= f.number_field :price_nv, value: 10, min: 1, step: 1, class: "nl-trade-hub__input" %>
           </p>
+          <p>
+            <%= f.check_box :featured, {}, "1", "0" %>
+            <%= f.label :featured, t("game.buildings.stall_feature_cta", fee: Game::Shop::StallListing::FEATURE_FEE_NV.to_i) %>
+          </p>
           <%= f.submit t("game.buildings.stall_listing_cta"), class: "lbut" %>
         <% end %>
       </div>
@@ -149,6 +153,9 @@
           <%= listing.item_template.name %> ×<%= listing.quantity %>
           — <%= listing.price_nv %> NV
           (<%= listing.seller_character.name %>)
+          <% if listing.metadata.to_h["featured"] == true %>
+            <em data-stall-featured="1"><%= t("game.buildings.stall_featured_badge") %></em>
+          <% end %>
           <% if Game::Seasons::Catalog.active? && Array(Game::Seasons::Catalog.current["craft_demand_keys"]).map(&:to_s).include?(listing.item_template.key.to_s) %>
             <em data-stall-demand="1"><%= t("game.buildings.stall_demand_badge") %></em>
           <% end %>

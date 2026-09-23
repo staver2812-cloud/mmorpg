@@ -131,7 +131,10 @@ Rails.application.routes.draw do
   resource :season, only: [:show], controller: "seasons" do
     post :unlock_premium
     post :claim
+    post :buy_offer
   end
+
+  resource :wars, only: [:show], controller: "wars"
 
 
   resources :combat_interventions, only: %i[index create]

@@ -20,9 +20,13 @@
     </p>
     <p class="nl-quests-board__meta" data-mist-craft-hint="1"><%= t("game.economy.combat_needs_crafter") %></p>
   <% end %>
+  <% if @checkin&.granted %>
+    <p class="nl-quests-board__meta" data-season-checkin="1"><%= @checkin.message %></p>
+  <% end %>
   <p class="nl-quests-board__meta" data-social-cta="1">
     <%= t("game.activity.social_cta") %>
     · <%= link_to t("game.clans.alliance_title"), clan_path, class: "nl-sheet-link", data: {turbo_frame: "_top"} %>
+    · <%= link_to t("game.wars.title"), wars_path, class: "nl-sheet-link", data: {turbo_frame: "_top"} %>
     · <%= link_to t("game.world.party_invite_cta"), world_path, class: "nl-sheet-link", data: {turbo_frame: "_top"} %>
   </p>
 

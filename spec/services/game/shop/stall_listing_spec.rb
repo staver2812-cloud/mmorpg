@@ -93,18 +93,19 @@ RSpec.describe Game::Shop::StallListing do
     expect(seller_wallet.reload.nv_balance.to_d).to eq(before_seller + BigDecimal("92.5"))
   end
 
-  it "rejects buying your own lot" do
+  it "charges a feature fee and pins the lot to the top of open_rows" do
+    before = seller_wallet.reload.nv_balance.to_d
     described_class.new(
       character: seller,
       inventory_item_id: seller_item.id,
       quantity: 1,
-      price_nv: 40
+      price_nv: 40,
+      featured: true
     ).list!
+
+    expect(seller_wallet.reload.nv_balance.to_d).to eq(before - described_class::FEATURE_FEE_NV)
     listing = AuctionListing.open.sole
-
-    result = described_class.new(character: seller, listing_id: listing.id).buy!
-
-    expect(result.success).to be(false)
-    expect(listing.reload.status).to eq("open")
+    expect(listing.metadata["featured"]).to eq(true)
+    expect(described_class.open_rows.first.id).to eq(listing.id)
   end
 end

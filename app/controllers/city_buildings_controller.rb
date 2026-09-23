@@ -438,7 +438,8 @@ class CityBuildingsController < ApplicationController
       character: current_character,
       inventory_item_id: params[:inventory_item_id],
       quantity: params[:quantity],
-      price_nv: params[:price_nv]
+      price_nv: params[:price_nv],
+      featured: params[:featured]
     ).list!
     extra = result.success ? {} : {stall_listing_denied: 1}
     flash_opts = result.success ? {notice: result.message} : {alert: result.message}

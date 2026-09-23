@@ -58,6 +58,30 @@
         </li>
       <% end %>
     </ul>
+
+    <h2><%= t("game.season.shop_title") %></h2>
+    <p class="nl-handbook__lead"><%= t("game.season.shop_lead") %></p>
+    <ul class="nl-trade-hub__list" data-season-shop="1">
+      <% @shop_offers.each do |offer| %>
+        <% bought = @shop_bought_today[offer["key"]].present? %>
+        <li data-season-offer="<%= offer["key"] %>" data-season-offer-bought="<%= bought ? "1" : "0" %>">
+          <strong><%= I18n.locale.to_s.start_with?("en") ? offer["title_en"] : offer["title_ru"] %></strong>
+          —
+          <% if offer["price_vm"].to_i.positive? %><%= offer["price_vm"] %> VM<% end %>
+          <% if offer["price_nv"].to_i.positive? %><%= offer["price_nv"] %> NV<% end %>
+          <% if bought %>
+            <em><%= t("game.season.shop_bought_today") %></em>
+          <% else %>
+            <%= button_to t("game.season.shop_buy_cta"),
+                  buy_offer_season_path,
+                  method: :post,
+                  params: {offer_key: offer["key"]},
+                  class: "lbut",
+                  form: {data: {turbo: false}} %>
+          <% end %>
+        </li>
+      <% end %>
+    </ul>
   <% else %>
     <p class="nl-empty-note" data-season-inactive="1"><%= t("game.season.inactive") %></p>
   <% end %>

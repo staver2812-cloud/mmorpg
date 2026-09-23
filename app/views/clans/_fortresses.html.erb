@@ -4,6 +4,7 @@
   <p class="nl-quests-board__meta" data-territory-cta="1">
     <%= t("game.clans.territory_cta") %>
     · <%= link_to t("game.buildings.clan_hall_short"), city_building_path("clan_hall"), class: "nl-sheet-link", data: {turbo_frame: "_top"} %>
+    · <%= link_to t("game.wars.title"), wars_path, class: "nl-sheet-link", data: {turbo_frame: "_top"} %>
     · <%= link_to t("game.world.siege_battle_cta"), world_path, class: "nl-sheet-link", data: {turbo_frame: "_top"} %>
   </p>
 <% elsif @fortresses.any? %>
@@ -32,6 +33,7 @@
   <p><%= t("game.clans.no_fortresses") %></p>
   <p class="nl-quests-board__meta" data-territory-cta="1">
     <%= t("game.clans.territory_cta") %>
+    · <%= link_to t("game.wars.title"), wars_path, class: "nl-sheet-link", data: {turbo_frame: "_top"} %>
     · <%= link_to t("game.world.siege_battle_cta"), world_path, class: "nl-sheet-link", data: {turbo_frame: "_top"} %>
     · <%= link_to t("game.clans.alliance_title"), clan_path(tab: "manage"), class: "nl-sheet-link", data: {turbo_frame: "_top"} %>
   </p>

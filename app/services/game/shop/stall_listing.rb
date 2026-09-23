@@ -10,11 +10,18 @@ module Game
       LISTED_FROM = "market_stall"
 
       def self.open_rows
-        AuctionListing.open.not_expired.craft_goods
+        demand = Array(Game::Seasons::Catalog.active? ? Game::Seasons::Catalog.current["craft_demand_keys"] : []).map(&:to_s)
+        rows = AuctionListing.open.not_expired.craft_goods
           .where("auction_listings.metadata->>'listed_from' = ?", LISTED_FROM)
           .includes(:seller_character, :item_template)
           .order(created_at: :desc)
           .limit(50)
+          .to_a
+        rows.sort_by do |row|
+          featured = row.metadata.to_h["featured"] == true ? 0 : 1
+          hot = demand.include?(row.item_template.key.to_s) ? 0 : 1
+          [featured, hot, -row.created_at.to_i]
+        end
       end
 
       def self.used_mass_for(character)
@@ -35,12 +42,15 @@ module Game
         pct / BigDecimal("100")
       end
 
-      def initialize(character:, inventory_item_id: nil, quantity: 1, price_nv: nil, listing_id: nil)
+      FEATURE_FEE_NV = BigDecimal("12")
+
+      def initialize(character:, inventory_item_id: nil, quantity: 1, price_nv: nil, listing_id: nil, featured: false)
         @character = character
         @inventory_item_id = inventory_item_id
         @quantity = [quantity.to_i, 1].max
         @price_nv = price_nv.to_d
         @listing_id = listing_id
+        @featured = ActiveModel::Type::Boolean.new.cast(featured)
       end
 
       def list!
@@ -62,7 +72,20 @@ module Game
           return failure(I18n.t("game.buildings.stall_listing_mass_full", used:, capacity:, need: added_mass))
         end
 
+        feature_fee = featured ? FEATURE_FEE_NV : BigDecimal("0")
+        wallet = character.user.currency_wallet || character.user.create_currency_wallet!(nv_balance: 0)
+        if feature_fee.positive? && wallet.nv_balance.to_d < feature_fee
+          return failure(I18n.t("game.buildings.stall_feature_need_nv", amount: feature_fee.to_i))
+        end
+
         ActiveRecord::Base.transaction do
+          if feature_fee.positive?
+            wallet.adjust!(
+              amount: -feature_fee,
+              reason: "ashen.stall_feature",
+              metadata: {"stall_name" => lease["stall_name"]}
+            )
+          end
           Game::Inventory::Manager.new(inventory: character.inventory).remove_item!(
             item_template: item.item_template,
             quantity: quantity
@@ -77,12 +100,14 @@ module Game
               "listed_from" => LISTED_FROM,
               "listed_from_item_id" => item.id,
               "stall_name" => lease["stall_name"],
-              "stall_tax" => lease["tax"].to_s
+              "stall_tax" => lease["tax"].to_s,
+              "featured" => featured
             }
           )
         end
 
-        Result.new(success: true, message: I18n.t("game.buildings.stall_listing_listed"))
+        msg = featured ? I18n.t("game.buildings.stall_listing_featured") : I18n.t("game.buildings.stall_listing_listed")
+        Result.new(success: true, message: msg)
       rescue Game::Inventory::Manager::InventoryUnderflowError => e
         failure(e.message)
       end
@@ -137,7 +162,7 @@ module Game
 
       private
 
-      attr_reader :character, :inventory_item_id, :quantity, :price_nv, :listing_id
+      attr_reader :character, :inventory_item_id, :quantity, :price_nv, :listing_id, :featured
 
       def failure(message)
         Result.new(success: false, message:)

@@ -525,6 +525,7 @@
             C<% if @activity_claimable.to_i.positive? %><span class="nl-claim-dot" aria-hidden="true"><%= @activity_claimable %></span><% end %>
           <% end %>
           <%= link_to "S", season_path, class: "nl-chat-tool nl-chat-tool--quests", aria: {label: t("game.season.nav")}, title: t("game.season.nav"), data: {turbo_frame: "_top", shell_recovery: "season"} %>
+          <%= link_to "W", wars_path, class: "nl-chat-tool nl-chat-tool--quests", aria: {label: t("game.wars.title")}, title: t("game.wars.title"), data: {turbo_frame: "_top", shell_recovery: "wars"} %>
           <%= link_to "A", character_licenses_path, class: "nl-chat-tool nl-chat-tool--abilities", aria: {label: t("nav.abilities")}, title: t("nav.abilities"), data: {turbo_frame: "_top", shell_recovery: "licenses"} %>
         <% end %>
       <% end %>

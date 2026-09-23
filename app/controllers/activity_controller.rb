@@ -17,6 +17,7 @@ class ActivityController < ApplicationController
     @live_events = WorldLiveEvent.active.order(starts_at: :desc).limit(6)
     @sector_wars = Game::World::SectorWarBoard.new.call
     @siege_rows = @sector_wars.select(&:under_siege)
+    @checkin = Game::Seasons::DailyCheckin.new(character: current_character).call
     Game::Onboarding::FirstHour.new(character: current_character).mark!("open_activity")
   end
 

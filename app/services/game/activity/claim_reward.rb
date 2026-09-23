@@ -37,18 +37,31 @@ module Game
         reward = row.reward.to_h.deep_dup
         streak = bump_claim_streak!
         bonus_nv = [streak - 1, 0].max * 5
+        milestone = streak_milestone_for(streak)
+        bonus_nv += milestone["nv"].to_i if milestone
         reward["nv"] = reward["nv"].to_i + bonus_nv if bonus_nv.positive?
         grant!(reward)
         meta = row.metadata.to_h.merge("claim_streak" => streak, "streak_bonus_nv" => bonus_nv)
+        meta["streak_milestone_days"] = milestone["days"] if milestone
         row.update!(claimed_at: Time.current, metadata: meta)
         season_xp = Game::Seasons::Catalog.active? ? Game::Seasons::Catalog.current.fetch("xp_per_daily_claim", 25).to_i : 0
+        season_xp += milestone["season_xp"].to_i if milestone
         Game::Seasons::Progress.new(character:).add_xp!(season_xp) if season_xp.positive?
-        message = if bonus_nv.positive?
+        message = if milestone
+          I18n.t("game.activity.claimed_milestone", streak:, bonus: bonus_nv, days: milestone["days"])
+        elsif bonus_nv.positive?
           I18n.t("game.activity.claimed_streak", streak:, bonus: bonus_nv)
         else
           I18n.t("game.activity.claimed")
         end
         Result.new(success?: true, message:)
+      end
+
+      def streak_milestone_for(streak)
+        return nil unless Game::Seasons::Catalog.active?
+
+        Array(Game::Seasons::Catalog.current["streak_milestones"]).map(&:deep_stringify_keys)
+          .find { |row| row["days"].to_i == streak.to_i }
       end
 
       def bump_claim_streak!
