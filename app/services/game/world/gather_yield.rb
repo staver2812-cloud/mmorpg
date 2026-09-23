@@ -80,9 +80,10 @@ module Game
 
       Result = Struct.new(:item_key, :quantity, :label, :group_key, :respawn_seconds, :depleted, keyword_init: true)
 
-      def initialize(tile:, local_action_type:, rng: Random.new, clock: -> { Time.current })
+      def initialize(tile:, local_action_type:, character: nil, rng: Random.new, clock: -> { Time.current })
         @tile = tile
         @local_action_type = local_action_type.to_s
+        @character = character
         @rng = rng
         @clock = clock
       end
@@ -103,7 +104,7 @@ module Game
 
       private
 
-      attr_reader :tile, :local_action_type, :rng, :clock
+      attr_reader :tile, :local_action_type, :character, :rng, :clock
 
       def pick_from(groups, kinds:, fallback:, map:)
         matching = groups.select { |g| kinds.include?(g["kind"].to_s) || map.key?(g["key"].to_s) }
@@ -124,6 +125,21 @@ module Game
         )
       end
 
+      # Soft profession bonus: +1 qty chance scales with skill (wiki miner/fisher depth
+      # is richer; Ashen uses a bounded bonus so early shore stays readable).
+      def profession_bonus_chance
+        return 0 unless character
+
+        skills = character.metadata.to_h.fetch("profession_skills", {})
+        skill = case local_action_type
+        when "digging" then skills["miner"].to_i + skills["tar_smith"].to_i / 2
+        when "resource_search" then skills["herbalist"].to_i + skills["ash_healer"].to_i / 2
+        when "fishing" then skills["ashen_fishing"].to_i
+        else 0
+        end
+        [[skill / 25, 0].max, 4].min
+      end
+
       def depleted?(group)
         value = tile.metadata.to_h.dig("resource_depletion", group["key"].to_s)
         expires_at = Time.zone.parse(value.to_s)
@@ -133,14 +149,21 @@ module Game
       end
 
       def weighted_groups(groups, map:)
-        return groups unless night?
+        multiplier = weather_weight_multiplier
+        return groups if multiplier <= 1
 
-        # Ashen's night window is evaluated in the server time zone. Duplicating
-        # nocturnal entries changes only seeded selection weight, not authority.
+        # Duplicating nocturnal/dusk entries changes only seeded selection weight.
         groups.flat_map do |group|
           key = map[group["key"].to_s] || map[group["kind"].to_s]
-          NIGHT_HERBS.include?(key) ? [group, group] : [group]
+          NIGHT_HERBS.include?(key) ? ([group] * multiplier) : [group]
         end
+      end
+
+      def weather_weight_multiplier
+        hour = clock.call.in_time_zone.hour
+        return 2 if hour >= 20 || hour <= 5 # night
+        return 2 if hour.between?(5, 7) || hour.between?(18, 20) # dawn/dusk
+        1
       end
 
       def night?
@@ -149,10 +172,14 @@ module Game
       end
 
       def quantity_for(key)
-        case key
+        base = case key
         when "wood_chips", "ash_herb", "drift_smelt", "mist_roach" then rng.rand(1..2)
         else 1
         end
+        bonus = profession_bonus_chance
+        return base if bonus <= 0
+
+        base + (rng.rand(100) < (bonus * 12) ? 1 : 0)
       end
     end
   end

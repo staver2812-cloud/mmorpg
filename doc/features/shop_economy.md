@@ -189,7 +189,7 @@ without partial mutation. No Shop-specific chat event is emitted: the live
 purchase showed catalog/wallet/mass refresh, while existing combat and world
 feedback continue in the shared chat timeline.
 
-Buying checks an explicitly offered, authored positive-priced template, current Shop/location, quote validity, finite stock, NV balance, inventory slots, carried mass, and stack limits. Selling checks current-character ownership, quantity, protected/equipped/bound state, and positive resale value. Unmet equipment requirements remain visible information and are enforced later by the inventory/equipment feature.
+Buying checks an explicitly offered, authored positive-priced template, current Shop/location, quote validity, finite stock, and NV balance. Soft inventory mass and stack counts do not block purchases; overweight only slows wilderness travel. Selling checks current-character ownership, quantity, protected/equipped/bound state, and positive resale value. Unmet equipment requirements remain visible information and are enforced later by the inventory/equipment feature.
 
 ### 4.4 Exit and integration behavior
 
@@ -258,7 +258,7 @@ Catalog order, row position, item label, CSS class, displayed price, and query p
 | Merchant license qualification | `POST /merchant_qualification/accept`, `/pay`, `/complete` | Location-gated steps; payment requires the accepted state | `MerchantQualificationsController`, `Game::Shop::MerchantQualification` |
 | Novice mode | `GET /shop?mode=novice` | Level denial/empty section | No novice capability or purchase |
 | Other captured city counters/interiors | City building routes | Read-only or deferred | City feature |
-| Mine Shop / Resource Exchange lobby sections | Exact-cell linked-location pages | Read-only; economic operations deferred | World owns the shipped lobbies; Economy owns the operation gaps in §6.5 |
+| Mine Shop / Resource Exchange lobby sections | Exact-cell linked-location pages | Exchange sell/buy/storage live at gov prices; mine shop previews still deferred to Shop | World owns lobbies; Economy owns `ResourceExchange` + Numismatics |
 
 ### 6.2 Buying and stock
 
@@ -482,9 +482,10 @@ query. [The World handbook](world.md) remains their runtime owner.
 | Remaining Economy work | Known runtime gap | Evidence needed before implementation |
 |---|---|---|
 | Mine item/license acquisition | `[IMPL]` Purchases, stock changes, NV debit and item/license receipt are absent for this lobby. Main Shop's Licenses mode does not provide them. | `[EVIDENCE]` Capture confirmation, successful acquisition, quantity/stock/funds/capacity/eligibility denials and repeat handling. Displayed prices/durations are already recorded; sampled stock is not a fixed rule. |
-| Exchange queries and listings | `[IMPL]` Choose, populated/empty listing results and listing refresh are absent. Switching a read-only section is not a resource query. | `[EVIDENCE]` Submit the observed selectors and capture actual results, row identities, filtering, refresh and stale state. |
-| Exchange transactions and settlement | `[IMPL]` Orders/trades, settlement and their wallet/resource mutations are absent. | `[EVIDENCE]` Confirm the live operation model, requirements, timing, fees if present, cancellation/expiry, failure and retry outcomes. Older wiki descriptions do not establish current settlement rules. |
-| Exchange storage operations | `[IMPL]` Resource deposit, withdrawal or claiming is absent; the exact operation model is not inferred from the tab name. | `[EVIDENCE]` Observe ownership, quantity/capacity if applicable, success, failure, persistence and repeated requests. |
+| Exchange queries and listings | Live filter + sell/buy/storage rows on the outpost Exchange lobby (`Game::World::ResourceExchange`) | Instant government-price settlement (Викиневер гос.цены). Full 4h auction matching remains deeper parity. |
+| Exchange transactions and settlement | Sell at gov price, buy at 110% markup, deposit/withdraw storage (cap 200) | Wallet + inventory mutate under character lock; failure leaves state unchanged. |
+| Exchange storage operations | Metadata vault `resource_exchange_storage` | Cap enforced; withdraw returns to bag. |
+| Numismatics commodity book | Same gov-price sell board in city Numismatics | Links to Exchange for full filters. |
 
 The canonical [capture backlog](../design/reference/economy/observations/evidence_needed_mine_exchange_operations.md)
 links the preserved live/wiki observations. These are later operation tasks,
@@ -532,7 +533,7 @@ The browser receives calculated rows and submits target IDs, a server-issued act
 
 ### 7.3 Presentation versus authority
 
-Displayed prices, totals, stock, requirements, mass, hidden IDs, confirmation text, filter fields, and saved gameplay-context parameters are presentation/input only. The server recalculates prices and rechecks all mutation invariants, including inventory slot capacity even though it is not displayed in the Shop status strip.
+Displayed prices, totals, stock, requirements, mass, hidden IDs, confirmation text, filter fields, and saved gameplay-context parameters are presentation/input only. The server recalculates prices and rechecks mutation invariants. Soft carried mass and stack counts do not reject Shop buys; NV, stock, and license gates remain hard.
 
 Numeric filters accept bounded nonnegative digit strings. Malformed filter
 values use the corresponding displayed default; they never change price, ownership, stock or wallet state.
@@ -1212,6 +1213,12 @@ automated completion results are recorded in
 
 | Date | Change |
 |---|---|
+| 2026-09-23 | Resource Exchange lobby live: gov-price sell/buy/storage (`Game::World::ResourceExchange`); Numismatics commodity book sells at the same rates; Sale failure coverage for shop_no_nv / shop_full / license. |
+| 2026-09-22 | Auction open-slot limit = 3 + Premium bonus; Infirmary VM desk packs 50/100/250/500 under ALLOW_STUB_IAP; Paid Services live IAP still `[EVIDENCE]`. |
+| 2026-09-22 | Choice packs open into sub-gift vouchers (one picker each); Mist War-style Premium/Gold/Lux/Platinum with auto-hunt/auto-gather gates; premium shop at `/premium` + Inventory CTA; supply/scroll/souvenir prices aligned for soft deficit. |
+| 2026-09-22 | Economy donate tune: gift prices raised for mild NV deficit (~1.4k traveler pack), festive VM packs stop refunding NV, fuse costs 120 NV / 18 VM, daily contracts trimmed. Gift boxes leave inventory after full open/claim. Premium passes (VM, Trade Hub) grant mass/gift discount/stipend/fatigue comfort — Neverlands Paid Services detail remains `[EVIDENCE]`. |
+| 2026-09-22 | Gift shop full loop: inventory CTA, NV/VM packs, social toys/flowers/cards, choice claims allowlist, birthday auto-box, manage enable/disable. Premium rune fuse spends VM. |
+| 2026-09-22 | Gift-box shop (`/gifts`) + Manage constructor: buy with VM, timed unlock, weighted NV/VM/item drops (Ashen Veil epic27 port). |
 | 2026-09-13 | Purchase/Sale success and rejection alerts use `game.shop.*` i18n (ru/en); English copy preserves prior trade vocabulary for specs. |
 | 2026-09-14 | Shop Sell Junk link exposes `data-shop-recovery="junk"`; empty Sell recovers via Inventory; doctor perk step exposes `data-doctor-recovery="perks"`. |
 | 2026-09-17 | Ashen Veil catalog goods activate into Shop by rarity tiers 1–23 with stock rows; catalog row cap raised to 1200. |
@@ -1237,6 +1244,7 @@ automated completion results are recorded in
 | 2026-09-15 | Failed Shop buy/sell redirects with `trade_denied=1` recovery chrome (`data-shop-trade-denied`, `data-shop-recovery`). |
 | 2026-09-15 | Out-of-district Shop denials redirect to World with `shop_denied=1` recovery chrome (`data-shop-denied`, `data-shop-recovery`). |
 | 2026-09-15 | Soft-release smoke buys an affordable knives-row item (prefer durable) before Inventory wear. |
+| 2026-09-18 | Soft inventory capacity: Shop buys are not blocked by slots/mass; NV/stock/licenses remain hard gates. |
 | 2026-09-14 | Doctor onboarding Licenses/City recovery; Infirmary premium short of VM recovers via topup/Bank/City. |
 | 2026-09-14 | Infirmary Traumatologist need-healer state recovers via Perks and City. |
 | 2026-09-14 | Narrow Shop: empty note drops forced 800px min-width; Licenses grid stacks to one column below 520px. |

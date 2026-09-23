@@ -123,12 +123,15 @@ module Game
         when "drinking"
           nature_child = character.owns_perk?(:nature_child)
           points = rules.drinking_fatigue_recovery_points(nature_child:)
-          applied = Characters::FatigueService.new(character:, rules:).recover!(amount: points, at:)
+          mult = Game::Shop::PremiumPass.perks_for(character.user)[:fatigue_mult].to_f
+          points = (points * mult).round if mult > 1.0
+          applied = ::Characters::FatigueService.new(character:, rules:).recover!(amount: points, at:)
           {
             "fatigue_recovery_points" => points,
             "fatigue_recovery_applied" => applied,
             "fatigue_recovered_at" => at.iso8601(6),
-            "nature_child" => nature_child
+            "nature_child" => nature_child,
+            "premium_fatigue_mult" => mult
           }
         when "digging", "resource_search", "fishing"
           grant_gather!
@@ -156,7 +159,7 @@ module Game
           tool_key = rod.key
         end
 
-        yield_row = GatherYield.new(tile:, local_action_type:, clock:).call
+        yield_row = GatherYield.new(tile:, local_action_type:, character:, clock:).call
         return effect.merge("gather_skipped" => "none") unless yield_row
         return effect.merge("gather_skipped" => "depleted") if yield_row.depleted
 
@@ -178,17 +181,28 @@ module Game
         template = ItemTemplate.find_by(key: yield_row.item_key)
         return effect.merge("gather_skipped" => yield_row.item_key) unless template
 
+        qty = yield_row.quantity.to_i + Game::Shop::PremiumPass.perks_for(character.user)[:gather_bonus].to_i
+        qty = [qty, 1].max
+
         inventory = character.inventory || character.create_inventory!(slot_capacity: 30, weight_capacity: 100)
         Game::Inventory::Manager.new(inventory:).add_item!(
           item_template: template,
-          quantity: yield_row.quantity
+          quantity: qty
         )
         deplete_group!(yield_row)
         GatherTools.wear!(character, tool_key)
         FishingCatalog.gain_skill!(character) if local_action_type == "fishing"
+        Game::WorldEvents::TournamentScore.record_fish!(character:, amount: qty) if local_action_type == "fishing"
+        activity_kind =
+          case local_action_type
+          when "fishing" then "catch_fish"
+          when "resource_search" then "gather_herb"
+          when "digging" then "dig_wood"
+          end
+        Game::Activity::Tracker.new(character:).record!(kind: activity_kind, amount: qty) if activity_kind
         effect.merge(
           "gather_item_key" => template.key,
-          "gather_quantity" => yield_row.quantity,
+          "gather_quantity" => qty,
           "gather_label" => yield_row.label,
           "gather_tool_key" => tool_key,
           "fishing_skill" => (FishingCatalog.effective_skill(character, rod_key: tool_key) if local_action_type == "fishing")

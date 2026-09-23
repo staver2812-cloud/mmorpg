@@ -1,8 +1,8 @@
 ---
 title: Quests Feature
-description: Ashen sandbox starter quest journal with gated craft/shore chains.
+description: Ashen sandbox starter quest journal with gated craft/shore/pack chains.
 status: Partially Implemented
-updated: 2026-09-13
+updated: 2026-09-22
 owners: [NPCs and Quests]
 template: feature-v3
 ---
@@ -16,52 +16,94 @@ dialogue trees and multi-step quest engines remain deferred; this handbook
 describes only the verified Ashen runtime.
 
 - Config: `config/gameplay/ashen_quests.yml`
-- Related runtime: `doc/features/city.md`, `doc/features/world.md`, `doc/features/arena_combat.md`
+- Related runtime: `doc/features/city.md`, `doc/features/world.md`,
+  `doc/features/arena_combat.md`, `doc/features/dungeons.md`
+- MVP scope: `doc/design/launch_mvp_plan.md`
 
-## 2. Player-facing behavior
+## 2. Player contract and non-goals
 
 Players open quests from Coal Hall or `/quests`. New playable characters
 auto-accept `veil_lure_drill` once. Contracts use `requires` / `unlocks` so
-later shore and craft jobs stay locked until earlier ones are turned in;
-successful turn-in can auto-accept the next key in `unlocks`. Journal cards show
-where-hints, named item rewards, and locked/available/active/completed status.
-Kill and delivery objectives grant NV, XP, and item rewards. Soft-release
+later shore, craft, pack-floor, and surface-ore jobs stay locked until earlier
+ones are turned in; successful turn-in can auto-accept the next key in
+`unlocks`. Journal cards show where-hints, named item rewards, and
+locked/available/active/completed status. Kill, delivery, fortress visit, and
+`clear_pack_floor` objectives grant NV, XP, and item rewards. Soft-release
 `veil_lure_drill` also accepts a Help Hall `arena_training_dummy` kill so
 level-zero players can complete the first contract without waiting on shore
-ambushes.
+ambushes. Pack chain covers Ruins of Ash → Salt Catacombs → Veil Well → Ash Pit;
+surface ore + coal prep point at outdoor dig and Trade Hub NV↔VM.
 
-## 3. Server ownership
+Non-goals:
 
-- `Game::Quests::Catalog` — YAML quest definitions
-- `Game::Quests::Journal` — accept / progress / turn-in mutations on
-  `character.metadata["ashen_quests"]` (requirement gate + auto-unlock)
-- `QuestsController` — HTTP boundary
-- `Arena::CombatProcessor` — records NPC kill progress after victory
+- Neverlands dialogue trees, cancellation UI, and shared party quests
+- Merchant qualification “quest” owned by Shop Economy
+- Underground mine quests (mine remains lobby + outdoor dig only)
+- Invented evidence for missing Neverlands quest formulas
 
-## 4. Persistence and failure
+## 3. Authoritative state and content
+
+| Owner | Responsibility | Important invariant |
+|---|---|---|
+| `Game::Quests::Catalog` | YAML quest definitions | Stable quest keys |
+| `Game::Quests::Journal` | accept / progress / turn-in on `character.metadata["ashen_quests"]` | Requirement gate + auto-unlock |
+| `QuestsController` | HTTP boundary | Auth + character scope |
+| `Arena::CombatProcessor` | NPC kill progress after victory | Only matching `npc_keys` |
+| `PackLaunch` | `record_pack_floor!` after dungeon floor clear | Pack key must match objective |
+
+## 4. Rails and Hotwire flow
+
+1. Coal Hall / `/quests` loads journal from Catalog + character metadata.
+2. Accept / turn-in posts hit `QuestsController` → `Journal` under character lock.
+3. Combat and pack victories bump progress via Journal hooks.
+4. ERB journal cards render status, where-hints, and recovery CTAs.
+
+## 5. Security, concurrency, and failure behavior
 
 All accept/turn-in mutations run under character lock. Failed turn-in leaves
 quest state and inventory unchanged. Unknown keys, unmet `requires`, and
-already-completed quests reject safely.
+already-completed quests reject safely. Delivery turn-in consumes the required
+item stacks only after progress checks pass.
 
-## 5. Coverage
+## 6. Acceptance and tests
 
 Focused service/request coverage exists for accept, locked gate, auto-unlock,
 incomplete turn-in, and reward grant paths where present. Live smoke verifies
 the starter lure is active and chain accepts of `veil_tail_delivery` stay locked.
 Craft spine includes Tar Smith bandage, field kit / lure pack, and Ash Healer
-novice → adept → master bags.
+novice → adept → master bags. Pack/ore quests are YAML-backed; floor progress
+is covered via PackLaunch + Journal hooks.
 
-## 6. Non-goals
+## 7. Responsible files and operations
 
-- Neverlands dialogue trees, cancellation UI, and shared party quests
-- Merchant qualification “quest” owned by Shop Economy
-- Invented evidence for missing Neverlands quest formulas
+### Runtime
 
-## 7. History
+- `config/gameplay/ashen_quests.yml`
+- `app/services/game/quests/catalog.rb`
+- `app/services/game/quests/journal.rb`
+- `app/controllers/quests_controller.rb`
+
+### Tests
+
+- Quest journal / request specs under `spec/` (accept, gate, turn-in)
+
+### Operations
+
+No special migration; quest state lives in character metadata JSONB.
+
+## 8. Gaps and version history
+
+Known gaps:
+
+- Neverlands dialogue trees and shared party quests
+- Underground mine-linked quest evidence
 
 | Date | Change |
 |---|---|
+| 2026-09-23 | Exchange desk + group spire pack contracts; hour-one gather/fish already live. |
+| 2026-09-23 | Hour-one gather/fish contracts: `ash_first_herbs`, `ash_first_catch` (auto-unlock after lure). |
+| 2026-09-23 | Group Spire pack quest + Resource Exchange desk contract on the Ashen board. |
+| 2026-09-22 | Pack floor chain (salt/veil/ash pit) + surface ore / coal exchange prep quests; handbook aligned to feature-v3. |
 | 2026-09-16 | Soft-release smoke farms `ash_mite_patrol` gate-mite bait wins and turns in after gift. |
 | 2026-09-16 | Soft-release adept prep caps light-bag skill climb so bandages accumulate for `healer_bag_heavy` (343/343). |
 | 2026-09-15 | Soft-release smoke crafts `healer_bag_heavy` and turns in `ash_healer_adept_bag` after lure pack. |

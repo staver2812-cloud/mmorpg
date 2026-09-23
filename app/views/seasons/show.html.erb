@@ -1,0 +1,64 @@
+<% content_for :title, t("game.season.title") %>
+<section class="nl-handbook" data-season-board="1" data-season-active="<%= @season[:active] ? "1" : "0" %>">
+  <h1><%= @season[:title_ru].presence || t("game.season.title") %></h1>
+  <p class="nl-handbook__lead"><%= t("game.season.lead") %></p>
+  <p class="nl-quests-board__meta">
+    <%= t("game.gifts.wallet_both", nv: @wallet.nv_balance.to_i, vm: @wallet.veil_marks.to_i) %>
+    · <%= link_to t("game.premium_pass.title"), premium_path, class: "nl-sheet-link" %>
+    · <%= link_to t("game.activity.daily_title"), activity_path, class: "nl-sheet-link" %>
+  </p>
+
+  <% if @season[:active] %>
+    <p data-season-days="<%= @season[:days_left] %>">
+      <%= t("game.season.countdown", days: @season[:days_left], xp: @season[:xp]) %>
+    </p>
+    <p class="nl-quests-board__meta"><%= t("game.season.fomo_hint") %></p>
+
+    <% if @season[:premium] %>
+      <p data-season-premium="1"><%= t("game.season.premium_on") %></p>
+    <% else %>
+      <p data-season-premium="0"><%= t("game.season.premium_off", price: @season[:premium_unlock_vm]) %></p>
+      <%= button_to t("game.season.unlock_premium_cta", price: @season[:premium_unlock_vm]),
+            unlock_premium_season_path,
+            method: :post,
+            class: "lbut lbut--primary",
+            form: {data: {turbo: false}} %>
+    <% end %>
+
+    <h2><%= t("game.season.free_track") %></h2>
+    <ul class="nl-trade-hub__list" data-season-free="1">
+      <% Array(Game::Seasons::Catalog.current["free_track"]).each do |row| %>
+        <li>
+          <%= t("game.season.level_row", level: row["level"], xp: row["xp"]) %>
+          <% if @season[:free_levels].any? { |r| r["level"].to_i == row["level"].to_i } %>
+            <%= button_to t("game.season.claim_cta"),
+                  claim_season_path,
+                  method: :post,
+                  params: {track: "free", level: row["level"]},
+                  class: "lbut",
+                  form: {data: {turbo: false}} %>
+          <% end %>
+        </li>
+      <% end %>
+    </ul>
+
+    <h2><%= t("game.season.premium_track") %></h2>
+    <ul class="nl-trade-hub__list" data-season-premium-track="1">
+      <% Array(Game::Seasons::Catalog.current["premium_track"]).each do |row| %>
+        <li>
+          <%= t("game.season.level_row", level: row["level"], xp: row["xp"]) %>
+          <% if @season[:premium] && @season[:premium_levels].any? { |r| r["level"].to_i == row["level"].to_i } %>
+            <%= button_to t("game.season.claim_cta"),
+                  claim_season_path,
+                  method: :post,
+                  params: {track: "premium", level: row["level"]},
+                  class: "lbut",
+                  form: {data: {turbo: false}} %>
+          <% end %>
+        </li>
+      <% end %>
+    </ul>
+  <% else %>
+    <p class="nl-empty-note" data-season-inactive="1"><%= t("game.season.inactive") %></p>
+  <% end %>
+</section>

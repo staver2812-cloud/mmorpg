@@ -70,9 +70,9 @@ Supporting documents:
 
 ## 2. Feature summary
 
-The MVP has one outdoor region, **Outpost Surroundings**, with local coordinates from `[0, 0]` through `[999, 999]`. A character occupies exactly one cell in exactly one `Zone`. The region is sparse: cells do not require one million database rows. An in-bounds cell without an explicit template exists as ordinary, passable outdoor terrain.
+The MVP has one outdoor region, **Пепельный Берег** (legacy docs may say Outpost Surroundings), with local coordinates from `[0, 0]` through `[999, 999]`. Soft-release densifies a **100 × 100** playable atlas (`config/gameplay/playable_region.yml` + `Game::World::PlayableRegionBuilder`, seed `playable_region_atlas_v3`) with fortresses, castles, multilevel dungeon rings, mines, resource nodes, L-path roads, approach neighborhoods, and mid-atlas corridor forage/fish/dig waypoints so travel between landmarks stays labeled. Character hub **Карта** opens `/world_map` overview. A character occupies exactly one cell in exactly one `Zone`. The wider million-cell region remains sparse beyond authored overlays: cells do not require one million database rows. An in-bounds cell without an explicit template exists as ordinary, passable outdoor terrain.
 
-The player sees a viewport-fitted nearby-cell surface centered on the current cell, using fixed 100px tiles. The server independently validates odd visible columns (`3..39`) and rows (`3..9`), defaulting invalid or omitted values to `3 × 5`. One off-screen cell on every edge gives a buffer two columns and two rows larger than the visible surface. These bounded limits are local implementation choices; the September 10 source sample showed 17 columns and retained an older off-screen row. The server offers up to eight adjacent destinations. Clicking an offered cell starts a server-authored move; captured clean steps were `24` seconds and a captured destination-specific step was `32` seconds. The local `24..30` Wanderer fallback applies only when the destination has no exact authored duration. The map animates in the browser, but the server remains authoritative and changes the persisted coordinate only when the command becomes due and is completed. Completion applies the command's snapshotted `1..2` fatigue gain. One point recovers every three minutes; at effective fatigue `86%+`, Move, Look, and Enter are withheld and rejected until recovery.
+The player sees a viewport-fitted nearby-cell surface centered on the current cell, using fixed 100px tiles. The server independently validates odd visible columns (`3..39`) and rows (`3..9`), defaulting invalid or omitted values to `3 × 5`. One off-screen cell on every edge gives a buffer two columns and two rows larger than the visible surface. These bounded limits are local implementation choices; the September 10 source sample showed 17 columns and retained an older off-screen row. The server offers up to eight adjacent destinations. Clicking an offered cell starts a server-authored move; captured clean steps were `24` seconds and a captured destination-specific step was `32` seconds. Soft-release Wanderer fallback (when no authored duration) is `12..30` seconds via `config/gameplay/world_rules.yml` (`base_seconds: 30`, `minimum_seconds: 12`, up to `18` seconds reduction at Wanderer `100`); authored positive `travel_seconds` also receive the same whole-second Wanderer discount, then optional watchtower cut and soft encumbrance slowdown. The map animates in the browser, but the server remains authoritative and changes the persisted coordinate only when the command becomes due and is completed. Completion applies the command's snapshotted `1..2` fatigue gain. One point recovers every three minutes; at effective fatigue `86%+`, Move, Look, and Enter are withheld and rejected until recovery.
 
 A cell may compose several independent concerns:
 
@@ -117,7 +117,8 @@ and delay distribution remain unobserved.
 - Persist the exact player zone and coordinate across logout and login.
 - Offer eight-direction timed movement with a single active command.
 - Preserve an exact positive `travel_seconds` authored on a destination cell;
-  otherwise use the bounded `30..24` effective-Wanderer fallback.
+  otherwise use the bounded `12..30` effective-Wanderer fallback
+  (`world_rules.yml`: base `30`, minimum `12`, up to `18` seconds reduction).
 - Persist wilderness fatigue, recover it from server time, and gate the three
   named source actions at the exact `86%` boundary.
 - Render only the small local map window required by the client.
@@ -155,17 +156,14 @@ and delay distribution remain unobserved.
   `doc/features/airship_travel.md` and reuse this feature's position/cell owners.
 - Rendering or downloading the entire 1,000 × 1,000 region.
 - Procedural region generation, pathfinding, fog of war, or minimap discovery.
-- Terrain-, encumbrance-, fatigue-, effect-, profession-, or non-Wanderer skill-based travel-time modifiers; fatigue gates actions but does not alter duration.
+- Terrain-, profession-, or non-Wanderer skill-based travel-time modifiers beyond the soft-release Wanderer/encumbrance/watchtower factors owned by `TravelTime`; fatigue gates actions but does not alter duration.
 - Claiming to reproduce Neverlands' complete hidden travel-time formula; the live server has produced `32`- and `49`-second values under unisolated conditions.
 - Automatic movement queues or click-to-path travel.
 - Generic building/location types, levels, keys, item gates, or invented entrance rules.
 - Underground mine travel/extraction, exchange listings or transactions, and
   other unimplemented location families. Mine/exchange lobbies support entry,
   read-only sections, return and persisted resume only.
-- Successful fishing casts/catches, fishing proficiency gains, and digging.
-  The captured no-bait Fish entry and Drink are implemented.
-- Successful gathering, deferred by the user to later profession work;
-  `Look Around` currently supports only the captured empty result and work lock.
+- Full Neverlands fishing/digging profession parity (bait tiers, proficiency curves, interruption variants). Soft-release already awards authored dig/look/fish materials when tools and cell metadata allow.
 - Generic encounter tables, claimed equal source weights, or procedural NPC
   group composition beyond explicit Neverlands-backed cell metadata. The
   shipped variable path replays complete observed samples; it is not the
@@ -482,12 +480,11 @@ active fight redirects to that fight. These checks share the character lock.
 
 The same owner also supports the nearby mine lobby at `[4,5]` (source
 `[998,997]`) and resource-exchange lobby at `[4,7]` (source `[998,999]`). Entry,
-return and login resume retain the exact outdoor coordinate. Their allowlisted
-sections are read-only views within the same location; switching sections does
-not relocate the player. Captured extraction/descent, resource-query and
-trading actions remain unavailable. No section parameter can grant a Shop
-feature or an underground position. Other location families still require
-their own captured contract.
+return and login resume retain the exact outdoor coordinate. Mine sections include
+an Ashen coal gallery: Descend / Dig / Ascend via `Game::World::AshenMineGallery`
+(hatchet + cooldown, coal/iron yields). Exchange resource-query and shop-buy
+controls remain deferred with Trade Hub / Shop recovery. No section parameter can
+grant central Shop access or invent a full underground grid beyond the gallery.
 
 ### 5.4 Captured outdoor content
 
@@ -568,21 +565,22 @@ zone/cell/room keys that authorize actions, chat or presence.
 | Current-cell city entrance | `POST /world/enter_building` | Interactive handoff | World entrance service, then City |
 | Current-cell linked-location entrance | `POST /world/enter_building` | Interactive handoff | World entrance service, then allowlisted World Location |
 | Frontier Village scene | `GET /world/locations/:building_key` | Interactive | `TileBuilding`, `TileStateResolver`, `WorldLocationsController`, World CSS |
-| Mine/exchange lobby and sections | `GET /world/locations/:building_key`, optional allowlisted `section` | Exact-cell lobby and read-only sections; underground/trading controls unavailable | Same persisted `TileBuilding` and `WorldLocationsController` |
+| Mine/exchange lobby and sections | `GET /world/locations/:building_key`, optional allowlisted `section`; mine `POST .../descend|gallery_dig|ascend`; exchange `POST .../exchange` | Exact-cell lobby; mine coal gallery dig; exchange sell/buy/storage at gov prices | `TileBuilding`, `WorldLocationsController`, `AshenMineGallery`, `ResourceExchange` |
 | Village Trading Post / exit | `POST /world/locations/:building_key/features` | Interactive handoff | Persisted building feature + shared owned offer, then Shop or unchanged World cell |
 | `Look Around` | `POST /world/perform_local_action` | Immediate empty result with persisted 28-second lock, or ambush handoff | `PerformLocalAction`, `LocalActionState` |
 | Character/Inventory world-shell actions | `POST /world/context` | Interactive navigation/ambush handoff | World allowlist and hostile interruption pipeline |
 | Wilderness result return | `POST /arena_matches/:id/finish` after a World fight | Interactive handoff | Arena finishes the result; World resolves the saved allowlisted destination |
 | `Drink` | `POST /world/perform_local_action` on an authored water cell | Immediate two-point fatigue recovery and persisted 60-second lock, or ambush handoff | `PerformLocalAction`, `LocalActionState`, `FatigueService` |
-| `Fish` without bait | `POST /world/perform_local_action` on an authored fishing cell | Immediate missing-bait result and persisted 30-second lock, or ambush handoff; no catch or proficiency award | `PerformLocalAction`, `LocalActionState` |
-| `dig` | Authored identifier only | Deferred | No offer or mutation is exposed |
+| `Fish` without bait | `POST /world/perform_local_action` on an authored fishing cell | Immediate missing-bait result and persisted 30-second lock, or ambush handoff; with bait, soft-release may award a catch | `PerformLocalAction`, `LocalActionState` |
+| `dig` / look gather | Authored resource cells with tools | Soft-release awards materials / depletes nodes per `gather_yield` | `PerformLocalAction`, `GatherYield` |
 
 ### 6.2 Movement and map behavior
 
 The server authors up to eight adjacent offers with opaque keys and a
-snapshotted duration. An exact positive `travel_seconds` in destination
-metadata wins; otherwise the current bounded Wanderer fallback produces
-`24..30` seconds. Acceptance also snapshots a `1..2` fatigue gain so
+snapshotted duration. Soft-release `TravelTime` uses authored positive
+`travel_seconds` (with Wanderer discount) or the `12..30` fallback from
+`world_rules.yml`, then applies optional fortress watchtower reduction and
+encumbrance slowdown. Acceptance also snapshots a `1..2` fatigue gain so
 reload/retry cannot reroll it. The browser marks only those cells, submits one
 offer, fixes the cursor in the center, translates the buffered map underneath
 it, and shows the server-derived countdown. Position remains the source cell
@@ -603,7 +601,11 @@ then hands the finish action back to that context.
 
 ### 6.4 Deferred behavior boundary
 
-The client exposes no generic building, pathfinding, terrain-speed, gathering-reward, or long-distance travel framework. Only captured action slices are active: empty Look, the no-bait Fish entry, and Drink. Successful fishing/gathering and digging remain unavailable until their requirements, outcomes and interruption behavior are captured and implemented with tests.
+The client exposes no generic building, pathfinding, or long-distance travel
+framework. Soft-release local actions award authored dig/look/fish yields when
+cell metadata and tools allow; full Neverlands profession parity (bait tiers,
+proficiency curves, interruption variants) remains deferred. Drink and the
+no-bait Fish lock path remain implemented.
 
 ## 7. Authoritative data and presentation model
 
@@ -1444,21 +1446,28 @@ in section 8.1 of `doc/features/city.md`.
 
 `Game::Movement::TravelTime` is a pure scalar calculation. `MapState` reads the
 effective Wanderer value once for the whole neighboring-offer batch, then
-snapshots each calculated duration into its offered command. Defaults are:
+snapshots each calculated duration into its offered command. Soft-release
+defaults (`config/gameplay/world_rules.yml`) are:
 
 ```text
+wanderer = clamp(effective_wanderer_level, 0, 100)
+reduction = floor(wanderer * wanderer_max_reduction_seconds / 100)  # up to 18s
+
 if destination.metadata.travel_seconds is a positive integer:
-  travel_seconds = destination.metadata.travel_seconds
+  base = clamp(authored - reduction, minimum_seconds, authored)
 else:
-  wanderer = clamp(effective_wanderer_level, 0, 100)
-  reduction_seconds = floor(wanderer * 6 / 100)
-  travel_seconds = clamp(30 - reduction_seconds, 24, 30)
+  base = clamp(30 - reduction, 12, 30)
+
+base = max(base - watchtower_cut(0..20), max(minimum_seconds - 4, 8))
+if encumbrance_ratio > 1.0:
+  travel_seconds = ceil(base * min(encumbrance_ratio, 2.5))
+else:
+  travel_seconds = base
 ```
 
-The fallback whole-second bands are `0..16 => 30`, `17..33 => 29`,
-`34..49 => 28`, `50..66 => 27`, `67..83 => 26`, `84..99 => 25`, and
-`100 => 24`. `passive_skill_level` is the effective value, including supported
-equipment bonuses and capped at `100`.
+`passive_skill_level` is the effective value, including supported equipment
+bonuses and capped at `100`. The older Neverlands-shaped `24..30` band remains
+historical evidence; soft-release intentionally uses the wider `12..30` band.
 
 The command keeps its offered duration even if the character's skill,
 equipment, or target metadata changes afterward. Acceptance uses that
@@ -1481,8 +1490,9 @@ Unknown keys, non-integers and out-of-range values fail clearly. There are no
 evaluated formula strings or client-supplied expressions. Accepted durations,
 fatigue gains, action deadlines and drinking recovery remain snapshots;
 effective natural recovery and presence freshness use current server policy.
-The 30-to-24-second linear Wanderer fallback and five-minute liveness window
-remain labeled provisional/local policies, not exact hidden Neverlands rules.
+The soft-release `12..30` Wanderer fallback (base `30`, min `12`) and five-minute
+liveness window remain labeled provisional/local policies, not exact hidden
+Neverlands rules. The older Neverlands-shaped `24..30` band is historical evidence only.
 
 ### 8.3 Start movement
 
@@ -1918,10 +1928,10 @@ A wilderness fight does not move `CharacterPosition`. Its match metadata stores 
 
 - A character can traverse any offered in-bounds adjacent cell, including diagonals.
 - A move lasts its exact positive destination duration when authored, otherwise
-  the bounded `24..30` Wanderer fallback; only one move may be active.
+  the bounded `12..30` Wanderer fallback; only one move may be active.
 - A completed move adds its snapshotted `1..2` fatigue once; time recovers one per three minutes and the `86%` action gate is enforced on render and acceptance.
-- Fallback Wanderer `0`, `20`, and `100` produce `30`, `29`, and `24` seconds
-  respectively; missing or malformed-negative skill data cannot exceed the
+- Fallback Wanderer `0`, `20`, and `100` produce `30`, `27`, and `12` seconds
+  respectively (`reduction = level * 18 / 100`); missing or malformed-negative skill data cannot exceed the
   30-second base.
 - The UI animates the accepted move and reloads authoritative state at completion.
 - The region supports local coordinates through `[999, 999]` without precreating every cell.
@@ -3028,7 +3038,8 @@ Before extending the World feature:
 | 2026-09-14 | Shell injury/wear chips expose `data-injury-recovery` / `data-wear-recovery` when those chips render. |
 | 2026-09-14 | Coarse-pointer mine/exchange lobby tabs and Descend/Choose/Buy controls target ~44×44 CSS px (`UI-ADAPT-005`). |
 | 2026-09-14 | Coarse-pointer outdoor Look/Drink/Fish action buttons also target ~44×44 CSS px. |
-| 2026-09-14 | Deferred mine Descend recovers to City beside the disabled control. |
+| 2026-09-22 | Ashen mine coal gallery: Descend / Dig / Ascend with hatchet, cooldown, coal/iron yields (`AshenMineGallery`). |
+| 2026-09-22 | Player Action panel + chat RMB assault; starter kit v6 tools/hooks; quest dialogue + dungeon vignette. |
 | 2026-09-14 | Deferred mine Choose/Buy recover to City/Shop beside their disabled controls. |
 | 2026-09-14 | Outdoor injury lock recovers via Inventory plus Infirmary/City; blocked Enter recovers to City; empty world state retries World. |
 | 2026-09-14 | Mine/exchange “you are here” nav recovers to City when no deferred action list is shown. |
@@ -3057,8 +3068,8 @@ not automatically an after-MVP commitment.
 | Inactive-player expiry | [Social domain](../domains/social.md#evidence-and-implementation-gaps) and [Game Shell presence](game_shell.md#63-presence-and-layout-preferences) | Five-minute freshness is a local policy; exact source expiry needs evidence. |
 | NPC statistics, pools, compositions, weights and encounter timing/probability | [NPC gap record](../design/reference/npcs_quests/observations/evidence_needed_world_npc_content_and_formulas.md#remaining-npc-gaps) and [NPC design](../design/features/npcs_quests.md) | Captured starter groups work; broader content and formulas require evidence. Level-zero support does not supply unknown rat statistics. |
 | Successful fishing/proficiency, gathering and digging | [Professions](professions.md) | Deferred profession work, with explicit user eligibility decisions and remaining evidence/implementation gaps. |
-| Mine underground topology/movement and extraction | [Dungeons](dungeons.md) for descent/underground travel; [Professions](professions.md) for extraction | World lobby entry/return/resume is complete; underground gameplay is separate unfinished work. |
-| Mine item/license purchases and resource exchange operations | [Shop and Economy](shop_economy.md#65-mine-shop-and-resource-exchange-gap-ownership) | Current mine/exchange previews are read-only; acquisition, queries, trading and storage remain unfinished. |
+| Mine underground topology/movement and extraction | [Dungeons](dungeons.md) for full grid travel; [Professions](professions.md) for broader extraction | World lobby + Ashen coal gallery Descend/Dig/Ascend ship; full underground topology beyond the gallery remains deferred. |
+| Mine item/license purchases and resource exchange operations | [Shop and Economy](shop_economy.md#65-mine-shop-and-resource-exchange-gap-ownership) | Exchange sell/buy/storage live (gov prices); mine shop license buy still routes to Shop / Buyer. |
 | Additional zones and walking crossings | [Movement](../design/features/movement.md#persistence-contract) and [Airship gaps](airship_travel.md#8-gaps-and-version-history) | Explicitly after the one-zone MVP; destination content and walking boundary evidence/implementation are absent. |
 | Airship incremental network responses | [Airship gaps](airship_travel.md#8-gaps-and-version-history) | Later technical improvement; flight still sends bounded 21/55-cell snapshots while walking already sends deltas. |
 
@@ -3079,7 +3090,7 @@ not automatically an after-MVP commitment.
 | Resolved `[IMPL]` | Level-zero NPC authoring, roster selection and persisted participant display work; positive HP remains required. |
 | Resolved starter `[IMPL]` | The starter scene has 312 required 100px physical PNGs: 273 main gameplay-area images plus 39 inert western scenery images, with per-cell CSS recovery for missing files. The city adds 32 optional 200px density variants for those same cells. The gameplay import remains 273 cells; section 15.9 is historical acceptance and section 15.10 owns the later user-reopened quality correction. Painted landmarks suppress duplicate decorative markers, retaining accessible labels and server-owned entrance controls. Gameplay passability remains atlas/DB-backed, including roads. |
 | Resolved starter `[IMPL]` | Forty additional atlas-eligible placements reuse complete captured Bandit profiles with the user's 300–360-second interval. Initial bootstrap checks managed cells/entrances and the bot-free pond; moved/disabled existing placements survive reseed. This does not establish the source's complete pools, HP formulas or selection weights. |
-| Resolved scoped `[IMPL]` | Mine `[4,5]` and exchange `[4,7]` have exact-cell lobby entry, read-only sections, return and login resume. Underground movement/extraction and resource trading remain unavailable. |
+| Resolved scoped `[IMPL]` | Mine `[4,5]` and exchange `[4,7]` have exact-cell lobby entry, return and login resume. Mine coal gallery dig loop ships (`AshenMineGallery`). Exchange resource trading boards remain deferred. |
 | Stage 2 `[EVIDENCE]` / deferred content | The million-cell zone remains sparse outside the 273-cell starter rectangle, using fallback art/default passability for unauthored cells. Full-zone art, roads, blocked cells, terrain classification, labels, settlements and broader NPC/resource population remain incomplete. Some starter annotations also lack a live-confirmed complete action set. The separate captured Bandit anchor stays at `[14,15]`; source columns requiring negative local X remain outside the bounded import. |
 | Resolved `[IMPL]` / `[EVIDENCE]` | Ordinary chat is confined to the authoritative current cell or room, as confirmed by the Neverlands Chat article and the user. Each bounded poll/send reauthorizes the current session and context; ordinary local/global broadcasts are suppressed. Already delivered rows persist through movement within one login; old-login and earlier-visit rows are not fetched. Personal/world gameplay events retain their durable shared timeline. |
 | Resolved `[IMPL]` | Nearby rows/counts use recent open sessions and the playable character only, excluding logged-out users and inactive alternate characters. Session heartbeats preserve logout and monotonic last-seen state; the total refreshes with the list. |
@@ -3088,7 +3099,7 @@ not automatically an after-MVP commitment.
 | Remaining `[EVIDENCE]` | Exact Neverlands disconnect/logout expiry remains unpublished and unobserved. The confirmed audience is one cell or room; the existing five-minute open-session window is a local technical liveness policy, not a claimed Neverlands interval. |
 | Deferred by user | Successful gathering remains deferred to later profession work, originally grouped by the user with alchemy. Wiki evidence distinguishes Naturalist/Herbalist discovery from Alchemy potion making. The current empty Look result remains supported; yields, eligibility, and profession progression are not invented. |
 | Current delivery boundary | Release one zone; full authored population is Stage 2. Configured airship journeys now use persisted region-qualified paths and bounded map cells, with atomic payment, explicit landing, resume, and flight audience isolation; see `doc/features/airship_travel.md`. Default routes await destination/path/schedule content. Additional populated zones, normal airship route activation and walking border mappings are TODO after the one-zone MVP. |
-| Remaining `[EVIDENCE]` / deferred `[IMPL]` | General movement/search coefficients and exact encounter pools/weights/probability/timing need evidence. Nature Child's four-point drinking recovery ships with owned `nature_child`; Wanderer/outdoor HP variants remain evidence gaps. Successful professions, underground mine gameplay and exchange operations are unfinished. The domain owners above separate known requirements from unknown rules. Lobby support/configurability does not complete those mechanics. |
+| Remaining `[EVIDENCE]` / deferred `[IMPL]` | General movement/search coefficients and exact encounter pools/weights/probability/timing need evidence. Nature Child's four-point drinking recovery ships with owned `nature_child`; Wanderer/outdoor HP variants remain evidence gaps. Full underground mine grid travel beyond the Ashen coal gallery, and exchange trading boards, remain deferred. Soft-release dig/look/fish yields and the gallery dig loop are shipped Ashen content. |
 
 The September 8 walking follow-up now reuses overlapping DOM terrain and sends
 only entering cells, with bounded full-snapshot recovery. Configurable numeric
@@ -3109,3 +3120,6 @@ The current starter survey is documented in
 Earlier September 8 manual travel to `[14,10]` exercised a placeholder default;
 the atlas now explicitly blocks that cell. The verified pond return uses
 `[12,10]` and the eastern gate, rather than retaining that old permissive path.
+
+| 2026-09-19 | MapBuffer projects adjacent-cell TileNpc names as 
+pc_labels overlays (no baked map art required). |

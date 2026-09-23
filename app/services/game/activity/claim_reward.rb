@@ -34,11 +34,46 @@ module Game
         return Result.new(success?: false, message: I18n.t("game.activity.not_ready")) if row.completed_at.blank?
         return Result.new(success?: false, message: I18n.t("game.activity.already_claimed")) if row.claimed_at.present?
 
-        grant!(row.reward.to_h)
-        row.update!(claimed_at: Time.current)
-        Result.new(success?: true, message: I18n.t("game.activity.claimed"))
+        reward = row.reward.to_h.deep_dup
+        streak = bump_claim_streak!
+        bonus_nv = [streak - 1, 0].max * 5
+        reward["nv"] = reward["nv"].to_i + bonus_nv if bonus_nv.positive?
+        grant!(reward)
+        meta = row.metadata.to_h.merge("claim_streak" => streak, "streak_bonus_nv" => bonus_nv)
+        row.update!(claimed_at: Time.current, metadata: meta)
+        season_xp = Game::Seasons::Catalog.active? ? Game::Seasons::Catalog.current.fetch("xp_per_daily_claim", 25).to_i : 0
+        Game::Seasons::Progress.new(character:).add_xp!(season_xp) if season_xp.positive?
+        message = if bonus_nv.positive?
+          I18n.t("game.activity.claimed_streak", streak:, bonus: bonus_nv)
+        else
+          I18n.t("game.activity.claimed")
+        end
+        Result.new(success?: true, message:)
       end
 
+      def bump_claim_streak!
+        meta = character.metadata.to_h.deep_dup
+        activity = meta["activity_streak"].to_h
+        today = Time.current.utc.to_date
+        last = begin
+          Date.iso8601(activity["last_claim_day"].to_s)
+        rescue ArgumentError, TypeError
+          nil
+        end
+        streak = activity["count"].to_i
+        streak = if last == today
+          [streak, 1].max
+        elsif last == today - 1
+          streak + 1
+        else
+          1
+        end
+        activity["count"] = streak
+        activity["last_claim_day"] = today.iso8601
+        meta["activity_streak"] = activity
+        character.update!(metadata: meta)
+        streak
+      end
       def claim_achievement!
         row = ActivityAchievement.lock.find_by!(id:, character:)
         return Result.new(success?: false, message: I18n.t("game.activity.not_ready")) if row.completed_at.blank?

@@ -16,6 +16,14 @@
 </head>
 <body class="nl-game-layout"
       data-controller="game-layout"
+      data-chat-menu-private="<%= t("game.chat.menu_private") %>"
+      data-chat-menu-info="<%= t("game.chat.menu_info") %>"
+      data-chat-menu-copy="<%= t("game.chat.menu_copy") %>"
+      data-chat-menu-ignore="<%= t("game.chat.menu_ignore") %>"
+      data-chat-menu-assault="<%= t("game.world.assault_cta") %>"
+      data-assault-cta="<%= t("game.world.assault_cta") %>"
+      data-party-invite-cta="<%= t("game.world.party_invite_cta") %>"
+      data-action-panel-empty="<%= t("social.action_panel_empty") %>"
       data-action="nl-world-map:refreshed->game-layout#refreshPlayersList nl-world-map:refreshed->game-layout#refreshChat nl-world-map:movement-state->game-layout#updateWorldMovementState chat:context->game-layout#updateLocalChatContext"
       <% if controller_name == "world" && @zone&.outdoor? %>
         data-game-layout-encounter-url-value="<%= world_encounter_check_path %>"
@@ -239,6 +247,12 @@
         <% end %>
         <% if controller_name == "inventories" %>
           <span class="nl-nav-link nl-nav-link--disabled" aria-current="page"><%= t("nav.inventory") %></span>
+          <%= button_to t("nav.return"),
+              world_context_action_path,
+              method: :post,
+              params: {context: "world"},
+              class: "nl-nav-link nl-nav-link--button",
+              form: {class: "nl-nav-action-form"} %>
         <% else %>
           <%= button_to t("nav.inventory"),
               world_context_action_path,
@@ -266,7 +280,7 @@
         <% elsif controller_name == "shop" %>
           <%= link_to shop_location_return_label, shop_location_return_path,
               class: "nl-nav-link", data: {turbo_frame: "_top"} %>
-        <% else %>
+        <% elsif controller_name != "inventories" %>
           <%= button_to t("nav.return"),
               world_context_action_path,
               method: :post,
@@ -297,7 +311,15 @@
     <% end %>
   </main>
 
-  <div class="nl-frame-resizer" aria-hidden="true"></div>
+  <div class="nl-frame-resizer"
+       role="separator"
+       aria-orientation="horizontal"
+       aria-label="<%= t("social.resize_chat", default: "Resize chat height") %>"
+       aria-valuemin="96"
+       aria-valuemax="520"
+       tabindex="0"
+       data-game-layout-target="socialResizer"
+       data-action="pointerdown->game-layout#startSocialResize keydown->game-layout#nudgeSocialResize"></div>
 
   <section class="nl-social-row" aria-label="<%= t("social.chat_players") %>">
     <div class="nl-chat-history" id="chat-messages" data-game-layout-target="chatMessages">
@@ -336,7 +358,23 @@
 
   <footer class="nl-bottom-bar" data-game-layout-target="bottomBar">
     <div class="nl-action-area">
-      <label class="nl-action-check"><input type="checkbox"> <%= t("social.action") %></label>
+      <label class="nl-action-check">
+        <input type="checkbox"
+               data-game-layout-target="actionCheck"
+               data-action="change->game-layout#toggleActionPanel"
+               aria-controls="nl-action-panel">
+        <%= t("social.action") %>
+      </label>
+      <div id="nl-action-panel"
+           class="nl-action-panel"
+           hidden
+           data-game-layout-target="actionPanel"
+           role="dialog"
+           aria-label="<%= t("social.action_panel_aria") %>">
+        <p class="nl-action-panel__hint"><%= t("social.action_panel_hint") %></p>
+        <p class="nl-action-panel__nick" data-game-layout-target="actionNick"><%= t("social.action_panel_empty") %></p>
+        <div class="nl-action-panel__links" data-game-layout-target="actionLinks"></div>
+      </div>
       <button type="button" class="nl-chat-image-button nl-chat-image-button--say" data-action="click->game-layout#focusChat" title="<%= t("social.say") %>"><%= t("social.say") %></button>
     </div>
 
@@ -347,7 +385,10 @@
                         method: :post,
                         scope: :chat_message,
                         class: "nl-chat-form-inline",
-                        data: { controller: "chat-input", action: "turbo:submit-end->chat-input#reset" } do |f| %>
+                        data: {
+                          controller: "chat-input",
+                          action: "turbo:submit-start->game-layout#prepareChatSubmit turbo:submit-end->chat-input#reset"
+                        } do |f| %>
             <%= hidden_field_tag :context_key, current_character.metadata.to_h.dig("local_chat_context", "key") %>
             <%= f.text_field :body,
                 class: "nl-chat-input-field",
@@ -364,19 +405,103 @@
       <% end %>
     </div>
 
-    <div class="nl-chat-toolstrip" aria-label="<%= t("social.chat_players") %>" data-chat-tools-deferred="1">
+    <div class="nl-chat-toolstrip" aria-label="<%= t("social.chat_players") %>" data-chat-tools-live="1">
       <button type="button" class="nl-chat-tool nl-chat-tool--send" aria-label="<%= t("social.send") %>" title="<%= t("social.send") %>" data-action="click->game-layout#sendChat">&gt;</button>
+      <% if current_character %>
+        <button type="button"
+                class="nl-chat-tool nl-chat-tool--help"
+                aria-label="<%= t("social.location_help") %>"
+                title="<%= t("social.location_help_title") %>"
+                data-action="click->game-layout#requestLocationHelp"
+                data-game-layout-target="helpButton"
+                data-location-help-url="<%= location_help_path %>">?</button>
+      <% end %>
+      <button type="button"
+              class="nl-chat-tool nl-chat-tool--timers"
+              aria-label="<%= t("social.timers") %>"
+              title="<%= t("social.timers") %>"
+              data-action="click->game-layout#toggleTimers"
+              data-game-layout-target="timersToggle">⏱</button>
       <button type="button" class="nl-chat-tool nl-chat-tool--clear-input" aria-label="<%= t("social.clear_input") %>" title="<%= t("social.clear_input") %>" data-action="click->game-layout#clearChatInput">X</button>
-      <button type="button" class="nl-chat-tool nl-chat-tool--smiles-one nl-chat-tool--disabled" aria-disabled="true" disabled title="<%= t("social.tool_deferred") %>" aria-label="<%= t("social.emoticons") %>">:)</button>
-      <button type="button" class="nl-chat-tool nl-chat-tool--smiles-two nl-chat-tool--disabled" aria-disabled="true" disabled title="<%= t("social.tool_deferred") %>" aria-label="<%= t("social.more_emoticons") %>">:D</button>
+      <button type="button"
+              class="nl-chat-tool nl-chat-tool--smiles-one"
+              aria-label="<%= t("social.emoticons") %>"
+              title="<%= t("social.emoticons") %>"
+              aria-expanded="false"
+              aria-controls="nl-smiles-popover"
+              data-action="click->game-layout#toggleSmiles"
+              data-game-layout-target="smilesToggle">:)</button>
+      <button type="button"
+              class="nl-chat-tool nl-chat-tool--smiles-two"
+              aria-label="<%= t("social.more_emoticons") %>"
+              title="<%= t("social.more_emoticons") %>"
+              aria-expanded="false"
+              aria-controls="nl-smiles-popover"
+              data-action="click->game-layout#toggleSmiles"
+              data-smiles-set="2"
+              data-game-layout-target="smilesToggleMore">:D</button>
+      <div id="nl-smiles-popover"
+           class="nl-smiles-popover"
+           hidden
+           data-game-layout-target="smilesPopover"
+           role="listbox"
+           aria-label="<%= t("social.emoticons") %>">
+        <% [
+          %w[smile grin wink sad],
+          %w[angry shock cool heart]
+        ].each_with_index do |row, set_idx| %>
+          <div class="nl-smiles-popover__row" data-smiles-set="<%= set_idx + 1 %>">
+            <% row.each do |key| %>
+              <button type="button"
+                      class="nl-smiles-popover__btn"
+                      role="option"
+                      title=":<%= key %>:"
+                      aria-label=":<%= key %>:"
+                      data-action="click->game-layout#insertSmile"
+                      data-smile-code=":<%= key %>:">
+                <%= image_tag "cc0/smiles/#{key}.png", alt: ":#{key}:", width: 16, height: 16 %>
+              </button>
+            <% end %>
+          </div>
+        <% end %>
+      </div>
       <button type="button" class="nl-chat-tool nl-chat-tool--refresh" aria-label="<%= t("social.refresh_chat") %>" title="<%= t("social.refresh_chat") %>" data-action="click->game-layout#refreshChat">R</button>
       <button type="button" class="nl-chat-tool nl-chat-tool--clear-chat" aria-label="<%= t("social.clear_chat") %>" title="<%= t("social.clear_chat") %>" data-action="click->game-layout#clearChat">X</button>
-      <button type="button" class="nl-chat-tool nl-chat-tool--messages nl-chat-tool--disabled" aria-disabled="true" disabled title="<%= t("social.tool_deferred") %>" aria-label="<%= t("social.all_messages") %>"><%= t("social.all_messages") %></button>
-      <button type="button" class="nl-chat-tool nl-chat-tool--speed nl-chat-tool--disabled" aria-disabled="true" disabled title="<%= t("social.tool_deferred") %>" aria-label="<%= t("social.refresh_10s") %>">10s</button>
-      <button type="button" class="nl-chat-tool nl-chat-tool--language nl-chat-tool--disabled" aria-disabled="true" disabled title="<%= t("social.tool_deferred") %>" aria-label="<%= t("social.text_mode") %>">Aa</button>
+      <button type="button"
+              class="nl-chat-tool nl-chat-tool--messages"
+              aria-label="<%= t("social.all_messages") %>"
+              title="<%= t("social.all_messages") %>"
+              data-action="click->game-layout#cycleChatFilter"
+              data-game-layout-target="chatFilter"
+              data-label-all="<%= t("social.all_messages") %>"
+              data-label-chat="<%= t("social.filter_chat") %>"
+              data-label-system="<%= t("social.filter_system") %>"><%= t("social.all_messages") %></button>
+      <button type="button"
+              class="nl-chat-tool nl-chat-tool--speed"
+              aria-label="<%= t("social.refresh_10s") %>"
+              title="<%= t("social.refresh_10s") %>"
+              data-action="click->game-layout#cycleChatSpeed"
+              data-game-layout-target="chatSpeed"
+              data-label-10="<%= t("social.refresh_10s") %>"
+              data-label-30="<%= t("social.refresh_30s") %>"
+              data-label-60="<%= t("social.refresh_60s") %>"
+              data-label-off="<%= t("social.refresh_off") %>">10s</button>
+      <button type="button"
+              class="nl-chat-tool nl-chat-tool--language"
+              aria-label="<%= t("social.translit_off") %>"
+              title="<%= t("social.translit_off") %>"
+              aria-pressed="false"
+              data-action="click->game-layout#toggleTranslit"
+              data-game-layout-target="chatTranslit"
+              data-label-on="<%= t("social.translit_on") %>"
+              data-label-off="<%= t("social.translit_off") %>">Aa</button>
+    </div>
+    <div class="nl-timers-popover" hidden data-game-layout-target="timersPopover" aria-live="polite">
+      <h3><%= t("social.timers_title") %></h3>
+      <div data-game-layout-target="timersBody"><%= t("social.timers_loading") %></div>
     </div>
     <p class="nl-quests-board__meta nl-chat-tools-next" data-chat-tools-next="1">
-      <%= t("social.tools_deferred_next") %>
+      <%= t("social.tools_help_hint") %>
       ·
       <%= link_to t("arena.nav.city"), world_path, class: "nl-sheet-link", data: {turbo: false, chat_recovery: "world"} %>
     </p>
@@ -391,7 +516,15 @@
           <%= link_to "E", dress_path, class: "nl-chat-tool nl-chat-tool--quests", aria: {label: t("game.dress.title")}, title: t("game.dress.title"), data: {turbo_frame: "_top", shell_recovery: "dress"} %>
           <%= link_to "Q", quests_path, class: "nl-chat-tool nl-chat-tool--quests", aria: {label: t("nav.quests")}, title: t("nav.quests"), data: {turbo_frame: "_top", shell_recovery: "quests"} %>
           <%= link_to "D", instances_path, class: "nl-chat-tool nl-chat-tool--quests", aria: {label: t("nav.instances")}, title: t("nav.instances"), data: {turbo_frame: "_top", shell_recovery: "instances"} %>
-          <%= link_to "C", activity_path, class: "nl-chat-tool nl-chat-tool--quests", aria: {label: t("nav.activity")}, title: t("nav.activity"), data: {turbo_frame: "_top", shell_recovery: "activity"} %>
+          <%= link_to "G", gifts_path, class: "nl-chat-tool nl-chat-tool--quests", aria: {label: t("game.gifts.title")}, title: t("game.gifts.title"), data: {turbo_frame: "_top", shell_recovery: "gifts"} %>
+          <%= link_to activity_path,
+                class: "nl-chat-tool nl-chat-tool--quests#{" nl-chat-tool--claim" if @activity_claimable.to_i.positive?}",
+                aria: {label: t("nav.activity")},
+                title: (@activity_claimable.to_i.positive? ? t("game.activity.claim_ready", count: @activity_claimable) : t("nav.activity")),
+                data: {turbo_frame: "_top", shell_recovery: "activity", claimable: @activity_claimable.to_i} do %>
+            C<% if @activity_claimable.to_i.positive? %><span class="nl-claim-dot" aria-hidden="true"><%= @activity_claimable %></span><% end %>
+          <% end %>
+          <%= link_to "S", season_path, class: "nl-chat-tool nl-chat-tool--quests", aria: {label: t("game.season.nav")}, title: t("game.season.nav"), data: {turbo_frame: "_top", shell_recovery: "season"} %>
           <%= link_to "A", character_licenses_path, class: "nl-chat-tool nl-chat-tool--abilities", aria: {label: t("nav.abilities")}, title: t("nav.abilities"), data: {turbo_frame: "_top", shell_recovery: "licenses"} %>
         <% end %>
       <% end %>

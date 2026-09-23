@@ -420,11 +420,27 @@ coverage equals the canonical catalog coverage, so client-authored zones or a
 different shield tier cannot change AP or protection.
 
 `NpcExperienceAwarder` uses one configured NPC reward or an explicit
-encounter-level total. The captured paired Plague Rat encounter stores `35` XP
-for the whole fight and is not summed to `70`; uncaptured multi-NPC totals and
-multi-player distribution fail closed. `EquipmentWearResolver` rolls each
+encounter-level total. Multi-bot pools without an explicit total use average
+template XP × count with a small efficiency bonus (wiki average-bot strength).
+Party shares split by `damage_dealt` (equal fallback). Per-character fight XP
+caps still apply. `EquipmentWearResolver` rolls each
 equipped durable item at basis-point precision and applies Careful Fighter's
 half chance, including `0.5%` after an arena defeat.
+
+Soft-release hit/crit/dodge/block/damage coefficients live in
+`config/gameplay/combat_resolution.yml` and are applied by
+`Arena::CombatResolver`: hit chance from dexterity/accuracy vs agility/evasion,
+dodge from agility/evasion/luck vs attacker accuracy, crit from table base + luck
++ equipment crit (not the UI `Character#critical_chance` composite) minus defender
+luck/fortitude (×2 damage), block from defense×0.15/agility vs attacker accuracy
+when the selected block covers the zone. Physical damage uses `attack_power` with
+armor pierce; mana/elemental attacks use `magic_power` (Knowledge×2) with a
+reduced physical-armor factor and elemental resistance percentages. Confirmed
+hits never resolve below `min_damage: 1`. Fight-finished system chat hides the XP
+suffix when awarded XP is 0 (loss/draw). Equipment flat `attack` / `armor` /
+`magic_power` / `hp` modifiers are combat outputs only and must not be aliased
+into primary Strength/Health/Knowledge (that previously double-counted attack
+power).
 
 Solo NPC finalization increments the winning character's persisted `npc_wins`
 metadata once per encounter inside the existing idempotent reward boundary.
@@ -474,7 +490,7 @@ set dump).
 | `CombatLogEntry` | Ordered durable event | Source for active and public logs |
 | `Arena::CombatProfile` | Persisted AP/cost/selector snapshot | Explicit captured values override exact AP derivation; reload cannot drift an active fight |
 | `Game::Combat::ActionCatalog` | Attack and exact normal/shield/magic selector identities | Server owns costs, row placement, coverage, and profile availability |
-| `Arena::NpcExperienceAwarder` | Bounded solo encounter XP | Explicit encounter total prevents guessed multi-NPC sums; level cap still applies |
+| `Arena::NpcExperienceAwarder` | Solo / multi-NPC / party XP | Explicit encounter total, or average-bot pool; damage-share party split; level cap |
 | `Arena::EquipmentWearResolver` | Independent post-fight item wear | Exact result chances, one point maximum, Careful Fighter half chance, once-only finalization |
 | `Arena::NpcLootAwarder` | One defeated NPC's typed loot resolution | Participation locks and `loot_resolution` marker make reward persistence retry-safe |
 | `Game::LootEntry` | Shared typed-loot probability normalization | Chance is explicit and valid as `0..1` fraction or `0..100` percent |
@@ -1124,6 +1140,7 @@ supplies only authoritative completion/loot facts and stable source keys.
 
 | Date | Change |
 |---|---|
+| 2026-09-23 | Multi-NPC XP uses average-bot pool + efficiency; party XP splits by damage_dealt; Observation drop mult is non-linear by skill bands. |
 | 2026-09-13 | Localized remaining hard-coded arena character-required alerts (`game.flashes.arena_character_required` / `arena_character_required_participate`). |
 | 2026-09-13 | CombatProcessor player-facing reject flashes use `game.fight.errors.*` (turn/AP/target/ally/state). |
 | 2026-09-13 | Arena countdown/timeout broadcast copy uses `game.fight.starts_in*` / `timeout_finish_available` / `turn_timeout_claim` / `turn_ended_by_timeout`. |
@@ -1162,6 +1179,7 @@ supplies only authoritative completion/loot facts and stable source keys.
 | 2026-09-14 | Coarse-pointer public fight-log pagination/mode links also target ~44×44 CSS px. |
 | 2026-09-14 | Arena statistics tab and empty recent-fights recover to Duels/City; empty public fight logs link Arena/City. |
 | 2026-09-18 | Phase 4: PvP trauma owned by assault scrolls (Peaceful/Normal/Bloody); Bloody guarantees heavy on loss; PvE defeat rolls light/medium only; Protection scroll joins live fights as helper A/B; Character inventory scrolls panel for buy/use. |
+| 2026-09-18 | Fight chrome polish: removed disabled Inventory/Mercenary stubs; larger body-part selects and Turn CTA; centered match page. |
 | 2026-09-17 | Ashen grinding rewrite: personal instances (no shared respawn), level-based aggro packs (`AggroPackSize`), set-equipped bot stats (`NpcLoadout`), scarce single `set_piece` loot, AFK 5-minute random-location ambush with off-cell personal fights, character-sheet set hints. |
 | 2026-09-14 | Arena chrome Character/Inventory/City links and recent-empty Duels CTA expose `data-arena-recovery`. |
 | 2026-09-14 | Arena room topline Character/Inventory/Lobby/City links expose `data-arena-recovery`. |

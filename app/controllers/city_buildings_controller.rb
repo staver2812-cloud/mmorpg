@@ -20,10 +20,24 @@ class CityBuildingsController < ApplicationController
       Game::Professions::Templates.ensure_craft_items!
       @profession_recipes = Game::Professions::Catalog.recipes_for_building("workshop")
       @tar_smith_skill = current_character.metadata.to_h.dig("profession_skills", "tar_smith").to_i
+      @repairable_items = current_character.inventory&.inventory_items
+        &.includes(:item_template)
+        &.select { |row|
+          max = row.item_template&.durability_max.to_i
+          max.positive? && row.current_durability.to_i < max
+        }
+        &.first(20) || []
     end
     if @building_key == "junk_dealer" || @building_key == "market"
       Game::Professions::Templates.ensure_craft_items!
       @junk_offers = Game::Shop::JunkBuyback.offer_rows_for(current_character)
+    end
+    if @building_key == "market"
+      @stall_listings = Game::Shop::StallListing.open_rows
+      @stall_lease = Game::Shop::StallRent.active_for(current_character)
+      @stall_mass_used = @stall_lease ? Game::Shop::StallListing.used_mass_for(current_character) : 0
+      stall_items = current_character.inventory&.inventory_items&.where(equipped: false)&.includes(:item_template)&.order(:id)&.limit(100) || []
+      @stall_listable = stall_items.select { |row| AuctionListing.listable_template?(row.item_template) }.first(40)
     end
     if @building_key == "hospital"
       Game::Professions::Templates.ensure_craft_items!
@@ -57,6 +71,10 @@ class CityBuildingsController < ApplicationController
       @auction_listings = AuctionListing.open.craft_goods.includes(:seller_character, :item_template).order(created_at: :desc).limit(50)
       auction_items = current_character.inventory&.inventory_items&.where(equipped: false)&.includes(:item_template)&.order(:id)&.limit(100) || []
       @auction_listable = auction_items.select { |row| AuctionListing.listable_template?(row.item_template) }.first(40)
+    end
+    if @building_key == "numismatics"
+      Game::Professions::Templates.ensure_craft_items!
+      @numismatics_rows = Game::World::ResourceExchange.offer_rows_for(current_character)
     end
     if @building_key == "clan_hall"
       @sector_war_rows = Game::World::SectorWarBoard.new.call
@@ -113,6 +131,35 @@ class CityBuildingsController < ApplicationController
     redirect_to city_building_path(@building_key, **extra), **flash_opts
   end
 
+  def repair
+    unless @building_key == "workshop"
+      redirect_to world_path(building_denied: 1), alert: I18n.t("game.professions.workshop_only"), status: :see_other
+      return
+    end
+
+    result = Game::Professions::AshenRepair.new(
+      character: current_character,
+      inventory_item_id: params[:inventory_item_id]
+    ).call
+    flash_opts = result.success ? {notice: result.message} : {alert: result.message}
+    redirect_to city_building_path("workshop", repair: result.success ? 1 : 0), **flash_opts
+  end
+
+  def recraft
+    unless @building_key == "workshop"
+      redirect_to world_path(building_denied: 1), alert: I18n.t("game.professions.workshop_only"), status: :see_other
+      return
+    end
+
+    result = Game::Professions::Recraft.new(
+      character: current_character,
+      inventory_item_id: params[:inventory_item_id]
+    ).call
+    extra = result.success ? {} : {recraft_denied: 1}
+    flash_opts = result.success ? {notice: result.message} : {alert: result.message}
+    redirect_to city_building_path("workshop", **extra), **flash_opts
+  end
+
   def buy_premium
     unless @building_key == "hospital"
       redirect_to world_path(building_denied: 1), alert: I18n.t("game.buildings.hospital_only"), status: :see_other
@@ -132,7 +179,7 @@ class CityBuildingsController < ApplicationController
       return
     end
 
-    result = Game::Shop::VeilMarksTopUp.new(character: current_character).call
+    result = Game::Shop::VeilMarksTopUp.new(character: current_character, amount: params[:amount]).call
     redirect_hospital(result)
   end
 
@@ -227,6 +274,10 @@ class CityBuildingsController < ApplicationController
     end
     return redirect_to(city_building_path("auction"), alert: I18n.t("game.trade_hub.auction_bad_price")) unless price.positive?
     return redirect_to(city_building_path("auction"), alert: I18n.t("game.trade_hub.auction_bad_qty")) if qty > item.quantity
+    if AuctionListing.slots_full?(current_character)
+      limit = AuctionListing.open_slot_limit_for(current_character)
+      return redirect_to(city_building_path("auction"), alert: I18n.t("game.trade_hub.auction_slots_full", limit:))
+    end
 
     ActiveRecord::Base.transaction do
       Game::Inventory::Manager.new(inventory: current_character.inventory).remove_item!(
@@ -329,6 +380,23 @@ class CityBuildingsController < ApplicationController
     redirect_to city_building_path("law_abode", **extra), **flash_opts
   end
 
+  def numismatics
+    unless @building_key == "numismatics"
+      redirect_to world_path(building_denied: 1), alert: I18n.t("game.buildings.numismatics_only"), status: :see_other
+      return
+    end
+
+    result = Game::World::ResourceExchange.new(
+      character: current_character,
+      item_key: params[:item_key],
+      quantity: params[:quantity],
+      mode: :sell
+    ).call
+    extra = result.success ? {} : {numismatics_denied: 1}
+    flash_opts = result.success ? {notice: result.message} : {alert: result.message}
+    redirect_to city_building_path("numismatics", **extra), **flash_opts
+  end
+
   def sell
     unless @building_key == "junk_dealer"
       redirect_to world_path(building_denied: 1), alert: I18n.t("game.buildings.junk_only"), status: :see_other
@@ -343,6 +411,53 @@ class CityBuildingsController < ApplicationController
     extra = result.success ? {} : {junk_denied: 1}
     flash_opts = result.success ? {notice: result.message} : {alert: result.message}
     redirect_to city_building_path("junk_dealer", **extra), **flash_opts
+  end
+
+  def rent_stall
+    unless @building_key == "market"
+      redirect_to world_path(building_denied: 1), alert: I18n.t("game.buildings.market_only"), status: :see_other
+      return
+    end
+
+    result = Game::Shop::StallRent.new(
+      character: current_character,
+      stall_name: params[:stall_name]
+    ).call
+    extra = result.success ? {} : {stall_denied: 1}
+    flash_opts = result.success ? {notice: result.message} : {alert: result.message}
+    redirect_to city_building_path("market", **extra), **flash_opts
+  end
+
+  def list_stall
+    unless @building_key == "market"
+      redirect_to world_path(building_denied: 1), alert: I18n.t("game.buildings.market_only"), status: :see_other
+      return
+    end
+
+    result = Game::Shop::StallListing.new(
+      character: current_character,
+      inventory_item_id: params[:inventory_item_id],
+      quantity: params[:quantity],
+      price_nv: params[:price_nv]
+    ).list!
+    extra = result.success ? {} : {stall_listing_denied: 1}
+    flash_opts = result.success ? {notice: result.message} : {alert: result.message}
+    redirect_to city_building_path("market", **extra), **flash_opts
+  end
+
+  def buy_stall
+    unless @building_key == "market"
+      redirect_to world_path(building_denied: 1), alert: I18n.t("game.buildings.market_only"), status: :see_other
+      return
+    end
+
+    result = Game::Shop::StallListing.new(
+      character: current_character,
+      listing_id: params[:listing_id]
+    ).buy!
+    extra = result.success ? {} : {stall_listing_denied: 1}
+    flash_opts = result.success ? {notice: result.message} : {alert: result.message}
+    redirect_to city_building_path("market", **extra), **flash_opts
   end
 
   private

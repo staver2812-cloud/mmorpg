@@ -155,11 +155,34 @@ module Arena
       dungeon_raw = meta["loot_bonus_chance"] if meta["dungeon_loot_bonus"]
       raw = tile_raw.presence || dungeon_raw.presence || template_raw
       value = Float(raw, exception: false)
-      return 1.0 unless value
+      base = if value
+        # Values below 1.0 are treated as an additive bonus (0.5 → ×1.5).
+        (value < 1.0 ? (1.0 + value) : value)
+      else
+        1.0
+      end
+      # Wiki Observation (Наблюдательность): non-linear — first 100 most effective,
+      # each further hundred half as strong. Use uncapped base skill when present.
+      observation = if character.respond_to?(:base_passive_skill_level)
+        character.base_passive_skill_level(:observation).to_i
+      else
+        character.passive_skill_level(:observation).to_i
+      end
+      observation_mult = observation_multiplier(observation)
+      (base * observation_mult).clamp(0.1, 5.0)
+    end
 
-      # Values below 1.0 are treated as an additive bonus (0.5 → ×1.5).
-      multiplier = value < 1.0 ? (1.0 + value) : value
-      multiplier.clamp(0.1, 5.0)
+    def observation_multiplier(observation)
+      remaining = [observation, 0].max
+      mult = 1.0
+      band = 0
+      while remaining.positive? && band < 6
+        chunk = [remaining, 100].min
+        mult += chunk / (200.0 * (2**band))
+        remaining -= chunk
+        band += 1
+      end
+      mult
     end
 
     def award_entry(entry, entry_index)

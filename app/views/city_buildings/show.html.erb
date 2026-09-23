@@ -41,6 +41,10 @@
           <%= t("game.buildings.souvenir_lead") %>
         <% elsif @building["kind"] == "post" %>
           <%= t("game.buildings.post_lead") %>
+        <% elsif @building["kind"] == "auction" %>
+          <%= t("game.buildings.auction_live_lead") %>
+        <% elsif @building["kind"] == "numismatics" %>
+          <%= t("game.buildings.numismatics_live_lead") %>
         <% elsif @building["kind"] == "bank" %>
           <%= t("game.buildings.bank_lead", wallet: @bank_wallet_nv, vault: @bank_vault_nv) %>
         <% elsif @building["kind"] == "temple" %>
@@ -61,7 +65,13 @@
 
       <% case @building["kind"] %>
       <% when "market" %>
-        <%= render "city_buildings/market", building: @building, offers: @junk_offers %>
+        <%= render "city_buildings/market",
+              building: @building,
+              offers: @junk_offers,
+              stall_listings: @stall_listings,
+              stall_listable: @stall_listable,
+              stall_lease: @stall_lease,
+              stall_mass_used: @stall_mass_used %>
       <% when "shop_shell" %>
         <%= render "city_buildings/shop_shell", building: @building, building_key: @building_key %>
       <% when "junk_buyback" %>
@@ -79,12 +89,14 @@
               recipes: @profession_recipes,
               skill: @ash_healer_skill,
               veil_marks: @veil_marks,
+              wallet_nv: @wallet_nv,
               premium_offers: @premium_offers %>
       <% when "workshop" %>
         <%= render "city_buildings/workshop",
               building: @building,
               recipes: @profession_recipes,
-              skill: @tar_smith_skill %>
+              skill: @tar_smith_skill,
+              repairable_items: @repairable_items %>
       <% when "tavern" %>
         <%= render "city_buildings/tavern", building: @building %>
       <% when "temple" %>
@@ -98,7 +110,9 @@
               stored_item: @bank_item,
               deposit_options: @bank_deposit_options %>
       <% when "post" %>
-        <%= render "city_buildings/post", building: @building, note: @post_note %>
+        <%= render "city_buildings/post", building: @building, note: @post_note, inbox: @post_inbox %>
+      <% when "auction" %>
+        <%= render "city_buildings/auction", building: @building %>
       <% when "souvenir" %>
         <%= render "city_buildings/souvenir_shop", building: @building %>
       <% when "obelisk" %>

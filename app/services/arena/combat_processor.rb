@@ -923,8 +923,17 @@ module Arena
       success(defending: true, block_parts:)
     end
 
-    def process_turn_skill(_character, skill, _target)
+    def process_turn_skill(character, skill, target)
       key = skill[:key].to_s
+      if Game::Combat::ActionCatalog.attack_config(key).present?
+        return process_attack(
+          character,
+          target,
+          attack_type: key,
+          body_part: (skill[:body_part].presence || "torso")
+        )
+      end
+
       config = Game::Combat::ActionCatalog.magic_config(key)
       return failure(I18n.t("game.fight.errors.magic_not_found", key: key)) if config.blank?
 
@@ -1116,9 +1125,17 @@ module Arena
       end
       wear_results = Arena::EquipmentWearResolver.new(match:, rng:).call
       injury_results = Game::Combat::InjuryResolver.new(match:, rng:).call
+      record_fight_record!(winning_team)
       record_solo_npc_victory!(winning_team) if npc_fight?
+      advance_dungeon_pack!(winning_team) if npc_fight?
+      Game::World::FortressSiegeBattle.record_victory!(match:, winning_team:)
 
-      if xp_result&.experience_awarded.to_i.positive?
+      if xp_result&.party_awards.present?
+        xp_result.party_awards.each do |award|
+          winner = Character.find(award.fetch(:character_id))
+          log_entry("system", winner, Arena::CombatLogMessages.xp_gain(winner.name, award.fetch(:experience_awarded)))
+        end
+      elsif xp_result&.experience_awarded.to_i.positive?
         winner = Character.find(xp_result.character_id)
         log_entry("system", winner, Arena::CombatLogMessages.xp_gain(winner.name, xp_result.experience_awarded))
       end
@@ -1176,9 +1193,39 @@ module Arena
             participation_id: participation.id,
             result: participation.result,
             winning_team:,
-            source: match.metadata.to_h["source"]
+            source: match.metadata.to_h["source"],
+            damage_dealt: participation.metadata.to_h["damage_dealt"].to_i,
+            damage_taken: participation.metadata.to_h["damage_taken"].to_i
           }.compact
         )
+      end
+    end
+
+    def record_fight_record!(winning_team)
+      match.arena_participations.players.includes(:character).find_each do |participation|
+        character = participation.character
+        next unless character
+
+        character.with_lock do
+          character.reload
+          meta = character.metadata.to_h
+          if npc_fight?
+            if participation.result.to_s == "victory"
+              meta["npc_wins"] = meta["npc_wins"].to_i + 1
+              Game::WorldEvents::TournamentScore.record_chaos_win!(character:)
+            elsif participation.result.to_s == "defeat"
+              meta["npc_losses"] = meta["npc_losses"].to_i + 1
+            end
+          else
+            if participation.result.to_s == "victory"
+              meta["player_wins"] = meta["player_wins"].to_i + 1
+              Game::WorldEvents::TournamentScore.record_chaos_win!(character:)
+            elsif participation.result.to_s == "defeat"
+              meta["player_losses"] = meta["player_losses"].to_i + 1
+            end
+          end
+          character.update!(metadata: meta)
+        end
       end
     end
 
@@ -1189,12 +1236,6 @@ module Arena
       return unless winners.one?
 
       winner = winners.first.character
-      winner.with_lock do
-        winner.reload
-        winner.update!(metadata: winner.metadata.to_h.merge(
-          "npc_wins" => winner.metadata.to_h["npc_wins"].to_i + 1
-        ))
-      end
 
       defeated_keys = match.arena_participations.npcs
         .where.not(team: winning_team)
@@ -1206,6 +1247,28 @@ module Arena
         Game::Activity::Tracker.new(character: winner).record!(kind: "kill_npc", amount: 1, meta: {"npc_key" => npc_key})
       end
       Game::Activity::Tracker.new(character: winner).record!(kind: "arena_fight", amount: 1)
+      family = winner.equipment_weapon_family
+      Game::Skills::UseTrainer.new(character: winner).train_from_combat_hit!(weapon_family: family)
+    end
+
+    def advance_dungeon_pack!(winning_team)
+      return if winning_team.blank?
+      return unless match.metadata.to_h["instance_kind"].to_s == "dungeon_pack"
+
+      pack_key = match.metadata.to_h["pack_key"].to_s
+      return if pack_key.blank?
+
+      winners = match.arena_participations.players.where(team: winning_team).includes(:character).to_a
+      return if winners.empty?
+
+      if match.metadata.to_h["party_character_ids"].present?
+        Game::Instances::PackLaunch.advance_party_after_victory!(match:)
+      elsif winners.one?
+        Game::Instances::PackLaunch.advance_after_victory!(
+          character: winners.first.character,
+          pack_key:
+        )
+      end
     end
 
     def log_entry(entry_type, actor, description)
