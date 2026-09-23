@@ -68,6 +68,9 @@
       <% @shop_offers.each do |offer| %>
         <% bought = @shop_bought_today[offer["key"]].present? %>
         <li data-season-offer="<%= offer["key"] %>" data-season-offer-bought="<%= bought ? "1" : "0" %>">
+          <% if offer["icon"].present? %>
+            <%= image_tag offer["icon"], alt: "", width: 48, height: 48, class: "nl-season-offer-icon" %>
+          <% end %>
           <strong><%= I18n.locale.to_s.start_with?("en") ? offer["title_en"] : offer["title_ru"] %></strong>
           —
           <% if offer["price_vm"].to_i.positive? %><%= offer["price_vm"] %> VM<% end %>

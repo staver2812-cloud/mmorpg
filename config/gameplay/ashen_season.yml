@@ -23,8 +23,8 @@ seasons:
       - {days: 14, nv: 300, season_xp: 100}
     # Convenience-only season shop (no damage/crit packs).
     shop_offers:
-      - {key: "xp_flask", title_ru: "Колба сезона (+80 XP)", title_en: "Season flask (+80 XP)", price_vm: 8, once_per_day: true, grant: {season_xp: 80}}
-      - {key: "bandage_pack", title_ru: "Набор бинтов ×3", title_en: "Bandage pack ×3", price_vm: 6, once_per_day: true, grant: {item_key: ashen_bandage, quantity: 3}}
+      - {key: "xp_flask", title_ru: "Колба сезона (+80 XP)", title_en: "Season flask (+80 XP)", price_vm: 8, once_per_day: true, icon: "cc0/ui/season-offer-xp-flask.png", grant: {season_xp: 80}}
+      - {key: "bandage_pack", title_ru: "Набор бинтов ×3", title_en: "Bandage pack ×3", price_vm: 6, once_per_day: true, icon: "cc0/ui/season-offer-bandage.png", grant: {item_key: ashen_bandage, quantity: 3}}
       - {key: "bait_pack", title_ru: "Приманка ×5", title_en: "Bait pack ×5", price_nv: 90, once_per_day: true, grant: {item_key: ashen_bait, quantity: 5}}
       - {key: "merchant_boost", title_ru: "Купеческий импульс (+35 NV)", title_en: "Merchant pulse (+35 NV)", price_vm: 5, once_per_day: true, grant: {nv: 35}}
     free_track:
