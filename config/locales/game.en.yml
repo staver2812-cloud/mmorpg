@@ -2024,6 +2024,7 @@ en:
       members: "Members: %{count}"
       fortresses: "Your fortresses and castles"
       no_fortresses: "No claimed fortresses yet."
+      territory_cta: "Mist politics: take a fortress cell in the world, call allies, hold the siege — without a clan the territory stays empty."
       name_placeholder: "Clan name"
       tag_placeholder: "TAG"
       create_cta: "Create clan"
