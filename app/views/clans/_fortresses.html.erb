@@ -1,6 +1,11 @@
 <h2><%= t("game.clans.tab_fortresses") %></h2>
 <% if @clan.blank? %>
   <p class="nl-quests-board__meta"><%= t("game.clans.need_clan") %></p>
+  <p class="nl-quests-board__meta" data-territory-cta="1">
+    <%= t("game.clans.territory_cta") %>
+    · <%= link_to t("game.buildings.clan_hall_short"), city_building_path("clan_hall"), class: "nl-sheet-link", data: {turbo_frame: "_top"} %>
+    · <%= link_to t("game.world.siege_battle_cta"), world_path, class: "nl-sheet-link", data: {turbo_frame: "_top"} %>
+  </p>
 <% elsif @fortresses.any? %>
   <% @fortresses.each do |fort| %>
     <article class="nl-clan-fort">
