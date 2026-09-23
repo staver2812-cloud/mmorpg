@@ -12,7 +12,7 @@ seasons:
     demand_keys: [coal_chunk, iron_ore, ash_herb, ash_perch, ember_trout]
     demand_mult: 1.25
     # Craft sink: combat players need these mats from gatherers
-    craft_demand_keys: [pine_resin, ash_herb, coal_chunk]
+    craft_demand_keys: [pine_resin, ash_herb, coal_chunk, ember_cedar_plank]
     xp_per_daily_claim: 25
     xp_per_pulse_hour: 10
     free_track:

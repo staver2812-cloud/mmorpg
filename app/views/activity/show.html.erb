@@ -25,6 +25,45 @@
     · <%= link_to t("game.clans.alliance_title"), clan_path, class: "nl-sheet-link", data: {turbo_frame: "_top"} %>
     · <%= link_to t("game.world.party_invite_cta"), world_path, class: "nl-sheet-link", data: {turbo_frame: "_top"} %>
   </p>
+
+  <% if @live_events.present? %>
+    <h2><%= t("game.activity.live_title") %></h2>
+    <ul class="nl-trade-hub__list" data-activity-live="<%= @live_events.size %>">
+      <% @live_events.each do |ev| %>
+        <li data-live-kind="<%= ev.kind %>">
+          <strong><%= I18n.locale.to_s.start_with?("en") ? ev.title_en : ev.title_ru %></strong>
+          — <%= I18n.locale.to_s.start_with?("en") ? ev.body_en : ev.body_ru %>
+          <% if ev.ends_at.present? %>
+            · <%= t("game.activity.live_ends", time: l(ev.ends_at, format: :short)) %>
+          <% end %>
+        </li>
+      <% end %>
+    </ul>
+  <% end %>
+
+  <h2><%= t("game.activity.wars_title") %></h2>
+  <% if @siege_rows.blank? %>
+    <p class="nl-quests-board__meta" data-activity-siege-empty="1">
+      <%= t("game.activity.wars_empty") %>
+      · <%= link_to t("game.buildings.clan_hall_short"), city_building_path("clan_hall"), class: "nl-sheet-link", data: {turbo_frame: "_top"} %>
+      · <%= link_to t("game.clans.tab_fortresses"), clan_path(tab: "fortresses"), class: "nl-sheet-link", data: {turbo_frame: "_top"} %>
+    </p>
+  <% else %>
+    <ul class="nl-trade-hub__list" data-activity-sieges="<%= @siege_rows.size %>">
+      <% @siege_rows.each do |row| %>
+        <li data-activity-siege-key="<%= row.key %>">
+          <strong><%= row.name %></strong>
+          (<%= row.x %>,<%= row.y %>)
+          · <%= t("game.buildings.clan_hall_wars_score", attack: row.attack_score, defense: row.defense_score) %>
+          <% if row.siege_ends_at.present? %>
+            · <%= t("game.buildings.clan_hall_wars_ends", time: l(row.siege_ends_at, format: "%H:%M")) %>
+          <% end %>
+          · <%= link_to t("game.world.siege_battle_cta"), world_path, class: "nl-sheet-link", data: {turbo_frame: "_top"} %>
+        </li>
+      <% end %>
+    </ul>
+  <% end %>
+
   <% if @claim_streak.to_i.positive? %>
     <p class="nl-quests-board__meta" data-claim-streak="<%= @claim_streak %>">
       <%= t("game.activity.streak_label", count: @claim_streak) %>

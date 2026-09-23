@@ -13,6 +13,11 @@ class ActivityController < ApplicationController
     day = Time.current.utc.strftime("%Y-%m-%d")
     @contracts = DailyActivityContract.where(character: current_character, day_key: day).order(:id)
     @achievements = ActivityAchievement.where(character: current_character).order(Arel.sql("completed_at NULLS LAST"), :id)
+    @claim_streak = current_character.metadata.to_h.dig("activity_streak", "count").to_i
+    @live_events = WorldLiveEvent.active.order(starts_at: :desc).limit(6)
+    @sector_wars = Game::World::SectorWarBoard.new.call
+    @siege_rows = @sector_wars.select(&:under_siege)
+    Game::Onboarding::FirstHour.new(character: current_character).mark!("open_activity")
   end
 
   def claim

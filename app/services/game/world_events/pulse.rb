@@ -21,6 +21,7 @@ module Game
         expire_stale!
         ensure_tournament_fish!
         ensure_tournament_chaos!
+        ensure_season_fair!
         maybe_random_ambush!
         maybe_city_attack!
         WorldLiveEvent.active.order(starts_at: :desc).limit(8).to_a
@@ -67,6 +68,33 @@ module Game
           body_ru: "Хаотический поединок для персонажей #{band_lo}–#{band_hi} уровней запущен. Готовность #{TOURNAMENT_CHAOS_MINUTES} мин. Арена Пепла ждёт.",
           body_en: "Chaotic duel for levels #{band_lo}–#{band_hi} is open for #{TOURNAMENT_CHAOS_MINUTES} min. Ash Arena awaits.",
           payload: {"level_min" => band_lo, "level_max" => band_hi}
+        )
+      end
+
+      # Mist biweekly cadence: while a season is live, keep a short "fair" FOMO
+      # window so the world feels refreshed about every two weeks.
+      def ensure_season_fair!
+        return unless Game::Seasons::Catalog.active?
+        return if WorldLiveEvent.active.of_kind("season_fair").exists?
+
+        season = Game::Seasons::Catalog.current
+        starts = Date.iso8601(season.fetch("starts_on"))
+        day_index = (now.to_date - starts).to_i
+        return unless (day_index % 14).zero? || day_index < 2
+
+        ends = now + 36.hours
+        create_event!(
+          kind: "season_fair",
+          ends_at: ends,
+          title_ru: "Ярмарка сезона",
+          title_en: "Season fair",
+          body_ru: "Ярмарка «#{season["title_ru"]}»: лотки ремесленников, спрос на бирже и XP сезона за турниры. До #{ends.strftime("%d.%m %H:%M")}!",
+          body_en: "Fair for «#{season["title_en"]}»: crafter stalls, exchange demand, and season XP from tournaments until #{ends.strftime("%d.%m %H:%M")}!",
+          payload: {
+            "season" => Game::Seasons::Catalog.current_key,
+            "cadence_days" => 14,
+            "hint" => "market_stalls"
+          }
         )
       end
 
