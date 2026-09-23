@@ -21,4 +21,15 @@ RSpec.describe "Quests", type: :request do
     expect(response.body).to include('data-quest-denied="1"')
     expect(response.body).to include('data-quest-recovery="world"').or include('data-quest-recovery="city_hall"')
   end
+
+  it "filters the journal by status query" do
+    get quests_path(status: "locked")
+
+    expect(response).to have_http_status(:ok)
+    expect(response.body).to include('data-quest-filters="1"')
+    expect(response.body).to include('data-quest-filter="locked"')
+    # Locked filter should not render available accept buttons when any locked rows exist,
+    # and must not 500 when the journal is empty for that status.
+    expect(response.body).not_to include("Translation missing")
+  end
 end

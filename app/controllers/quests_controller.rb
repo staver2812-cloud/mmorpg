@@ -8,6 +8,14 @@ class QuestsController < ApplicationController
 
   def index
     @entries = Game::Quests::Journal.new(character: current_character).entries
+    status = params[:status].to_s.presence
+    if status.present? && %w[available active ready locked completed].include?(status)
+      @entries = @entries.select do |entry|
+        ready = entry[:status] == "active" && entry[:progress].to_i >= entry[:target].to_i
+        effective = ready ? "ready" : entry[:status].to_s
+        effective == status
+      end
+    end
   end
 
   def accept

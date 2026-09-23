@@ -1986,6 +1986,7 @@ ru:
       board_open: "Открыть журнал заданий"
       board_meta: "Договоры Ратуши Угля · прогресс хранится у персонажа"
       summary_aria: "Сводка заданий"
+      filter_all: "Все"
       objective_label: "Цель"
       objective_kill_npc: "Победа над NPC"
       objective_deliver_item: "Сдать предмет"
