@@ -38,6 +38,10 @@ class ApplicationController < ActionController::Base
     character = resource.ensure_playable_character! if resource.respond_to?(:ensure_playable_character!)
     return world_path unless character
 
+    if (unresolved = Game::World::UnresolvedFight.new(character:).match)
+      return arena_match_path(unresolved)
+    end
+
     path = Game::World::ResumeContext.new(character:).resume_path
     # Stale shop filter URLs (min_level>max etc.) 404 after login — fall back to World.
     return world_path if path.to_s.start_with?("/shop?") && path.include?("min_level=")

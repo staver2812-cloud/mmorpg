@@ -7,24 +7,21 @@ RSpec.describe Game::World::DismissCompletedFight do
   let(:match) { create(:arena_match, :completed) }
   let!(:participation) { create(:arena_participation, character:, arena_match: match, metadata: {}) }
 
-  it "stamps finished_at, clears in_combat, and recovers zero HP" do
+  it "does not auto-stamp Finish on a completed fight the player must still acknowledge" do
+    result = described_class.new(character:).call
+
+    expect(participation.reload.metadata["finished_at"]).to be_blank
+    expect(result.recovery).to be_nil
+  end
+
+  it "clears orphan in_combat when there is no unresolved match" do
+    participation.update!(metadata: {"finished_at" => 1.minute.ago.iso8601})
+    character.update!(in_combat: true, current_hp: 50)
+
     result = described_class.new(character:).call
 
     expect(result.dismissed).to be(true)
-    expect(participation.reload.metadata["finished_at"]).to be_present
     expect(character.reload).not_to be_in_combat
-    expect(character.current_hp).to be_positive
-    expect(result.recovery.recovered).to be(true)
-  end
-
-  it "is a no-op when the fight was already finished" do
-    participation.update!(metadata: {"finished_at" => 1.minute.ago.iso8601})
-    character.update!(in_combat: false, current_hp: 50)
-
-    result = described_class.new(character:).call
-
-    expect(result.dismissed).to be(false)
-    expect(result.recovery).to be_nil
   end
 
   it "removes orphan pulse ambush tile NPCs when no live match remains" do

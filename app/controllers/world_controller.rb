@@ -22,6 +22,13 @@ class WorldController < ApplicationController
   before_action :set_position
 
   def show
+    Game::World::DismissCompletedFight.new(character: current_character).call
+
+    if (unresolved = Game::World::UnresolvedFight.new(character: current_character).match)
+      redirect_to arena_match_path(unresolved), status: :see_other
+      return
+    end
+
     # City zones render captured node actions instead of an outdoor grid.
     if city_zone?
       @zone = @position.zone
@@ -411,6 +418,13 @@ class WorldController < ApplicationController
         },
         offer:
       }
+    end
+
+    landmark = @tile_state&.tile&.metadata.to_h["landmark"].to_h
+    if landmark["kind"].in?(%w[fortress castle])
+      actions << {type: :claim_fortress, landmark:}
+    elsif landmark["kind"] == "dungeon"
+      actions << {type: :enter_dungeon, landmark:}
     end
 
     actions

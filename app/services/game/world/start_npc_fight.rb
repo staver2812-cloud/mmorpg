@@ -128,7 +128,8 @@ module Game
           "zone" => tile_npc.zone,
           "x" => tile_npc.x,
           "y" => tile_npc.y,
-          "fight_timeout_seconds" => ArenaMatch::DEFAULT_TURN_TIMEOUT
+          # Turn inactivity (5 min) owns timeouts; do not wall-clock end at 5 min from start.
+          "fight_timeout_seconds" => ArenaMatch::ABSOLUTE_FIGHT_CEILING
         }
         if encounter_selection.sample_key.present?
           metadata["encounter_roster_sample"] = encounter_selection.sample_key

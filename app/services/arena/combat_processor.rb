@@ -177,7 +177,10 @@ module Arena
         broadcaster.broadcast_ap_update(character, get_character_ap(character), combat_ap_limit_for(character))
 
         if npc_response_required_for?(character) && !should_end?
-          process_npc_turn_after_delay(character)
+          process_npc_turn_after_delay(
+            character,
+            only_participation_ids: counter_npc_participation_ids(params[:target])
+          )
         end
       end
 
@@ -202,11 +205,14 @@ module Arena
     # Process the NPC's turn (called after player action)
     #
     # @return [Result, nil] result of NPC action or nil if no NPC
-    def process_npc_turn(opposing_team: nil)
+    def process_npc_turn(opposing_team: nil, only_participation_ids: nil)
       results = []
 
       npc_turn_participations(opposing_team:).each do |npc_participation|
         break if should_end?
+        if only_participation_ids.present? && !only_participation_ids.include?(npc_participation.id)
+          next
+        end
 
         result = process_single_npc_turn(npc_participation)
         results << result if result
@@ -571,7 +577,10 @@ module Arena
               broadcaster.broadcast_ap_update(character, get_character_ap(character), combat_ap_limit_for(character))
 
               if npc_response_required_for?(character) && !should_end?
-                process_npc_turn_after_delay(character)
+                process_npc_turn_after_delay(
+                  character,
+                  only_participation_ids: counter_npc_participation_ids(target)
+                )
               end
 
               participation.reload
@@ -587,6 +596,8 @@ module Arena
                   current_turn_number: round_number + 1,
                   current_turn_team: nil
                 )
+                # Restart the 5-minute inactivity clock after every answered turn.
+                match.schedule_timeout_check
                 reset_ap(character)
                 broadcaster.broadcast_ap_update(character, combat_ap_limit_for(character), combat_ap_limit_for(character))
               end
@@ -1672,10 +1683,20 @@ module Arena
     end
 
     # Schedule NPC turn after a brief delay (for UI feedback)
-    def process_npc_turn_after_delay(character)
-      # Process immediately for now, could be async with job
-      # Small delay could be added with ActionCable streaming
-      process_npc_turn(opposing_team: match.arena_participations.find_by(character:)&.team)
+    def process_npc_turn_after_delay(character, only_participation_ids: nil)
+      team = match.arena_participations.find_by(character:)&.team
+      process_npc_turn(opposing_team: team, only_participation_ids:)
+    end
+
+    # Wilderness packs used to have every bot strike after one player hit.
+    # Counter only the focused target; if missing, the first alive opposing NPC.
+    def counter_npc_participation_ids(target)
+      if target.is_a?(ArenaParticipation) && target.npc? && target.current_hp.to_i.positive?
+        return [target.id]
+      end
+
+      npc = match.arena_participations.npcs.detect { |row| row.current_hp.to_i.positive? }
+      npc ? [npc.id] : []
     end
 
     def process_single_npc_turn(npc_participation)

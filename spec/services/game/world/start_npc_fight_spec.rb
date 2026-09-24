@@ -128,7 +128,7 @@ RSpec.describe Game::World::StartNpcFight do
       "encounter_member_keys" => [npc_template.npc_key, robber.npc_key],
       "encounter_experience_reward" => 56,
       "repeatable_encounter_source" => true,
-      "fight_timeout_seconds" => 300
+      "fight_timeout_seconds" => ArenaMatch::ABSOLUTE_FIGHT_CEILING
     )
     expect(participants.map(&:npc_template)).to eq([npc_template, robber])
     expect(participants.map(&:participant_level)).to eq([8, 9])
@@ -211,7 +211,7 @@ RSpec.describe Game::World::StartNpcFight do
     expect(match.metadata.dig("combat_profile", "injected_block_keys")).to eq(
       %w[magic_shield rainbow_barrier crystal_sphere]
     )
-    expect(match.metadata["fight_timeout_seconds"]).to eq(300)
+    expect(match.metadata["fight_timeout_seconds"]).to eq(ArenaMatch::ABSOLUTE_FIGHT_CEILING)
   end
 
   it "returns the existing active fight on a duplicate start" do

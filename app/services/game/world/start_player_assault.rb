@@ -159,7 +159,7 @@ module Game
             "y" => position.y,
             "attacker_id" => attacker.id,
             "defender_id" => defender.id,
-            "fight_timeout_seconds" => ArenaMatch::DEFAULT_TURN_TIMEOUT
+            "fight_timeout_seconds" => ArenaMatch::ABSOLUTE_FIGHT_CEILING
           }
         )
       end

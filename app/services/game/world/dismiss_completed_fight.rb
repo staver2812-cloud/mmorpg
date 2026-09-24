@@ -2,8 +2,8 @@
 
 module Game
   module World
-    # Clears sticky post-fight chrome when a match already completed but the
-    # player never pressed Finish (common after DefeatRecovery redirects).
+    # Clears sticky ambush chrome and zero-HP soft-locks without silently
+    # dismissing a completed fight the player still needs to Finish.
     class DismissCompletedFight
       Result = Struct.new(:dismissed, :recovery, keyword_init: true)
 
@@ -15,32 +15,21 @@ module Game
         dismissed = false
         recovery = nil
 
-        character.arena_participations.includes(:arena_match).find_each do |participation|
-          match = participation.arena_match
-          next unless match&.completed?
-          next if participation.metadata.to_h["finished_at"].present?
-
-          participation.with_lock do
-            participation.reload
-            next if participation.metadata.to_h["finished_at"].present?
-
-            participation.metadata = participation.metadata.to_h.merge(
-              "finished_at" => Time.current.iso8601,
-              "dismissed_via" => "shell"
-            )
-            participation.save!
-            dismissed = true
-          end
+        unresolved = UnresolvedFight.new(character:).match
+        if unresolved&.live?
+          # Never auto-finish a live fight — player must return to the arena UI.
+          dismissed = true if clear_stale_pulse_ambushes!
+          return Result.new(dismissed:, recovery: nil)
         end
 
-        if character.in_combat?
+        if character.in_combat? && unresolved.nil?
           character.exit_combat!
           dismissed = true
         end
 
         dismissed = true if clear_stale_pulse_ambushes!
 
-        recovery = DefeatRecovery.new(character:).call if character.reload.current_hp.to_i <= 0
+        recovery = DefeatRecovery.new(character:).call if character.reload.current_hp.to_i <= 0 && unresolved.nil?
         Result.new(dismissed:, recovery:)
       end
 
@@ -48,8 +37,6 @@ module Game
 
       attr_reader :character
 
-      # Pulse ambushes that never reached end_match leave yellow bot labels on the
-      # outdoor map. Sweep orphan ashen_ambush_* rows that no live match owns.
       def clear_stale_pulse_ambushes!
         return false if character.arena_participations.joins(:arena_match).merge(ArenaMatch.active).exists?
 
