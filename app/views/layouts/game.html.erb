@@ -525,11 +525,11 @@
             C<% if @activity_claimable.to_i.positive? %><span class="nl-claim-dot" aria-hidden="true"><%= @activity_claimable %></span><% end %>
           <% end %>
           <%= link_to season_path,
-                class: "nl-chat-tool nl-chat-tool--quests#{" nl-chat-tool--claim" if @season_claimable.to_i.positive? || (@season_days_left.to_i.positive? && @season_days_left.to_i <= 3)}",
+                class: "nl-chat-tool nl-chat-tool--quests#{" nl-chat-tool--claim" if @season_claimable.to_i.positive? || (@season_days_left.to_i.positive? && @season_days_left.to_i <= 14)}",
                 aria: {label: t("game.season.nav")},
                 title: season_shell_title,
                 data: {turbo_frame: "_top", shell_recovery: "season", season_days: @season_days_left.to_i, season_claimable: @season_claimable.to_i} do %>
-            S<% if @season_claimable.to_i.positive? %><span class="nl-claim-dot" aria-hidden="true"><%= @season_claimable %></span><% elsif @season_days_left.to_i.positive? && @season_days_left.to_i <= 7 %><span class="nl-claim-dot nl-claim-dot--fomo" aria-hidden="true"><%= @season_days_left %></span><% end %>
+            S<% if @season_claimable.to_i.positive? %><span class="nl-claim-dot" aria-hidden="true"><%= @season_claimable %></span><% elsif @season_days_left.to_i.positive? && @season_days_left.to_i <= 14 %><span class="nl-claim-dot nl-claim-dot--fomo" aria-hidden="true"><%= @season_days_left %></span><% end %>
           <% end %>
           <%= link_to wars_path,
                 class: "nl-chat-tool nl-chat-tool--quests#{" nl-chat-tool--claim" if @wars_siege_count.to_i.positive?}",

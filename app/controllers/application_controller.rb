@@ -99,11 +99,11 @@ class ApplicationController < ActionController::Base
   end
 
   def prepare_mist_shell_fomo!(character)
-    @wars_siege_count = WorldFortress.active.where("siege_ends_at > ?", Time.current).count
+    @wars_siege_count = Game::World::SectorWarBoard.new.call.count(&:under_siege)
     return unless Game::Seasons::Catalog.active?
 
     snap = Game::Seasons::Progress.new(character:).snapshot
-    @season_days_left = snap[:days_left].to_i
+    @season_days_left = [snap[:days_left].to_i, Game::Seasons::Catalog.days_remaining].max
     @season_claimable = Array(snap[:free_levels]).size
     @season_claimable += Array(snap[:premium_levels]).size if snap[:premium]
   end
