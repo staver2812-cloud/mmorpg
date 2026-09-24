@@ -55,8 +55,12 @@ class TileNpc < ApplicationRecord
 
   # Check if NPC is alive and interactable.
   # Lazy-respawn when the authored timer elapsed so patrol loops work without a worker.
+  # Personal ambush instances must still honor defeated_at / active:false so a
+  # finished fight does not leave a sticky yellow name on the outdoor cell.
   def alive?
-    return active? if personal_instance?
+    if personal_instance?
+      return active? && defeated_at.nil?
+    end
 
     maybe_respawn_if_due!
     active? && defeated_at.nil? && (respawns_at.nil? || respawns_at <= Time.current)

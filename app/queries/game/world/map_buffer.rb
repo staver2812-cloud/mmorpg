@@ -80,7 +80,10 @@ module Game
         @tile_npcs = TileNpc.active
           .in_zone(zone.name)
           .where(x: x_range, y: y_range)
+          .where(defeated_at: nil)
           .includes(:npc_template)
+          .to_a
+          .select(&:alive?)
           .group_by { |npc| [npc.x, npc.y] }
       end
 
