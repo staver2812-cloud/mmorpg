@@ -27,6 +27,10 @@ module Game
 
           active_world_action = LocalActionState.new(character:).call
           if (match = active_match)
+            # After a fight the player must still reach Character / Inventory
+            # (heal scrolls, gear). Do not bounce them back into the arena UI.
+            next Result.new(interrupted: false) if shell_navigation?
+
             next Result.new(
               interrupted: true,
               match:,
@@ -87,7 +91,15 @@ module Game
       end
 
       def shell_navigation?
-        %w[profile inventory].include?(return_context.to_s)
+        # WorldContextActionsController passes CombatReturnContext.normalize output
+        # ({"name"=>"inventory"}), while other callers pass a bare string.
+        name = if return_context.respond_to?(:to_h) && !return_context.is_a?(String)
+          return_context.to_h.deep_stringify_keys["name"]
+        else
+          return_context
+        end.to_s
+
+        %w[profile inventory].include?(name)
       end
 
       def hostile_npc_at_current_cell
