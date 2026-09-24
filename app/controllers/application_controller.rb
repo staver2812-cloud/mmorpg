@@ -99,6 +99,8 @@ class ApplicationController < ActionController::Base
   end
 
   def prepare_mist_shell_fomo!(character)
+    # Keep living-world siege pressure warm so shell W matches /wars FOMO.
+    Game::WorldEvents::Pulse.new.call
     @wars_siege_count = Game::World::SectorWarBoard.new.call.count(&:under_siege)
     return unless Game::Seasons::Catalog.active?
 
