@@ -1213,6 +1213,7 @@ automated completion results are recorded in
 
 | Date | Change |
 |---|---|
+| 2026-09-24 | Mist shell FOMO: `S`/`W` claim dots (season levels/days, live sieges); Pulse `sector_siege` keeps `/wars` non-empty; handbook `doc/features/season_wars.md`. |
 | 2026-09-23 | Better-than-Mist retention: season convenience shop (time-savers only), daily check-in XP, streak milestones 3/7/14, public `/wars` board, featured stall lots (+12 NV pin). |
 | 2026-09-23 | Mist retention depth: seasonal half-tax on stall demand mats; Activity live Pulse + siege board; Pulse `season_fair` biweekly cadence; tournament scores grant season XP. |
 | 2026-09-23 | Mist craft↔combat soft loop: seasonal `MistCurve` craft demand stacks on Resource Exchange sell prices; Trade Hub bandage soft premium while season active; Activity/Exchange social+crafter FOMO CTAs. |

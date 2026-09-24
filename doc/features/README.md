@@ -24,7 +24,13 @@ Neverlands remains the sole game-design authority.
 | `world.md` | Partially Implemented | Bounded region/cell reads, eight-neighbor movement, gate/village entry, empty Look, and NPC handoff; full region content and successful gathering remain gaps |
 | `quests.md` | Partially Implemented | Ashen starter journal with kill/delivery objectives; Neverlands dialogue trees deferred |
 | `professions.md` | Partially Implemented | Ashen Tar Smith workshop craft; Neverlands gathering/fishing/mining still deferred |
-| `dungeons.md` | NOT_IMPLEMENTED | Explicit dungeon runtime gap |
+| `dungeons.md` | Partially Implemented | Ashen dungeon pack floors (arena NPC), cooldown; Neverlands topology and mine underground deferred |
+| `pets.md` | Partially Implemented | Ashen companion pets: equip one, NV level-up, custom nick, combat aura; expeditions later |
+| `world_live_events.md` | Partially Implemented | Tournament scoring + finals, ambush→fight, city defense CTA; deeper siege later |
+| `activity_achievements.md` | Partially Implemented | Daily contracts + achievement chains + first-hour on `/activity` |
+| `season_wars.md` | Implemented | Veil Season board/shop + public `/wars` + Pulse sector siege FOMO |
+| `character_dossier.md` | Partially Implemented | Mist-density public dossier, settlement window, chat nick RMB menu |
+| `pets.md` | Partially Implemented | Equip/level/rename + expeditions with NV find announcements |
 
 A non-green status is intentionally visible. Do not upgrade it because nearby
 code resembles the feature.

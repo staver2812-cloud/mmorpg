@@ -524,8 +524,20 @@
                 data: {turbo_frame: "_top", shell_recovery: "activity", claimable: @activity_claimable.to_i} do %>
             C<% if @activity_claimable.to_i.positive? %><span class="nl-claim-dot" aria-hidden="true"><%= @activity_claimable %></span><% end %>
           <% end %>
-          <%= link_to "S", season_path, class: "nl-chat-tool nl-chat-tool--quests", aria: {label: t("game.season.nav")}, title: t("game.season.nav"), data: {turbo_frame: "_top", shell_recovery: "season"} %>
-          <%= link_to "W", wars_path, class: "nl-chat-tool nl-chat-tool--quests", aria: {label: t("game.wars.title")}, title: t("game.wars.title"), data: {turbo_frame: "_top", shell_recovery: "wars"} %>
+          <%= link_to season_path,
+                class: "nl-chat-tool nl-chat-tool--quests#{" nl-chat-tool--claim" if @season_claimable.to_i.positive? || (@season_days_left.to_i.positive? && @season_days_left.to_i <= 3)}",
+                aria: {label: t("game.season.nav")},
+                title: season_shell_title,
+                data: {turbo_frame: "_top", shell_recovery: "season", season_days: @season_days_left.to_i, season_claimable: @season_claimable.to_i} do %>
+            S<% if @season_claimable.to_i.positive? %><span class="nl-claim-dot" aria-hidden="true"><%= @season_claimable %></span><% elsif @season_days_left.to_i.positive? && @season_days_left.to_i <= 7 %><span class="nl-claim-dot nl-claim-dot--fomo" aria-hidden="true"><%= @season_days_left %></span><% end %>
+          <% end %>
+          <%= link_to wars_path,
+                class: "nl-chat-tool nl-chat-tool--quests#{" nl-chat-tool--claim" if @wars_siege_count.to_i.positive?}",
+                aria: {label: t("game.wars.title")},
+                title: (@wars_siege_count.to_i.positive? ? t("game.wars.shell_siege_title", count: @wars_siege_count) : t("game.wars.title")),
+                data: {turbo_frame: "_top", shell_recovery: "wars", sieges: @wars_siege_count.to_i} do %>
+            W<% if @wars_siege_count.to_i.positive? %><span class="nl-claim-dot" aria-hidden="true"><%= @wars_siege_count %></span><% end %>
+          <% end %>
           <%= link_to "A", character_licenses_path, class: "nl-chat-tool nl-chat-tool--abilities", aria: {label: t("nav.abilities")}, title: t("nav.abilities"), data: {turbo_frame: "_top", shell_recovery: "licenses"} %>
         <% end %>
       <% end %>

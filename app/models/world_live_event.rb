@@ -7,6 +7,7 @@ class WorldLiveEvent < ApplicationRecord
     random_ambush
     city_attack
     season_fair
+    sector_siege
   ].freeze
   STATUSES = %w[active ended].freeze
 

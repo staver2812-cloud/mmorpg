@@ -14,7 +14,7 @@ class ActivityController < ApplicationController
     @contracts = DailyActivityContract.where(character: current_character, day_key: day).order(:id)
     @achievements = ActivityAchievement.where(character: current_character).order(Arel.sql("completed_at NULLS LAST"), :id)
     @claim_streak = current_character.metadata.to_h.dig("activity_streak", "count").to_i
-    @live_events = WorldLiveEvent.active.order(starts_at: :desc).limit(6)
+    @live_events = Game::WorldEvents::Pulse.new.call.first(6)
     @sector_wars = Game::World::SectorWarBoard.new.call
     @siege_rows = @sector_wars.select(&:under_siege)
     @checkin = Game::Seasons::DailyCheckin.new(character: current_character).call

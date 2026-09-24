@@ -9,6 +9,7 @@ class WarsController < ApplicationController
   layout "game"
 
   def show
+    Game::WorldEvents::Pulse.new.call
     @rows = Game::World::SectorWarBoard.new.call
     @sieges = @rows.select(&:under_siege)
     @window_open = WorldFortress::SIEGE_OPEN_HOUR..WorldFortress::SIEGE_CLOSE_HOUR

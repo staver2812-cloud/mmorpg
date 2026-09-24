@@ -32,10 +32,17 @@ class ApplicationController < ActionController::Base
   end
 
   def after_sign_in_path_for(resource)
+    stored = stored_location_for(resource)
+    return stored if stored.to_s.start_with?("/manage")
+
     character = resource.ensure_playable_character! if resource.respond_to?(:ensure_playable_character!)
     return world_path unless character
 
-    Game::World::ResumeContext.new(character:).resume_path
+    path = Game::World::ResumeContext.new(character:).resume_path
+    # Stale shop filter URLs (min_level>max etc.) 404 after login — fall back to World.
+    return world_path if path.to_s.start_with?("/shop?") && path.include?("min_level=")
+
+    path
   end
 
   private
@@ -81,8 +88,24 @@ class ApplicationController < ActionController::Base
     character = current_character
     return unless character
 
+    Characters::VitalsService.new(character).catch_up_regeneration!
+    character.reload
     @position ||= character.position
     prepare_presence_context unless controller_name.in?(%w[world world_locations shop city_buildings airships])
+    @first_hour = Game::Onboarding::FirstHour.new(character:)
+    @first_hour.ensure_bootstrapped!
+    @activity_claimable = Game::Activity::Tracker.new(character:).claimable_contract_count
+    prepare_mist_shell_fomo!(character)
+  end
+
+  def prepare_mist_shell_fomo!(character)
+    @wars_siege_count = WorldFortress.active.where("siege_ends_at > ?", Time.current).count
+    return unless Game::Seasons::Catalog.active?
+
+    snap = Game::Seasons::Progress.new(character:).snapshot
+    @season_days_left = snap[:days_left].to_i
+    @season_claimable = Array(snap[:free_levels]).size
+    @season_claimable += Array(snap[:premium_levels]).size if snap[:premium]
   end
 
   def prepare_presence_context(sort: "az")

@@ -22,6 +22,7 @@ module Game
         ensure_tournament_fish!
         ensure_tournament_chaos!
         ensure_season_fair!
+        ensure_sector_siege!
         maybe_random_ambush!
         maybe_city_attack!
         WorldLiveEvent.active.order(starts_at: :desc).limit(8).to_a
@@ -94,6 +95,55 @@ module Game
             "season" => Game::Seasons::Catalog.current_key,
             "cadence_days" => 14,
             "hint" => "market_stalls"
+          }
+        )
+      end
+
+      # Soft-release living-world pressure: keep at least one fortress siege lit so
+      # /wars and Clan Hall never look empty. Pulse sieges are board FOMO; player
+      # claims still go through FortressClaim on the cell.
+      SECTOR_SIEGE_MINUTES = 55
+
+      def ensure_sector_siege!
+        return if WorldFortress.active.where("siege_ends_at > ?", now).exists?
+        return if WorldLiveEvent.active.of_kind("sector_siege").exists?
+
+        fort = WorldFortress.active.order(:fortress_key).first
+        return unless fort
+
+        ends = now + SECTOR_SIEGE_MINUTES.minutes
+        wave = "pulse-#{now.utc.strftime("%Y%m%d%H")}"
+        meta = fort.metadata.to_h
+        scores = meta.fetch("siege_scores", {}).to_h
+        scores[wave] = {
+          "attack" => 12 + rng.rand(28),
+          "defense" => 10 + rng.rand(26)
+        }
+        fort.update!(
+          siege_ends_at: ends,
+          siege_wave_key: wave,
+          siege_opens_at: now,
+          siege_closes_at: ends,
+          metadata: meta.merge(
+            "siege_scores" => scores,
+            "pulse_siege" => true,
+            "pulse_siege_at" => now.iso8601
+          )
+        )
+
+        create_event!(
+          kind: "sector_siege",
+          ends_at: ends,
+          title_ru: "Осада сектора!",
+          title_en: "Sector siege!",
+          body_ru: "Крепость «#{fort.name}» под ударом Завесы (#{fort.zone} · #{fort.x},#{fort.y}). Доска войн и Зал Клана ждут подкрепления до #{ends.strftime("%H:%M")}!",
+          body_en: "Fortress «#{fort.name}» is under Veil pressure (#{fort.zone} · #{fort.x},#{fort.y}). Wars board and Clan Hall need support until #{ends.strftime("%H:%M")}!",
+          payload: {
+            "fortress_key" => fort.fortress_key,
+            "zone" => fort.zone,
+            "x" => fort.x,
+            "y" => fort.y,
+            "wave" => wave
           }
         )
       end
