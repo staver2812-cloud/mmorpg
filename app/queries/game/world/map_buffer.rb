@@ -146,11 +146,12 @@ module Game
           {"out_of_bounds" => true}
         end
         if building
-          metadata["building"] = building.name
+          metadata["building"] = Game::World::LocationCopy.building_name(building)
           metadata["building_kind"] = building.location? ? building.location_kind : building.building_type
         elsif metadata["landmark"].is_a?(Hash)
           landmark = metadata["landmark"]
-          metadata["building"] = landmark["name"].presence || metadata["presence_label"]
+          raw_name = landmark["name"].presence || metadata["presence_label"]
+          metadata["building"] = Game::World::LocationCopy.presence(raw_name)
           metadata["building_kind"] = landmark["kind"].presence || "landmark"
           metadata["landmark_key"] = landmark["key"]
           metadata["landmark_floors"] = landmark["floors"]
