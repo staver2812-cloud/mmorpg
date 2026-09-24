@@ -37,8 +37,12 @@ server-authoritative; fortress ownership still mutates only via `FortressClaim` 
 ## 4. Browser acceptance notes
 
 Login → shell `S` (badge if claimable/days≤7) → claim/buy offer → shell `W` (siege badge) →
-confirm live siege list → Activity check-in → Clan Hall wars strip. Claims still require
-standing on the fortress cell.
+confirm live siege list (`data-wars-sieges` > 0 after Pulse) → Activity check-in → Clan Hall wars strip.
+Claims still require standing on the fortress cell. Pulse `ensure_sector_siege!` may light a
+FOMO siege without transferring ownership.
+
+Verified 2026-09-24: Pulse + WarsController/ActivityController refresh; shell S/W claim dots;
+season shop icons; handbook banners on season/wars/activity/premium/trade/quests/gifts/clan_hall.
 
 ## 5. Specs
 

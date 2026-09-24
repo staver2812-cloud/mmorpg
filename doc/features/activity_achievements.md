@@ -46,3 +46,6 @@ Daily **claim streaks** add `+5 NV` per prior consecutive claim-day (server-owne
 ## 4. Browser acceptance notes
 
 Open Character → Achievements (or chat tool `C`). Complete a chat message / walk / kill and refresh to see progress; claim when ready. Consecutive daily claims raise the streak chip. Next legendary tier stays locked until the previous tier completes.
+
+Season check-in runs on every `/activity` open (once/UTC day). Live Pulse list should include
+tournaments / `sector_siege` after refresh; shell `W` shows a claim-dot while sieges are live.

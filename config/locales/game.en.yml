@@ -2436,7 +2436,7 @@ en:
       shop_once_day: "This offer is once per day"
       checkin: "Daily check-in: +%{amount} season XP"
       shell_claim_title: "Season: %{count} ready to claim"
-      shell_days_title: "Season: %{days}d left"
+      shell_days_title: "Season: %{days} days left"
 
     wars:
       title: "Territory wars"
@@ -2446,7 +2446,7 @@ en:
       live_empty: "Quiet for now — claim a free fortress or defend yours."
       all_title: "All fortresses"
       goto_cta: "To world"
-      shell_siege_title: "Sieges: %{count}"
+      shell_siege_title: "Wars: %{count} live sieges"
 
     economy:
       combat_needs_crafter: "Combat without craft costs more this season: resin, herbs, and coal sell higher — buy from gatherers or craft bandages yourself."

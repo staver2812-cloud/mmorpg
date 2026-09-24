@@ -99,51 +99,54 @@ module Game
         )
       end
 
-      # Soft-release living-world pressure: keep at least one fortress siege lit so
-      # /wars and Clan Hall never look empty. Pulse sieges are board FOMO; player
-      # claims still go through FortressClaim on the cell.
-      SECTOR_SIEGE_MINUTES = 55
-
+      # Mist board FOMO: keep at least one fortress under siege for /wars + shell W.
+      # Does not transfer ownership — FortressClaim remains the only claim path.
       def ensure_sector_siege!
-        return if WorldFortress.active.where("siege_ends_at > ?", now).exists?
+        live = WorldFortress.active.select(&:under_siege?)
+        if live.any?
+          return if WorldLiveEvent.active.of_kind("sector_siege").exists?
+
+          fort = live.first
+          create_sector_siege_event!(fort, ends_at: fort.siege_ends_at || (now + 1.hour))
+          return
+        end
+
         return if WorldLiveEvent.active.of_kind("sector_siege").exists?
 
         fort = WorldFortress.active.order(:fortress_key).first
         return unless fort
 
-        ends = now + SECTOR_SIEGE_MINUTES.minutes
-        wave = "pulse-#{now.utc.strftime("%Y%m%d%H")}"
-        meta = fort.metadata.to_h
-        scores = meta.fetch("siege_scores", {}).to_h
-        scores[wave] = {
-          "attack" => 12 + rng.rand(28),
-          "defense" => 10 + rng.rand(26)
+        ends = now + 1.hour
+        wave = "pulse:#{now.to_i}"
+        scores = {
+          "attack" => rng.rand(4..14),
+          "defense" => rng.rand(3..12)
         }
         fort.update!(
           siege_ends_at: ends,
           siege_wave_key: wave,
-          siege_opens_at: now,
-          siege_closes_at: ends,
-          metadata: meta.merge(
-            "siege_scores" => scores,
+          metadata: fort.metadata.to_h.merge(
             "pulse_siege" => true,
-            "pulse_siege_at" => now.iso8601
+            "siege_scores" => fort.metadata.to_h.fetch("siege_scores", {}).to_h.merge(wave => scores)
           )
         )
+        create_sector_siege_event!(fort, ends_at: ends)
+      end
 
+      def create_sector_siege_event!(fort, ends_at:)
         create_event!(
           kind: "sector_siege",
-          ends_at: ends,
-          title_ru: "Осада сектора!",
-          title_en: "Sector siege!",
-          body_ru: "Крепость «#{fort.name}» под ударом Завесы (#{fort.zone} · #{fort.x},#{fort.y}). Доска войн и Зал Клана ждут подкрепления до #{ends.strftime("%H:%M")}!",
-          body_en: "Fortress «#{fort.name}» is under Veil pressure (#{fort.zone} · #{fort.x},#{fort.y}). Wars board and Clan Hall need support until #{ends.strftime("%H:%M")}!",
+          ends_at:,
+          title_ru: "Осада сектора",
+          title_en: "Sector siege",
+          body_ru: "Крепость «#{fort.name}» под осадой до #{ends_at.strftime("%H:%M")}. Открой доску Войн и держи давление!",
+          body_en: "Fortress «#{fort.name}» is under siege until #{ends_at.strftime("%H:%M")}. Open the Wars board and hold the pressure!",
           payload: {
             "fortress_key" => fort.fortress_key,
             "zone" => fort.zone,
             "x" => fort.x,
             "y" => fort.y,
-            "wave" => wave
+            "pulse" => true
           }
         )
       end

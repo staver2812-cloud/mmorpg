@@ -116,8 +116,8 @@ Explicitly **out of** soft-release 100% (still honest):
 |------|------|
 | Season board `/season` free+VM tracks + convenience shop | Yes — icons, claim, buy_offer |
 | Daily check-in season XP + streak milestones | Yes — Activity board |
-| Public `/wars` board + Pulse `sector_siege` living pressure | Yes — shell `W` badge when sieges live |
-| Shell FOMO badges `S`/`W` | Yes — claimable levels / days left / siege count |
+| Public `/wars` board + Pulse `sector_siege` living pressure | Yes — `Pulse#ensure_sector_siege!` + Wars/Activity refresh |
+| Shell FOMO badges `S`/`W` | Yes — claimable levels / days≤7 / live siege count dots |
 | Season fair + craft↔combat MistCurve demand | Yes — Pulse + Resource Exchange |
 | Featured stall lots + seasonal half-tax | Yes — Trade Hub / StallListing |
 
