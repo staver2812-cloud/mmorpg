@@ -241,7 +241,7 @@
               method: :post,
               params: {context: "profile"},
               class: "nl-nav-link nl-nav-link--button",
-              data: {game_layout_target: "worldNavigation", turbo: false},
+              data: {turbo: false},
               form: {class: "nl-nav-action-form", data: {turbo: false}} %>
         <% end %>
         <% if controller_name == "inventories" %>
@@ -259,7 +259,7 @@
               method: :post,
               params: {context: "inventory"},
               class: "nl-nav-link nl-nav-link--button",
-              data: {game_layout_target: "worldNavigation", turbo: false},
+              data: {turbo: false},
               form: {class: "nl-nav-action-form", data: {turbo: false}} %>
         <% end %>
         <% if @active_airship_journey %>
