@@ -21,20 +21,8 @@ RSpec.describe Game::World::InterruptAction do
   let!(:position) { create(:character_position, character:, zone:, x: 5, y: 5) }
 
   it "lets profile and inventory open even while a local action timer is active" do
-    WorldActionOffer.create!(
-      character:,
-      zone:,
-      x: 5,
-      y: 5,
-      action_type: "search_resources",
-      action_key: "nav-spec-#{SecureRandom.hex(4)}",
-      status: :accepted,
-      accepted_at: Time.current,
-      expires_at: 10.minutes.from_now,
-      metadata: {
-        "local_action_ends_at" => 2.minutes.from_now.iso8601
-      }
-    )
+    offer = instance_double(WorldActionOffer, accepted?: true)
+    allow(Game::World::LocalActionState).to receive(:new).and_return(instance_double(Game::World::LocalActionState, call: offer))
 
     result = described_class.new(character:, return_context: "inventory").call
     expect(result.interrupted?).to be(false)
