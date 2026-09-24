@@ -289,6 +289,7 @@ module Arena
 
         finalize_participations(resolved_winning_team)
         finalize_rewards!(resolved_winning_team)
+        cleanup_personal_world_npc!
 
         # End match messages
         case reason
@@ -869,6 +870,22 @@ module Arena
 
       tile_npc = TileNpc.find_by(id: match.metadata["tile_npc_id"])
       tile_npc&.defeat!(defeated_by)
+    end
+
+    # Personal ambush NPCs must leave the cell when the fight ends (win or lose),
+    # otherwise shell Character/Inventory stays blocked on a sticky hostile.
+    def cleanup_personal_world_npc!
+      return unless match.metadata.to_h["personal_instance"] == true || match.metadata.to_h["source"] == "world_live_ambush"
+
+      tile_npc = TileNpc.find_by(id: match.metadata["tile_npc_id"])
+      return unless tile_npc&.personal_instance?
+
+      tile_npc.update!(
+        defeated_at: Time.current,
+        current_hp: 0,
+        respawns_at: nil,
+        metadata: tile_npc.metadata.to_h.merge("active" => false, "ambush_cleared_at" => Time.current.iso8601)
+      )
     end
 
     def all_npcs_defeated?

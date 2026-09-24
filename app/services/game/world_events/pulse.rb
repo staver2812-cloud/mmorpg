@@ -17,14 +17,16 @@ module Game
         @rng = rng
       end
 
-      def call
+      def call(scope: :full)
         expire_stale!
         ensure_tournament_fish!
         ensure_tournament_chaos!
         ensure_season_fair!
         ensure_sector_siege!
-        maybe_random_ambush!
-        maybe_city_attack!
+        if scope.to_sym == :full
+          maybe_random_ambush!
+          maybe_city_attack!
+        end
         WorldLiveEvent.active.order(starts_at: :desc).limit(8).to_a
       end
 
@@ -166,6 +168,9 @@ module Game
           "Угольный Страж"
         ].fetch(rng.rand(4))
 
+        fight = AmbushFight.new(character: candidate, npc_label:, rng:).call
+        return unless fight.ok && fight.match
+
         ends = now + 10.minutes
         create_event!(
           kind: "random_ambush",
@@ -177,19 +182,10 @@ module Game
           payload: {
             "character_id" => candidate.id,
             "character_name" => candidate.name,
-            "npc_label" => npc_label
+            "npc_label" => npc_label,
+            "match_id" => fight.match.id
           }
         )
-        candidate.update!(
-          metadata: candidate.metadata.to_h.merge(
-            "live_ambush" => {
-              "npc_label" => npc_label,
-              "at" => now.iso8601,
-              "event_until" => ends.iso8601
-            }
-          )
-        )
-        Game::WorldEvents::AmbushFight.new(character: candidate, npc_label:, rng:).call
       end
 
       def maybe_city_attack!

@@ -35,11 +35,18 @@ module Game
           end
 
           if MovementCommand.moving.where(character:).exists?
+            next Result.new(interrupted: false) if shell_navigation?
+
             raise StartNpcFight::FightViolationError, I18n.t("game.flashes.movement_in_progress")
           end
           if active_world_action
+            next Result.new(interrupted: false) if shell_navigation?
+
             raise StartNpcFight::FightViolationError, I18n.t("game.world.local_action_in_progress")
           end
+
+          # Opening Character / Inventory must never force a bait fight.
+          next Result.new(interrupted: false) if shell_navigation?
 
           npc = hostile_npc_at_current_cell
           next Result.new(interrupted: false) unless npc
@@ -77,6 +84,10 @@ module Game
           .order("arena_participations.created_at DESC")
           .first
           &.arena_match
+      end
+
+      def shell_navigation?
+        %w[profile inventory].include?(return_context.to_s)
       end
 
       def hostile_npc_at_current_cell

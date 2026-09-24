@@ -167,15 +167,18 @@ module Game
         if template
           resource_labels = []
           template.active_resource_groups.each do |group|
-            label = group["label"].presence || group["key"]
+            label = Game::World::ResourceLabel.for_group(group)
             resource_labels << label if label.present?
           end
           regrowth = template.active_resource_groups.filter_map do |group|
             expires_at = Time.zone.parse(template.metadata.to_h.dig("resource_depletion", group["key"].to_s).to_s)
             next unless expires_at && expires_at > Time.current
 
+            display = Game::World::ResourceLabel.for_group(group)
+            next if display.blank?
+
             {
-              "label" => (group["label"].presence || group["key"]).to_s,
+              "label" => display,
               "remaining_seconds" => (expires_at - Time.current).ceil
             }
           rescue ArgumentError, TypeError
@@ -185,7 +188,10 @@ module Game
           template.active_local_actions.each do |action|
             next unless %w[gather mine forage harvest fish dig].include?(action["type"].to_s)
 
-            label = action["label"].presence || action["type"]
+            label = Game::World::ResourceLabel.for_group(
+              "key" => action["type"],
+              "label" => action["label"]
+            )
             resource_labels << label if label.present?
           end
           metadata["resource_labels"] = resource_labels.uniq.first(3) if resource_labels.any?

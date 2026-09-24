@@ -242,7 +242,6 @@
               params: {context: "profile"},
               class: "nl-nav-link nl-nav-link--button",
               data: {game_layout_target: "worldNavigation"},
-              disabled: world_actions_locked,
               form: {class: "nl-nav-action-form"} %>
         <% end %>
         <% if controller_name == "inventories" %>
@@ -260,7 +259,6 @@
               params: {context: "inventory"},
               class: "nl-nav-link nl-nav-link--button",
               data: {game_layout_target: "worldNavigation"},
-              disabled: world_actions_locked,
               form: {class: "nl-nav-action-form", data: {turbo_frame: ("main_content" if controller_name == "shop")}} %>
         <% end %>
         <% if @active_airship_journey %>
