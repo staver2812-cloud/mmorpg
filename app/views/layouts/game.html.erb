@@ -241,8 +241,8 @@
               method: :post,
               params: {context: "profile"},
               class: "nl-nav-link nl-nav-link--button",
-              data: {game_layout_target: "worldNavigation"},
-              form: {class: "nl-nav-action-form"} %>
+              data: {game_layout_target: "worldNavigation", turbo: false},
+              form: {class: "nl-nav-action-form", data: {turbo: false}} %>
         <% end %>
         <% if controller_name == "inventories" %>
           <span class="nl-nav-link nl-nav-link--disabled" aria-current="page"><%= t("nav.inventory") %></span>
@@ -251,15 +251,16 @@
               method: :post,
               params: {context: "world"},
               class: "nl-nav-link nl-nav-link--button",
-              form: {class: "nl-nav-action-form"} %>
+              data: {turbo: false},
+              form: {class: "nl-nav-action-form", data: {turbo: false}} %>
         <% else %>
           <%= button_to t("nav.inventory"),
               world_context_action_path,
               method: :post,
               params: {context: "inventory"},
               class: "nl-nav-link nl-nav-link--button",
-              data: {game_layout_target: "worldNavigation"},
-              form: {class: "nl-nav-action-form", data: {turbo_frame: ("main_content" if controller_name == "shop")}} %>
+              data: {game_layout_target: "worldNavigation", turbo: false},
+              form: {class: "nl-nav-action-form", data: {turbo: false}} %>
         <% end %>
         <% if @active_airship_journey %>
           <% unless controller_name == "airships" %>
