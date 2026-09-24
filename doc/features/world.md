@@ -65,7 +65,7 @@ Supporting documents:
 | `doc/features/character_progression.md` | World reads the character's effective Wanderer level when it authors adjacent movement offers. | Character Progression owns saved/base/equipment-backed skill values; World owns the travel-time formula, command snapshot, timer, and completion lifecycle. |
 | `doc/features/game_shell.md` | World bootstraps the game layout and supplies current location and same-cell player data. | World owns position queries and the central map/city payload; Game Shell owns the persistent frame, nearby-player presentation, and compact chat. |
 | `doc/features/shop_economy.md` | World-owned resume context validates a saved Shop surface and falls back to World when it is unavailable. | World/City retain exact location authority; Shop owns allowlisted catalog context and exchange behavior after entry. |
-| `doc/features/player_inventory.md` | Outdoor Inventory requests may be replaced by the current hidden hostile encounter and resumed after fight completion. | World owns interruption and allowlisted return context; Player Inventory owns carried/equipment state and destination rendering. |
+| `doc/features/player_inventory.md` | Outdoor Inventory requests open Inventory directly; Look/Enter may still hand off to a hostile encounter with bait. | World owns allowlisted return context; Player Inventory owns carried/equipment state and destination rendering. |
 | `doc/features/arena_combat.md` | A hidden same-cell hostile encounter creates the shared match and later returns through World metadata. | World owns encounter eligibility, match-creation handoff, authored NPC loot-table input, and allowlisted return context; Arena Combat owns match resolution, per-NPC typed item/NV loot persistence, logs, and Finish after creation. |
 
 ## 2. Feature summary
@@ -232,6 +232,15 @@ The surrounding game shell owns navigation, character status, presence, inventor
   exact cell while remaining fixed at `100 x 100`.
 - Current position: a fixed 100 × 100 overlay in the center of the viewport.
 - Available destination: thin dark-red 1px border, matching the observed Neverlands selection language.
+- Outdoor map chrome: NPC names render as bright yellow text (`#ffe338`) without a fill box;
+  herb/tree resource labels are green (`#7dff6a`) and use `Game::World::ResourceLabel` so atlas
+  `Herb group N` / `Tree group N` ids become Ashen plant names (e.g. «Лунная орхидея»). Cell
+  coordinates sit in the top-left corner at a lower opacity so they do not cover bot names.
+- City-defense CTA (`Защита города`) renders only on the city surface while a `city_attack`
+  live event is active; outdoor World no longer shows that banner as false wilderness FOMO.
+- Pulse personal ambushes (`ashen_ambush_*`) are destroyed when the fight ends or when
+  `DismissCompletedFight` runs on World/Character/Inventory with no live arena match, so sticky
+  yellow ambush nameplates cannot block the outdoor loop after defeat.
 - Active movement: the map layer translates toward the target while an original
   walking GIF remains centered in the cursor; reduced-motion preferences select
   its static first frame. The idle compass remains unchanged.
@@ -296,12 +305,13 @@ Before an offered wilderness entrance or local action completes, World checks th
 authoritative current cell for its live hostile encounter. Forced interruption
 requires Ashen Bait (`ashen_bait`): one unit is consumed and the personal-instance
 fight opens immediately (Ashen placements use `respawn_seconds: 0` so the cell
-never waits on a shared defeat lock). Without bait, Look / Enter / Character /
-Inventory continue normally. Offered wilderness movement away from the cell
-never starts a fight (escape). The persistent shell's **Character** and
-**Inventory** actions pass through the same bait-gated check. After an explicit
-fight result step, the player returns to the saved allowlisted destination.
-Arbitrary submitted URLs are never accepted as return targets.
+never waits on a shared defeat lock). Without bait, Look / Enter continue normally.
+Offered wilderness movement away from the cell never starts a fight (escape). The
+persistent shell's **Character** and **Inventory** actions skip bait fights and
+timers so the player can always open those surfaces; they still respect an already
+active Arena match. After an explicit fight result step, the player returns to the
+saved allowlisted destination. Arbitrary submitted URLs are never accepted as
+return targets.
 
 The outdoor shell immediately asks the same server owner for encounter state.
 When an alive hostile exists on the exact authoritative cell, the server
@@ -1623,13 +1633,15 @@ zero-fatigue clamping is explicitly covered.
 authoritative outdoor position and starts a fight only when the character has
 Ashen Bait; one bait is consumed on a successful handoff. Without bait the
 intended action proceeds. `WorldController` invokes it for entrance and
-implemented local actions, and `WorldContextActionsController` invokes it for
-the World shell's Character and Inventory destinations. Wilderness movement
-does not call `InterruptAction` (escape). `WorldEncounterChecksController`
-delegates passive delivery to `Game::World::PassiveEncounterCheck`, which
-resolves the same exact-cell NPC on the five-minute timer and hands due
-encounters to `StartNpcFight` without consuming bait. City positions and
-already-active combat do not start another encounter.
+implemented local actions. `WorldContextActionsController` still calls it for
+Character / Inventory so an already-active Arena match is respected, but those
+shell destinations skip bait consumption, travel locks, and Look timers.
+Wilderness movement does not call `InterruptAction` (escape).
+`WorldEncounterChecksController` delegates passive delivery to
+`Game::World::PassiveEncounterCheck`, which resolves the same exact-cell NPC on
+the five-minute timer and hands due encounters to `StartNpcFight` without
+consuming bait. City positions and already-active combat do not start another
+encounter.
 
 On interruption, `StartNpcFight` locks the character and encounter anchor,
 returns an existing active match on a duplicate request, and otherwise delegates
