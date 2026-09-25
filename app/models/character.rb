@@ -183,7 +183,10 @@ class Character < ApplicationRecord
   # primary stats. Equipment bonuses stay separate from these persisted base
   # values so allocating a stat cannot refill an injured character.
   def derived_base_max_hp
-    base_primary_stat_value(:vitality) * HP_PER_HEALTH
+    # Updated formula: Max_HP = (level * 50) + (vitality * 12) + (strength * 2)
+    vitality_value = base_primary_stat_value(:vitality)
+    strength_value = base_primary_stat_value(:strength)
+    (level.to_i * 50) + (vitality_value * 12) + (strength_value * 2)
   end
 
   def derived_base_max_mp
