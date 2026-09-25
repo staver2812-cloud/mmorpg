@@ -56,12 +56,15 @@ module PlayerProfileHelper
   def profile_combat_stats(character)
     {
       I18n.t("game.sheet.ap_per_strike") => profile_attack_cost,
-      I18n.t("game.sheet.armor_class") => character.equipment_effect_value("armor_class"),
-      I18n.t("game.sheet.dodge") => "#{character.dodge_bonus}%",
+      I18n.t("game.sheet.attack_power") => character.attack_power,
+      I18n.t("game.sheet.defense") => character.defense,
       I18n.t("game.sheet.accuracy") => "#{character.accuracy_bonus}%",
-      I18n.t("game.sheet.crushing") => "#{character.equipment_effect_value("crushing")}%",
-      I18n.t("game.sheet.fortitude") => "#{character.fortitude_percent}%",
-      I18n.t("game.sheet.armor_pierce") => "#{character.armor_pierce_percent}%"
+      I18n.t("game.sheet.dodge") => "#{character.dodge_bonus}%",
+      I18n.t("game.sheet.dexterity") => character.stats.get(:dexterity).to_i,
+      I18n.t("game.sheet.agility") => character.agility.to_i,
+      I18n.t("game.sheet.luck") => character.stats.get(:luck).to_i,
+      I18n.t("game.sheet.magic_power") => character.magic_power,
+      I18n.t("game.sheet.armor_class") => character.equipment_effect_value("armor_class")
     }
   end
 
@@ -76,7 +79,7 @@ module PlayerProfileHelper
       match = participation.arena_match
       next false unless match
 
-      match.live? || match.pending? || match.matching? || (match.completed? && participation.metadata.to_h["finished_at"].blank?)
+      match.live? || match.pending? || match.matching?
     end&.arena_match
   end
 end

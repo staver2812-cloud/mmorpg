@@ -138,7 +138,7 @@ module Game
           character.reload
           Catalog.ordered.each do |quest|
             next unless quest.dig("objective", "type") == "kill_npc"
-            next unless Array(quest.dig("objective", "npc_keys")).map(&:to_s).include?(key)
+            next unless kill_matches_objective?(key, Array(quest.dig("objective", "npc_keys")).map(&:to_s))
 
             state = state_for(quest.fetch("key"))
             next unless state["status"] == "active"
@@ -150,7 +150,69 @@ module Game
         end
       end
 
+      # Stand on a fortress cell.
+      def record_fortress_visit!
+        bump_objective!("visit_fortress")
+      end
+
+      # Cleared one dungeon pack floor.
+      def record_pack_floor!(pack_key:)
+        key = pack_key.to_s
+        return if key.blank?
+
+        character.with_lock do
+          character.reload
+          Catalog.ordered.each do |quest|
+            next unless quest.dig("objective", "type") == "clear_pack_floor"
+            keys = Array(quest.dig("objective", "pack_keys")).map(&:to_s)
+            next if keys.any? && !keys.include?(key)
+
+            state = state_for(quest.fetch("key"))
+            next unless state["status"] == "active"
+
+            target = objective_count(quest)
+            progress = [state["progress"].to_i + 1, target].min
+            write_state!(quest.fetch("key"), state.merge("progress" => progress))
+          end
+        end
+      end
+
+      # After gather/fishing, persist live bag counts onto deliver_item quest rows
+      # so HUD/metadata match Journal#present without waiting for turn-in.
+      def sync_delivery_progress!
+        character.with_lock do
+          character.reload
+          Catalog.ordered.each do |quest|
+            next unless quest.dig("objective", "type") == "deliver_item"
+
+            state = state_for(quest.fetch("key"))
+            next unless state["status"] == "active"
+
+            progress = progress_for(quest, state)
+            next if state["progress"].to_i == progress
+
+            write_state!(quest.fetch("key"), state.merge("progress" => progress))
+          end
+        end
+      end
+
       private
+
+      def bump_objective!(type)
+        character.with_lock do
+          character.reload
+          Catalog.ordered.each do |quest|
+            next unless quest.dig("objective", "type") == type.to_s
+
+            state = state_for(quest.fetch("key"))
+            next unless state["status"] == "active"
+
+            target = objective_count(quest)
+            progress = [state["progress"].to_i + 1, target].min
+            write_state!(quest.fetch("key"), state.merge("progress" => progress))
+          end
+        end
+      end
 
       attr_reader :character
 
@@ -197,6 +259,17 @@ module Game
         quest.dig("objective", "count").to_i.clamp(1, 99)
       end
 
+      # Soft-release: match exact keys, and treat av_* farm clones as their shore
+      # base when quests list the shore cast (av_plague_rat ↔ plague_rat).
+      def kill_matches_objective?(killed_key, objective_keys)
+        return false if objective_keys.blank?
+
+        candidates = [killed_key.to_s]
+        candidates << killed_key.delete_prefix("av_") if killed_key.start_with?("av_")
+        candidates << "av_#{killed_key}" unless killed_key.start_with?("av_")
+        (candidates & objective_keys).any?
+      end
+
       def progress_for(quest, state)
         target = objective_count(quest)
         case quest.dig("objective", "type")
@@ -210,12 +283,16 @@ module Game
       end
 
       def objective_met?(quest, state)
-        case quest.dig("objective", "type")
-        when "kill_npc"
+        type = quest.dig("objective", "type").to_s
+        return false if type.blank?
+
+        case type
+        when "kill_npc", "visit_fortress", "clear_pack_floor"
           state["progress"].to_i >= objective_count(quest)
         when "deliver_item"
           item_quantity(quest.dig("objective", "item_key")) >= objective_count(quest)
         else
+          Rails.logger.warn("[quests] unsupported objective type=#{type} key=#{quest["key"]}")
           false
         end
       end

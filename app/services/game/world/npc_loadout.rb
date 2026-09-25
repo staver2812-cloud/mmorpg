@@ -4,14 +4,18 @@ module Game
   module World
     # Equips an Ashen wilderness NPC with one thematic set matching its world tier
     # and derives combat attack/defense/HP from the worn pieces (server-authoritative).
+    # Soft-release: four Mist-guided archetypes (tank/evader/critter/mage) scale the
+    # floor so shore/farm bots ask for different player answers (STR/ACC/DEF/MR).
     class NpcLoadout
       SET_IDS = %w[blood demiurge distortion judge swamp].freeze
-      CATALOG_TIERS = [5, 10, 15, 20, 25, 30, 35, 40, 45, 50].freeze
+      # Universe freeze: world bands 1..23 plus endgame catalog steps through 50.
+      # 5 sets × 10 pieces × 29 tiers = 1450 set ItemTemplates (≥650 requirement).
+      CATALOG_TIERS = ((1..23).to_a + [25, 30, 35, 40, 45, 50]).uniq.sort.freeze
       PIECE_SUFFIXES = %w[
         weapon-sword helm armor-plate gloves bracers boots amulet ring earring-1 waist
       ].freeze
 
-      Result = Struct.new(:item_keys, :combat_stats, :set_id, :set_tier, keyword_init: true)
+      Result = Struct.new(:item_keys, :combat_stats, :set_id, :set_tier, :archetype, keyword_init: true)
 
       def initialize(npc_template:, world_tier: nil, rng: Random.new)
         @npc_template = npc_template
@@ -20,7 +24,9 @@ module Game
       end
 
       def call
-        set_id = pick_set_id
+        archetype = NpcCombatArchetypes.archetype_for(npc_template)
+        profile = NpcCombatArchetypes.profile(archetype)
+        set_id = pick_set_id(profile)
         set_tier = catalog_tier_for(world_tier)
         keys = PIECE_SUFFIXES.map { |suffix| "set-#{set_id}-#{suffix}-t#{set_tier}" }
         templates = ItemTemplate.where(key: keys).index_by(&:key)
@@ -29,15 +35,21 @@ module Game
 
         Result.new(
           item_keys: present,
-          combat_stats: derive_stats(templates.values_at(*present).compact),
+          combat_stats: derive_stats(templates.values_at(*present).compact, profile),
           set_id:,
-          set_tier:
+          set_tier:,
+          archetype:
         )
       end
 
       def self.catalog_tier_for(world_tier)
-        index = (((world_tier.to_i.clamp(1, 23) - 1) * (CATALOG_TIERS.size - 1)) / 22)
-        CATALOG_TIERS.fetch(index.clamp(0, CATALOG_TIERS.size - 1))
+        # Personal-instance wilderness bands map onto seeded set keys.
+        # Soft-launch: early shore (bands 1–8) uses lower set tiers so shop
+        # armor matters without one-shotting starters (Mist/Legend early curve).
+        band = world_tier.to_i.clamp(1, 23)
+        return [1, (band / 2.0).ceil].max if band <= 8
+
+        band
       end
 
       def self.drop_chance_percent(role:, set_tier:)
@@ -65,53 +77,64 @@ module Game
         self.class.catalog_tier_for(tier)
       end
 
-      def pick_set_id
-        role = npc_template.metadata.to_h["ashen_role"].to_s
-        focus = case role
-        when "boss" then %w[judge blood demiurge]
-        when "elite" then %w[blood distortion swamp]
-        else SET_IDS
-        end
+      def pick_set_id(profile)
+        focus = Array(profile["set_focus"]).map(&:to_s) & SET_IDS
+        focus = SET_IDS if focus.empty?
         focus.fetch(rng.rand(focus.length))
       end
 
-      def derive_stats(templates)
-        # Gear is the authority. Keep only a thin level floor so naked templates
-        # still fight; do not re-add catalog combat_stats (would double-count
-        # after AshenPopulation bakes loadout into metadata).
+      def derive_stats(templates, profile)
         level = npc_template.level.to_i.clamp(1, 100)
-        attack = level
-        defense = [level / 2, 0].max
-        hp = 20 + (level * 8)
-        agility = level / 3
-        accuracy = level / 3
-        luck = level / 5
+        # Smooth Mist-style floor: grows with level, then archetype mults specialize.
+        attack = 10 + (level * 5)
+        defense = 12 + (level * 5)
+        hp = 80 + (level * 26) + ((level * level) / 5)
+        agility = 3 + level
+        accuracy = 4 + (level * 2)
+        luck = 1 + (level / 2)
+        magic_power = 4 + (level * 3)
+
+        set_scale = case world_tier.to_i
+        when 0..6 then 0.12
+        when 7..10 then 0.45
+        else 1.0
+        end
 
         templates.each do |template|
           mods = template.stat_modifiers.to_h
           dmin = mods["damage_min"].to_i
           dmax = mods["damage_max"].to_i
           if dmax.positive?
-            attack += ((dmin + dmax) / 2.0).round
+            attack += (((dmin + dmax) / 2.0) * set_scale).round
           end
-          defense += mods["armor_class"].to_i
-          hp += mods["hp"].to_i
-          agility += mods["evasion"].to_i + mods["dexterity"].to_i
-          accuracy += mods["accuracy"].to_i
-          luck += mods["luck"].to_i
-          attack += (mods["strength"].to_i / 2)
+          defense += ((mods["armor_class"].to_i + mods["defense"].to_i + mods["armor"].to_i) * set_scale).round
+          hp += (mods["hp"].to_i * set_scale).round
+          agility += ((mods["evasion"].to_i + mods["dexterity"].to_i) * set_scale).round
+          accuracy += (mods["accuracy"].to_i * set_scale).round
+          luck += (mods["luck"].to_i * set_scale).round
+          attack += (mods["strength"].to_i * set_scale).round
+          magic_power += (
+            (mods["magic_power"].to_i + mods["intelligence"].to_i + mods["spell_power"].to_i) * set_scale
+          ).round
         end
 
         {
-          "attack" => [attack, 1].max,
-          "defense" => [defense, 0].max,
-          "hp" => [hp, 10].max,
-          "agility" => [agility, 0].max,
-          "accuracy" => [accuracy, 0].max,
-          "luck" => [luck, 0].max,
+          "attack" => scale(attack, profile["attack_mult"]),
+          "defense" => scale(defense, profile["defense_mult"]),
+          "hp" => [scale(hp, profile["hp_mult"]), 40].max,
+          "agility" => scale(agility, profile["agility_mult"]),
+          "accuracy" => scale(accuracy, profile["accuracy_mult"]),
+          "luck" => scale(luck, profile["luck_mult"]),
+          "magic_power" => scale(magic_power, profile["magic_power_mult"]),
+          "magic_resist" => profile["magic_resist"].to_i,
+          "combat_archetype" => profile["key"],
           "crit_chance" => 0,
           "dodge_chance" => 0
         }
+      end
+
+      def scale(value, mult)
+        [(value * mult.to_f).round, 0].max
       end
     end
   end

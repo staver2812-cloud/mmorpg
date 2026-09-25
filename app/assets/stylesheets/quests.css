@@ -120,14 +120,23 @@
 }
 
 .nl-quests__formula {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 6px 10px;
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 4px 12px;
+  align-items: start;
   margin: 0 0 10px;
   padding: 8px 10px;
   border: 1px solid #d0c1a4;
   background: #faf6ec;
   font: 12px Verdana, Tahoma, sans-serif;
+}
+
+.nl-quests__formula strong {
+  white-space: nowrap;
+}
+
+.nl-quests__formula span {
+  line-height: 1.35;
 }
 
 .nl-quests__rewards {
@@ -148,6 +157,10 @@
 
 .nl-quests__actions {
   margin-top: 8px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  align-items: center;
 }
 
 .nl-quests__done {
@@ -258,6 +271,42 @@
   margin: 0;
   color: #4a3d2e;
   font: 11px/1.35 Verdana, Tahoma, sans-serif;
+}
+
+.nl-handbook__bullets {
+  margin: 6px 0 0;
+  padding-left: 16px;
+  color: #4a3d2e;
+  font: 11px/1.35 Verdana, Tahoma, sans-serif;
+}
+
+.nl-living-board {
+  margin: 0 0 12px;
+  padding: 8px 10px;
+  border: 1px solid #c9b89a;
+  background: linear-gradient(180deg, #f7f0e2 0%, #efe4d0 100%);
+}
+
+.nl-living-board__title {
+  display: block;
+  margin: 0 0 6px;
+  font: 700 12px Verdana, Tahoma, sans-serif;
+  color: #3d3224;
+}
+
+.nl-living-board__list {
+  margin: 0;
+  padding-left: 16px;
+}
+
+.nl-living-board__item,
+.nl-living-board li {
+  margin: 0 0 4px;
+  font: 11px/1.35 Verdana, Tahoma, sans-serif;
+}
+
+.nl-living-board--city {
+  margin-bottom: 10px;
 }
 
 .nl-city-landmark__lead {
@@ -379,6 +428,48 @@
   color: #2a2218;
   font: 700 13px/1.2 Verdana, Tahoma, sans-serif;
   cursor: pointer;
+}
+
+.nl-instances__rooms {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  margin: 6px 0 0;
+}
+
+.nl-instances__room {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 1.35rem;
+  height: 1.35rem;
+  padding: 0 3px;
+  border: 1px solid #9a8560;
+  border-radius: 2px;
+  background: #ebe1cc;
+  color: #4a3a28;
+  font: 700 10px/1 Verdana, Tahoma, sans-serif;
+}
+
+.nl-instances__room--elite {
+  border-color: #8a6a20;
+  background: #f0dfa8;
+}
+
+.nl-instances__room--boss {
+  border-color: #7a3030;
+  background: #e8b8b0;
+  color: #4a1010;
+}
+
+.nl-instances__room.is-done {
+  opacity: 0.45;
+  text-decoration: line-through;
+}
+
+.nl-instances__room.is-current {
+  box-shadow: 0 0 0 2px #6a4a18;
+  font-weight: 800;
 }
 
 @media (max-width: 520px) {
@@ -540,10 +631,6 @@
   font: 700 9px/14px Verdana, Tahoma, sans-serif;
   text-align: center;
   box-shadow: 0 1px 2px rgba(0, 0, 0, 0.35);
-}
-
-.nl-claim-dot--fomo {
-  background: #6b3a8c;
 }
 
 .nl-clan-online {

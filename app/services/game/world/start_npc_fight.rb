@@ -177,6 +177,7 @@ module Game
             participation_metadata["equipped_set_keys"] = loadout.item_keys
             participation_metadata["equipped_set_id"] = loadout.set_id
             participation_metadata["equipped_set_tier"] = loadout.set_tier
+            participation_metadata["combat_archetype"] = loadout.archetype
             participation_metadata["combat_stats"] = loadout.combat_stats
           end
 
@@ -191,9 +192,11 @@ module Game
       end
 
       def member_loadout(member)
-        return unless tile_npc.personal_instance? || member.npc_template.metadata.to_h["world_tier"].present?
-
-        tier = tile_npc.metadata.to_h["world_tier"] || member.npc_template.metadata.to_h["world_tier"] || 1
+        # Always derive set-floor combat stats for wilderness NPCs so authored
+        # soft bots cannot undercut the soft-launch gear necessity curve.
+        tier = tile_npc.metadata.to_h["world_tier"] ||
+          member.npc_template.metadata.to_h["world_tier"] ||
+          [member.level.to_i, 1].max.clamp(1, 23)
         NpcLoadout.new(npc_template: member.npc_template, world_tier: tier, rng:).call
       end
     end

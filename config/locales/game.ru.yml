@@ -618,6 +618,12 @@ ru:
       armor_pierce: "Пробитие брони"
       sets_title: "Сеты"
       sets_aria: "Активные комплекты снаряжения"
+      attack_power: "Сила атаки"
+      defense: "Защита"
+      dexterity: "Сноровка"
+      agility: "Ловкость"
+      luck: "Удача"
+      magic_power: "Сила магии"
     world:
       managed_content_changed: "Содержимое мира изменилось в управлении."
       resource_regrowth: "%{resource} через %{time}"

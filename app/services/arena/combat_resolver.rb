@@ -95,7 +95,9 @@ module Arena
     def magic_attack_power(participation)
       if participation.npc?
         stats = npc_stats(participation)
-        stats[:magic].presence&.to_i || stats[:attack].to_i
+        magic = stats[:magic_power].presence || stats[:magic].presence
+        # Mage archetype falls back to attack only when magic_power unset.
+        magic.to_i.positive? ? magic.to_i : stats[:attack].to_i
       else
         participation.character&.magic_power.to_i
       end

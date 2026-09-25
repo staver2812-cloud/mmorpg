@@ -110,6 +110,7 @@ RSpec.describe Game::Quests::Journal do
   it "shows live delivery progress from inventory" do
     complete!("veil_lure_drill")
     journal.accept!("veil_tail_delivery")
+    Game::Professions::Templates.instance_variable_set(:@craft_items_ensured, false)
     Game::Professions::Templates.ensure_craft_items!
     Game::Inventory::Manager.new(inventory: character.inventory).add_item!(
       item_template: ItemTemplate.find_by!(key: "rat_tail"),
@@ -119,5 +120,17 @@ RSpec.describe Game::Quests::Journal do
     entry = journal.present(Game::Quests::Catalog.find("veil_tail_delivery"))
     expect(entry[:progress]).to eq(1)
     expect(entry[:target]).to eq(1)
+  end
+
+  it "counts av_* farm kills toward shore kill_npc objectives" do
+    journal.accept!("veil_lure_drill")
+    quest = Game::Quests::Catalog.find("veil_lure_drill")
+    keys = Array(quest.dig("objective", "npc_keys")).map(&:to_s)
+    shore = keys.first
+    skip "no kill keys" if shore.blank?
+
+    journal.record_npc_kill!(npc_key: "av_#{shore}")
+    state = character.reload.metadata.dig("ashen_quests", "veil_lure_drill")
+    expect(state["progress"].to_i).to be >= 1
   end
 end

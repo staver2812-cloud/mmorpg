@@ -616,6 +616,12 @@ en:
       armor_pierce: "Armor pierce"
       sets_title: "Sets"
       sets_aria: "Active equipment sets"
+      attack_power: "Attack power"
+      defense: "Defense"
+      dexterity: "Dexterity"
+      agility: "Agility"
+      luck: "Luck"
+      magic_power: "Magic power"
     world:
       managed_content_changed: "Managed world content changed."
       resource_regrowth: "%{resource} in %{time}"

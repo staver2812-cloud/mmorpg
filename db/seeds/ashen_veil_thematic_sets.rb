@@ -12,7 +12,7 @@ SET_META = {
   "swamp" => {"ru" => "Топь", "focus" => "hp", "acquisition" => "drop"}
 }.freeze
 
-CATALOG_TIERS = [5, 10, 15, 20, 25, 30, 35, 40, 45, 50].freeze
+CATALOG_TIERS = Game::World::NpcLoadout::CATALOG_TIERS
 
 CORE_SLOTS = [
   {"slot" => "main_hand", "key" => "weapon-sword", "label" => "Клинок", "asset" => "weapon-sword.png"},
@@ -52,39 +52,90 @@ end
 def set_piece_stats(set_id, tier, nl_slot)
   t = tier.to_i.clamp(1, 50)
   focus = SET_META.fetch(set_id).fetch("focus")
-  # Stronger curve: T5 starter kit vs T50 endgame must feel like years of grind.
+  # Soft-release Mist curve: full-set focus primary ~ T10≈120, T20≈280, T50≈900+.
+  focus_primary = (t * 1.2).floor + (t * t / 60).floor
+  secondary = (t * 0.45).floor + (t / 6)
   stats = {
-    "strength" => ((set_id == "blood" || set_id == "judge") ? (t / 3) : (t / 5)) + (t / 20),
-    "dexterity" => ((set_id == "distortion" || set_id == "swamp") ? (t / 3) : (t / 5)) + (t / 20),
-    "vitality" => ((set_id == "swamp" || set_id == "judge") ? (t / 3) : (t / 5)) + (t / 15),
-    "intelligence" => ((set_id == "demiurge" || set_id == "distortion") ? (t / 3) : (t / 5)) + (t / 20),
-    "luck" => (t / 6)
+    "strength" => (set_id == "blood" || set_id == "judge") ? focus_primary : secondary,
+    "dexterity" => (set_id == "distortion" || set_id == "swamp") ? focus_primary : secondary,
+    "vitality" => (set_id == "swamp" || set_id == "judge") ? focus_primary : secondary,
+    "intelligence" => (set_id == "demiurge" || set_id == "distortion") ? focus_primary : secondary,
+    "luck" => (t / 3) + (t / 10)
   }
 
   case nl_slot
   when "main_hand"
-    dmg = 4 + (t * 1.15).floor
-    stats["weapon_family"] = "sword"
-    stats["damage_min"] = [2, dmg - 3].max
-    stats["damage_max"] = dmg + 2
-    stats["accuracy"] = 3 + (t / 3)
+    # Weapon damage scales strictly with tier (min/max band ~±15%).
+    mid = 10 + (t * 2.6).floor + (t * t / 70).floor
+    spread = [2, (mid * 0.15).floor].max
+    stats["weapon_family"] = (set_id == "demiurge") ? "staff" : "sword"
+    stats["damage_min"] = [1, mid - spread].max
+    stats["damage_max"] = mid + spread
+    stats["accuracy"] = 4 + (t / 2) + (t / 10)
+    stats["attack"] = 2 + (t / 2)
+    stats["strength"] = stats["strength"] + 1 + (t / 5)
     if set_id == "demiurge"
-      stats["mana"] = 10 + (t * 2)
-      stats["intelligence"] = stats["intelligence"] + 2 + (t / 3)
+      stats["mana"] = 18 + (t * 4)
+      stats["intelligence"] = stats["intelligence"] + 3 + (t / 2)
+      stats["magic_power"] = 6 + (t * 2) + (t / 3)
+      stats["magic_resist"] = 2 + (t / 5)
+    end
+    if set_id == "distortion"
+      stats["dexterity"] = stats["dexterity"] + 2 + (t / 4)
+      stats["evasion"] = 2 + (t / 3)
+      stats["luck"] = stats["luck"] + 1 + (t / 6)
     end
   when "chest", "head"
-    stats["armor_class"] = 2 + (t * 0.75).floor
-    stats["hp"] = 12 + (t * 5)
+    # Heavy plate: defense/HP (judge/blood/swamp). Distortion stays lighter.
+    heavy = %w[judge blood swamp].include?(set_id)
+    armor = if heavy
+      6 + (t * 1.8).floor + (t / 4)
+    else
+      3 + (t * 0.9).floor + (t / 8)
+    end
+    stats["armor_class"] = armor
+    stats["defense"] = (armor / 2) + (t / 5)
+    stats["hp"] = 24 + (t * 12) + (t * t / 40).floor
+    stats["vitality"] = stats["vitality"] + 1 + (t / 6)
+    if set_id == "distortion"
+      stats["evasion"] = 4 + (t / 2) + (t / 8)
+      stats["dexterity"] = stats["dexterity"] + 2 + (t / 5)
+      stats["luck"] = stats["luck"] + 1 + (t / 8)
+    end
+    if set_id == "demiurge"
+      stats["magic_power"] = 4 + (t * 1.5).floor
+      stats["magic_resist"] = 4 + (t / 3)
+      stats["intelligence"] = stats["intelligence"] + 2 + (t / 5)
+    end
   when "hands", "feet", "bracers"
-    stats["armor_class"] = [2, (t / 3)].max
-    stats["evasion"] = [2, (t / 3)].max
-    stats["dexterity"] = stats["dexterity"] + 1 + (t / 10)
+    # Light limbs: dexterity / luck / evasion (Mist light-armor answer).
+    stats["armor_class"] = [2, (t / 3)].max + (t / 12)
+    stats["evasion"] = [4, (t / 2)].max + (t / 8)
+    stats["dexterity"] = stats["dexterity"] + 3 + (t / 4)
+    stats["luck"] = stats["luck"] + 1 + (t / 6)
+    stats["accuracy"] = 2 + (t / 4) if nl_slot == "hands"
   else
-    stats[focus] = stats.fetch(focus, 0) + 2 + (t / 3)
-    stats["mana"] = 8 + (t * 2) if focus == "intelligence"
-    stats["hp"] = 15 + (t * 4) if focus == "hp"
-    stats["armor_class"] = 1 + (t / 4) if focus == "armor_class"
+    # Jewelry / belt: focus primary + magic for demiurge amulets/rings.
+    stats[focus] = stats.fetch(focus, 0) + 3 + (t / 2) + (t / 10)
+    stats["mana"] = 14 + (t * 4) if focus == "intelligence"
+    stats["hp"] = 28 + (t * 8) + (t * t / 60).floor if focus == "hp"
+    stats["armor_class"] = 2 + (t / 2) if focus == "armor_class"
+    stats["defense"] = 1 + (t / 3) if focus == "armor_class"
+    if set_id == "demiurge"
+      stats["magic_power"] = 5 + (t * 1.8).floor
+      stats["magic_resist"] = 3 + (t / 4)
+      stats["intelligence"] = stats["intelligence"] + 2 + (t / 4)
+    end
+    if set_id == "distortion"
+      stats["luck"] = stats["luck"] + 2 + (t / 5)
+      stats["evasion"] = 2 + (t / 4)
+      stats["dexterity"] = stats["dexterity"] + 2 + (t / 5)
+    end
   end
+
+  # Drop legacy intuition-style keys if any authoring leftover appears.
+  stats.delete("intuition")
+  stats.delete("intuition_bonus")
 
   stats.reject do |k, v|
     v.is_a?(Numeric) && v.to_i <= 0 && !k.to_s.start_with?("weapon", "damage")
