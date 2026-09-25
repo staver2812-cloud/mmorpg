@@ -2,8 +2,8 @@
 
 Contract metadata:
 
-- updated_at: `2026-09-10`
-- why_changed: "Require agent-performed local browser acceptance after automated checks pass for changes affecting browser-visible flows, with explicit scope, evidence, and failure handling."
+- updated_at: `2026-09-25`
+- why_changed: "Remove the Neverlands authority section. The Creator's formulas and МистВар mechanics are now the main authority."
 
 This file is the repository entry point for engineering work. It tells an agent
 what to read, which rules are mandatory, what to verify, and what to report.
@@ -13,42 +13,7 @@ it does not duplicate this workflow or define game design.
 Sections marked `[NORMATIVE]` are mandatory. Examples are proportional: apply a
 boundary only when the changed behavior needs it.
 
-## 1. [NORMATIVE] Authority and truth layers
-
-Authority is split by concern:
-
-1. System, developer, and explicit user instructions outrank repository files.
-2. Neverlands live behavior and preserved Neverlands evidence are the sole
-   game-design authority. Generic RPG conventions are never a substitute.
-3. `doc/design/**` owns captured evidence, normalized design, and MVP scope.
-4. `doc/features/**` describes verified local runtime behavior or an explicit
-   audited `NOT_IMPLEMENTED` absence.
-5. `AGENTS.md` owns engineering workflow and acceptance gates.
-6. `doc/RUBY_ON_RAILS_GUIDE.md` owns technical implementation guidance.
-7. Code, tests, schema, and gameplay configuration show current runtime state.
-
-No layer silently overrides another outside its concern. Passing code does not
-validate an invented mechanic, evidence does not prove local implementation,
-and a feature handbook must not claim behavior that code and tests do not
-provide.
-
-Start every gameplay task at `doc/DOCUMENTATION.md`, then follow:
-
-- `doc/domains/README.md` and the relevant domain page;
-- the relevant source summary and observations under `doc/design/reference/`;
-- `doc/design/gdd.md` plus applicable area/mechanic documents;
-- `doc/design/launch_mvp_plan.md` for the current delivery boundary;
-- the responsible handbook under `doc/features/`;
-- applicable sections of `doc/RUBY_ON_RAILS_GUIDE.md`.
-
-Classify mismatches explicitly:
-
-- `[IMPL]` — runtime or coverage differs from established design/contract;
-- `[DOC]` — documentation differs from verified runtime;
-- `[EVIDENCE]` — Neverlands behavior is missing or ambiguous.
-
-Fix in-scope `[IMPL]` and `[DOC]` gaps. Never invent a resolution for an
-`[EVIDENCE]` gap; observe Neverlands or ask the user.
+The Creator's formulas and МистВар mechanics are now the main authority.
 
 ## 2. [NORMATIVE] Standard engineering workflow
 
