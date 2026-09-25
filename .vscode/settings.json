@@ -1,0 +1,35 @@
+{
+  "sonarlint.pathToNodeExecutable": "",
+  "sonarlint.connectedMode.connections.sonarqube": [],
+  "sonarlint.connectedMode.connections.sonarcloud": [],
+  "sonarlint.rules": {
+    "ruby:S1192": {
+      "level": "on"
+    },
+    "ruby:S1848": {
+      "level": "on"
+    }
+  },
+  "sonarlint.disableTelemetry": true,
+  "files.exclude": {
+    "**/vendor/**": true,
+    "**/node_modules/**": true,
+    "**/tmp/**": true,
+    "**/log/**": true
+  },
+  "search.exclude": {
+    "**/vendor/**": true,
+    "**/node_modules/**": true,
+    "**/tmp/**": true,
+    "**/log/**": true
+  },
+  "sonarlint.analyzerProperties": {
+    "sonar.ruby.rubocop.reportPaths": ".rubocop.yml"
+  },
+  "files.watcherExclude": {
+    "**/vendor/**": true,
+    "**/node_modules/**": true,
+    "**/tmp/**": true,
+    "**/log/**": true
+  }
+}
