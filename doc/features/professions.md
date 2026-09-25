@@ -2,7 +2,7 @@
 title: Professions Feature
 description: Ashen sandbox workshop craft (Tar Smith) plus remaining Neverlands profession gaps.
 status: Partially Implemented
-updated: 2026-09-23
+updated: 2026-09-24
 owners: [Professions]
 template: feature-v3
 ---
@@ -11,11 +11,18 @@ template: feature-v3
 
 ## 1. Authority and scope
 
-Ashen sandbox ships a playable Tar Smith craft loop at the Pitch Forge
-(`workshop`). Gather/fish/mine yields on the Shore use `GatherYield` with a
-bounded profession-skill quantity bonus; Resource Exchange settles ore/coal at
+Ashen sandbox ships playable craft loops at Pitch Forge / Infirmary / Tavern:
+Tar Smith, Ash Healer, Ash Herbalist, **Veil Woodcutter**, and **Ash Fisher**.
+Gather/fish/mine yields on the Shore use `GatherYield` with a bounded
+profession-skill quantity bonus; Resource Exchange settles ore/coal at
 Neverlands government prices. Broader Neverlands profession counters and full
-tool-timer grids remain deeper parity, not soft-release blockers.
+Mist tool-timer grids remain deeper parity, not soft-release blockers.
+
+**Profession tool ladder (2026-09-24):** Trade Hub Supply sells tiered Ashen tools
+per family — hatchets/picks (dig), sickles (herb search), rods (fish), forge
+hammers, healer kits, herb pouches. Some top kits cost **VM**. Icons reuse
+existing Ashen item art via `enhancement_rules.icon` (placeholders until final art).
+`Game::World::ProfessionTools` picks the best owned unbroken tool for gather.
 
 - Design gap / Neverlands boundary: `doc/design/features/professions.md`
 - Related runtime: `doc/features/city.md`, `doc/features/player_inventory.md`, `doc/features/world.md`, `doc/features/shop_economy.md`
@@ -56,7 +63,7 @@ Non-goals:
 | Owner | Responsibility | Important invariant |
 |---|---|---|
 | `Game::Professions::Catalog` | YAML recipes | Stable recipe keys |
-| `Game::Professions::Craft` | Locked craft mutation | Character lock; fail closed on materials/skill/capacity |
+| `Game::Professions::Craft` | Locked craft mutation | Success roll (dexterity) before consume; fail keeps mats; gated skill gain |
 | `Game::Professions::Templates` | Craft item templates | Soft-release ids only |
 | `CityBuildingsController#craft` | HTTP boundary | Building gate + flash |
 
@@ -72,9 +79,12 @@ Config: `config/gameplay/ashen_professions.yml`. Profession skill lives in
 
 ## 5. Security, concurrency, and failure behavior
 
-Craft runs under the character lock. Missing materials, capacity overflow, or
-skill gate leave inventory unchanged. Successful craft persists inventory and
-metadata skill together. Untrusted recipe keys are validated against the catalog.
+Craft runs under the character lock. Before consume, a dexterity-scaled success
+roll (`5–95%`) may fail soft-launch style: materials and skill stay unchanged.
+Missing materials, capacity overflow, or skill gate also leave inventory
+unchanged. Successful craft persists inventory and metadata skill together;
+skill gain is always applied within 10 of recipe difficulty, otherwise chance
+falls to a 5% floor. Untrusted recipe keys are validated against the catalog.
 
 ## 6. Acceptance and tests
 
@@ -112,6 +122,7 @@ Known gaps:
 
 | Date | Change |
 |---|---|
+| 2026-09-25 | Soft-release craft: dexterity success roll before consume; fail keeps mats; gated skill gain. |
 | 2026-09-23 | GatherYield profession-skill quantity bonus; Resource Exchange gov prices for ore/coal/herbs/fish. |
 | 2026-09-22 | Pitch Forge recraft ships (`Game::Professions::Recraft`, 75 NV) for craft-set gear. |
 | 2026-09-21 | Ashen Pitch Forge repair ships (`AshenRepair`, 2 NV/point) with Inventory CTA and durability progress bars. |

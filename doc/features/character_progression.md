@@ -52,7 +52,7 @@ Supporting documents:
 | Related feature | Relationship | Ownership and handoff |
 |---|---|---|
 | `doc/features/game_shell.md` | The shell links to the player profile and renders profile/allocation surfaces in its main content context. | Character Progression owns saved allocations and profile values; Game Shell owns only shared navigation, framing, and header presentation. |
-| `doc/features/world.md` | World consumes effective Wanderer for adjacent travel and supplies the profile's current cell/room/flight label. | Character Progression owns saved skill values and profile formatting; World owns the configurable `24..30` second local fallback, exact authored durations, movement lifecycle, and `Presence#label` resolution from persisted location. |
+| `doc/features/world.md` | World consumes effective Wanderer for adjacent travel and supplies the profile's current cell/room/flight label. | Character Progression owns saved skill values and profile formatting; World owns the soft-release `12..30` second Wanderer fallback, authored durations (also Wanderer-discounted), encumbrance/watchtower factors, movement lifecycle, and `Presence#label` resolution from persisted location. |
 | `doc/features/shop_economy.md` | Shop rows read character requirements and Merchant/Healer prerequisites; Your licenses displays purchased permissions. | Character Progression owns allocations and permission display; Shop owns license grants, catalog, eligibility and atomic settlement, while Inventory owns later equipment enforcement. |
 | `doc/features/player_inventory.md` | The shared character sheet and item rows consume effective stats/skills. | Character Progression owns saved/effective values; Player Inventory owns equipment state, capacity display, and requirement enforcement. |
 | `doc/features/arena_combat.md` | Fight profiles consume effective character values and eligible completed solo NPC fights may award capped XP, whose actual amount is passed onward for concise shell feedback. | Character Progression owns values, thresholds, and grants; Arena Combat owns match resolution, the idempotent award handoff, and the persisted fact supplied to Game Shell. |
@@ -68,7 +68,7 @@ Numeric skill identities and four-band progression rates come from the captured 
 The MVP currently contains:
 
 - five primary stats with base value `1` and additive saved allocations;
-- a finite table of complete source rows `0..27` for thresholds, stat/skill/perk/NV grants, per-fight XP caps, and source NPC-group limits;
+- a finite Ashen progression table `0..50` for thresholds, denser stat/skill/perk/NV grants, per-fight XP caps, and NPC-group limits;
 - exact `Health × 5` base HP, `Knowledge × 7` base MP, and `Strength × 5 + Health × 10 + level × 10` mass formulas;
 - 29 source-backed numeric skills from `0` to `100` with combat and peace point pools;
 - five selectable binary perks with a separate point pool and captured exclusion infrastructure;
@@ -96,7 +96,7 @@ The MVP currently contains:
 - Rendering or selecting the remaining observed `Навыки` merely because their source labels are known.
 - Free respec, saved progression builds, skill trees, classes, specializations, or generic ability unlock graphs.
 - Owning equipment, combat, movement, recovery, inventory, or profession mechanics that consume progression values.
-- Group PvE XP distribution, XP loss, fame/valor awards, or levels beyond the complete row `27`.
+- Group PvE XP distribution, XP loss, fame/valor awards, or levels beyond the authored row `50`.
 - Recreating Neverlands CGI routes, frames, Russian player-facing copy, or token formats.
 
 ## 4. Player experience
@@ -130,6 +130,7 @@ Each allocation page uses the compact Neverlands player-subpage language:
 
 - character name and level;
 - the same equipment paper doll, location, and money summary as the profile left column;
+- an owner-only look picker with 10 standard Ashen portraits (`ash_01`…`ash_10`): two free changes, then `50 NV` per further change; admin/donor custom upload resizes to 128×128;
 - a visible remaining-point counter;
 - dense rows grouped by stat or captured skill category;
 - plus and minus controls for pending changes;
@@ -137,7 +138,7 @@ Each allocation page uses the compact Neverlands player-subpage language:
 - one disabled-until-changed Save button;
 - profile, Stats, Skills, Perks, and Your licenses navigation.
 
-Numeric skills render as `[NNN/100]` and show the gain for the next spend. Perks render as `Yes` or `No`. Existing owned perks remain `Yes` and do not expose a normal removal control.
+Numeric skills render as `[NNN]` (uncapped). Point spends and use-based training (`Game::Skills::UseTrainer`) both grow skills; the last rate band repeats past level 75 forever.
 
 The desktop owner profile retains the 463/5/467 composition and shared
 258/5/200 sheet. At `<=800px` its columns stack; at `<=520px` the CSS paper
@@ -223,17 +224,14 @@ The numeric registry contains 29 captured `Умения`, each with a source ID,
 
 Multiple pending spends are applied sequentially so crossing `25`, `50`, or `75` changes the rate used by later spends. The final value is capped at `100`; requested spends after the cap do not consume points. Unknown skill keys do not consume points. Equipment bonuses contribute to `passive_skill_level`.
 
-Two numeric skills have bounded downstream effects. World snapshots an exact
-authored cell duration when present; otherwise its configurable fallback uses
-effective Wanderer. Current defaults compute `30 - floor(wanderer * 6 / 100)`
-seconds with Wanderer clamped to `0..100` and duration bounded to `24..30`.
-These values come from `config/gameplay/world_rules.yml`; the linear fallback
-is a local projection of observed samples, not the complete Neverlands formula.
-Combat builds AP as base `80`, plus `10` at level `5`, another `10` at level
-`10`, and one point per effective Extra Action Points value. Persisted
-per-fight profile overrides remain authoritative for captured fights. Every
-other downstream numeric-skill effect remains unimplemented until separately
-captured.
+Two numeric skills have bounded downstream effects. World snapshots travel via
+`Game::Movement::TravelTime`: soft-release defaults are a `12..30` Wanderer
+fallback (`world_rules.yml`), Wanderer discount on authored `travel_seconds`,
+optional watchtower cut, and encumbrance slowdown. Combat builds AP as base
+`80`, plus `10` at level `5`, another `10` at level `10`, and one point per
+effective Extra Action Points value. Persisted per-fight profile overrides
+remain authoritative for captured fights. Every other downstream numeric-skill
+effect remains unimplemented until separately captured.
 
 ### 6.4 Boolean perks and deferred behavior boundary
 
@@ -330,7 +328,7 @@ and remaining gaps.
 | Record or component | Responsibility | Important contract |
 |---|---|---|
 | `Character` | Saved point pools, allocations, level, experience, and effective accessors | Point pools are non-negative; saved JSONB maps default to empty objects |
-| `Game::Progression::Catalog` | Complete source rows `0..27` | Thresholds and all grants are validated, contiguous, and never extrapolated |
+| `Game::Progression::Catalog` | Ashen rows `0..50` | Thresholds and all grants are validated, contiguous, and never extrapolated |
 | `LevelUpService` | Award XP and table-authored level grants | Locks/reloads Character; grants pools and NV without refilling vitals |
 | `StatAllocationService` | Spend primary-stat points and recalculate base vitals | Locks/reloads Character and preserves current HP/MP except max clamp |
 | `SkillAllocationService` | Spend combat/peace points using tier rates | Locks/reloads Character and charges only actual pre-cap spends |
@@ -346,7 +344,7 @@ and remaining gaps.
 
 ### 7.1 Source of truth
 
-The `characters` table is authoritative for character state. Point counters and JSONB maps determine saved allocation; `config/gameplay/character_progression.yml` is authoritative for complete level thresholds/grants; the NV wallet/ledger is authoritative for level currency grants. Registries define valid content identity; they do not grant ownership or points. Profile values are rebuilt from the saved character, registries, exact derived formulas, and supported equipment modifiers on every request.
+The `characters` table is authoritative for character state. Point counters and JSONB maps determine saved allocation; `Game::Progression::Curves` is authoritative for cumulative XP thresholds (YAML `experience_to_next_level` remains for docs/compat); `config/gameplay/character_progression.yml` remains authoritative for complete level grants (stat/perk/NV/caps); the NV wallet/ledger is authoritative for level currency grants. Registries define valid content identity; they do not grant ownership or points. Profile values are rebuilt from the saved character, registries, exact derived formulas, and supported equipment modifiers on every request.
 
 Missing JSON keys mean zero numeric skill, no stat addition, or unowned perk. An absent/unknown perk key is not rendered through the registry-backed profile payload.
 
@@ -470,7 +468,7 @@ page composition and the shared 258/5/200 character sheet, including the
 the increases banner, and the combat chips. `app/assets/stylesheets/player.css`
 owns the profile tab band, the allocation panels, and the stat/skill/perk rows.
 The reusable markup lives in
-`app/views/shared/_neverlands_character_sheet.html.erb`, which Profile and
+`app/views/shared/_ashen_character_sheet.html.erb`, which Profile and
 Inventory consume without sharing their domain actions. Shared controls and
 shell styling remain owned by the ordered `tokens.css`, `primitives.css`, and
 `shell.css` modules; no Tailwind layer is introduced. `character_sheet.css`
@@ -560,7 +558,7 @@ Arbitrary saved browser fields, translated labels, or profile URLs do not grant 
 - Profile HTML and JSON expose numeric skills and owned launch-registry perks without private account data.
 - Browser preview/reset behavior never mutates saved state before PATCH succeeds.
 - Saved progression survives logout/login; pending browser preview does not.
-- Effective Wanderer is available to World, which owns and tests exact authored cell durations and the configurable local movement fallback, currently bounded to `24..30` seconds.
+- Effective Wanderer is available to World, which owns and tests exact authored cell durations and the soft-release `12..30` movement fallback (plus authored Wanderer discount, encumbrance, and watchtower).
 - Effective Extra Action Points contributes one AP per point to a new shared
   combat profile after the captured level-threshold base.
 - Owner and public profile surfaces preserve their desktop source geometry and
@@ -654,8 +652,8 @@ There is no dedicated view spec for each allocation partial; request and system 
 - `app/views/players/show.html.erb`
 - `app/views/shared/_equipment_paperdoll.html.erb`
 - `app/views/shared/_equipment_paperdoll_slot.html.erb`
-- `app/views/shared/_neverlands_character_sheet.html.erb`
-- `app/views/shared/_neverlands_profile_navigation.html.erb`
+- `app/views/shared/_ashen_character_sheet.html.erb`
+- `app/views/shared/_ashen_profile_navigation.html.erb`
 - `app/views/characters/stats.html.erb`
 - `app/views/characters/_stat_allocation.html.erb`
 - `app/views/characters/skills.html.erb`
@@ -770,3 +768,7 @@ Before extending Character Progression:
 | 2026-09-13 | Character/licenses page titles use `game.profile.*_title`; license kinds use `game.licenses.kinds.*`. |
 | 2026-09-13 | Paper-doll empty slots, alignment labels, profile combat/unknown location, sheet aria, and city/village Shop presence use `game.equipment.slots.*` / `game.buildings.law_alignment.*` / `game.profile.*` / `game.sheet.aria_label` / `game.world.shop_presence` i18n. |
 | 2026-08-26 | Added the exact `80 + level thresholds + Extra Action Points` combat-profile effect and source perk `15` Careful Fighter with half-probability equipment wear. |
+| 2026-09-18 | Phase 6 power rebalance: progression table extended to `0..50` with denser stat/skill grants, HP/MP `×8`, stronger level combat contribution, and Super Admin resync through honest level inject. |
+| 2026-09-25 | Soft-release XP: `Game::Progression::Curves` owns cumulative thresholds; YAML keeps grants/caps. |
+| 2026-09-20 | Formula audit restored Neverlands wiki vitals/mass (`Health×5`, `Knowledge×7`, mass `5/10/10`), AP bonuses only at levels 5 and 10, and stopped mapping equipment attack/armor/hp into primary stats (double-count). |
+| 2026-09-19 | Hybrid uncapped skills: use-based trainer from combat/chat/travel + level points; display drops `/100` ceiling. |

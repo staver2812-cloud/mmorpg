@@ -419,11 +419,17 @@ attack/block key is present in the participant's profile and that posted block
 coverage equals the canonical catalog coverage, so client-authored zones or a
 different shield tier cannot change AP or protection.
 
-`NpcExperienceAwarder` uses one configured NPC reward or an explicit
-encounter-level total. Multi-bot pools without an explicit total use average
-template XP × count with a small efficiency bonus (wiki average-bot strength).
-Party shares split by `damage_dealt` (equal fallback). Per-character fight XP
-caps still apply. `EquipmentWearResolver` rolls each
+`NpcExperienceAwarder` uses an explicit encounter-level total when present.
+Otherwise each defeated NPC contributes Ashen level-delta XP:
+`(monster_level × 15) × max(1.0 − |Δlevel| × 0.1, 0.1)`. Party shares split by
+`damage_dealt` (equal fallback). Per-character fight XP caps still apply.
+
+`NpcLootAwarder` always credits soft-release formula NV once per kill
+(`monster_level × 3 + rand(1..(monster_level × 2))`), scales table drop chances
+by luck (`× (1 + luck × 0.01)` on top of observation/pet), and when the table
+has no rarity tags may roll a one-item rarity fallback (common/uncommon/rare)
+from `config/gameplay/ashen_loot_rarity.yml`. At most one gear piece per kill.
+`EquipmentWearResolver` rolls each
 equipped durable item at basis-point precision and applies Careful Fighter's
 half chance, including `0.5%` after an arena defeat.
 
@@ -494,9 +500,9 @@ set dump).
 | `CombatLogEntry` | Ordered durable event | Source for active and public logs |
 | `Arena::CombatProfile` | Persisted AP/cost/selector snapshot | Explicit captured values override exact AP derivation; reload cannot drift an active fight |
 | `Game::Combat::ActionCatalog` | Attack and exact normal/shield/magic selector identities | Server owns costs, row placement, coverage, and profile availability |
-| `Arena::NpcExperienceAwarder` | Solo / multi-NPC / party XP | Explicit encounter total, or average-bot pool; damage-share party split; level cap |
+| `Arena::NpcExperienceAwarder` | Solo / multi-NPC / party XP | Explicit encounter total, or Curves level-delta sum; damage-share party split; level cap |
 | `Arena::EquipmentWearResolver` | Independent post-fight item wear | Exact result chances, one point maximum, Careful Fighter half chance, once-only finalization |
-| `Arena::NpcLootAwarder` | One defeated NPC's typed loot resolution | Participation locks and `loot_resolution` marker make reward persistence retry-safe |
+| `Arena::NpcLootAwarder` | One defeated NPC's typed loot resolution | Formula NV once; luck-scaled chances; rarity fallback; `loot_resolution` marker |
 | `Game::LootEntry` | Shared typed-loot probability normalization | Chance is explicit and valid as `0..1` fraction or `0..100` percent |
 | `Game::World::EncounterRosterSelector` | Fixed or captured-sample wilderness side selection | Server RNG selects one complete validated sample; unknown templates/parameters fail before match creation |
 | `Game::Inventory::Manager` | Atomic item stack/mass addition | Inventory lock plus nested savepoint rolls back every unit when the complete quantity cannot fit |
@@ -1184,6 +1190,7 @@ supplies only authoritative completion/loot facts and stable source keys.
 | 2026-09-14 | Coarse-pointer public fight-log pagination/mode links also target ~44×44 CSS px. |
 | 2026-09-14 | Arena statistics tab and empty recent-fights recover to Duels/City; empty public fight logs link Arena/City. |
 | 2026-09-24 | Soft-launch: PvE (bots/NPC/dungeons) applies **light only** — never medium/heavy/combat. Match `trauma_percent` is legacy display; fight UI shows soft PvE label. HUD injury is a red ✕ right of vitals with hover tip; locator shows ✕ for injured players. RedisConfig/Cable/cache fall back to `REDIS_URL`. |
+| 2026-09-25 | Soft-release economy: Curves XP thresholds; level-delta monster XP; formula NV + luck drop mult + rarity fallback loot. |
 | 2026-09-25 | Soft-launch integrity: arena/shell use `effective_max_hp/mp`; `sync_persisted_base_vitals!` on shell boot; auto-ack stale finished fights (>6h); spawn missing positions; assign_base_vitals no longer clamps below equipment ceiling. |
 | 2026-09-25 | Soft-launch balance: early PvE XP thresholds/caps tightened; shore NPC HP/dmg up; NpcLoadout floor harder; always apply loadout in StartNpcFight; undergear (no chest) vs NPC: −18% outgoing / +45% incoming; starter kit v7 grants equipped `ashen_starter_vest`. Pattern: Mist/Legend early shop armor necessity. |
 | 2026-09-25 | Logic integrity: HospitalRest clears `medium`; starter tools/hooks via `add_essential!`; gather skip fails without timer; dungeon L0 difficulty gate; stale fight ack calls DefeatRecovery; bloody PvP → `combat` trauma; shop buy blocks unmet equipment requirements. |

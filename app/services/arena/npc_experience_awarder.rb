@@ -1,10 +1,10 @@
 # frozen_string_literal: true
 
 module Arena
-  # Awards NPC experience for PvE victories. Solo fights use template xp_reward
-  # (or explicit encounter_experience_reward). Multi-bot pools follow wiki
-  # «средний уровень ботов» — average template XP × count with a small group
-  # efficiency bonus. Party shares split by damage dealt (equal fallback).
+  # Awards NPC experience for PvE victories. Soft-release Ashen formula:
+  #   Base_Monster_XP = (monster_level * 15) * max(1.0 - |Δlevel| * 0.1, 0.1)
+  # Multi-bot pools sum per-NPC formula values; party shares split by damage
+  # dealt (equal fallback). Per-character fight XP caps still apply.
   class NpcExperienceAwarder
     Result = Data.define(:character_id, :experience_awarded, :levels_gained, :skipped_reason, :party_awards)
 
@@ -19,15 +19,18 @@ module Arena
       winners = match.arena_participations.players.where(team: winning_team).includes(:character).to_a
       return skipped("no_winners") if winners.empty?
 
-      pool = experience_pool
-      return skipped("no_configured_experience") unless pool.positive?
+      defeated = defeated_enemy_npcs
+      return skipped("no_configured_experience") if defeated.empty? && explicit_encounter_experience.blank?
 
-      shares = damage_shares(winners)
       party_awards = []
       primary = nil
 
       winners.each do |participation|
         character = participation.character
+        pool = experience_pool_for(character)
+        next unless pool.positive?
+
+        shares = damage_shares(winners)
         raw = (pool * shares.fetch(participation.id)).round
         cap = Game::Progression::Catalog.fight_experience_cap(character.level)
         awarded = [raw, cap].min
@@ -58,19 +61,24 @@ module Arena
 
     attr_reader :match, :winning_team
 
-    def experience_pool
+    def experience_pool_for(character)
       explicit = explicit_encounter_experience
       return explicit if explicit
 
-      npcs = defeated_enemy_npcs
-      rewards = npcs.filter_map { |p| p.npc_template&.xp_reward.to_i }.select(&:positive?)
-      return 0 if rewards.empty?
-      return rewards.first if rewards.one?
+      defeated_enemy_npcs.sum do |participation|
+        Game::Progression::Curves.monster_xp(
+          monster_level: monster_level_of(participation),
+          player_level: character.level
+        )
+      end
+    end
 
-      # Wiki: group bot fights use average bot strength, not a raw sum of outliers.
-      average = rewards.sum.to_f / rewards.size
-      efficiency = 1.0 + ((rewards.size - 1) * 0.05)
-      (average * rewards.size * efficiency).round
+    def monster_level_of(participation)
+      template = participation.npc_template
+      level = template&.level.to_i
+      level = participation.metadata.to_h["level"].to_i if level < 1
+      level = template&.metadata.to_h["level"].to_i if level < 1
+      [level, 1].max
     end
 
     def damage_shares(winners)

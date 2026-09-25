@@ -1669,6 +1669,7 @@ en:
       wrong_building: "That recipe belongs to another building."
       craft_cta: "Craft"
       crafted: "Crafted: %{name}. %{profession} skill: %{skill}."
+      craft_failed: "Craft failed: %{name}. Materials kept — try again."
       recraft_title: "Recraft"
       recraft_lead: "Reroll craft-set bonuses for %{cost} NV."
       recraft_cta: "Recraft"

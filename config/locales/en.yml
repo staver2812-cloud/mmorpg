@@ -55,6 +55,7 @@ en:
     unsupported_fight_return_context: "Unsupported fight return context."
     unknown_chat_scope: "Unknown chat scope: %{scope}"
     unknown_injury_severity: "unknown severity"
+    temporary_glitch: "Something went wrong — the action was cancelled. Please try again."
     unsupported_money_currency: "unsupported money currency"
     item_name_required: "item name is required"
     money_amount_positive: "money amount must be a positive integer"

@@ -19,10 +19,67 @@ class ApplicationController < ActionController::Base
   stale_when_importmap_changes
 
   rescue_from Pundit::NotAuthorizedError, with: :user_not_authorized
+  # Soft-launch crash net: one global handler — do NOT wrap each action in begin/rescue
+  # (duplicates this net, hides bugs in test/dev, and can swallow mid-transaction errors).
+  rescue_from ActiveRecord::RecordNotFound, with: :soft_launch_safety_net
+  rescue_from StandardError, with: :soft_launch_safety_net
 
   helper_method :current_device_id
 
   protected
+
+  def soft_launch_safety_net(error)
+    raise error if Rails.env.local? || Rails.env.test?
+    raise error if manage_namespace?
+    raise error if passthrough_error?(error)
+
+    Rails.logger.error(
+      "[soft_launch_safety] #{error.class}: #{error.message}\n" \
+      "#{Array(error.backtrace).first(15).join("\n")}"
+    )
+    begin
+      Rails.error.report(error)
+    rescue StandardError
+      nil
+    end
+
+    alert = I18n.t("errors.temporary_glitch")
+    # Never redirect world→world: a raise in WorldController#show would loop.
+    # Player routes have no characters#index — inventory is a safe alternate shell.
+    recovery_path =
+      if request.path.to_s.start_with?("/world")
+        inventory_path
+      else
+        world_path
+      end
+
+    respond_to do |format|
+      format.html do
+        redirect_to(recovery_path, alert:, status: :see_other)
+      end
+      format.turbo_stream do
+        flash[:alert] = alert
+        redirect_to recovery_path, status: :see_other
+      end
+      format.json { render json: {error: alert}, status: :unprocessable_entity }
+      format.any { head :unprocessable_entity }
+    end
+  end
+
+  def passthrough_error?(error)
+    # RecordNotFound is soft-handled above in production soft-launch.
+    error.is_a?(ActionController::RoutingError) ||
+      error.is_a?(AbstractController::ActionNotFound) ||
+      error.is_a?(ActionController::UnknownFormat) ||
+      error.is_a?(ActionController::InvalidAuthenticityToken) ||
+      error.is_a?(ActionController::BadRequest) ||
+      error.is_a?(ActionController::ParameterMissing) ||
+      error.is_a?(Pundit::NotAuthorizedError)
+  end
+
+  def manage_namespace?
+    controller_path.to_s.start_with?("manage/")
+  end
 
   def switch_locale(&action)
     locale = params[:locale].presence || session[:locale].presence || cookies[:locale].presence || I18n.default_locale

@@ -117,6 +117,13 @@ module Arena
       failures = []
       item_awarded = false
 
+      begin
+        formula_nv = award_formula_nv!(entry_index: -1)
+        awards << formula_nv if formula_nv
+      rescue InvalidEntryError => e
+        failures << Failure.new(entry_index: -1, message: e.message)
+      end
+
       Array(npc_participation.npc_template.loot_table).each_with_index do |raw_entry, entry_index|
         loot_entry = Game::LootEntry.new(raw_entry)
         entry = loot_entry.attributes
@@ -136,11 +143,77 @@ module Arena
         failures << Failure.new(entry_index:, message: e.message)
       end
 
+      unless item_awarded || Game::Loot::RarityFallback.table_has_rarity_tags?(npc_participation.npc_template.loot_table)
+        rarity_award = roll_rarity_fallback!(entry_index: -2)
+        if rarity_award
+          awards << rarity_award
+          item_awarded = true
+        end
+      end
+
       record_player_awards!(awards)
       publish_awards!(awards)
+      publish_empty_loot! if awards.empty? && failures.empty?
       record_resolution!(awards, failures)
 
       Result.new(awards:, failures:, already_processed: false)
+    end
+
+    # Soft-release kill purse: always credit NV once per NPC resolution.
+    # nv = monster_level * 3 + rand(1..(monster_level * 2).clamp(1, 200))
+    def award_formula_nv!(entry_index:)
+      monster = monster_level
+      hi = (monster * 2).clamp(1, 200)
+      bonus = Integer(rng.rand(1..hi), exception: false) || 1
+      amount = (monster * 3) + [bonus, 1].max
+      award_currency(
+        {kind: "currency", currency: "NV", amount:, chance: 1.0},
+        entry_index
+      )
+    end
+
+    def roll_rarity_fallback!(entry_index:)
+      Game::Loot::RarityFallback::CHANCES.each do |rarity, base_percent|
+        chance = base_percent * luck_multiplier
+        next unless rng.rand < (chance / 100.0)
+
+        keys = Array(Game::Loot::RarityFallback.pools[rarity]).map(&:to_s).reject(&:blank?)
+        next if keys.empty?
+
+        Game::Professions::Templates.ensure_craft_items!
+        chosen = keys.fetch(rng.rand(keys.length))
+        return award_item(
+          {kind: "item", item_key: chosen, quantity: 1, chance: 1.0, rarity:},
+          entry_index
+        )
+      rescue Game::Inventory::Manager::CapacityExceededError, InvalidEntryError
+        next
+      end
+      nil
+    end
+
+    def monster_level
+      template = npc_participation.npc_template
+      level = template&.level.to_i
+      level = npc_participation.metadata.to_h["level"].to_i if level < 1
+      level = template&.metadata.to_h["level"].to_i if level < 1
+      [level, 1].max
+    end
+
+    def publish_empty_loot!
+      recipient = character.user
+      return unless recipient
+
+      event_publisher.system_information!(
+        recipient:,
+        body: I18n.t("game.events.loot_empty"),
+        event_key: "loot.none.match-#{match.id}.npc-#{npc_participation.id}",
+        payload: {
+          "character_id" => character.id,
+          "arena_match_id" => match.id,
+          "npc_participation_id" => npc_participation.id
+        }
+      )
     end
 
     def roll_succeeds?(loot_entry)
@@ -169,7 +242,14 @@ module Arena
         character.passive_skill_level(:observation).to_i
       end
       observation_mult = observation_multiplier(observation)
-      (base * observation_mult).clamp(0.1, 5.0)
+      pet_mult = Game::Pets::HuntAssist.loot_multiplier(character)
+      # Soft-release luck: Final = Base * (1 + luck * 0.01) on top of observation/pet.
+      (base * observation_mult * pet_mult * luck_multiplier).clamp(0.1, 5.0)
+    end
+
+    def luck_multiplier
+      luck = character.stats.get(:luck).to_i
+      1.0 + (luck * 0.01)
     end
 
     def observation_multiplier(observation)

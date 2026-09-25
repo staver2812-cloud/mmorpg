@@ -26,6 +26,7 @@ ru:
     unsupported_fight_return_context: "неподдерживаемый контекст возврата из боя"
     unknown_chat_scope: "неизвестный scope чата: %{scope}"
     unknown_injury_severity: "неизвестная тяжесть травмы"
+    temporary_glitch: "Что-то пошло не так, действие отменено. Пожалуйста, повторите попытку."
     unsupported_money_currency: "неподдерживаемая валюта денег"
     item_name_required: "нужно имя предмета"
     money_amount_positive: "сумма денег должна быть положительным целым"

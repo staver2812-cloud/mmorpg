@@ -23,17 +23,17 @@ RSpec.describe Arena::NpcExperienceAwarder do
     expect(winner.reload.experience).to eq(35)
   end
 
-  it "awards multi-NPC pools from average bot XP with a small efficiency bonus" do
+  it "sums Ashen level-delta XP across defeated NPCs and applies the fight cap" do
     2.times do |index|
-      npc = create(:npc_template, npc_key: "pack_#{index}", metadata: {"xp_reward" => 40})
+      npc = create(:npc_template, level: 10, npc_key: "pack_#{index}", metadata: {})
       create(:arena_participation, :npc, arena_match: match, npc_template: npc, team: "b", result: :defeat)
     end
 
     result = described_class.new(match:, winning_team: "a").call
 
-    # average 40 * 2 * 1.05 = 84
-    expect(result).to have_attributes(experience_awarded: 84, skipped_reason: nil)
-    expect(winner.reload.experience).to eq(84)
+    # 2 × (10*15) = 300, fight_experience_cap(10) = 292
+    expect(result).to have_attributes(experience_awarded: 292, skipped_reason: nil)
+    expect(winner.reload.experience).to eq(292)
   end
 
   it "splits group XP by damage dealt among winning players" do
@@ -41,15 +41,16 @@ RSpec.describe Arena::NpcExperienceAwarder do
     create(:arena_participation, arena_match: match, character: teammate, user: teammate.user, team: "a", result: :victory,
       metadata: {"damage_dealt" => 30})
     match.arena_participations.players.find_by(character: winner).update!(metadata: {"damage_dealt" => 70})
-    npc = create(:npc_template, metadata: {"xp_reward" => 100})
+    npc = create(:npc_template, level: 10, metadata: {})
     create(:arena_participation, :npc, arena_match: match, npc_template: npc, team: "b", result: :defeat)
 
     result = described_class.new(match:, winning_team: "a").call
 
     expect(result.skipped_reason).to be_nil
     expect(result.party_awards.size).to eq(2)
-    expect(winner.reload.experience).to eq(70)
-    expect(teammate.reload.experience).to eq(30)
+    # pool 150 × 0.7 / 0.3
+    expect(winner.reload.experience).to eq(105)
+    expect(teammate.reload.experience).to eq(45)
   end
 
   it "awards nothing for a draw" do
@@ -63,6 +64,6 @@ RSpec.describe Arena::NpcExperienceAwarder do
     result = described_class.new(match:, winning_team: "a").call
 
     expect(result.skipped_reason).to be_nil
-    expect(result.experience_awarded).to be_positive
+    expect(result.experience_awarded).to eq(2)
   end
 end
