@@ -1,0 +1,34 @@
+{
+  "files.exclude": {
+    "**/vendor": true,
+    "**/node_modules": true,
+    "**/tmp": true,
+    "**/log": true
+  },
+  "files.watcherExclude": {
+    "**/vendor/**": true,
+    "**/node_modules/**": true,
+    "**/tmp/**": true,
+    "**/log/**": true
+  },
+  "search.exclude": {
+    "**/vendor": true,
+    "**/node_modules": true,
+    "**/tmp": true,
+    "**/log": true
+  },
+  "sonarlint.pathToNodeExecutable": "",
+  "sonarlint.connectedMode.project": {
+    "projectKey": ""
+  },
+  "sonarlint.rules": {
+    "ruby:S1192": {
+      "level": "on"
+    },
+    "ruby:S1066": {
+      "level": "on"
+    }
+  },
+  "sonarlint.output.showAnalyzerLogs": true,
+  "sonarlint.trace.server": "verbose"
+}
