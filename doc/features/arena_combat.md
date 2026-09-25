@@ -427,16 +427,20 @@ caps still apply. `EquipmentWearResolver` rolls each
 equipped durable item at basis-point precision and applies Careful Fighter's
 half chance, including `0.5%` after an arena defeat.
 
-Soft-release hit/crit/dodge/block/damage coefficients live in
+Soft-release hit/block coefficients live in
 `config/gameplay/combat_resolution.yml` and are applied by
-`Arena::CombatResolver`: hit chance from dexterity/accuracy vs agility/evasion,
-dodge from agility/evasion/luck vs attacker accuracy, crit from table base + luck
-+ equipment crit (not the UI `Character#critical_chance` composite) minus defender
-luck/fortitude (×2 damage), block from defense×0.15/agility vs attacker accuracy
-when the selected block covers the zone. Physical damage uses `attack_power` with
-armor pierce; mana/elemental attacks use `magic_power` (Knowledge×2) with a
-reduced physical-armor factor and elemental resistance percentages. Confirmed
-hits never resolve below `min_damage: 1`. Fight-finished system chat hides the XP
+`Arena::CombatResolver`. Soft-release damage core is authored in
+`CombatResolver` constants:
+evasion `(evasion×1.5 − accuracy×0.4).clamp(5,70)`,
+crit `(luck×1.8 + dexterity×0.3).clamp(5,75)` (not the UI
+`Character#critical_chance` composite),
+`base_hit` random in `[attack_power×0.6, attack_power×1.3]` then action/body
+multipliers, crit ×2 before armor, then `max(final − defense, 1)`.
+Hit chance still uses dexterity/accuracy vs agility/evasion from YAML; block
+uses defense×0.15/agility vs attacker accuracy when the selected block covers
+the zone. Mana/elemental attacks use `magic_power` with a reduced physical-armor
+factor and elemental resistance percentages. Confirmed hits never resolve below
+`min_damage: 1`. Fight-finished system chat hides the XP
 suffix when awarded XP is 0 (loss/draw). Equipment flat `attack` / `armor` /
 `magic_power` / `hp` modifiers are combat outputs only and must not be aliased
 into primary Strength/Health/Knowledge (that previously double-counted attack
@@ -661,7 +665,8 @@ loot persists as a wallet balance plus `CurrencyTransaction`, and the NPC
 participation persists its loot-resolution marker. Shell-owned fight/item/NV
 `GameEvent` rows also persist for recent chat-history reloads. A character's `in_combat` flag allows the
 authenticated resume flow to return to an active or unfinished match. Arena
-matches return to Arena after Finish. Wilderness matches retain only a
+hall matches return to the same `arena_room` after Finish (lobby only when the
+match has no room). Wilderness matches retain only a
 server-authored logical return context and fall back to World if it is invalid.
 
 Character metadata separately persists the selected `arena_room` id. Entry and
@@ -1178,6 +1183,11 @@ supplies only authoritative completion/loot facts and stable source keys.
 | 2026-09-14 | Coarse-pointer Arena tabs/buttons and fight selects target ~44×44 CSS px (`UI-ADAPT-005`). |
 | 2026-09-14 | Coarse-pointer public fight-log pagination/mode links also target ~44×44 CSS px. |
 | 2026-09-14 | Arena statistics tab and empty recent-fights recover to Duels/City; empty public fight logs link Arena/City. |
+| 2026-09-24 | Soft-launch: PvE (bots/NPC/dungeons) applies **light only** — never medium/heavy/combat. Match `trauma_percent` is legacy display; fight UI shows soft PvE label. HUD injury is a red ✕ right of vitals with hover tip; locator shows ✕ for injured players. RedisConfig/Cable/cache fall back to `REDIS_URL`. |
+| 2026-09-25 | Soft-launch integrity: arena/shell use `effective_max_hp/mp`; `sync_persisted_base_vitals!` on shell boot; auto-ack stale finished fights (>6h); spawn missing positions; assign_base_vitals no longer clamps below equipment ceiling. |
+| 2026-09-25 | Soft-launch balance: early PvE XP thresholds/caps tightened; shore NPC HP/dmg up; NpcLoadout floor harder; always apply loadout in StartNpcFight; undergear (no chest) vs NPC: −18% outgoing / +45% incoming; starter kit v7 grants equipped `ashen_starter_vest`. Pattern: Mist/Legend early shop armor necessity. |
+| 2026-09-25 | Logic integrity: HospitalRest clears `medium`; starter tools/hooks via `add_essential!`; gather skip fails without timer; dungeon L0 difficulty gate; stale fight ack calls DefeatRecovery; bloody PvP → `combat` trauma; shop buy blocks unmet equipment requirements. |
+| 2026-09-24 | Soft-launch: PvE (bots/NPC/dungeons) applies **light only** — never medium/heavy/combat. Match `trauma_percent` is legacy display; fight UI shows soft PvE label. HUD injury is a red ✕ right of vitals with hover tip; locator shows ✕ for injured players. RedisConfig/Cable/cache fall back to `REDIS_URL`. |
 | 2026-09-18 | Phase 4: PvP trauma owned by assault scrolls (Peaceful/Normal/Bloody); Bloody guarantees heavy on loss; PvE defeat rolls light/medium only; Protection scroll joins live fights as helper A/B; Character inventory scrolls panel for buy/use. |
 | 2026-09-18 | Fight chrome polish: removed disabled Inventory/Mercenary stubs; larger body-part selects and Turn CTA; centered match page. |
 | 2026-09-17 | Ashen grinding rewrite: personal instances (no shared respawn), level-based aggro packs (`AggroPackSize`), set-equipped bot stats (`NpcLoadout`), scarce single `set_piece` loot, AFK 5-minute random-location ambush with off-cell personal fights, character-sheet set hints. |

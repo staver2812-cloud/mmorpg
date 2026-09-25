@@ -1024,11 +1024,14 @@ module Arena
     end
 
     def calculate_base_damage(character)
-      character.attack_power + rand(1..5)
+      # Prefer CombatResolver for live fights; this helper mirrors base_hit mid-band.
+      power = [character.attack_power.to_f, 1.0].max
+      ((power * Arena::CombatResolver::BASE_HIT_MIN_FACTOR) +
+        (power * Arena::CombatResolver::BASE_HIT_MAX_FACTOR)) / 2.0
     end
 
     def calculate_defense(character)
-      character.defense
+      character.defense.to_i
     end
 
     def resolve_physical_attack(attacker_participation:, defender_participation:, action_key:, body_part:, block: nil)
@@ -1168,6 +1171,7 @@ module Arena
       record_fight_record!(winning_team)
       record_solo_npc_victory!(winning_team) if npc_fight?
       advance_dungeon_pack!(winning_team) if npc_fight?
+      advance_catalog_instance!(winning_team) if npc_fight?
       Game::World::FortressSiegeBattle.record_victory!(match:, winning_team:)
 
       if xp_result&.party_awards.present?
@@ -1287,6 +1291,7 @@ module Arena
         Game::Activity::Tracker.new(character: winner).record!(kind: "kill_npc", amount: 1, meta: {"npc_key" => npc_key})
       end
       Game::Activity::Tracker.new(character: winner).record!(kind: "arena_fight", amount: 1)
+      Game::Pets::HuntAssist.after_victory!(winner)
       family = winner.equipment_weapon_family
       Game::Skills::UseTrainer.new(character: winner).train_from_combat_hit!(weapon_family: family)
     end
@@ -1309,6 +1314,43 @@ module Arena
           pack_key:
         )
       end
+    end
+
+    def advance_catalog_instance!(winning_team)
+      return if winning_team.blank?
+
+      meta = match.metadata.to_h
+      return unless meta["catalog_run"]
+      return unless meta["instance_kind"].to_s.in?(%w[dungeon raid])
+
+      winners = match.arena_participations.players.where(team: winning_team).includes(:character).to_a
+      return unless winners.one?
+
+      character = winners.first.character
+      catalog = if meta["instance_kind"].to_s == "raid"
+        Array(Game::Catalog::AshenVeilFiles.raids["raids"]).find { |row| row["id"].to_s == meta["instance_id"].to_s }
+      else
+        Array(Game::Catalog::AshenVeilFiles.dungeons["dungeons"]).find { |row| row["id"].to_s == meta["instance_id"].to_s }
+      end
+
+      advance = Game::Instances::CatalogProgress.advance_after_victory!(
+        character:,
+        kind: meta["instance_kind"],
+        id: meta["instance_id"],
+        rooms_total: meta["rooms_total"].to_i,
+        catalog:
+      )
+      match.update!(
+        metadata: meta.merge(
+          "catalog_advance" => {
+            "cleared" => advance.cleared,
+            "next_room" => advance.next_room,
+            "status" => advance.status,
+            "message" => advance.message
+          },
+          "continue_after_win" => !advance.cleared
+        )
+      )
     end
 
     def log_entry(entry_type, actor, description)
