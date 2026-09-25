@@ -62,28 +62,33 @@ module Arena
       return outcome(:dodge, action_key:, body_part:, hit:, dodge:) if dodge[:dodged]
 
       block_result_data = {}
+      block_success = false
       if block_covers?(block, body_part)
         block_result_data = block_result(attacker_participation, defender_participation, block, body_part)
-        if block_result_data[:blocked]
-          return outcome(
-            :blocked,
-            action_key:,
-            body_part:,
-            hit:,
-            dodge:,
-            block: block.merge(
-              "attempted" => true,
-              "blocked" => true,
-              "damage_reduction" => 1.0,
-              "roll" => block_result_data[:roll],
-              "chance" => block_result_data[:chance]
-            )
-          )
-        end
+        block_success = block_result_data[:blocked]
       end
 
       critical = critical_result(attacker_participation, defender_participation, action_key, body_part)
-      damage = damage_amount(attacker_participation, defender_participation, action_key, body_part, critical:)
+      damage = damage_amount(attacker_participation, defender_participation, action_key, body_part, critical:, block_success:)
+
+      if block_success
+        return outcome(
+          :blocked,
+          action_key:,
+          body_part:,
+          hit:,
+          dodge:,
+          block: block.merge(
+            "attempted" => true,
+            "blocked" => true,
+            "damage_reduction" => 0.7,
+            "roll" => block_result_data[:roll],
+            "chance" => block_result_data[:chance]
+          ),
+          critical:,
+          damage:
+        )
+      end
 
       block_data = block_result_data.present? ? block.merge(
         "attempted" => true,
@@ -154,59 +159,105 @@ module Arena
     end
 
     def dodge_result(attacker, defender, action_key, body_part)
-      chance = BASE_DODGE_CHANCE
-      chance += stat(defender, :agility) * 0.4
-      chance += stat(defender, :evasion) * 0.3
-      chance += stat(defender, :luck) * 0.1
+      # New evasion formula:
+      # evasion_modifier = (defender.agility * 1.5) / (attacker.agility + 1.0)
+      # evasion_chance = (evasion_modifier * 12) - (attacker.luck * 0.3)
+      # Clamped to 5-70%
+      defender_agility = stat(defender, :agility).to_f
+      attacker_agility = stat(attacker, :agility).to_f
+      attacker_luck = stat(attacker, :luck).to_f
+
+      evasion_modifier = (defender_agility * 1.5) / (attacker_agility + 1.0)
+      chance = (evasion_modifier * 12) - (attacker_luck * 0.3)
       chance += BODY_PART_DODGE_MODIFIERS.fetch(body_part, 0)
-      chance -= stat(attacker, :dexterity) * 0.15
-      chance -= stat(attacker, :accuracy) * 0.25
       chance -= 10 if action_key == "aimed"
-      chance = chance.clamp(0.0, 40.0)
+      chance = chance.clamp(5.0, 70.0)
 
       roll = rng.rand(100)
       {dodged: roll < chance, roll:, chance: chance.round(1)}
     end
 
     def critical_result(attacker, defender, action_key, body_part)
-      chance = BASE_CRIT_CHANCE
-      chance += stat(attacker, :luck) * 0.3
-      chance += stat(attacker, :critical_chance)
+      # New critical formula:
+      # crit_modifier = (attacker.intelligence * 1.5) / (defender.intelligence + 1.0)
+      # crit_chance = (crit_modifier * 10) + (attacker.luck * 0.5)
+      # Clamped to 5-75%
+      attacker_intelligence = stat(attacker, :intelligence).to_f
+      defender_intelligence = stat(defender, :intelligence).to_f
+      attacker_luck = stat(attacker, :luck).to_f
+
+      crit_modifier = (attacker_intelligence * 1.5) / (defender_intelligence + 1.0)
+      chance = (crit_modifier * 10) + (attacker_luck * 0.5)
       chance += 10 if action_key == "aimed"
       chance += 5 if body_part == "head"
       chance += 2 if body_part == "stomach"
       chance -= 3 if body_part == "legs"
-      chance -= stat(defender, :luck) * 0.15
-      chance = chance.clamp(1.0, 50.0)
+      chance = chance.clamp(5.0, 75.0)
 
       roll = rng.rand(100)
       {critical: roll < chance, roll:, chance: chance.round(1)}
     end
 
     def block_result(attacker, defender, block, body_part)
+      # New block formula (only if shield equipped):
+      # block_chance = (10 + (defender.vitality * 0.2)).clamp(0, 50)
       covered_parts = Array(block["body_parts"]).map(&:to_s)
-      chance = BASE_BLOCK_CHANCE
-      chance += defense_power(defender) * 0.4
-      chance += stat(defender, :agility) * 0.2
-      chance += stat(defender, :dexterity) * 0.15
-      chance += BODY_PART_BLOCK_MODIFIERS.fetch(body_part, 0)
-      chance -= stat(attacker, :accuracy) * 0.2
-      chance -= stat(attacker, :dexterity) * 0.1
-      chance -= [covered_parts.size - 1, 0].max * 4
-      chance = chance.clamp(5.0, 95.0)
+      defender_vitality = stat(defender, :vitality).to_f
+
+      # Check if defender has a shield equipped
+      has_shield = defender_has_shield?(defender)
+
+      if has_shield
+        chance = 10 + (defender_vitality * 0.2)
+        chance += BODY_PART_BLOCK_MODIFIERS.fetch(body_part, 0)
+        chance -= [covered_parts.size - 1, 0].max * 4
+        chance = chance.clamp(0.0, 50.0)
+      else
+        # Without shield, use reduced block chance
+        chance = (defender_vitality * 0.1).clamp(0.0, 25.0)
+      end
 
       roll = rng.rand(100)
       {blocked: roll < chance, roll:, chance: chance.round(1)}
     end
 
-    def damage_amount(attacker, defender, action_key, body_part, critical:)
-      attack = attack_power(attacker) + rng.rand(1..5)
-      attack *= Game::Combat::ActionCatalog.attack_damage_multiplier(action_key)
-      attack *= BODY_PART_DAMAGE_MULTIPLIERS.fetch(body_part, 1.0)
+    def damage_amount(attacker, defender, action_key, body_part, critical:, block_success: false)
+      # New damage formula:
+      # min_damage = (strength * 0.4) + weapon_min_damage
+      # max_damage = (strength * 0.8) + weapon_max_damage
+      # base_hit = rand(min_damage..max_damage)
+      attacker_strength = stat(attacker, :strength).to_f
+      weapon_min = weapon_min_damage(attacker)
+      weapon_max = weapon_max_damage(attacker)
 
-      damage = attack.round - (defense_power(defender) / DEFENSE_DIVISOR)
-      damage = (damage * CRITICAL_MULTIPLIER).round if critical[:critical]
-      [damage, MIN_DAMAGE].max
+      min_damage = (attacker_strength * 0.4) + weapon_min
+      max_damage = (attacker_strength * 0.8) + weapon_max
+
+      # Random damage in range
+      base_damage = if max_damage > min_damage
+        rng.rand(min_damage..max_damage)
+      else
+        min_damage
+      end
+
+      # Apply body part multiplier
+      base_damage *= BODY_PART_DAMAGE_MULTIPLIERS.fetch(body_part, 1.0)
+
+      # Apply critical multiplier if critical hit
+      base_damage = (base_damage * CRITICAL_MULTIPLIER) if critical[:critical]
+
+      # Apply block damage reduction if blocked (30% of incoming damage)
+      damage_after_block = block_success ? (base_damage * 0.3) : base_damage
+
+      # Apply armor reduction:
+      # armor_reduction = (defender.vitality * 0.15) + defender.equipment_armor
+      defender_vitality = stat(defender, :vitality).to_f
+      defender_armor = equipment_armor(defender)
+      armor_reduction = (defender_vitality * 0.15) + defender_armor
+
+      # Final damage (minimum 1)
+      final_damage = damage_after_block - armor_reduction
+      [final_damage.round, 1].max
     end
 
     def block_covers?(block, body_part)
@@ -227,6 +278,8 @@ module Arena
       return 0 unless character
       return character.critical_chance if stat_name == :critical_chance
       return character.agility if stat_name == :agility
+      return character.stats.get(:vitality).to_i if stat_name == :vitality
+      return character.stats.get(:intelligence).to_i if stat_name == :intelligence
 
       direct = character.public_send(stat_name) if character.respond_to?(stat_name)
       return direct.to_i if direct.present?
@@ -244,6 +297,47 @@ module Arena
       end
 
       stats.with_indifferent_access
+    end
+
+    def defender_has_shield?(participation)
+      return false unless participation.character&.inventory
+
+      participation.character.inventory.inventory_items.equipped.includes(:item_template).any? do |item|
+        item.item_template&.slot == "shield" || item.item_template&.family == "shield"
+      end
+    end
+
+    def weapon_min_damage(participation)
+      return 5 unless participation.character&.inventory
+
+      participation.character.inventory.inventory_items.equipped.includes(:item_template).sum do |item|
+        template = item.item_template
+        next 0 unless template&.slot == "weapon" || template&.family == "weapon"
+
+        stats = template.stat_modifiers || {}
+        (stats["damage_min"] || stats[:damage_min] || stats["min_damage"] || stats[:min_damage] || 0).to_f
+      end + 5
+    end
+
+    def weapon_max_damage(participation)
+      return 10 unless participation.character&.inventory
+
+      participation.character.inventory.inventory_items.equipped.includes(:item_template).sum do |item|
+        template = item.item_template
+        next 0 unless template&.slot == "weapon" || template&.family == "weapon"
+
+        stats = template.stat_modifiers || {}
+        (stats["damage_max"] || stats[:damage_max] || stats["max_damage"] || stats[:max_damage] || 0).to_f
+      end + 10
+    end
+
+    def equipment_armor(participation)
+      return 0 unless participation.character&.inventory
+
+      participation.character.inventory.inventory_items.equipped.includes(:item_template).sum do |item|
+        stats = item.item_template&.stat_modifiers || {}
+        (stats["defense"] || stats[:defense] || stats["armor"] || stats[:armor] || stats["armor_class"] || stats[:armor_class] || 0).to_f
+      end
     end
   end
 end

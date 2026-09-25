@@ -179,11 +179,14 @@ class Character < ApplicationRecord
     [threshold - experience.to_i, 0].max
   end
 
-  # Neverlands derives base hit points, mana, and carried mass directly from
-  # primary stats. Equipment bonuses stay separate from these persisted base
-  # values so allocating a stat cannot refill an injured character.
+  # Combat system derives base hit points from level, vitality (stamina), and strength.
+  # Equipment bonuses stay separate from these persisted base values so allocating
+  # a stat cannot refill an injured character.
+  # Formula: Max_HP = (level * 50) + (vitality * 12) + (strength * 2)
   def derived_base_max_hp
-    base_primary_stat_value(:vitality) * HP_PER_HEALTH
+    vitality_value = base_primary_stat_value(:vitality)
+    strength_value = base_primary_stat_value(:strength)
+    (level.to_i * 50) + (vitality_value * 12) + (strength_value * 2)
   end
 
   def derived_base_max_mp
